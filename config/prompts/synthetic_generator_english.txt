@@ -1,0 +1,55 @@
+Generate a strictly valid JSON synthetic dataset for CrossExtend-KG.
+
+Requirements:
+1. Output JSON only. No markdown and no explanations.
+2. Total sample count must be exactly __NUM_SAMPLES__.
+3. Domain distribution must exactly match:
+__DOMAIN_SAMPLE_COUNTS_JSON__
+4. Every concept mention should be classifiable under one backbone concept from:
+__BACKBONE_CONCEPTS_JSON__
+5. Every relation family must come from:
+__RELATION_FAMILIES_JSON__
+6. Use only English for:
+   - raw_text
+   - concept label
+   - concept description
+   - relation label
+7. The scenario must stay within industrial maintenance, fault diagnosis, alarm handling, repair, and recovery.
+8. Each evidence item should be locally self-contained enough for:
+   - backbone / adapter split
+   - target attachment
+   - graph assembly
+
+Required JSON structure:
+{
+  "meta": {
+    "generator": "string",
+    "sample_count": __NUM_SAMPLES__
+  },
+  "samples": [
+    {
+      "evidence_id": "string",
+      "domain_id": "string",
+      "role": "target",
+      "source_type": "log | manual | sop | table",
+      "timestamp": "ISO-8601 string",
+      "raw_text": "one short English industrial evidence text",
+      "concept_mentions": [
+        {
+          "label": "English label",
+          "kind": "concept",
+          "description": "short English description",
+          "node_worthy": true
+        }
+      ],
+      "relation_mentions": [
+        {
+          "label": "English relation label",
+          "family": "one relation family",
+          "head": "English concept label",
+          "tail": "English concept label"
+        }
+      ]
+    }
+  ]
+}

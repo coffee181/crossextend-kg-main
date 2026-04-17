@@ -1,0 +1,159 @@
+{
+  "_preset": "Real Industrial Data Experiment",
+  "_description": "Real-data preset aligned with the active pipeline schema",
+
+  "project_name": "CrossExtend-KG-Real",
+  "benchmark_name": "real_data_experiment",
+
+  "prompts": {
+    "attachment_judge_template_path": "../prompts/attachment_judge.txt",
+    "synthetic_generator_template_path": "../prompts/synthetic_generator_english.txt"
+  },
+
+  "llm": {
+    "base_url": "https://api.deepseek.com",
+    "api_key": "${DEEPSEEK_API_KEY}",
+    "model": "deepseek-chat",
+    "timeout_sec": 600,
+    "max_tokens": 4096,
+    "temperature": 0.1
+  },
+
+  "embedding": {
+    "base_url": "http://127.0.0.1:11434/v1",
+    "api_key": "",
+    "model": "bge-m3:latest",
+    "timeout_sec": 300,
+    "dimensions": 1024
+  },
+
+  "backbone": {
+    "seed_concepts": ["Asset", "Component", "Process", "Task", "Signal", "State", "Fault", "MaintenanceAction", "Incident", "Actor", "Document"],
+    "seed_descriptions": {
+      "Asset": "industrial asset, machine, line, robot, battery pack, assembly, cabinet, robotic arm, control system, main equipment",
+      "Component": "part, module, bearing, reducer, lock, cooling module, hardware component, subassembly part, harness, sensor, motor, controller",
+      "Process": "industrial process or operational procedure, charging process, diagnostic process, maintenance workflow",
+      "Task": "maintenance or operational task, inspection task, calibration task, shutdown task, work order, repair task",
+      "Signal": "alarm, warning, telemetry, sensor reading, sensor signal, vibration signal, torque signal, temperature signal",
+      "State": "operating state, normal state, abnormal state, status condition, overload state, shortage status, shutdown state",
+      "Fault": "fault, failure, defect, damage, deviation, drift, anomaly root issue, isolation fault, temperature fault",
+      "MaintenanceAction": "repair, replacement action, reset action, recalibration action, power-off operation, refueling action",
+      "Incident": "event, abnormal incident, occurrence, fault event, shutdown event, safety incident",
+      "Actor": "technician, operator, engineer, actor, battery service technician, maintenance crew",
+      "Document": "report, ticket, document, manual, work order document, operation log, maintenance manual"
+    }
+  },
+
+  "relations": {
+    "relation_families": ["task_dependency", "communication", "propagation", "lifecycle", "structural"],
+    "family_descriptions": {
+      "task_dependency": "dependency edges between assets, tasks, and actions",
+      "communication": "signal and reporting links",
+      "propagation": "fault propagation links",
+      "lifecycle": "event-state-action transitions",
+      "structural": "asset-component structural edges"
+    },
+    "allowed_routes": ["reuse_backbone", "vertical_specialize", "reject"]
+  },
+
+  "data": {
+    "synthetic_generation": {
+      "enabled": false,
+      "output_path": "../../artifacts/data/synthetic_samples.json",
+      "num_samples": 10,
+      "domain_sample_counts": {}
+    },
+    "normalize_whitespace": true
+  },
+
+  "runtime": {
+    "artifact_root": "../../artifacts",
+    "retrieval_top_k": 3,
+    "llm_attachment_batch_size": 8,
+    "enable_temporal_memory_bank": true,
+    "temporal_memory_top_k": 3,
+    "temporal_memory_max_entries": 4000,
+    "temporal_memory_path": null,
+    "save_latest_summary": true,
+    "write_jsonl_artifacts": true,
+    "write_graph_db_csv": true,
+    "write_property_graph_jsonl": true,
+    "run_prefix": "real_data",
+    "relation_constraints_path": "./relation_constraints.json",
+    "enable_relation_validation": true
+  },
+
+  "variants": [
+    {
+      "variant_id": "full_llm",
+      "description": "Main pipeline with embedding routing, rule filtering, and memory bank",
+      "attachment_strategy": "llm",
+      "use_embedding_routing": true,
+      "use_rule_filter": true,
+      "allow_free_form_growth": false,
+      "enable_snapshots": true,
+      "enable_memory_bank": true,
+      "export_artifacts": true
+    },
+    {
+      "variant_id": "no_memory_bank",
+      "description": "Attachment without temporal memory retrieval",
+      "attachment_strategy": "llm",
+      "use_embedding_routing": true,
+      "use_rule_filter": true,
+      "allow_free_form_growth": false,
+      "enable_snapshots": true,
+      "enable_memory_bank": false,
+      "export_artifacts": true
+    },
+    {
+      "variant_id": "no_embedding_routing",
+      "description": "Attachment without embedding retrieval",
+      "attachment_strategy": "llm",
+      "use_embedding_routing": false,
+      "use_rule_filter": true,
+      "allow_free_form_growth": false,
+      "enable_snapshots": true,
+      "enable_memory_bank": true,
+      "export_artifacts": true
+    },
+    {
+      "variant_id": "no_rule_filter",
+      "description": "Attachment without rule filtering",
+      "attachment_strategy": "llm",
+      "use_embedding_routing": true,
+      "use_rule_filter": false,
+      "allow_free_form_growth": false,
+      "enable_snapshots": true,
+      "enable_memory_bank": true,
+      "export_artifacts": true
+    }
+  ],
+
+  "domains": [
+    {
+      "domain_id": "battery",
+      "domain_name": "Battery System",
+      "role": "target",
+      "data_path": "../../data/evidence_records_llm.json",
+      "source_types": ["fault_case", "product_intro"],
+      "domain_keywords": ["battery", "pack", "cell", "bms", "cooling", "capacity", "degradation"]
+    },
+    {
+      "domain_id": "cnc",
+      "domain_name": "CNC Machine",
+      "role": "target",
+      "data_path": "../../data/evidence_records_llm.json",
+      "source_types": ["fault_case", "product_intro"],
+      "domain_keywords": ["cnc", "spindle", "bearing", "servo", "axis", "motor"]
+    },
+    {
+      "domain_id": "nev",
+      "domain_name": "Electric Vehicle",
+      "role": "target",
+      "data_path": "../../data/evidence_records_llm.json",
+      "source_types": ["fault_case", "product_intro"],
+      "domain_keywords": ["vehicle", "ev", "drive", "motor", "charging", "battery"]
+    }
+  ]
+}

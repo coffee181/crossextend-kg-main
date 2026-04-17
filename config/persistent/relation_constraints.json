@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "关系类型语义约束配置 - 定义每种 Family 允许的 head/tail 类型组合",
+
+  "propagation": {
+    "description": "因果传播链：A 导致/引发/触发 B",
+    "allowed_head_types": ["Fault", "Signal", "State", "Process", "Component"],
+    "allowed_tail_types": ["Fault", "Signal", "State"],
+    "examples": [
+      "thermal runaway causes fire → Fault → Fault",
+      "voltage drop triggers alarm → Signal → Fault",
+      "high temperature accelerates degradation → State → Fault",
+      "fast charging induces lithium plating → Process → Fault"
+    ],
+    "semantic_rules": [
+      "head 必须是能作为'原因'的实体（故障、信号、状态、工艺、组件）",
+      "tail 必须是能作为'结果'的实体（故障、信号、状态）",
+      "Fault → Fault 表示故障连锁",
+      "Component → Fault 表示组件引发故障"
+    ]
+  },
+
+  "structural": {
+    "description": "物理层级链：A 包含/属于 B",
+    "allowed_head_types": ["Asset", "Component"],
+    "allowed_tail_types": ["Asset", "Component"],
+    "examples": [
+      "battery pack contains cells → Asset → Component",
+      "sensor belongs to controller → Component → Component",
+      "module includes sensors → Component → Component",
+      "vehicle has battery → Asset → Asset"
+    ],
+    "semantic_rules": [
+      "只有物理实体能参与层级关系",
+      "Asset 是顶层资产，Component 是子组件",
+      "Process、State、Document 等不是物理实体，不参与层级"
+    ]
+  },
+
+  "task_dependency": {
+    "description": "任务执行链：A 先于/触发 B",
+    "allowed_head_types": ["Task", "Process", "Actor"],
+    "allowed_tail_types": ["Task", "Process", "Signal", "Document", "Fault", "State", "Asset", "Component"],
+    "examples": [
+      "inspection confirms fault → Task → Fault",
+      "engineer performs diagnosis → Actor → Process",
+      "analysis produces report → Process → Document",
+      "monitoring outputs signal → Task → Signal"
+    ],
+    "semantic_rules": [
+      "head 必须是能执行动作的实体（任务、流程、人员）",
+      "tail 可以是后续任务、产出物、发现的问题",
+      "Component/Asset 是物理实体，不是执行者"
+    ]
+  },
+
+  "communication": {
+    "description": "信息传递链：A 发送/监测信号给 B",
+    "allowed_head_types": ["Component", "Signal", "Process"],
+    "allowed_tail_types": ["Signal", "State", "Component", "Asset", "Actor", "Task", "Fault"],
+    "examples": [
+      "sensor detects temperature → Component → Signal",
+      "alarm notifies operator → Signal → Actor",
+      "monitoring finds fault → Process → Fault",
+      "BMS reports voltage → Component → Signal"
+    ],
+    "semantic_rules": [
+      "head 必须是能产生/发送信号的实体（组件、信号本身、监控流程）",
+      "tail 必须是能接收信号或被监测的实体",
+      "Document 不是信号源，不能作为 head"
+    ]
+  },
+
+  "lifecycle": {
+    "description": "状态演变链：A 变成/经历 B",
+    "allowed_head_types": ["Asset", "Component", "Fault", "State", "MaintenanceAction"],
+    "allowed_tail_types": ["State", "MaintenanceAction", "Incident", "Process"],
+    "examples": [
+      "battery experiences degradation → Asset → State",
+      "fault triggers repair → Fault → MaintenanceAction",
+      "normal transitions to warning → State → State",
+      "device undergoes maintenance → Asset → Process"
+    ],
+    "semantic_rules": [
+      "head 是能经历状态的主体或状态本身",
+      "tail 是状态、动作、事件或经历的过程",
+      "State → State 表示状态转换",
+      "Fault → MaintenanceAction 表示故障触发维护"
+    ]
+  },
+
+  "_metadata": {
+    "version": "1.0",
+    "created": "2026-04-16",
+    "purpose": "为 CrossExtend-KG 提供关系类型语义约束，确保图谱语义一致性",
+    "usage": "在 pipeline 后处理验证时，不符合约束的边将被丢弃"
+  }
+}

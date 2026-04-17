@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Preprocessing Config - DeepSeek Full Experiment",
+  "description": "Configuration for preprocessing three domains (battery, cnc, nev) using DeepSeek LLM",
+  "data_root": "../../data/",
+  "domain_ids": ["battery", "cnc", "nev"],
+  "output_path": "../../data/evidence_records_llm.json",
+  "role": "target",
+  "prompt_template_path": "../prompts/preprocessing_extraction.txt",
+  "_role_note": "Unified construction - all domains are application cases (Literal['target'] only)",
+  "llm": {
+    "base_url": "https://api.deepseek.com",
+    "api_key": "${DEEPSEEK_API_KEY}",
+    "model": "deepseek-chat",
+    "timeout_sec": 600,
+    "max_tokens": 4096,
+    "temperature": 0.1
+  },
+  "batch_size": 5,
+  "relation_families": [
+    "task_dependency",
+    "communication",
+    "propagation",
+    "lifecycle",
+    "structural"
+  ],
+  "backbone_concepts": [
+    "Asset",
+    "Component",
+    "Process",
+    "Task",
+    "Signal",
+    "State",
+    "Fault",
+    "MaintenanceAction",
+    "Incident",
+    "Actor",
+    "Document"
+  ]
+}

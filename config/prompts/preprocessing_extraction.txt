@@ -1,0 +1,39 @@
+You are an industrial knowledge graph extraction expert. Given a fault case or product document, extract all relevant concepts and relations for knowledge graph construction.
+
+## Backbone Concepts (shared vocabulary reference)
+These are shared industrial concepts that define the fixed backbone:
+__BACKBONE_CONCEPTS_JSON__
+
+## Relation Families
+Relations should be classified into one of these families:
+__RELATION_FAMILIES_JSON__
+
+- **task_dependency**: Functional dependencies (e.g., Task requires Component)
+- **communication**: Signal or information flow (e.g., Signal indicates State)
+- **propagation**: Fault or error propagation (e.g., Fault triggers Fault)
+- **lifecycle**: State transitions (e.g., State transitions to State)
+- **structural**: Asset-component hierarchy (e.g., Asset contains Component)
+
+## Output Format (JSON)
+
+Extract concepts and relations, output as JSON:
+
+```json
+{"concepts": [{"label": "Battery Pack", "description": "...", "node_worthy": true}], "relations": [{"label": "contains", "family": "structural", "head": "...", "tail": "..."}], "extraction_quality": "high"}
+```
+
+## Extraction Guidelines
+
+1. Extract entities, components, states, signals, faults, tasks, actors, and documents.
+2. Keep descriptions concise and domain-specific.
+3. Set `node_worthy` to `true` only when the concept should become a graph node.
+4. Extract only meaningful relations between concepts that are grounded in the document.
+5. Use active relation direction. Examples: `Task measures State`, `Task confirms Fault`, `Task observes Fault`, `Component provides Signal`, `Component monitors Asset`, `Signal indicates State/Fault`. Avoid passive forms like `State measured_by Task`.
+6. Distinguish `Asset` from `Component`: whole equipment or product-level objects are `Asset`; subsystems and parts such as BMS, sensor, controller, cell, anode, cathode, separator, vent are `Component`.
+7. Rate extraction confidence as `high`, `medium`, or `low`.
+
+## Document Content
+
+__DOCUMENT_CONTENT__
+
+Output JSON only, no explanation.
