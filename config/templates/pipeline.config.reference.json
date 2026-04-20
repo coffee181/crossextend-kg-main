@@ -84,15 +84,17 @@
     "_comment": "Artifact export, retrieval, memory-bank, and graph-validation settings",
     "artifact_root": "../../artifacts",
     "retrieval_top_k": 3,
+    "min_relation_support_count": 1,
     "llm_attachment_batch_size": 8,
     "enable_temporal_memory_bank": true,
     "temporal_memory_top_k": 3,
     "temporal_memory_max_entries": 4000,
     "temporal_memory_path": null,
     "save_latest_summary": true,
-    "write_jsonl_artifacts": true,
-    "write_graph_db_csv": true,
-    "write_property_graph_jsonl": true,
+    "write_detailed_working_artifacts": false,
+    "write_jsonl_artifacts": false,
+    "write_graph_db_csv": false,
+    "write_property_graph_jsonl": false,
     "run_prefix": "reference",
     "relation_constraints_path": "../persistent/relation_constraints.json",
     "enable_relation_validation": true
@@ -117,7 +119,7 @@
       "domain_id": "battery",
       "domain_name": "Battery System",
       "role": "target",
-      "data_path": "../../data/evidence_records_llm.json",
+      "data_path": "../../data/evidence_records/battery_evidence_records_llm.json",
       "ontology_seed_path": null,
       "source_types": [
         "om_manual"
@@ -134,7 +136,7 @@
       "domain_id": "cnc",
       "domain_name": "CNC Machine",
       "role": "target",
-      "data_path": "../../data/evidence_records_llm.json",
+      "data_path": "../../data/evidence_records/cnc_evidence_records_llm.json",
       "ontology_seed_path": null,
       "source_types": [
         "om_manual"
@@ -151,7 +153,7 @@
       "domain_id": "nev",
       "domain_name": "New Energy Vehicle",
       "role": "target",
-      "data_path": "../../data/evidence_records_llm.json",
+      "data_path": "../../data/evidence_records/nev_evidence_records_llm.json",
       "ontology_seed_path": null,
       "source_types": [
         "om_manual"

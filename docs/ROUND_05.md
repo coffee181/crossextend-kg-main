@@ -1,0 +1,5 @@
+# Round 5
+
+Round 5 froze the best Round 4 configuration and replayed the full 9-document pipeline twice from fresh preprocessing so we could measure stability instead of assuming it. The frozen runs live under [artifacts/optimization_rounds/round_05](D:/crossextend_kg/artifacts/optimization_rounds/round_05), with aligned inputs, dedicated configs, evidence records, run manifests, metrics diffs, and per-run audit snapshots all kept together.
+
+The two replays stayed very close on the metrics that matter most for the paper: relation F1 was effectively unchanged at `0.5222 -> 0.5218`, and anchor accuracy stayed at `0.9539 -> 0.9530`. Concept F1 moved from `0.7070` to `0.7253`, which matches the audit finding that candidate counts and edge counts are stable while accepted node counts still drift modestly because of LLM attachment variance. That makes the final architecture credible and publishable as a no-fallback mainline, but not yet something we should describe as strictly deterministic.

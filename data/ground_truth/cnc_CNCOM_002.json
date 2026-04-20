@@ -1,0 +1,487 @@
+{
+  "schema_version": "human_gold.v2",
+  "domain_id": "cnc",
+  "label_tier": "human_annotation_v1",
+  "annotation_status": "human_annotated",
+  "annotator_id": "human_expert_01",
+  "annotation_date": "2026-04-19",
+  "annotation_basis": "Independent human annotation from source O&M text only. Annotator did not consult pipeline extraction outputs. Task labels taken verbatim from O&M text.",
+  "documents": [
+    {
+      "doc_id": "CNCOM_002",
+      "doc_type": "om_manual"
+    }
+  ],
+  "concept_ground_truth": [
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "T1",
+      "step_id": "T1",
+      "surface_form": "On Kestrel VMC-850, record whether the spindle chiller leak appears only under circulation or remains wet after shutdown, and note the exact hose branch, residue color, and cabinet-side drip path before the cover is opened.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T1, leak observation recording phase"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "T2",
+      "step_id": "T2",
+      "surface_form": "Isolate machine power as required, expose the spindle chiller hoses, hose clamps, tube necks, and nearby cable tray, and preserve the as-found hose twist so the original side load can still be judged.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T2, power isolation and component exposure phase"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "T3",
+      "step_id": "T3",
+      "surface_form": "Wipe only loose coolant film, then trace the wet boundary from the lowest drip point back toward the hose neck, clamp line, quick connector, or chiller manifold seam instead of assuming the largest stain is the source.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T3, leak tracing phase"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "T4",
+      "step_id": "T4",
+      "surface_form": "Pressure-test the local cooling branch and hold long enough to see whether fresh coolant appears at the clamp gap, molded hose bend, tube bead, or manifold fitting, because tracking can blur the origin if the branch is released too early.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T4, pressure test phase"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "T5",
+      "step_id": "T5",
+      "surface_form": "Compare clamp clocking, hose insertion depth, and bracket preload with a dry reference branch so a hose forced off-axis by the machine frame clip is not misread as a failed fitting.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T5, comparison and preload analysis phase"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "T6",
+      "step_id": "T6",
+      "surface_form": "Close the inspection only after the report names the exact leak boundary as upper spindle-chiller hose clamp, return-hose elbow, quick connector body, or manifold fitting, with the pressure result tied to that hardware.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T6, inspection closure phase"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "T7",
+      "step_id": "T7",
+      "surface_form": "Repeat the same speed, orientation, or clamp event after the local hardware settles so the accepted result reflects the true spindle operating condition rather than a one-time static check.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T7, operating condition verification phase"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "Kestrel VMC-850",
+      "should_be_in_graph": true,
+      "expected_anchor": "Asset",
+      "reason": "Named CNC machine platform"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "spindle chiller hoses",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Primary coolant hose components"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "hose clamps",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Clamps securing hoses"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "tube necks",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Neck sections of tube connections"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "cable tray",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Tray routing cables near coolant system"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "hose neck",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Hose connection neck area"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "clamp line",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Clamp position reference line"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "quick connector",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Quick-disconnect coolant connector"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "chiller manifold seam",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Seam on manifold body"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "molded hose bend",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Pre-formed bend in hose"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "tube bead",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Bead on tube for hose retention"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "manifold fitting",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Fitting on manifold body"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "dry reference branch",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Non-leaking branch for comparison"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "machine frame clip",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Clip on machine frame supporting hose"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "upper spindle-chiller hose clamp",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Named leak boundary in T6"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "return-hose elbow",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Named leak boundary in T6"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "quick connector body",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Named leak boundary in T6"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "spindle chiller leak",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Top-level fault being diagnosed"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "hose forced off-axis",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Hose routing causing side load"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "failed fitting",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Fitting failure at connection point"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "circulation condition",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Operating state during coolant flow"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "wet after shutdown",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Observable moisture after machine stops"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "residue color",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Visual characteristic of coolant residue"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "cabinet-side drip path",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Path of coolant drips on cabinet side"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "as-found hose twist",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Original hose rotation position"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "side load",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Lateral force on hose/connector"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "wet boundary",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Edge of visible coolant wetting"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "lowest drip point",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Bottom of visible drip path"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "fresh coolant",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "New coolant appearance during test"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "clamp gap",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Gap at clamp interface"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "clamp clocking",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Rotation position of clamp screw"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "hose insertion depth",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "How far hose is inserted onto tube"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "bracket preload",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Force from bracket on hose routing"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "pressure result",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Outcome of pressure test"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "true spindle operating condition",
+      "should_be_in_graph": true,
+      "expected_anchor": "State",
+      "reason": "Acceptable final operating state"
+    }
+  ],
+  "relation_ground_truth": [
+    {
+      "evidence_id": "CNCOM_002",
+      "head": "T1",
+      "relation": "triggers",
+      "tail": "T2",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T1 recording before T2 isolation"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "head": "T2",
+      "relation": "triggers",
+      "tail": "T3",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T2 exposure before T3 tracing"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "head": "T3",
+      "relation": "triggers",
+      "tail": "T4",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T3 tracing before T4 pressure test"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "head": "T4",
+      "relation": "triggers",
+      "tail": "T5",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T4 pressure test before T5 comparison"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "head": "T5",
+      "relation": "triggers",
+      "tail": "T6",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T5 comparison before T6 closure"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "head": "T6",
+      "relation": "triggers",
+      "tail": "T7",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T6 closure before T7 operating verification"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "head": "Kestrel VMC-850",
+      "relation": "contains",
+      "tail": "spindle chiller hoses",
+      "family": "structural",
+      "valid": true,
+      "reason": "Chiller hoses are part of machine"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "head": "spindle chiller hoses",
+      "relation": "contains",
+      "tail": "hose clamps",
+      "family": "structural",
+      "valid": true,
+      "reason": "Clamps are attached to hoses"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "head": "spindle chiller hoses",
+      "relation": "contains",
+      "tail": "molded hose bend",
+      "family": "structural",
+      "valid": true,
+      "reason": "Molded bend is part of hose"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "head": "spindle chiller hoses",
+      "relation": "contains",
+      "tail": "quick connector",
+      "family": "structural",
+      "valid": true,
+      "reason": "Connector is at hose end"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "head": "wet after shutdown",
+      "relation": "indicates",
+      "tail": "spindle chiller leak",
+      "family": "communication",
+      "valid": true,
+      "reason": "Wetness indicates active leak"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "head": "fresh coolant",
+      "relation": "indicates",
+      "tail": "spindle chiller leak",
+      "family": "communication",
+      "valid": true,
+      "reason": "Fresh coolant appearance confirms leak"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "head": "as-found hose twist",
+      "relation": "indicates",
+      "tail": "side load",
+      "family": "communication",
+      "valid": true,
+      "reason": "Twist position indicates side load history"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "head": "clamp gap",
+      "relation": "indicates",
+      "tail": "failed fitting",
+      "family": "communication",
+      "valid": true,
+      "reason": "Gap at clamp indicates potential fitting issue"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "head": "bracket preload",
+      "relation": "indicates",
+      "tail": "hose forced off-axis",
+      "family": "communication",
+      "valid": true,
+      "reason": "Preload indicates hose routing issue"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "head": "hose forced off-axis",
+      "relation": "causes",
+      "tail": "spindle chiller leak",
+      "family": "propagation",
+      "valid": true,
+      "reason": "Off-axis routing causes leak"
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "head": "side load",
+      "relation": "causes",
+      "tail": "failed fitting",
+      "family": "propagation",
+      "valid": true,
+      "reason": "Side load causes fitting failure"
+    }
+  ],
+  "_statistics": {
+    "total_concepts": 42,
+    "positive_concepts": 42,
+    "negative_concepts": 0,
+    "total_relations": 17,
+    "valid_relations": 17
+  }
+}

@@ -4,7 +4,7 @@
   "description": "Configuration for preprocessing O&M forms using DeepSeek LLM for multi-domain industrial data",
   "data_root": "../../data/",
   "domain_ids": ["battery", "cnc", "nev"],
-  "output_path": "../../data/evidence_records_llm.json",
+  "output_path": "../../data/evidence_records/evidence_records_llm.json",
   "role": "target",
   "prompt_template_path": "../prompts/preprocessing_extraction_om.txt",
   "_role_note": "Unified construction - all domains are application cases (Literal['target'] only)",
@@ -13,7 +13,7 @@
     "api_key": "${DEEPSEEK_API_KEY}",
     "model": "deepseek-chat",
     "timeout_sec": 600,
-    "max_tokens": 4096,
+    "max_tokens": 8000,
     "temperature": 0.1
   },
   "batch_size": 5,

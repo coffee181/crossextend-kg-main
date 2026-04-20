@@ -41,6 +41,23 @@ from .validation import (
     validate_positive_int,
 )
 from .logging_config import configure_logging, get_logger
+from .experiments import (
+    aggregate_metric_payloads,
+    build_default_ablation_variants,
+    compare_variant_evaluations,
+    collect_variant_audit_summary,
+    compute_metrics,
+    evaluate_round_variant,
+    evaluate_variant_run,
+    materialize_ablation_config,
+    materialize_round_pipeline_config,
+    materialize_round_preprocessing_config,
+    prepare_round_workspace,
+    resolve_gold_file,
+    resolve_full_gold_alignment,
+    run_ablation_experiment,
+    stage_aligned_input_corpus,
+)
 
 __version__ = "0.1.0"
 
@@ -71,7 +88,21 @@ __all__ = [
     # Logging
     "configure_logging",
     "get_logger",
+    "aggregate_metric_payloads",
+    "build_default_ablation_variants",
+    "compare_variant_evaluations",
+    "collect_variant_audit_summary",
+    "compute_metrics",
+    "evaluate_round_variant",
+    "evaluate_variant_run",
+    "materialize_ablation_config",
+    "materialize_round_pipeline_config",
+    "materialize_round_preprocessing_config",
+    "prepare_round_workspace",
+    "resolve_gold_file",
+    "resolve_full_gold_alignment",
+    "run_ablation_experiment",
+    "stage_aligned_input_corpus",
     # Version
     "__version__",
 ]
-

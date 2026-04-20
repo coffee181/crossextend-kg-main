@@ -164,7 +164,14 @@ def _build_data_flow_trace_payload(result: VariantRunResult) -> dict[str, object
     }
 
 
-def export_variant_run(run_dir: str | Path, result: VariantRunResult, write_jsonl_artifacts: bool, write_property_graph_jsonl: bool, write_graph_db_csv: bool) -> None:
+def export_variant_run(
+    run_dir: str | Path,
+    result: VariantRunResult,
+    write_detailed_working_artifacts: bool,
+    write_jsonl_artifacts: bool,
+    write_property_graph_jsonl: bool,
+    write_graph_db_csv: bool,
+) -> None:
     root = ensure_dir(run_dir)
     write_json(
         root / "run_meta.json",
@@ -175,21 +182,23 @@ def export_variant_run(run_dir: str | Path, result: VariantRunResult, write_json
             "backbone_size": len(result.backbone_concepts),
         },
     )
-    write_json(root / "backbone_seed.json", _build_backbone_seed_payload(result))
     write_json(root / "backbone_final.json", _build_backbone_final_payload(result))
-    write_json(
-        root / "backbone.json",
-        {
-            "seed_concepts": result.seed_backbone_concepts,
-            "seed_descriptions": result.seed_backbone_descriptions,
-            "concepts": result.backbone_concepts,
-            "descriptions": result.backbone_descriptions,
-            "curated_concepts": result.curated_backbone_concepts,
-        },
-    )
     write_json(root / "construction_summary.json", result.construction_summary)
-    write_json(root / "data_flow_trace.json", _build_data_flow_trace_payload(result))
     write_jsonl(root / "temporal_memory_entries.jsonl", result.memory_entries)
+
+    if write_detailed_working_artifacts:
+        write_json(root / "backbone_seed.json", _build_backbone_seed_payload(result))
+        write_json(
+            root / "backbone.json",
+            {
+                "seed_concepts": result.seed_backbone_concepts,
+                "seed_descriptions": result.seed_backbone_descriptions,
+                "concepts": result.backbone_concepts,
+                "descriptions": result.backbone_descriptions,
+                "curated_concepts": result.curated_backbone_concepts,
+            },
+        )
+        write_json(root / "data_flow_trace.json", _build_data_flow_trace_payload(result))
 
     working_root = ensure_dir(root / "working")
     for domain_id, schema in result.schemas.items():
@@ -214,7 +223,7 @@ def export_variant_run(run_dir: str | Path, result: VariantRunResult, write_json
         relation_candidate_triples = [triple.model_dump(mode="json") for triple in graph_root.triples]
         accepted_relation_edges = [edge.model_dump(mode="json") for edge in graph_root.edges]
 
-        if write_jsonl_artifacts:
+        if write_detailed_working_artifacts and write_jsonl_artifacts:
             write_jsonl(domain_root / "evidence_units.jsonl", evidence_units)
             write_jsonl(domain_root / "schema_candidates.jsonl", candidates)
             write_jsonl(domain_root / "graph_nodes.jsonl", graph_root.nodes)
@@ -223,32 +232,51 @@ def export_variant_run(run_dir: str | Path, result: VariantRunResult, write_json
             write_jsonl(domain_root / "temporal_assertions.jsonl", graph_root.temporal_assertions)
             write_jsonl(domain_root / "snapshot_manifest.jsonl", graph_root.snapshots)
 
-        write_json(domain_root / "adapter_schema.json", schema.model_dump(mode="json"))
-        write_json(domain_root / "adapter_candidates.json", candidate_payloads)
-        write_json(domain_root / "adapter_candidates.accepted.json", accepted_adapter_candidates)
-        write_json(domain_root / "adapter_candidates.rejected.json", rejected_adapter_candidates)
-        write_json(domain_root / "adapter_candidates.rejected_by_reason.json", rejected_adapter_candidates_by_reason)
-        write_json(domain_root / "backbone_reuse_candidates.json", backbone_reuse_candidates)
         write_json(
-            domain_root / "retrievals.json",
-            {key: [item.model_dump(mode="json") for item in values] for key, values in retrievals.items()},
-        )
-        write_json(
-            domain_root / "attachment_decisions.json",
-            {key: value.model_dump(mode="json") for key, value in decisions.items()},
-        )
-        write_json(
-            domain_root / "historical_context.json",
+            domain_root / "attachment_audit.json",
             {
-                key: [item.model_dump(mode="json") for item in values]
-                for key, values in historical_context.items()
+                "domain_id": domain_id,
+                "summary": {
+                    "candidate_count": len(candidates),
+                    "accepted_adapter_candidate_count": len(accepted_adapter_candidates),
+                    "accepted_backbone_reuse_count": len(backbone_reuse_candidates),
+                    "rejected_candidate_count": len(rejected_adapter_candidates),
+                    "rejected_by_reason": {
+                        reason: len(items)
+                        for reason, items in rejected_adapter_candidates_by_reason.items()
+                    },
+                },
+                "items": candidate_payloads,
             },
         )
-        write_json(domain_root / "relation_edges.candidates.json", relation_candidate_triples)
-        write_json(domain_root / "relation_edges.accepted.json", accepted_relation_edges)
-        write_json(domain_root / "relation_edges.rejected.json", rejected_relation_triples)
-        write_json(domain_root / "relation_edges.rejected_type.json", rejected_type_triples)
         write_json(domain_root / "final_graph.json", _build_final_graph_payload(result, domain_id))
+
+        if write_detailed_working_artifacts:
+            write_json(domain_root / "adapter_schema.json", schema.model_dump(mode="json"))
+            write_json(domain_root / "adapter_candidates.json", candidate_payloads)
+            write_json(domain_root / "adapter_candidates.accepted.json", accepted_adapter_candidates)
+            write_json(domain_root / "adapter_candidates.rejected.json", rejected_adapter_candidates)
+            write_json(domain_root / "adapter_candidates.rejected_by_reason.json", rejected_adapter_candidates_by_reason)
+            write_json(domain_root / "backbone_reuse_candidates.json", backbone_reuse_candidates)
+            write_json(
+                domain_root / "retrievals.json",
+                {key: [item.model_dump(mode="json") for item in values] for key, values in retrievals.items()},
+            )
+            write_json(
+                domain_root / "attachment_decisions.json",
+                {key: value.model_dump(mode="json") for key, value in decisions.items()},
+            )
+            write_json(
+                domain_root / "historical_context.json",
+                {
+                    key: [item.model_dump(mode="json") for item in values]
+                    for key, values in historical_context.items()
+                },
+            )
+            write_json(domain_root / "relation_edges.candidates.json", relation_candidate_triples)
+            write_json(domain_root / "relation_edges.accepted.json", accepted_relation_edges)
+            write_json(domain_root / "relation_edges.rejected.json", rejected_relation_triples)
+            write_json(domain_root / "relation_edges.rejected_type.json", rejected_type_triples)
 
         snapshots_root = ensure_dir(domain_root / "snapshots")
         if len(graph_root.snapshots) != len(graph_root.snapshot_states):
@@ -272,23 +300,24 @@ def export_variant_run(run_dir: str | Path, result: VariantRunResult, write_json
                 },
             )
 
-        exports_root = ensure_dir(domain_root / "exports")
-        if write_property_graph_jsonl:
-            property_root = ensure_dir(exports_root / "property_graph")
-            write_jsonl(property_root / "nodes.jsonl", graph_root.nodes)
-            write_jsonl(property_root / "edges.jsonl", graph_root.edges)
-        if write_graph_db_csv:
-            graph_db_root = ensure_dir(exports_root / "graph_db")
-            write_csv(
-                graph_db_root / "nodes.csv",
-                [node.model_dump(mode="json") for node in graph_root.nodes],
-                fieldnames=["node_id", "label", "domain_id", "node_type", "parent_anchor", "provenance_evidence_ids"],
-            )
-            write_csv(
-                graph_db_root / "edges.csv",
-                [edge.model_dump(mode="json") for edge in graph_root.edges],
-                fieldnames=["edge_id", "domain_id", "label", "family", "head", "tail", "provenance_evidence_ids"],
-            )
+        if write_detailed_working_artifacts:
+            exports_root = ensure_dir(domain_root / "exports")
+            if write_property_graph_jsonl:
+                property_root = ensure_dir(exports_root / "property_graph")
+                write_jsonl(property_root / "nodes.jsonl", graph_root.nodes)
+                write_jsonl(property_root / "edges.jsonl", graph_root.edges)
+            if write_graph_db_csv:
+                graph_db_root = ensure_dir(exports_root / "graph_db")
+                write_csv(
+                    graph_db_root / "nodes.csv",
+                    [node.model_dump(mode="json") for node in graph_root.nodes],
+                    fieldnames=["node_id", "label", "domain_id", "node_type", "parent_anchor", "provenance_evidence_ids"],
+                )
+                write_csv(
+                    graph_db_root / "edges.csv",
+                    [edge.model_dump(mode="json") for edge in graph_root.edges],
+                    fieldnames=["edge_id", "domain_id", "label", "family", "head", "tail", "provenance_evidence_ids"],
+                )
 
 
 def export_benchmark_summary(run_root: str | Path, result: PipelineBenchmarkResult) -> None:

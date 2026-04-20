@@ -151,12 +151,14 @@ class RuntimeConfig(BaseModel):
 
     artifact_root: str
     retrieval_top_k: int = Field(default=3, ge=1)
+    min_relation_support_count: int = Field(default=1, ge=0)
     llm_attachment_batch_size: int = Field(default=8, ge=1)
     enable_temporal_memory_bank: bool = True
     temporal_memory_top_k: int = Field(default=3, ge=1)
     temporal_memory_max_entries: int = Field(default=4000, ge=1)
     temporal_memory_path: str | None = None
     save_latest_summary: bool = True
+    write_detailed_working_artifacts: bool = False
     write_jsonl_artifacts: bool = True
     write_graph_db_csv: bool = True
     write_property_graph_jsonl: bool = True
@@ -237,7 +239,7 @@ def _resolve_path(base_dir: Path, value: str | None) -> str | None:
 
 def load_pipeline_config(config_path: str | Path) -> PipelineConfig:
     path = Path(config_path).resolve()
-    payload = _expand_env(json.loads(path.read_text(encoding="utf-8")))
+    payload = _expand_env(json.loads(path.read_text(encoding="utf-8-sig")))
     config = PipelineConfig.model_validate(payload)
     base_dir = path.parent
 

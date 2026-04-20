@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from typing import Any, Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 
 RejectReason = Literal[
@@ -22,12 +22,52 @@ RejectReason = Literal[
     "backbone_label_mismatch",
 ]
 
+SemanticTypeHint = Literal["Asset", "Component", "Signal", "State", "Fault"]
+
+
+def _normalize_semantic_type_hint(value: Any) -> SemanticTypeHint | None:
+    if not isinstance(value, str):
+        return None
+    compact = value.strip().lower()
+    mapping: dict[str, SemanticTypeHint] = {
+        "asset": "Asset",
+        "component": "Component",
+        "signal": "Signal",
+        "state": "State",
+        "fault": "Fault",
+    }
+    return mapping.get(compact)
+
 
 class ConceptMention(BaseModel):
     label: str
     kind: Literal["concept"] = "concept"
     description: str = ""
     node_worthy: bool = True
+    surface_form: str = ""
+    semantic_type_hint: SemanticTypeHint | None = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def _upgrade_semantic_type_hint(cls, data: Any) -> Any:
+        if not isinstance(data, dict):
+            return data
+        payload = dict(data)
+        semantic_type_hint = (
+            payload.get("semantic_type_hint")
+            or payload.get("parent_gold")
+            or payload.get("gold_parent")
+        )
+        normalized_hint = _normalize_semantic_type_hint(semantic_type_hint)
+        if normalized_hint is not None:
+            payload["semantic_type_hint"] = normalized_hint
+        payload.pop("parent_gold", None)
+        payload.pop("gold_parent", None)
+        return payload
+
+
+class StepConceptMention(ConceptMention):
+    """Semantic alias for concepts attached to O&M steps."""
 
 
 class RelationMention(BaseModel):
@@ -37,6 +77,16 @@ class RelationMention(BaseModel):
     tail: str
 
 
+class StepEvidenceRecord(BaseModel):
+    step_id: str
+    task: StepConceptMention
+    concept_mentions: list[ConceptMention] = Field(default_factory=list)
+    relation_mentions: list[RelationMention] = Field(default_factory=list)
+
+
+StepRecord = StepEvidenceRecord
+
+
 class EvidenceRecord(BaseModel):
     evidence_id: str
     domain_id: str
@@ -44,8 +94,48 @@ class EvidenceRecord(BaseModel):
     source_type: str
     timestamp: str
     raw_text: str
-    concept_mentions: list[ConceptMention]
-    relation_mentions: list[RelationMention]
+    step_records: list[StepEvidenceRecord] = Field(default_factory=list)
+    document_concept_mentions: list[ConceptMention] = Field(default_factory=list)
+    document_relation_mentions: list[RelationMention] = Field(default_factory=list)
+
+    @model_validator(mode="before")
+    @classmethod
+    def _upgrade_legacy_payload(cls, data: Any) -> Any:
+        if not isinstance(data, dict):
+            return data
+        payload = dict(data)
+        if "step_records" not in payload and (
+            "concept_mentions" in payload or "relation_mentions" in payload
+        ):
+            payload["step_records"] = []
+            payload["document_concept_mentions"] = payload.pop("concept_mentions", [])
+            payload["document_relation_mentions"] = payload.pop("relation_mentions", [])
+        payload.setdefault("step_records", [])
+        payload.setdefault("document_concept_mentions", [])
+        payload.setdefault("document_relation_mentions", [])
+        return payload
+
+    @staticmethod
+    def _flatten_step_records(
+        step_records: list[StepEvidenceRecord],
+    ) -> tuple[list[ConceptMention], list[RelationMention]]:
+        concept_mentions: list[ConceptMention] = []
+        relation_mentions: list[RelationMention] = []
+        for step_record in step_records:
+            concept_mentions.append(step_record.task)
+            concept_mentions.extend(step_record.concept_mentions)
+            relation_mentions.extend(step_record.relation_mentions)
+        return concept_mentions, relation_mentions
+
+    @property
+    def concept_mentions(self) -> list[ConceptMention]:
+        step_mentions, _ = self._flatten_step_records(self.step_records)
+        return step_mentions + list(self.document_concept_mentions)
+
+    @property
+    def relation_mentions(self) -> list[RelationMention]:
+        _, step_relations = self._flatten_step_records(self.step_records)
+        return step_relations + list(self.document_relation_mentions)
 
 
 class EvidenceUnit(BaseModel):
@@ -68,7 +158,6 @@ class SchemaCandidate(BaseModel):
     description: str
     evidence_ids: list[str] = Field(default_factory=list)
     evidence_texts: list[str] = Field(default_factory=list)
-    support_count: int = 0
     routing_features: dict[str, Any] = Field(default_factory=dict)
 
 
@@ -110,6 +199,7 @@ class GraphNode(BaseModel):
     domain_id: str
     node_type: str
     parent_anchor: str | None = None
+    surface_form: str = ""
     provenance_evidence_ids: list[str] = Field(default_factory=list)
 
 
@@ -227,7 +317,6 @@ class VariantRunResult(BaseModel):
     domain_graphs: dict[str, DomainGraphArtifacts]
     construction_summary: dict[str, Any]
     memory_entries: list[MemoryEntry] = Field(default_factory=list)
-    run_dir: str | None = None
 
 
 class PipelineBenchmarkResult(BaseModel):

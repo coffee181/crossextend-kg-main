@@ -108,6 +108,7 @@ class PreprocessingResult(BaseModel):
     config_path: str
     data_root: str
     output_path: str
+    domain_output_paths: dict[str, str] = Field(default_factory=dict)
     domain_ids: list[str]
     total_docs: int
     successful_docs: int

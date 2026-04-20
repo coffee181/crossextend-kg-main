@@ -1,0 +1,570 @@
+{
+  "schema_version": "human_gold.v2",
+  "domain_id": "nev",
+  "label_tier": "human_annotation_v1",
+  "annotation_status": "human_annotated",
+  "annotator_id": "human_expert_01",
+  "annotation_date": "2026-04-20",
+  "annotation_basis": "Independent human annotation from source O&M text. Task labels use step_id (T1-T7), concepts extracted with semantic type hints.",
+  "documents": [
+    {
+      "doc_id": "EVMAN_003",
+      "doc_type": "om_manual"
+    }
+  ],
+  "concept_ground_truth": [
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "T1",
+      "step_id": "T1",
+      "surface_form": "At Velorian PackLine-287 AWD, reproduce the service-disconnect seating complaint by noting latch feel, insertion force, handle flushness, any HVIL warning, and whether the orange handle sits proud of the battery access opening or snaps back after seating.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T1, intake documentation"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "T2",
+      "step_id": "T2",
+      "surface_form": "Depower the pack, verify zero residual high-voltage potential at the service-disconnect cavity, and remove the access lid so the disconnect plug, blade set, guide rail, interlock pins, latch window, and surrounding sealing edge are all visible in one service view.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T2, pack isolation and exposure"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "T3",
+      "step_id": "T3",
+      "surface_form": "Pull the service disconnect straight out without rotating it, then inspect the male blades, female socket faces, guide ribs, CPA feature, handle pivot, and latch hook for burrs, arc marks, plastic rollover, uneven insertion witness lines, or debris.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T3, disconnect inspection"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "T4",
+      "step_id": "T4",
+      "surface_form": "Compare the suspect disconnect with a known-good reference or spare, checking seating depth, latch travel, blade exposure, guide-rib alignment, and the shoulder position of the interlock pins.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T4, comparison analysis"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "T5",
+      "step_id": "T5",
+      "surface_form": "Rework the seat condition by correcting the misaligned guide feature, removing only the minor burr or displaced plastic that blocks full travel, and cleaning the contact area without changing the original blade profile.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T5, repair action"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "T6",
+      "step_id": "T6",
+      "surface_form": "Reinstall the service disconnect in one continuous motion, confirm full blade entry, verify the latch hook snaps fully into the window, and check that the orange handle now remains flush with the cover plane.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T6, reinstall verification"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "T7",
+      "step_id": "T7",
+      "surface_form": "Restore the service lid, wake the pack, and confirm through two seat checks that the HVIL path, service-disconnect status, and ready-state permissive remain stable with no handle movement, no latch relaxation, and no repeat interlock warning.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T7, functional verification"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "Velorian PackLine-287 AWD",
+      "should_be_in_graph": true,
+      "expected_anchor": "Asset",
+      "reason": "Named EV vehicle platform"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "service disconnect",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Primary component being diagnosed"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "service-disconnect cavity",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Disconnect receptacle"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "access lid",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Cover panel"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "disconnect plug",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Removable disconnect assembly"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "blade set",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Male blade contacts"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "guide rail",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Disconnect alignment feature"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "interlock pins",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "HVIL engagement pins"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "latch window",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Latch engagement slot"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "sealing edge",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Environmental seal perimeter"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "male blades",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Disconnect male contacts"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "female socket faces",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Receptacle contacts"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "guide ribs",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Alignment features"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "CPA feature",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Connector position assurance"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "handle pivot",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Handle hinge point"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "latch hook",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Latch engagement mechanism"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "orange handle",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Disconnect operating handle"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "known-good reference",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Comparison baseline hardware"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "service lid",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Service cover panel"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "service-disconnect seating complaint",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Top-level fault being diagnosed"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "HVIL warning",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Interlock system alert"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "misaligned guide feature",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Named fault boundary"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "minor burr",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Named fault boundary"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "displaced plastic",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Named fault boundary"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "debris in guide channel",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Named fault boundary"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "latch feel",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Sensory symptom"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "insertion force",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Measured effort"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "handle flushness",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Visual indicator"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "handle proud",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Visual indicator of incomplete seating"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "seating depth",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Measured blade entry"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "latch travel",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Measured latch movement"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "blade exposure",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Measured blade position"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "guide-rib alignment",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Measured alignment"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "arc marks",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Evidence of electrical fault"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "plastic rollover",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Evidence of mechanical damage"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "uneven insertion witness lines",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Evidence of seating problem"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "HVIL path",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Interlock circuit status"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "service-disconnect status",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Disconnect position status"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "ready-state permissive",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Vehicle operation enable"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "handle movement",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Post-install observation"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "latch relaxation",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Post-install observation"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "zero residual high-voltage potential",
+      "should_be_in_graph": true,
+      "expected_anchor": "State",
+      "reason": "Safe working condition"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "label": "battery access opening",
+      "should_be_in_graph": false,
+      "expected_anchor": null,
+      "reason": "Location context, not primary concept"
+    }
+  ],
+  "relation_ground_truth": [
+    {
+      "evidence_id": "EVMAN_003",
+      "head": "T1",
+      "relation": "triggers",
+      "tail": "T2",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "Documentation before pack isolation"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "head": "T2",
+      "relation": "triggers",
+      "tail": "T3",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "Isolation before disconnect removal"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "head": "T3",
+      "relation": "triggers",
+      "tail": "T4",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "Inspection before comparison"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "head": "T4",
+      "relation": "triggers",
+      "tail": "T5",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "Comparison before repair"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "head": "T5",
+      "relation": "triggers",
+      "tail": "T6",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "Repair before reinstall"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "head": "T6",
+      "relation": "triggers",
+      "tail": "T7",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "Reinstall before functional verification"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "head": "misaligned guide feature",
+      "relation": "causes",
+      "tail": "service-disconnect seating complaint",
+      "family": "propagation",
+      "valid": true,
+      "reason": "Alignment error prevents proper seating"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "head": "minor burr",
+      "relation": "causes",
+      "tail": "service-disconnect seating complaint",
+      "family": "propagation",
+      "valid": true,
+      "reason": "Burr blocks full travel"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "head": "debris in guide channel",
+      "relation": "causes",
+      "tail": "service-disconnect seating complaint",
+      "family": "propagation",
+      "valid": true,
+      "reason": "Debris interferes with alignment"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "head": "service-disconnect seating complaint",
+      "relation": "causes",
+      "tail": "HVIL warning",
+      "family": "propagation",
+      "valid": true,
+      "reason": "Poor seating triggers interlock alert"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "head": "handle proud",
+      "relation": "indicates",
+      "tail": "service-disconnect seating complaint",
+      "family": "communication",
+      "valid": true,
+      "reason": "Handle position shows incomplete seating"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "head": "HVIL warning",
+      "relation": "indicates",
+      "tail": "service-disconnect seating complaint",
+      "family": "communication",
+      "valid": true,
+      "reason": "Warning confirms seating problem"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "head": "uneven insertion witness lines",
+      "relation": "indicates",
+      "tail": "misaligned guide feature",
+      "family": "communication",
+      "valid": true,
+      "reason": "Witness pattern reveals alignment error"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "head": "arc marks",
+      "relation": "indicates",
+      "tail": "HVIL warning",
+      "family": "communication",
+      "valid": true,
+      "reason": "Arcing evidence shows electrical fault"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "head": "Velorian PackLine-287 AWD",
+      "relation": "contains",
+      "tail": "service disconnect",
+      "family": "structural",
+      "valid": true,
+      "reason": "Disconnect is vehicle component"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "head": "service disconnect",
+      "relation": "contains",
+      "tail": "blade set",
+      "family": "structural",
+      "valid": true,
+      "reason": "Blades are disconnect contacts"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "head": "service disconnect",
+      "relation": "contains",
+      "tail": "orange handle",
+      "family": "structural",
+      "valid": true,
+      "reason": "Handle is disconnect operating part"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "head": "service disconnect",
+      "relation": "contains",
+      "tail": "latch hook",
+      "family": "structural",
+      "valid": true,
+      "reason": "Latch is disconnect retention mechanism"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "head": "service-disconnect cavity",
+      "relation": "contains",
+      "tail": "guide rail",
+      "family": "structural",
+      "valid": true,
+      "reason": "Rail is cavity alignment feature"
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "head": "service-disconnect cavity",
+      "relation": "contains",
+      "tail": "interlock pins",
+      "family": "structural",
+      "valid": true,
+      "reason": "Pins are HVIL engagement in cavity"
+    }
+  ],
+  "_statistics": {
+    "total_concepts": 50,
+    "positive_concepts": 49,
+    "negative_concepts": 1,
+    "total_relations": 20,
+    "valid_relations": 20
+  }
+}

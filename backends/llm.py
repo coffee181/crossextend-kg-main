@@ -7,10 +7,11 @@ import json
 import logging
 import re
 import time
-import urllib.request
 from typing import Any, Protocol
 
-from .embeddings import build_api_endpoint, normalize_api_base_url
+import openai
+
+from .embeddings import normalize_api_base_url
 from ..config import LLMBackendConfig
 
 
@@ -68,15 +69,14 @@ def extract_json(raw: str) -> dict[str, Any]:
         text = re.sub(r"```$", "", text).strip()
     try:
         return json.loads(text)
-    except json.JSONDecodeError as e:
-        return json.loads(_extract_first_json_object(text))
-
-
-def _build_headers(api_key: str) -> dict[str, str]:
-    headers = {"Content-Type": "application/json"}
-    if api_key:
-        headers["Authorization"] = f"Bearer {api_key}"
-    return headers
+    except json.JSONDecodeError:
+        try:
+            return json.loads(_extract_first_json_object(text))
+        except (ValueError, json.JSONDecodeError) as nested_exc:
+            raise ValueError(
+                "Failed to parse JSON from LLM response. "
+                f"Preview: {text[:240]}..."
+            ) from nested_exc
 
 
 class ChatCompletionsLLMBackend:
@@ -87,49 +87,62 @@ class ChatCompletionsLLMBackend:
         self.timeout_sec = config.timeout_sec
         self.max_tokens = config.max_tokens
         self.temperature = config.temperature
-        # Retry the same request a few times to absorb transient provider/network failures
-        # without changing the main architecture or introducing fallback behavior.
         self.max_retries = 3
+        self.request_max_attempts = 2
+        self.client = openai.OpenAI(
+            api_key=self.api_key,
+            base_url=self.base_url,
+            timeout=self.timeout_sec,
+            max_retries=self.max_retries,
+        )
+
 
     def supports_generation(self) -> bool:
         return True
 
     def generate_json(self, prompt: str) -> dict[str, Any]:
-        payload = {
-            "model": self.model,
-            "messages": [{"role": "user", "content": prompt}],
-            "temperature": self.temperature,
-            "max_tokens": self.max_tokens,
-        }
-        last_error: Exception | None = None
-        for attempt in range(1, self.max_retries + 1):
+        retryable_errors = (
+            openai.APIConnectionError,
+            openai.APITimeoutError,
+            openai.RateLimitError,
+            openai.InternalServerError,
+        )
+        for attempt in range(1, self.request_max_attempts + 1):
             try:
-                req = urllib.request.Request(
-                    build_api_endpoint(self.base_url, "chat/completions"),
-                    data=json.dumps(payload).encode("utf-8"),
-                    headers=_build_headers(self.api_key),
-                    method="POST",
+                response = self.client.chat.completions.create(
+                    model=self.model,
+                    messages=[{"role": "user", "content": prompt}],
+                    response_format={"type": "json_object"},
+                    temperature=self.temperature,
+                    max_tokens=self.max_tokens,
                 )
-                with urllib.request.urlopen(req, timeout=self.timeout_sec) as resp:
-                    body = json.loads(resp.read().decode("utf-8"))
-                message = body["choices"][0]["message"]
-                return extract_json(_normalize_chat_content(message.get("content", "")))
-            except Exception as exc:
-                last_error = exc
-                if attempt >= self.max_retries:
+                choice = response.choices[0]
+                finish_reason = getattr(choice, "finish_reason", None)
+                if finish_reason not in {None, "stop"}:
+                    raise RuntimeError(
+                        "LLM response did not finish cleanly "
+                        f"(finish_reason={finish_reason}). "
+                        "Reduce prompt/output size or increase max_tokens."
+                    )
+                content = choice.message.content or ""
+                return extract_json(_normalize_chat_content(content))
+            except retryable_errors as exc:
+                if attempt >= self.request_max_attempts:
+                    logger.error("OpenAI API error after %d attempts: %s", attempt, exc)
                     raise
-                delay_sec = min(2 ** (attempt - 1), 5)
+                delay_sec = min(10.0, 2.0 * attempt)
                 logger.warning(
-                    "LLM request failed on attempt %d/%d: %s; retrying in %ss",
+                    "Retryable OpenAI API error on attempt %d/%d: %s. Retrying in %.1fs",
                     attempt,
-                    self.max_retries,
+                    self.request_max_attempts,
                     exc,
                     delay_sec,
                 )
                 time.sleep(delay_sec)
-        if last_error is not None:
-            raise last_error
-        raise RuntimeError("unreachable LLM retry state")
+            except openai.APIError as exc:
+                logger.error("OpenAI API error: %s", exc)
+                raise
+        raise RuntimeError("LLM request exhausted without a JSON response")
 
 
 def build_llm_backend(config: LLMBackendConfig) -> LLMBackend:

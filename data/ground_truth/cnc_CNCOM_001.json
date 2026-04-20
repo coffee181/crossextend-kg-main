@@ -1,0 +1,609 @@
+{
+  "schema_version": "human_gold.v2",
+  "domain_id": "cnc",
+  "label_tier": "human_annotation_v1",
+  "annotation_status": "human_annotated",
+  "annotator_id": "human_expert_01",
+  "annotation_date": "2026-04-19",
+  "annotation_basis": "Independent human annotation from source O&M text only. Annotator did not consult pipeline extraction outputs. Task labels taken verbatim from O&M text.",
+  "documents": [
+    {
+      "doc_id": "CNCOM_001",
+      "doc_type": "om_manual"
+    }
+  ],
+  "concept_ground_truth": [
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "T1",
+      "step_id": "T1",
+      "surface_form": "On Arcline VTC-630, record the complaint as tool pull-out during face milling, weak unclamp feel, or drawbar alarm on a CAT40 spindle, and note the toolholder style, cutting load, and whether the issue followed recent drawbar service. The intake note must already tie the problem to the drawbar clamp stack and not to a generic spindle fault.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T1, complaint recording and intake phase"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "T2",
+      "step_id": "T2",
+      "surface_form": "Warm the spindle to the service temperature if required, then expose the drawbar booster cylinder, Belleville stack housing, unclamp valve, pressure transducer port, and the access path to the spindle pull-force test point. Keep the upper actuator side and lower retention side visible in the same inspection window so stroke and clamp force can be judged against the same hardware state.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T2, spindle warm-up and component exposure phase"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "T3",
+      "step_id": "T3",
+      "surface_form": "Install the calibrated clamp-force gauge in a verified CAT40 holder, run the clamp cycle, and record the measured pull force rather than relying on sound or feel. Compare the cold and warmed values if the complaint changes with temperature, because a weak Belleville stack and a short hydraulic stroke do not deteriorate in the same way.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T3, clamp-force measurement phase"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "T4",
+      "step_id": "T4",
+      "surface_form": "Measure unclamp pressure at the booster cylinder and compare it with the machine target while watching drawbar movement. If the supply pressure is healthy but clamp force remains low, the next split should stay inside the mechanical stack, whereas low pressure with normal stack height pushes the boundary toward the hydraulic side of the circuit.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T4, pressure measurement and fault boundary split phase"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "T5",
+      "step_id": "T5",
+      "surface_form": "Inspect the Belleville stack height, washer orientation, release-piston clearance, and actuator linkage from upper cylinder to lower drawbar seat. Pay attention to whether one washer pair is inverted or whether the stack height is short at the lower end, because a single reversed pair can reduce clamp force without leaving obvious damage on the piston or pressure circuit.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T5, stack and linkage inspection phase"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "T6",
+      "step_id": "T6",
+      "surface_form": "Compare measured stack height and washer sequence with the service layout, then isolate the fault boundary only after pressure, stroke, and stack geometry are read together. If pressure reaches the target and release stroke is normal while pull force stays low, keep the fault on the Belleville stack orientation or drawbar hardware instead of blaming the valve or pressure supply.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T6, fault boundary isolation phase"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "T7",
+      "step_id": "T7",
+      "surface_form": "Rebuild the stack in the correct order, restore the actuator linkage, and repeat the pull-force test with the same toolholder and the same spindle temperature window. Confirm that the stack sits against the lower seat, the linkage travels freely, and the pull-force gauge now follows the corrected washer orientation rather than random warm-up variation.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T7, stack rebuild and verification phase"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "T8",
+      "step_id": "T8",
+      "surface_form": "Run three clamp and unclamp cycles while watching pressure recovery, release stroke, and holder retention, then inspect the actuator and cylinder for fresh oil trace or misalignment. The machine is not released on one good force reading if the drawbar still hangs up on the second or third cycle.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T8, cycle testing and verification phase"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "T9",
+      "step_id": "T9",
+      "surface_form": "Close the work only after the report names the exact failed boundary, such as an inverted lower Belleville pair, reduced stack height, hydraulic short-stroke, or actuator-linkage misalignment, and ties it to the measured force and pressure results. Accept the repair when clamp force, release stroke, and repeated tool retention all remain stable on the corrected drawbar stack.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T9, work closure and documentation phase"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "Arcline VTC-630",
+      "should_be_in_graph": true,
+      "expected_anchor": "Asset",
+      "reason": "Named CNC machine platform"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "CAT40 spindle",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Primary spindle component with toolholding interface"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "drawbar clamp stack",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Primary mechanism for tool retention"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "toolholder",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Toolholding interface component"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "drawbar booster cylinder",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Hydraulic actuator for unclamp function"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "Belleville stack housing",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Housing containing Belleville spring stack"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "unclamp valve",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Valve controlling unclamp hydraulic circuit"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "pressure transducer port",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Port for pressure measurement access"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "spindle pull-force test point",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Access point for pull force measurement"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "clamp-force gauge",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Measurement device for clamp force"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "CAT40 holder",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Verified holder for gauge installation"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "Belleville stack",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Spring stack providing clamp force"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "washer",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Washer elements in Belleville stack"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "release-piston",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Piston for release mechanism"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "actuator linkage",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Mechanical linkage from cylinder to drawbar"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "drawbar seat",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Lower seat for Belleville stack"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "upper cylinder",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Upper actuator cylinder"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "lower retention side",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Lower retention mechanism side"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "tool pull-out",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Observable symptom of clamp failure"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "weak unclamp feel",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Tactile symptom of unclamp mechanism issue"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "drawbar alarm",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Machine alarm indicating drawbar fault"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "cutting load",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Measured load during machining operation"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "measured pull force",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Quantified clamp force measurement"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "cold and warmed values",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Temperature-dependent force comparison"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "unclamp pressure",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Measured hydraulic pressure for unclamp"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "supply pressure",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "System hydraulic supply pressure"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "clamp force",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Force holding tool in spindle"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "Belleville stack height",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Measured stack dimension"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "washer orientation",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Configuration of washer pairs"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "release-piston clearance",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Gap measurement in release mechanism"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "pressure recovery",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Hydraulic pressure response after cycle"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "release stroke",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Travel distance of release mechanism"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "holder retention",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Tool holding security measurement"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "fresh oil trace",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Observable hydraulic leak indicator"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "inverted washer pair",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Improper washer orientation causing force loss"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "short stack height",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Reduced stack dimension affecting clamp force"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "inverted lower Belleville pair",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Named failure mode in T9"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "reduced stack height",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Named failure mode in T9"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "hydraulic short-stroke",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Named failure mode in T9"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "actuator-linkage misalignment",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Named failure mode in T9"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "misalignment",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Actuator linkage alignment issue"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "weak Belleville stack",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Stack with insufficient spring force"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "corrected washer orientation",
+      "should_be_in_graph": true,
+      "expected_anchor": "State",
+      "reason": "Acceptable washer configuration after repair"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "stable clamp force",
+      "should_be_in_graph": true,
+      "expected_anchor": "State",
+      "reason": "Acceptable force stability after repair"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "stable release stroke",
+      "should_be_in_graph": true,
+      "expected_anchor": "State",
+      "reason": "Acceptable stroke stability after repair"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "label": "stable tool retention",
+      "should_be_in_graph": true,
+      "expected_anchor": "State",
+      "reason": "Acceptable retention stability after repair"
+    }
+  ],
+  "relation_ground_truth": [
+    {
+      "evidence_id": "CNCOM_001",
+      "head": "T1",
+      "relation": "triggers",
+      "tail": "T2",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T1 intake before T2 exposure"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "head": "T2",
+      "relation": "triggers",
+      "tail": "T3",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T2 exposure before T3 force measurement"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "head": "T3",
+      "relation": "triggers",
+      "tail": "T4",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T3 force measurement before T4 pressure measurement"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "head": "T4",
+      "relation": "triggers",
+      "tail": "T5",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T4 pressure split before T5 stack inspection"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "head": "T5",
+      "relation": "triggers",
+      "tail": "T6",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T5 inspection before T6 fault isolation"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "head": "T6",
+      "relation": "triggers",
+      "tail": "T7",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T6 isolation before T7 rebuild"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "head": "T7",
+      "relation": "triggers",
+      "tail": "T8",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T7 rebuild before T8 cycle testing"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "head": "T8",
+      "relation": "triggers",
+      "tail": "T9",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T8 testing before T9 closure"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "head": "Arcline VTC-630",
+      "relation": "contains",
+      "tail": "CAT40 spindle",
+      "family": "structural",
+      "valid": true,
+      "reason": "Spindle is part of machine assembly"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "head": "CAT40 spindle",
+      "relation": "contains",
+      "tail": "drawbar clamp stack",
+      "family": "structural",
+      "valid": true,
+      "reason": "Drawbar is internal to spindle"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "head": "drawbar clamp stack",
+      "relation": "contains",
+      "tail": "Belleville stack",
+      "family": "structural",
+      "valid": true,
+      "reason": "Belleville stack is part of drawbar"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "head": "Belleville stack",
+      "relation": "contains",
+      "tail": "washer",
+      "family": "structural",
+      "valid": true,
+      "reason": "Washers are elements of stack"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "head": "drawbar clamp stack",
+      "relation": "contains",
+      "tail": "actuator linkage",
+      "family": "structural",
+      "valid": true,
+      "reason": "Linkage connects actuator to drawbar"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "head": "drawbar booster cylinder",
+      "relation": "contains",
+      "tail": "unclamp valve",
+      "family": "structural",
+      "valid": true,
+      "reason": "Valve controls cylinder circuit"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "head": "tool pull-out",
+      "relation": "indicates",
+      "tail": "inverted washer pair",
+      "family": "communication",
+      "valid": true,
+      "reason": "Pull-out indicates potential stack orientation issue"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "head": "drawbar alarm",
+      "relation": "indicates",
+      "tail": "hydraulic short-stroke",
+      "family": "communication",
+      "valid": true,
+      "reason": "Alarm indicates potential hydraulic issue"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "head": "fresh oil trace",
+      "relation": "indicates",
+      "tail": "actuator-linkage misalignment",
+      "family": "communication",
+      "valid": true,
+      "reason": "Oil trace indicates potential linkage seal issue"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "head": "inverted washer pair",
+      "relation": "causes",
+      "tail": "reduced stack height",
+      "family": "propagation",
+      "valid": true,
+      "reason": "Inverted washers reduce stack height"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "head": "inverted washer pair",
+      "relation": "causes",
+      "tail": "tool pull-out",
+      "family": "propagation",
+      "valid": true,
+      "reason": "Incorrect orientation reduces clamp force causing pull-out"
+    },
+    {
+      "evidence_id": "CNCOM_001",
+      "head": "hydraulic short-stroke",
+      "relation": "causes",
+      "tail": "weak unclamp feel",
+      "family": "propagation",
+      "valid": true,
+      "reason": "Short stroke causes weak unclamp response"
+    }
+  ],
+  "_statistics": {
+    "total_concepts": 55,
+    "positive_concepts": 55,
+    "negative_concepts": 0,
+    "total_relations": 20,
+    "valid_relations": 20
+  }
+}

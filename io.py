@@ -18,7 +18,7 @@ def ensure_dir(path: str | Path) -> Path:
 
 
 def read_json(path: str | Path) -> Any:
-    return json.loads(Path(path).read_text(encoding="utf-8"))
+    return json.loads(Path(path).read_text(encoding="utf-8-sig"))
 
 
 def write_json(path: str | Path, payload: Any) -> None:
@@ -27,7 +27,7 @@ def write_json(path: str | Path, payload: Any) -> None:
 
 def read_jsonl(path: str | Path) -> list[dict[str, Any]]:
     items: list[dict[str, Any]] = []
-    for line in Path(path).read_text(encoding="utf-8").splitlines():
+    for line in Path(path).read_text(encoding="utf-8-sig").splitlines():
         line = line.strip()
         if not line:
             continue
@@ -62,8 +62,14 @@ def load_evidence_records(path: str | Path) -> list[EvidenceRecord]:
             samples = payload["samples"]
         elif "evidence_records" in payload:
             samples = payload["evidence_records"]
+        elif "evidence_id" in payload:
+            samples = [payload]
         else:
-            samples = payload
+            raise ValueError(
+                f"unsupported evidence record payload in {Path(path)}: "
+                "expected a list, a single EvidenceRecord object, or a mapping containing "
+                "'samples' or 'evidence_records'"
+            )
     else:
         samples = payload
     return [EvidenceRecord.model_validate(item) for item in samples]

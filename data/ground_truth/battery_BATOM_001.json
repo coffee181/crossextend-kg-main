@@ -1,0 +1,250 @@
+{
+  "schema_version": "human_gold.v2",
+  "domain_id": "battery",
+  "label_tier": "human_annotation_v1",
+  "annotation_status": "human_annotated",
+  "annotator_id": "human_expert_01",
+  "annotation_date": "2026-04-19",
+  "annotation_basis": "Independent human annotation from source O&M text only. Annotator did not consult pipeline extraction outputs. Task labels taken verbatim from O&M text.",
+  "documents": [
+    {
+      "doc_id": "BATOM_001",
+      "doc_type": "om_manual"
+    }
+  ],
+  "concept_ground_truth": [
+    {
+      "evidence_id": "BATOM_001",
+      "label": "T1",
+      "step_id": "T1",
+      "surface_form": "On Aurex BatteryHub-612 LR, record coolant level, residue color, undertray wetness, recent chiller work, and whether the seepage already points to the left coolant-plate outlet before any shield or hose support is moved.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T1, diagnostic observation phase"
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "label": "T2",
+      "step_id": "T2",
+      "surface_form": "Isolate the high-voltage pack, remove the local underbody shield, and expose the outlet quick connector, aluminum cooling-plate edge, hose support bracket, and nearby harness clip while keeping the hose angle unchanged so the original witness pattern remains readable.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T2, hardware access phase"
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "label": "T3",
+      "step_id": "T3",
+      "surface_form": "Wipe only loose dirt, leave the wet boundary intact, and trace fresh coolant from the lowest drip point back toward the outlet tube bead, connector latch window, green O-ring land, and plate seam instead of assuming the largest stain marks the source.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T3, leak tracing phase"
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "label": "T4",
+      "step_id": "T4",
+      "surface_form": "Cap the neighboring branch, apply pressure to the suspect cooling section, and hold long enough to see whether new wetting starts at the connector shell, the O-ring interface, the hose end, or the aluminum plate seam beside the outlet neck.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T4, pressure verification phase"
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "label": "T5",
+      "step_id": "T5",
+      "surface_form": "Compare latch height, tube insertion depth, hose twist, and bracket side load with the opposite-side outlet branch, because a coupler body held off-axis by the support bracket often leaks while the plate seam stays dry.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T5, cross-comparison phase"
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "label": "T6",
+      "step_id": "T6",
+      "surface_form": "Close the inspection only after the report names the exact leak boundary as coolant-plate seam, outlet O-ring seat, connector shell crack, or hose-end distortion, with the pressure result and residue path tied to that hardware.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T6, record closure phase"
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "label": "Aurex BatteryHub-612 LR",
+      "should_be_in_graph": true,
+      "expected_anchor": "Asset",
+      "reason": "Named battery pack platform"
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "label": "outlet quick connector",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Primary hardware component for coolant outlet"
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "label": "coolant plate",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Aluminum cooling plate, leak boundary candidate"
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "label": "hose support bracket",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Bracket that may induce side-load on connector"
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "label": "connector shell",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Shell of quick connector, potential leak point"
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "label": "O-ring",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Seal element in connector"
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "label": "plate seam",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Seam between plate sections, leak boundary"
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "label": "coolant level",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Measured coolant quantity"
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "label": "seepage",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Observable leak symptom"
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "label": "pressure result",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Test pressure outcome"
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "label": "coolant leak",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Top-level fault being diagnosed"
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "label": "connector shell crack",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Named leak boundary in T6"
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "label": "hose-end distortion",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Named leak boundary in T6"
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "label": "recent chiller work",
+      "should_be_in_graph": false,
+      "expected_anchor": null,
+      "reason": "Historical context, not a graph-worthy concept"
+    }
+  ],
+  "relation_ground_truth": [
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T1",
+      "relation": "triggers",
+      "tail": "T2",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T1 observation before T2 hardware access"
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T2",
+      "relation": "triggers",
+      "tail": "T3",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T2 access before T3 leak tracing"
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T3",
+      "relation": "triggers",
+      "tail": "T4",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T3 tracing before T4 pressure test"
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T4",
+      "relation": "triggers",
+      "tail": "T5",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T4 verification before T5 comparison"
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T5",
+      "relation": "triggers",
+      "tail": "T6",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T5 comparison before T6 closure"
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "Aurex BatteryHub-612 LR",
+      "relation": "contains",
+      "tail": "coolant plate",
+      "family": "structural",
+      "valid": true,
+      "reason": "Coolant plate is part of battery pack"
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "coolant plate",
+      "relation": "contains",
+      "tail": "outlet quick connector",
+      "family": "structural",
+      "valid": true,
+      "reason": "Connector attached to plate outlet"
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "seepage",
+      "relation": "indicates",
+      "tail": "coolant leak",
+      "family": "communication",
+      "valid": true,
+      "reason": "Visible seepage indicates active leak"
+    }
+  ],
+  "_statistics": {
+    "total_concepts": 20,
+    "positive_concepts": 19,
+    "negative_concepts": 1,
+    "total_relations": 8,
+    "valid_relations": 8
+  }
+}

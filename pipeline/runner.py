@@ -14,7 +14,12 @@ from ..rules.filtering import filter_attachment_decision
 from .artifacts import export_benchmark_summary, export_variant_run, write_latest_summary
 from .attachment import decide_attachments_for_domain
 from .backbone import build_backbone
-from .evidence import aggregate_schema_candidates, build_evidence_units, load_records_by_domain
+from .evidence import (
+    aggregate_schema_candidates,
+    build_evidence_units,
+    load_records_by_domain,
+    normalize_records_by_domain,
+)
 from .graph import assemble_domain_graphs, build_domain_schemas
 from .memory import (
     build_variant_memory_entries,
@@ -104,9 +109,9 @@ def run_pipeline(
         )
 
     logger.info("Loading records by domain")
-    records_by_domain = load_records_by_domain(config)
+    records_by_domain = normalize_records_by_domain(load_records_by_domain(config))
     evidence_units = build_evidence_units(config, records_by_domain)
-    candidates_by_domain = aggregate_schema_candidates(records_by_domain)
+    candidates_by_domain = aggregate_schema_candidates(records_by_domain, assume_normalized=True)
     persistent_memory_entries = load_persistent_memory_bank(config)
     historical_context_by_domain = retrieve_historical_context(
         config=config,
@@ -175,6 +180,7 @@ def run_pipeline(
                         backbone_concepts=backbone_set,
                         allowed_routes=set(config.relations.allowed_routes),
                         allow_free_form_growth=variant.allow_free_form_growth,
+                        min_relation_support_count=config.runtime.min_relation_support_count,
                     )
                 decisions = filtered
             decisions_by_domain[domain.domain_id] = decisions
@@ -200,6 +206,7 @@ def run_pipeline(
                 variant_id=variant.variant_id,
                 run_root=str(run_root),
                 records_by_domain=records_by_domain,
+                candidates_by_domain=candidates_by_domain,
                 decisions_by_domain=decisions_by_domain,
                 historical_context_by_domain=variant_historical_context,
                 domain_graphs=domain_graphs,
@@ -224,7 +231,6 @@ def run_pipeline(
             domain_graphs=domain_graphs,
             construction_summary={},
             memory_entries=memory_entries,
-            run_dir=str(variant_run_dir),
         )
         result.construction_summary = _build_variant_construction_summary(result)
         variant_results[variant.variant_id] = result
@@ -233,6 +239,7 @@ def run_pipeline(
             export_variant_run(
                 run_dir=variant_run_dir,
                 result=result,
+                write_detailed_working_artifacts=config.runtime.write_detailed_working_artifacts,
                 write_jsonl_artifacts=config.runtime.write_jsonl_artifacts,
                 write_property_graph_jsonl=config.runtime.write_property_graph_jsonl,
                 write_graph_db_csv=config.runtime.write_graph_db_csv,

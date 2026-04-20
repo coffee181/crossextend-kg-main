@@ -12,6 +12,16 @@ from .utils import json_pretty, load_text, render_prompt_template
 
 logger = logging.getLogger(__name__)
 
+_PROPAGATION_FAMILIES: frozenset[str] = frozenset({"propagation", "communication"})
+_SEMANTIC_TYPE_HINTS: frozenset[str] = frozenset({"Asset", "Component", "Signal", "State", "Fault"})
+_FAMILY_COMPATIBLE_ANCHORS: dict[str, frozenset[str]] = {
+    "task_dependency": frozenset({"Task", "Process", "Actor", "Signal", "State", "Fault", "Asset", "Component", "Document"}),
+    "communication": frozenset({"Component", "Signal", "Process", "State", "Asset", "Actor", "Task", "Fault"}),
+    "propagation": frozenset({"Fault", "Signal", "State", "Process", "Component"}),
+    "structural": frozenset({"Asset", "Component"}),
+    "lifecycle": frozenset({"Asset", "Component", "Fault", "State", "MaintenanceAction", "Incident", "Process"}),
+}
+
 ALLOWED_REJECT_REASONS: tuple[RejectReason, ...] = (
     "person_name",
     "document_title",
@@ -27,7 +37,90 @@ ALLOWED_REJECT_REASONS: tuple[RejectReason, ...] = (
 )
 
 
+def _semantic_type_hint(candidate: SchemaCandidate) -> str | None:
+    hint = candidate.routing_features.get("semantic_type_hint")
+    if isinstance(hint, str) and hint in _SEMANTIC_TYPE_HINTS:
+        return hint
+    for item in candidate.routing_features.get("semantic_type_hint_candidates", []):
+        if isinstance(item, str) and item in _SEMANTIC_TYPE_HINTS:
+            return item
+    return None
+
+
+def _is_task_candidate(candidate: SchemaCandidate) -> bool:
+    if candidate.routing_features.get("is_task_candidate"):
+        return True
+    task_step_id = candidate.routing_features.get("task_step_id")
+    return isinstance(task_step_id, str) and task_step_id.startswith("T")
+
+
+def _apply_semantic_type_hint(candidate: SchemaCandidate, proposed_anchor: str | None) -> str | None:
+    hint = _semantic_type_hint(candidate)
+    if hint is None:
+        return proposed_anchor
+    if proposed_anchor is None:
+        return hint
+    if proposed_anchor == "Task" and not _is_task_candidate(candidate):
+        return hint
+    return proposed_anchor
+
+
+def _infer_anchor_from_relation_families(
+    candidate: SchemaCandidate,
+    proposed_anchor: str | None,
+) -> str | None:
+    families: list[str] = candidate.routing_features.get("relation_families", [])
+    family_set = set(families)
+    if not family_set:
+        return proposed_anchor
+
+    if _PROPAGATION_FAMILIES & family_set and "task_dependency" not in family_set:
+        if proposed_anchor in (None, "Task"):
+            return _semantic_type_hint(candidate)
+        if all(
+            proposed_anchor in _FAMILY_COMPATIBLE_ANCHORS.get(family, frozenset({proposed_anchor}))
+            for family in family_set
+        ):
+            return proposed_anchor
+        return _semantic_type_hint(candidate)
+
+    if proposed_anchor == "Task" and "task_dependency" not in family_set and family_set:
+        return _semantic_type_hint(candidate)
+
+    if proposed_anchor is None:
+        return None
+
+    if all(
+        proposed_anchor in _FAMILY_COMPATIBLE_ANCHORS.get(family, frozenset({proposed_anchor}))
+        for family in family_set
+    ):
+        return proposed_anchor
+
+    hint = _semantic_type_hint(candidate)
+    if hint is None:
+        return None
+    if all(
+        hint in _FAMILY_COMPATIBLE_ANCHORS.get(family, frozenset({hint}))
+        for family in family_set
+    ):
+        return hint
+    return None
+
+
 def _seed_decision(candidate: SchemaCandidate, backbone_concepts: set[str]) -> AttachmentDecision | None:
+    if _is_task_candidate(candidate) and "Task" in backbone_concepts:
+        return AttachmentDecision(
+            candidate_id=candidate.candidate_id,
+            label=candidate.label,
+            route="vertical_specialize",
+            parent_anchor="Task",
+            accept=True,
+            admit_as_node=True,
+            reject_reason=None,
+            confidence=1.0,
+            justification="preserved O&M step candidate as Task",
+            evidence_ids=list(candidate.evidence_ids),
+        )
     if candidate.label not in backbone_concepts:
         return None
     return AttachmentDecision(
@@ -62,10 +155,29 @@ def _normalize_attachment_decision(
         return decision
 
     recovered_anchor = decision.parent_anchor if decision.parent_anchor in backbone_concepts else None
+    recovered_anchor = _apply_semantic_type_hint(candidate, recovered_anchor)
+    recovered_anchor = _infer_anchor_from_relation_families(candidate, recovered_anchor)
     if recovered_anchor is None:
-        recovered_anchor = _top_anchor(candidate, retrievals)
+        recovered_anchor = _infer_anchor_from_relation_families(
+            candidate,
+            _apply_semantic_type_hint(candidate, _top_anchor(candidate, retrievals)),
+        )
     if recovered_anchor is None:
-        recovered_anchor = top_historical_parent_anchor(historical_context.get(candidate.candidate_id), backbone_concepts)
+        recovered_anchor = _infer_anchor_from_relation_families(
+            candidate,
+            _apply_semantic_type_hint(
+                candidate,
+                top_historical_parent_anchor(
+                    historical_context.get(candidate.candidate_id),
+                    backbone_concepts,
+                ),
+            ),
+        )
+    if recovered_anchor is None:
+        recovered_anchor = _infer_anchor_from_relation_families(
+            candidate,
+            _apply_semantic_type_hint(candidate, None),
+        )
 
     if recovered_anchor is None:
         return decision.model_copy(
@@ -104,9 +216,25 @@ def build_embedding_top1_decisions(
         if seed:
             decisions.append(seed)
             continue
-        retrieved_anchor = _top_anchor(candidate, retrievals)
-        historical_anchor = top_historical_parent_anchor(historical_context.get(candidate.candidate_id), backbone_concepts)
-        parent_anchor = retrieved_anchor or historical_anchor
+        retrieved_anchor = _infer_anchor_from_relation_families(
+            candidate,
+            _apply_semantic_type_hint(candidate, _top_anchor(candidate, retrievals)),
+        )
+        historical_anchor = _infer_anchor_from_relation_families(
+            candidate,
+            _apply_semantic_type_hint(
+                candidate,
+                top_historical_parent_anchor(
+                    historical_context.get(candidate.candidate_id),
+                    backbone_concepts,
+                ),
+            ),
+        )
+        hint_anchor = _infer_anchor_from_relation_families(
+            candidate,
+            _apply_semantic_type_hint(candidate, None),
+        )
+        parent_anchor = retrieved_anchor or historical_anchor or hint_anchor
         accept = parent_anchor is not None or allow_free_form_growth
         if retrieved_anchor and historical_anchor and retrieved_anchor == historical_anchor:
             confidence = 0.7
@@ -117,6 +245,9 @@ def build_embedding_top1_decisions(
         elif retrieved_anchor is not None:
             confidence = 0.55
             justification = "embedding top-1 anchor"
+        elif hint_anchor is not None:
+            confidence = 0.5
+            justification = "preprocessing semantic type hint"
         else:
             confidence = 0.25
             justification = "no anchor available"
@@ -144,7 +275,13 @@ def build_deterministic_decisions(
     backbone_concepts: set[str],
     allow_free_form_growth: bool,
 ) -> list[AttachmentDecision]:
-    decisions = build_embedding_top1_decisions(candidates, retrievals, historical_context, backbone_concepts, allow_free_form_growth)
+    decisions = build_embedding_top1_decisions(
+        candidates,
+        retrievals,
+        historical_context,
+        backbone_concepts,
+        allow_free_form_growth,
+    )
     for index, decision in enumerate(decisions):
         if decision.route == "vertical_specialize":
             decisions[index] = decision.model_copy(
@@ -265,15 +402,35 @@ def decide_attachments_for_domain(
     backbone_concepts: set[str],
 ) -> dict[str, AttachmentDecision]:
     if variant.attachment_strategy == "embedding_top1":
-        decisions = build_embedding_top1_decisions(candidates, retrievals, historical_context, backbone_concepts, variant.allow_free_form_growth)
+        decisions = build_embedding_top1_decisions(
+            candidates,
+            retrievals,
+            historical_context,
+            backbone_concepts,
+            variant.allow_free_form_growth,
+        )
     elif variant.attachment_strategy == "deterministic":
-        decisions = build_deterministic_decisions(candidates, retrievals, historical_context, backbone_concepts, variant.allow_free_form_growth)
+        decisions = build_deterministic_decisions(
+            candidates,
+            retrievals,
+            historical_context,
+            backbone_concepts,
+            variant.allow_free_form_growth,
+        )
     else:
         seed_decisions = [seed for candidate in candidates if (seed := _seed_decision(candidate, backbone_concepts))]
-        llm_candidates = [candidate for candidate in candidates if candidate.label not in backbone_concepts]
+        seeded_ids = {decision.candidate_id for decision in seed_decisions}
+        llm_candidates = [candidate for candidate in candidates if candidate.candidate_id not in seeded_ids]
         decisions = list(seed_decisions)
         total_batches = len(_chunked(llm_candidates, config.runtime.llm_attachment_batch_size))
-        logger.info("Domain %s: %d candidates (%d seed, %d LLM), processing %d batches", domain_id, len(candidates), len(seed_decisions), len(llm_candidates), total_batches)
+        logger.info(
+            "Domain %s: %d candidates (%d seed, %d LLM), processing %d batches",
+            domain_id,
+            len(candidates),
+            len(seed_decisions),
+            len(llm_candidates),
+            total_batches,
+        )
         batch_idx = 0
         for batch in _chunked(llm_candidates, config.runtime.llm_attachment_batch_size):
             batch_idx += 1
@@ -290,22 +447,30 @@ def decide_attachments_for_domain(
                 ) from exc
 
     candidates_by_id = {candidate.candidate_id: candidate for candidate in candidates}
-    normalized_decisions = [
-        _normalize_attachment_decision(
-            candidate=candidates_by_id[decision.candidate_id],
-            decision=decision,
-            retrievals=retrievals,
-            historical_context=historical_context,
-            backbone_concepts=backbone_concepts,
+    normalized_decisions: list[AttachmentDecision] = []
+    for decision in decisions:
+        candidate = candidates_by_id.get(decision.candidate_id)
+        if candidate is None:
+            logger.warning(
+                "Dropping attachment decision for unknown candidate_id=%s in domain %s",
+                decision.candidate_id,
+                domain_id,
+            )
+            continue
+        normalized_decisions.append(
+            _normalize_attachment_decision(
+                candidate=candidate,
+                decision=decision,
+                retrievals=retrievals,
+                historical_context=historical_context,
+                backbone_concepts=backbone_concepts,
+            )
         )
-        for decision in decisions
-    ]
 
     decisions_by_id: dict[str, AttachmentDecision] = {}
     for decision in normalized_decisions:
         decisions_by_id[decision.candidate_id] = decision
 
-    # Ensure stable output for every candidate.
     for candidate in candidates:
         if candidate.candidate_id not in decisions_by_id:
             decisions_by_id[candidate.candidate_id] = AttachmentDecision(

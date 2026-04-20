@@ -1,0 +1,841 @@
+{
+  "schema_version": "human_gold.v2",
+  "domain_id": "cnc",
+  "label_tier": "human_annotation_v1",
+  "annotation_status": "human_annotated",
+  "annotator_id": "human_expert_01",
+  "annotation_date": "2026-04-19",
+  "annotation_basis": "Independent human annotation from source O&M text only. Annotator did not consult pipeline extraction outputs. Task labels taken verbatim from O&M text.",
+  "documents": [
+    {
+      "doc_id": "CNCOM_003",
+      "doc_type": "om_manual"
+    }
+  ],
+  "concept_ground_truth": [
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "T1",
+      "step_id": "T1",
+      "surface_form": "On Kestrel VMC-850, record the spindle chiller complaint as coolant dripping from the rear column only during circulation, residue collecting on the lower cable tray, or coolant loss that appears after a sustained 8000 to 12000 rpm spindle hold. Note the as-received coolant level, spindle speed window, and the first visible drip path before any guard is removed.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T1, complaint recording phase"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "T2",
+      "step_id": "T2",
+      "surface_form": "Isolate the machine as required and expose the spindle-chiller supply hose, return hose, worm-drive clamps, brass tube necks, chiller manifold block, P-clip on the rear column, and the lower drip tray. Keep the upper outlet hose and lower return hose visible together so upstream and downstream wetting can be separated instead of being read as one large stain.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T2, machine isolation and component exposure phase"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "T3",
+      "step_id": "T3",
+      "surface_form": "Trace the wet boundary from the lowest drip point back toward the upper hose bead, the clamp screw housing, the molded hose bend, or the manifold face, and document whether the stain runs front to rear along the cable tray or drops straight down from the hose neck. Preserve hose twist and clip position because a side-loaded branch often leaks only when the machine is in its final supported geometry.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T3, wet boundary tracing phase"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "T4",
+      "step_id": "T4",
+      "surface_form": "Pressure-test the branch at 1.5 bar with the spindle stopped and compare the result with the dry reference hose on the opposite side of the chiller block. If the branch stays dry under static pressure but wets the lower tray once the chiller pump runs, keep the evidence on vibration load, clamp position, and hose insertion depth rather than replacing the manifold on assumption.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T4, static pressure test phase"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "T5",
+      "step_id": "T5",
+      "surface_form": "Measure clamp position relative to the tube bead and check hose insertion depth at both the upper outlet neck and the lower return neck. A clamp that sits more than a few millimeters behind the bead or a hose that is pulled rearward by the P-clip can look seated while still opening a leak path once pump pulsation and spindle vibration act on the branch together.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T5, clamp and insertion depth measurement phase"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "T6",
+      "step_id": "T6",
+      "surface_form": "Run the chiller pump and hold the spindle at the complaint speed with the rear guard still open, then watch the upper clamp, the molded bend, and the P-clip bracket through the full vibration event. If wetting starts only when the hose is tugged toward the rear column clip, isolate the fault boundary to the upper return-hose clamp and clip-to-bracket side load rather than to the manifold casting or the lower drain path.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T6, dynamic vibration test phase"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "T7",
+      "step_id": "T7",
+      "surface_form": "Reposition the hose fully against the tube bead, rotate the clamp so the screw housing does not contact the column bracket, and restore the branch through the original clip path with a relaxed bend radius. Confirm that the hose is seated against the bead, the clamp band is centered, and the P-clip is holding the branch without twisting the upper neck sideways.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T7, hose repositioning and restoration phase"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "T8",
+      "step_id": "T8",
+      "surface_form": "Release the machine only after a repeated pressure hold and a repeated high-speed circulation run leave the upper hose neck, lower return path, and drip tray dry. The accepted closeout is a named leak boundary at the spindle-chiller return hose clamp or its support path, with no renewed coolant trace from upper outlet to lower tray under the same speed window that created the complaint.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T8, final verification and release phase"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "Kestrel VMC-850",
+      "should_be_in_graph": true,
+      "expected_anchor": "Asset",
+      "reason": "Named CNC machine platform"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "spindle-chiller supply hose",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Supply hose for spindle cooling"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "return hose",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Return hose for spindle cooling"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "worm-drive clamps",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Clamps securing hoses"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "brass tube necks",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Brass neck sections for hose connection"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "chiller manifold block",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Manifold distributing coolant"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "P-clip",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Clip supporting hose on rear column"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "lower drip tray",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Tray collecting drips below"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "upper outlet hose",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Outlet hose at upper position"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "lower return hose",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Return hose at lower position"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "upper hose bead",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Bead on upper hose connection"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "clamp screw housing",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Housing of clamp screw mechanism"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "molded hose bend",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Pre-formed bend section of hose"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "manifold face",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Front surface of manifold block"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "rear column",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Column at rear of machine"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "dry reference hose",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Reference hose without leak for comparison"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "chiller block",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Block assembly of chiller"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "upper outlet neck",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Neck at upper outlet position"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "lower return neck",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Neck at lower return position"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "tube bead",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Bead on tube for hose retention"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "upper clamp",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Clamp at upper hose position"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "P-clip bracket",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Bracket holding P-clip"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "column bracket",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Bracket on column for hose support"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "rear guard",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Guard at rear of machine"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "clamp band",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Band portion of clamp"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "upper hose neck",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Neck of upper hose"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "lower return path",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Path of lower return hose"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "upper return-hose clamp",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Named leak boundary component"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "spindle-chiller return hose clamp",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Named leak boundary in closeout"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "upper return-hose clamp leak",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Named failure mode: leak at upper return-hose clamp"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "coolant dripping during circulation",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Top-level fault being diagnosed"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "coolant loss after high-speed hold",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Coolant loss under sustained spindle speed"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "side-loaded branch",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Branch under lateral load causing leak"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "leak under dynamic condition",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Leak that appears only under pump/vibration"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "clip-to-bracket side load",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Named failure mode in T6"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "manifold casting failure",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Alternative fault boundary ruled out"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "lower drain path failure",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Alternative fault boundary ruled out"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "hose pulled rearward",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Hose position issue causing leak"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "coolant dripping",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Observable coolant leak symptom"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "circulation",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Pump running state"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "residue collecting",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Accumulated coolant residue"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "coolant loss",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Reduced coolant quantity"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "sustained spindle hold",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Continuous spindle operation at high speed"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "spindle speed",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "RPM measurement of spindle"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "as-received coolant level",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Initial coolant quantity measurement"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "spindle speed window",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Range of spindle speeds related to complaint"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "first visible drip path",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Initial observable leak path"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "wet boundary",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Edge of visible coolant wetting"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "lowest drip point",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Bottom of visible drip path"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "hose twist",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Rotation position of hose"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "clip position",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Position of P-clip"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "pressure test result",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Outcome of static pressure test"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "vibration load",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Force from spindle vibration on hose"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "clamp position",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Position of clamp relative to bead"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "hose insertion depth",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "How far hose is inserted onto tube"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "clamp position relative to tube bead",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Measured position of clamp vs bead"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "hose insertion depth at upper neck",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Insertion depth at upper position"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "hose insertion depth at lower neck",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Insertion depth at lower position"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "pump pulsation",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Pressure cycling from pump operation"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "spindle vibration",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Vibration from spindle rotation"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "vibration event",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Period of vibration during test"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "hose tugged toward rear column clip",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Observable hose movement during vibration"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "wetting starts",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Observable coolant appearance during test"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "hose seated against bead",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Verified position of hose on bead"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "clamp band centered",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Verified clamp position on hose"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "P-clip holding",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Verified P-clip function"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "upper hose neck dry",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Verified dry condition at upper position"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "lower return path dry",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Verified dry condition at lower position"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "drip tray dry",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Verified dry condition in tray"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "repeated pressure hold",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Multiple static test iterations"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "repeated high-speed circulation run",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Multiple dynamic test iterations"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "relaxed bend radius",
+      "should_be_in_graph": true,
+      "expected_anchor": "State",
+      "reason": "Acceptable hose geometry after repair"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "no renewed coolant trace",
+      "should_be_in_graph": true,
+      "expected_anchor": "State",
+      "reason": "Acceptable final condition"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "label": "final supported geometry",
+      "should_be_in_graph": true,
+      "expected_anchor": "State",
+      "reason": "Acceptable geometry under machine configuration"
+    }
+  ],
+  "relation_ground_truth": [
+    {
+      "evidence_id": "CNCOM_003",
+      "head": "T1",
+      "relation": "triggers",
+      "tail": "T2",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T1 recording before T2 isolation"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "head": "T2",
+      "relation": "triggers",
+      "tail": "T3",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T2 exposure before T3 tracing"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "head": "T3",
+      "relation": "triggers",
+      "tail": "T4",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T3 tracing before T4 pressure test"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "head": "T4",
+      "relation": "triggers",
+      "tail": "T5",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T4 static test before T5 measurement"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "head": "T5",
+      "relation": "triggers",
+      "tail": "T6",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T5 measurement before T6 dynamic test"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "head": "T6",
+      "relation": "triggers",
+      "tail": "T7",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T6 fault isolation before T7 repair"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "head": "T7",
+      "relation": "triggers",
+      "tail": "T8",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T7 repositioning before T8 final verification"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "head": "Kestrel VMC-850",
+      "relation": "contains",
+      "tail": "spindle-chiller supply hose",
+      "family": "structural",
+      "valid": true,
+      "reason": "Supply hose is part of machine cooling system"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "head": "Kestrel VMC-850",
+      "relation": "contains",
+      "tail": "return hose",
+      "family": "structural",
+      "valid": true,
+      "reason": "Return hose is part of machine cooling system"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "head": "spindle-chiller supply hose",
+      "relation": "contains",
+      "tail": "worm-drive clamps",
+      "family": "structural",
+      "valid": true,
+      "reason": "Clamps are attached to supply hose"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "head": "return hose",
+      "relation": "contains",
+      "tail": "worm-drive clamps",
+      "family": "structural",
+      "valid": true,
+      "reason": "Clamps are attached to return hose"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "head": "return hose",
+      "relation": "contains",
+      "tail": "molded hose bend",
+      "family": "structural",
+      "valid": true,
+      "reason": "Molded bend is part of return hose"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "head": "rear column",
+      "relation": "contains",
+      "tail": "P-clip",
+      "family": "structural",
+      "valid": true,
+      "reason": "P-clip is attached to rear column"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "head": "P-clip",
+      "relation": "contains",
+      "tail": "return hose",
+      "family": "structural",
+      "valid": true,
+      "reason": "P-clip supports return hose"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "head": "chiller manifold block",
+      "relation": "contains",
+      "tail": "manifold face",
+      "family": "structural",
+      "valid": true,
+      "reason": "Face is surface of manifold block"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "head": "coolant dripping",
+      "relation": "indicates",
+      "tail": "coolant dripping during circulation",
+      "family": "communication",
+      "valid": true,
+      "reason": "Visible dripping indicates circulation leak"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "head": "coolant loss",
+      "relation": "indicates",
+      "tail": "coolant loss after high-speed hold",
+      "family": "communication",
+      "valid": true,
+      "reason": "Quantity loss indicates high-speed leak"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "head": "hose twist",
+      "relation": "indicates",
+      "tail": "side-loaded branch",
+      "family": "communication",
+      "valid": true,
+      "reason": "Twist indicates side load condition"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "head": "hose tugged toward rear column clip",
+      "relation": "indicates",
+      "tail": "clip-to-bracket side load",
+      "family": "communication",
+      "valid": true,
+      "reason": "Observable tug indicates side load"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "head": "wetting starts",
+      "relation": "indicates",
+      "tail": "leak under dynamic condition",
+      "family": "communication",
+      "valid": true,
+      "reason": "Wetting during vibration indicates dynamic leak"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "head": "vibration load",
+      "relation": "causes",
+      "tail": "leak under dynamic condition",
+      "family": "propagation",
+      "valid": true,
+      "reason": "Vibration causes leak to appear"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "head": "side-loaded branch",
+      "relation": "causes",
+      "tail": "coolant dripping during circulation",
+      "family": "propagation",
+      "valid": true,
+      "reason": "Side load causes circulation leak"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "head": "clip-to-bracket side load",
+      "relation": "causes",
+      "tail": "upper return-hose clamp leak",
+      "family": "propagation",
+      "valid": true,
+      "reason": "Side load causes clamp leak"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "head": "pump pulsation",
+      "relation": "causes",
+      "tail": "hose pulled rearward",
+      "family": "propagation",
+      "valid": true,
+      "reason": "Pump pulsation causes hose movement"
+    },
+    {
+      "evidence_id": "CNCOM_003",
+      "head": "spindle vibration",
+      "relation": "causes",
+      "tail": "vibration load",
+      "family": "propagation",
+      "valid": true,
+      "reason": "Spindle rotation causes vibration load"
+    }
+  ],
+  "_statistics": {
+    "total_concepts": 82,
+    "positive_concepts": 82,
+    "negative_concepts": 0,
+    "total_relations": 25,
+    "valid_relations": 25
+  }
+}

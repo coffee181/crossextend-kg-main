@@ -1,0 +1,537 @@
+{
+  "schema_version": "human_gold.v2",
+  "domain_id": "battery",
+  "label_tier": "human_annotation_v1",
+  "annotation_status": "human_annotated",
+  "annotator_id": "human_expert_01",
+  "annotation_date": "2026-04-19",
+  "annotation_basis": "Independent human annotation from source O&M text only. Annotator did not consult pipeline extraction outputs. Task labels taken verbatim from O&M text.",
+  "documents": [
+    {
+      "doc_id": "BATOM_002",
+      "doc_type": "om_manual"
+    }
+  ],
+  "concept_ground_truth": [
+    {
+      "evidence_id": "BATOM_002",
+      "label": "T1",
+      "step_id": "T1",
+      "surface_form": "Before replacing the chiller-inlet connector on Novaris ThermalPack-481, document the original failure as cracked shell, broken latch ear, incomplete insertion, or recurring seepage at the inlet tube bead, and note the exact operating state that exposed it. Keep the pack-to-chiller hose and the adjacent support clip undisturbed until the as-found angle is recorded.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T1, pre-replacement documentation phase"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "T2",
+      "step_id": "T2",
+      "surface_form": "Isolate the cooling branch, recover residual coolant, and expose the tube neck, quick-connector shell, internal retainer, green O-ring, hose overmold, support clip, and nearby case rib while preserving the original hose clocking. Photograph the connector-to-clip path so the load direction remains traceable after removal.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T2, branch isolation and exposure phase"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "T3",
+      "step_id": "T3",
+      "surface_form": "Release the connector with the approved tool and inspect the removed shell for stress whitening, latch-window distortion, inner-retainer wear, and witness marks that show whether the shell rotated or walked under vibration. A shell that is polished on one side only usually indicates bracket side load rather than poor seal material.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T3, connector removal and inspection phase"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "T4",
+      "step_id": "T4",
+      "surface_form": "Inspect the aluminum tube bead, lead-in chamfer, and O-ring land for burrs, nicks, or corrosion that could cut the fresh seal during installation. Measure the bead condition and insertion depth reference before fitting the new hardware so the new connector is not asked to mask a damaged neck.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T4, tube neck inspection phase"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "T5",
+      "step_id": "T5",
+      "surface_form": "Compare the replacement connector, seal, and retainer with the removed parts, then lubricate the new O-ring as specified and install the shell square to the tube neck. Confirm that the retainer windows show full engagement and that the hose overmold is not twisted relative to the case rib.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T5, replacement installation phase"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "T6",
+      "step_id": "T6",
+      "surface_form": "Refit the support clip and verify that the hose leaves the connector with the intended bend radius, upper-to-lower offset, and clearance to the pack case. If the clip position shortens the hose path and starts to tilt the shell, correct the support geometry before any pressure test begins.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T6, clip refit and geometry verification phase"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "T7",
+      "step_id": "T7",
+      "surface_form": "Apply a static pressure hold and watch the new shell, O-ring interface, and tube bead for fresh wetting, then compare the result with the as-found leak path. Static proof is useful only if the connector remains centered while pressure rises.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T7, static pressure test phase"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "T8",
+      "step_id": "T8",
+      "surface_form": "Run coolant through the repaired inlet branch and observe the connector while the pump cycles and the branch warms, because some replacement connectors stay dry at rest but sweat once the hose relaxes into its loaded position. Record both flow condition and surface state during this dynamic check.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T8, dynamic flow test phase"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "T9",
+      "step_id": "T9",
+      "surface_form": "Reinstall the access panels and repeat the same operating state that originally produced the leak so the final judgment reflects the guarded configuration and the real support path from connector to clip. The restored branch has to survive shield preload as well as coolant flow.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T9, final configuration test phase"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "T10",
+      "step_id": "T10",
+      "surface_form": "Close the work only after the note names the replaced and inspected items at component level, such as quick-connector shell, O-ring, inner retainer, tube bead, or support clip, and records the static and dynamic proof results beside them. The accepted state is a chiller-inlet joint that remains dry, fully latched, and naturally supported from tube neck to first clip.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T10, work closure and documentation phase"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "Novaris ThermalPack-481",
+      "should_be_in_graph": true,
+      "expected_anchor": "Asset",
+      "reason": "Named battery thermal management platform"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "chiller-inlet connector",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Primary component being replaced"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "pack-to-chiller hose",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Hose connecting pack to chiller"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "support clip",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Clip supporting hose/connector"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "inlet tube bead",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Tube bead at inlet connection point"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "tube neck",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Neck of tube for connector attachment"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "quick-connector shell",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Shell housing of quick connector"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "internal retainer",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Internal retention mechanism"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "green O-ring",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Seal element identified by color"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "hose overmold",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Overmolded portion of hose"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "case rib",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Structural rib on case"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "aluminum tube bead",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Aluminum bead on tube for seal engagement"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "lead-in chamfer",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Chamfered edge for tube insertion"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "O-ring land",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Sealing surface for O-ring"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "access panels",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Panels for equipment access"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "operating state",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Measured state condition that exposed the failure"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "stress whitening",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Visual indicator of plastic stress"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "latch-window distortion",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Observable deformation of latch window"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "inner-retainer wear",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Observable wear pattern on retainer"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "witness marks",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Visible marks indicating movement or rotation"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "burrs",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Surface defect on tube bead"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "nicks",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Surface damage on sealing surfaces"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "corrosion",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Corrosion damage on metal surfaces"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "bend radius",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Measured hose bend geometry"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "upper-to-lower offset",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Measured offset between upper and lower positions"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "clearance",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Measured clearance to pack case"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "fresh wetting",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Observable new coolant leakage"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "flow condition",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Measured coolant flow state"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "surface state",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Observable surface condition during test"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "cracked shell",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Named failure mode in T1"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "broken latch ear",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Named failure mode in T1"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "incomplete insertion",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Named failure mode in T1"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "recurring seepage",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Named failure mode in T1"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "bracket side load",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Root cause indicated by shell polishing pattern"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "dry",
+      "should_be_in_graph": true,
+      "expected_anchor": "State",
+      "reason": "Acceptable final state condition"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "fully latched",
+      "should_be_in_graph": true,
+      "expected_anchor": "State",
+      "reason": "Acceptable final latch state"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "label": "naturally supported",
+      "should_be_in_graph": true,
+      "expected_anchor": "State",
+      "reason": "Acceptable final support geometry state"
+    }
+  ],
+  "relation_ground_truth": [
+    {
+      "evidence_id": "BATOM_002",
+      "head": "T1",
+      "relation": "triggers",
+      "tail": "T2",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T1 documentation before T2 isolation"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "head": "T2",
+      "relation": "triggers",
+      "tail": "T3",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T2 exposure before T3 connector release"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "head": "T3",
+      "relation": "triggers",
+      "tail": "T4",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T3 removal before T4 tube inspection"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "head": "T4",
+      "relation": "triggers",
+      "tail": "T5",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T4 inspection before T5 installation"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "head": "T5",
+      "relation": "triggers",
+      "tail": "T6",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T5 installation before T6 clip refit"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "head": "T6",
+      "relation": "triggers",
+      "tail": "T7",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T6 geometry verification before T7 pressure test"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "head": "T7",
+      "relation": "triggers",
+      "tail": "T8",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T7 static test before T8 dynamic test"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "head": "T8",
+      "relation": "triggers",
+      "tail": "T9",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T8 dynamic test before T9 final configuration"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "head": "T9",
+      "relation": "triggers",
+      "tail": "T10",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "T9 final test before T10 closure"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "head": "Novaris ThermalPack-481",
+      "relation": "contains",
+      "tail": "chiller-inlet connector",
+      "family": "structural",
+      "valid": true,
+      "reason": "Connector is part of thermal pack system"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "head": "chiller-inlet connector",
+      "relation": "contains",
+      "tail": "quick-connector shell",
+      "family": "structural",
+      "valid": true,
+      "reason": "Shell is part of connector assembly"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "head": "chiller-inlet connector",
+      "relation": "contains",
+      "tail": "internal retainer",
+      "family": "structural",
+      "valid": true,
+      "reason": "Retainer is internal to connector"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "head": "chiller-inlet connector",
+      "relation": "contains",
+      "tail": "green O-ring",
+      "family": "structural",
+      "valid": true,
+      "reason": "O-ring is seal in connector assembly"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "head": "stress whitening",
+      "relation": "indicates",
+      "tail": "cracked shell",
+      "family": "communication",
+      "valid": true,
+      "reason": "Visual stress indicator points to shell crack potential"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "head": "latch-window distortion",
+      "relation": "indicates",
+      "tail": "broken latch ear",
+      "family": "communication",
+      "valid": true,
+      "reason": "Distortion indicates latch mechanism failure"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "head": "witness marks",
+      "relation": "indicates",
+      "tail": "bracket side load",
+      "family": "communication",
+      "valid": true,
+      "reason": "Movement marks indicate side load condition"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "head": "fresh wetting",
+      "relation": "indicates",
+      "tail": "recurring seepage",
+      "family": "communication",
+      "valid": true,
+      "reason": "New wetting indicates continued leak"
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "head": "bracket side load",
+      "relation": "causes",
+      "tail": "cracked shell",
+      "family": "propagation",
+      "valid": true,
+      "reason": "Side load can cause shell cracking"
+    }
+  ],
+  "_statistics": {
+    "total_concepts": 47,
+    "positive_concepts": 47,
+    "negative_concepts": 0,
+    "total_relations": 18,
+    "valid_relations": 18
+  }
+}

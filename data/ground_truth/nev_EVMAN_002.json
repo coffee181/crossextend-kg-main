@@ -1,0 +1,529 @@
+{
+  "schema_version": "human_gold.v2",
+  "domain_id": "nev",
+  "label_tier": "human_annotation_v1",
+  "annotation_status": "human_annotated",
+  "annotator_id": "human_expert_01",
+  "annotation_date": "2026-04-20",
+  "annotation_basis": "Independent human annotation from source O&M text. Task labels use step_id (T1-T8), concepts extracted with semantic type hints.",
+  "documents": [
+    {
+      "doc_id": "EVMAN_002",
+      "doc_type": "om_manual"
+    }
+  ],
+  "concept_ground_truth": [
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "T1",
+      "step_id": "T1",
+      "surface_form": "On vehicle Aurex E-Motion-412 LR, record battery coolant level, residue color, undertray wetness, recent thermal-system repair history, and whether seepage is already visible at the left coolant-plate outlet while the pack remains in the as-received condition with no covers moved.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T1, intake documentation"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "T2",
+      "step_id": "T2",
+      "surface_form": "Power the vehicle down, isolate the high-voltage pack, and allow the local cooling branch to equalize; then remove the rear underbody shield and the left pack-side splash cover while keeping the hose angle unchanged so the original quick-coupler seating witness can still be read.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T2, vehicle isolation and access"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "T3",
+      "step_id": "T3",
+      "surface_form": "Wipe only the loose surface film first, leave the wet edge untouched, and trace the leak path from the coolant-plate seam toward the outlet hose, the quick-coupler lock window, the O-ring seat, and the nearby bracket drain edge so the actual origin is not blurred by cleaning too early.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T3, leak tracing"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "T4",
+      "step_id": "T4",
+      "surface_form": "Install the local pressure tool on the coolant-plate inlet and outlet, cap the neighboring branch, and hold the specified pressure long enough to observe whether fresh wetting begins at the plate seam, the coupler body, the hose clamp line, or the tube insertion stop inside the connector.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T4, pressure test"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "T5",
+      "step_id": "T5",
+      "surface_form": "Compare the suspect joint with the opposite coolant-plate branch, paying attention to hose twist, clamp clocking, connector latch height, tube insertion depth, and any side-load mark where the support bracket may have forced the plastic coupler body off-axis.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T5, cross-comparison"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "T6",
+      "step_id": "T6",
+      "surface_form": "Inspect the aluminum plate edge, the molded quick connector, the green O-ring land, the hose end, and the nearby harness clip for dried coolant crystals, abrasion, plastic stress whitening, or metal staining that would separate connector leakage from a plate-side crack.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T6, component inspection"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "T7",
+      "step_id": "T7",
+      "surface_form": "Mark the confirmed leak boundary directly at the leaking hardware, photograph the coolant-plate seam and the quick-coupler seat from more than one angle, and note clearly whether the failure belongs to the plate seam, the O-ring interface, the connector shell, or the hose-routing condition.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T7, boundary confirmation"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "T8",
+      "step_id": "T8",
+      "surface_form": "Refit only the access parts needed to protect the opened area, leave the identified leak point readable for downstream repair, and close the record with the exact hardware named as battery coolant-plate outlet quick connector or coolant-plate seam instead of leaving a generic leak description.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T8, closure"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "Aurex E-Motion-412 LR",
+      "should_be_in_graph": true,
+      "expected_anchor": "Asset",
+      "reason": "Named EV vehicle platform"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "high-voltage pack",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Primary component being diagnosed"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "coolant plate",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Cooling plate assembly"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "left coolant-plate outlet",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Specific outlet being investigated"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "outlet hose",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Hose at coolant outlet"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "quick coupler",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Connector at outlet"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "quick-coupler lock window",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Latch mechanism visibility"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "O-ring seat",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "O-ring sealing surface"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "bracket drain edge",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Support bracket drainage"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "local pressure tool",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Test equipment"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "coolant-plate inlet",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Plate inlet port"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "coolant-plate outlet",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Plate outlet port"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "molded quick connector",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Plastic connector body"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "green O-ring land",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "O-ring sealing groove"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "hose end",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Hose termination"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "harness clip",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Wire routing fixture"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "rear underbody shield",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Vehicle cover panel"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "left pack-side splash cover",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Pack-side protection panel"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "support bracket",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Bracket supporting hose routing"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "battery coolant-plate outlet quick connector",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Named leak boundary in T8"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "seepage",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Observable leak symptom"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "battery coolant level",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Measured coolant quantity"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "residue color",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Observed residue characteristic"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "undertray wetness",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Observed wetness indicator"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "fresh wetting",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Observed new leak during test"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "hose twist",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Measured hose orientation"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "clamp clocking",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Measured clamp orientation"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "connector latch height",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Measured latch position"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "tube insertion depth",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Measured tube seating"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "side-load mark",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Evidence of mechanical load"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "dried coolant crystals",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Residue evidence"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "abrasion",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Observed wear pattern"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "plastic stress whitening",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Observed plastic stress"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "metal staining",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Observed corrosion evidence"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "coolant-plate seam leak",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Named leak boundary candidate"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "O-ring interface leak",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Named leak boundary candidate"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "connector shell leak",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Named leak boundary candidate"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "hose-routing condition fault",
+      "should_be_in_graph": true,
+      "expected_anchor": "Fault",
+      "reason": "Named leak boundary candidate"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "as-received condition",
+      "should_be_in_graph": true,
+      "expected_anchor": "State",
+      "reason": "Vehicle state before any work"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "hose angle",
+      "should_be_in_graph": true,
+      "expected_anchor": "State",
+      "reason": "Original hose orientation preserved"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "label": "recent thermal-system repair history",
+      "should_be_in_graph": false,
+      "expected_anchor": null,
+      "reason": "Historical context, not graph-worthy"
+    }
+  ],
+  "relation_ground_truth": [
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "T1",
+      "relation": "triggers",
+      "tail": "T2",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "Documentation before vehicle isolation"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "T2",
+      "relation": "triggers",
+      "tail": "T3",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "Access before leak tracing"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "T3",
+      "relation": "triggers",
+      "tail": "T4",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "Tracing before pressure test"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "T4",
+      "relation": "triggers",
+      "tail": "T5",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "Pressure test before comparison"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "T5",
+      "relation": "triggers",
+      "tail": "T6",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "Comparison before component inspection"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "T6",
+      "relation": "triggers",
+      "tail": "T7",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "Inspection before boundary confirmation"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "T7",
+      "relation": "triggers",
+      "tail": "T8",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "Confirmation before closure"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "support bracket",
+      "relation": "causes",
+      "tail": "side-load mark",
+      "family": "propagation",
+      "valid": true,
+      "reason": "Bracket forces hose off-axis"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "side-load mark",
+      "relation": "causes",
+      "tail": "connector shell leak",
+      "family": "propagation",
+      "valid": true,
+      "reason": "Side load causes connector distortion"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "seepage",
+      "relation": "indicates",
+      "tail": "coolant-plate seam leak",
+      "family": "communication",
+      "valid": true,
+      "reason": "Visible seepage points to leak boundary"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "fresh wetting",
+      "relation": "indicates",
+      "tail": "O-ring interface leak",
+      "family": "communication",
+      "valid": true,
+      "reason": "Test result reveals leak location"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "plastic stress whitening",
+      "relation": "indicates",
+      "tail": "side-load mark",
+      "family": "communication",
+      "valid": true,
+      "reason": "Whitening reveals mechanical stress history"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "Aurex E-Motion-412 LR",
+      "relation": "contains",
+      "tail": "high-voltage pack",
+      "family": "structural",
+      "valid": true,
+      "reason": "Pack is part of vehicle"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "high-voltage pack",
+      "relation": "contains",
+      "tail": "coolant plate",
+      "family": "structural",
+      "valid": true,
+      "reason": "Coolant plate is in battery pack"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "coolant plate",
+      "relation": "contains",
+      "tail": "coolant-plate outlet",
+      "family": "structural",
+      "valid": true,
+      "reason": "Outlet is plate feature"
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "coolant-plate outlet",
+      "relation": "contains",
+      "tail": "quick coupler",
+      "family": "structural",
+      "valid": true,
+      "reason": "Connector attaches to outlet"
+    }
+  ],
+  "_statistics": {
+    "total_concepts": 49,
+    "positive_concepts": 48,
+    "negative_concepts": 1,
+    "total_relations": 16,
+    "valid_relations": 16
+  }
+}

@@ -1,91 +1,127 @@
-You are an industrial knowledge graph extraction expert specializing in operation and maintenance (O&M) manuals. Given one O&M manual document, extract grounded concept mentions and relation mentions for concept-layer knowledge graph construction.
+You are an industrial knowledge graph extraction expert specializing in operation and maintenance (O&M) forms.
+
+Given one O&M form document, extract grounded concept mentions and grounded relation mentions for downstream graph construction.
 
 ## Backbone Concepts
-These are the fixed shared backbone concepts:
 __BACKBONE_CONCEPTS_JSON__
 
-## Relation Families
-All relations must use one of these families:
+## Allowed Relation Families
 __RELATION_FAMILIES_JSON__
 
-- `structural`: asset/component hierarchy
-- `task_dependency`: task sequence, task-to-output, and task-to-state dependencies
-- `lifecycle`: state transition or condition-evolution edges
-- `communication`: diagnostic signal or observable evidence indicating a state or fault
-- `propagation`: fault or causal propagation
+- `structural`: asset/component hierarchy or part-whole structure
+- `task_dependency`: step sequencing, task-to-signal, task-to-state, task-to-component interaction
+- `lifecycle`: state transition or condition evolution
+- `communication`: signal/state indicating a state or fault
+- `propagation`: causal or fault propagation
 
 ## Output Format
-Return JSON only:
+Return JSON only.
 
 ```json
 {
   "concepts": [
-    {"label": "T1 Shutdown Vehicle", "description": "...", "node_worthy": true}
+    {
+      "label": "coolant level",
+      "description": "measured coolant level",
+      "node_worthy": true,
+      "semantic_type_hint": "Signal"
+    }
   ],
   "relations": [
-    {"label": "triggers", "family": "task_dependency", "head": "...", "tail": "..."}
+    {
+      "label": "observes",
+      "family": "task_dependency",
+      "head": "T1",
+      "tail": "coolant level"
+    }
   ],
   "extraction_quality": "high"
 }
 ```
 
 ## Hard Rules
-1. Extract only concepts and relations grounded in the document.
-2. Do not extract the overall manual title, report title, filename, or table title as a graph concept.
-3. Do not extract generic human roles such as `Service Technician` or `Reviewer` unless they are operationally essential and directly participate in a grounded relation.
-4. Keep concept labels concise and domain-specific.
-5. Prefer fewer high-value concepts over noisy bookkeeping concepts.
+1. Extract only concepts and relations explicitly grounded in the source document.
+2. Do not extract the document title, filename, table title, or generic report name as a graph concept.
+3. Do not extract generic human bookkeeping roles such as technician, reviewer, or approver unless they are operationally essential and directly participate in a grounded relation.
+4. Keep concept labels concise and reusable. Do not output whole clauses as labels.
+5. Prefer fewer high-value concepts over noisy fragments.
+6. Prefer the most specific stable label stated in the document. If the text gives a specific component such as `green O-ring`, `internal retainer`, or `chiller-inlet connector`, do not also emit a generic alias like `O-ring`, `seal`, `retainer`, or `replacement connector` unless it clearly refers to a different physical object.
+7. Include grounded geometry or operating-condition concepts when the procedure explicitly records, verifies, or compares them as reusable inspection targets, such as `operating state`, `bend radius`, `clearance`, or `upper-to-lower offset`.
+8. When the document explicitly names a final failure boundary or exact hardware boundary, reuse that exact label. Do not replace it with generic alternatives such as `failure`, `leakage`, `suspect joint`, or `generic leak description`.
+9. Each concept may optionally include `semantic_type_hint`, and if present it must be one of `Asset`, `Component`, `Signal`, `State`, `Fault`.
+10. `semantic_type_hint` is a soft semantic prior, not a hard ontology claim. Choose the closest type based on meaning.
+11. Do not extract tiny quantitative fragments or modifiers as standalone concepts, such as isolated colors, directions, magnitudes, or vague descriptors, unless they function as stable diagnostic concepts in the document.
+12. Do not promote step-local bookkeeping fragments such as exact angle notes, clip-path reminders, proof-result bookkeeping, or temporary geometry reminders into graph concepts unless they are reused as stable diagnostic concepts.
+13. Every non-step concept that appears in a valid relation head or tail must also appear in `concepts`.
+14. Do not invent unlabeled abstractions that are not clearly stated in the document.
 
-## Time-Step Processing
-The document usually contains markdown table rows like `T1`, `T2`, `T3`, ...
+## Step Handling
+The document usually contains markdown table rows such as `T1`, `T2`, `T3`, ...
 
-- Every `T<number>` row is a `Task` concept.
-- Keep the step number in the label.
-- Even if the step text contains words like `report`, `document`, `mark`, or `photograph`, it is still a `Task`, not a `Document`.
-- Always extract the sequential flow between neighboring steps as `Task triggers Task` with family `task_dependency`.
+- Treat each `T<number>` as a step identifier.
+- When a relation endpoint is a step, use the step id directly, for example `T1`.
+- Do not paraphrase a step into a long task title like `T1 Record Coolant Condition`; use `T1`.
+- Do not output neighboring `T1 triggers T2` sequence edges unless the document explicitly states a non-local dependency. The pipeline already reconstructs the normal linear step chain.
+- A concept mentioned inside a step is not automatically a `Task`. Classify it by its own semantics.
 
-## Concept Extraction Priority
-1. `Asset`: machine, vehicle, battery pack, or equipment model names
-2. `Component`: physical parts, assemblies, fittings, hoses, clamps, connectors, brackets, sensors
-3. `Task`: step operations such as record, isolate, inspect, compare, pressure-test, mark, refit, close
-4. `Signal`: measured outcomes, observed evidence, diagnostic observations, comparison values, wetness/wetting, residue path, leak path, pressure result, insertion depth, latch height
-5. `State`: standing or persistent conditions such as `as-received condition`, `wet after shutdown`, `under circulation`, `safe state`
-6. `Fault`: defect or failure concepts such as leak, leakage, crack, distortion, failed fitting
+## Concept Priority
+1. `Asset`: named vehicle, pack, machine, line, cabinet, platform
+2. `Component`: physical parts, assemblies, fittings, hoses, clamps, connectors, brackets, manifolds, seals, clips, sensors
+3. `Signal`: measured or observed evidence such as result, path, wetting, residue, odor, reading, load, offset, depth, level
+4. `State`: persistent condition or status such as dry, wet after shutdown, under circulation, fully latched, naturally supported
+5. `Fault`: defect, failure, crack, leak, distortion, incomplete insertion, side load root cause
 
-## Relation Extraction Guidance
+Important distinction:
+- observed evidence such as `stress whitening`, `witness marks`, `wear`, `burrs`, `nicks`, or `corrosion` is usually better typed as `Signal`
+- the defect or root cause they imply, such as `cracked shell`, `broken latch ear`, or `bracket side load`, is the `Fault`
+
+## Relation Guidance
 Use active direction.
 
-Preferred patterns:
-- `Task triggers Task` -> family `task_dependency`
-- `Task requires Component` -> family `task_dependency`
-- `Task measures Signal` -> family `task_dependency`
-- `Task observes Signal` -> family `task_dependency`
-- `Task confirms State` -> family `task_dependency`
-- `Signal indicates Fault` -> family `communication`
-- `Signal indicates State` -> family `communication`
-- `State indicates Fault` -> family `communication` when the state itself is diagnostic evidence
-- `Asset contains Component` or `Component contains Component` -> family `structural`
-- `State transitionsTo State` -> family `lifecycle`
+Good patterns:
+- `T1 requires Component` -> `task_dependency`
+- `T1 observes Signal` -> `task_dependency`
+- `T1 confirms State` -> `task_dependency`
+- `T1 measures Signal` -> `task_dependency`
+- `Signal indicates Fault` -> `communication`
+- `Signal indicates State` -> `communication`
+- `State indicates Fault` -> `communication`
+- `Fault causes Fault` or `State causes Fault` -> `propagation`
+- `Asset contains Component` or `Component contains Component` -> `structural`
+- `State transitionsTo State` -> `lifecycle`
+
+Specific guidance for this corpus:
+- Prefer the most immediate grounded fault target. For example, `stress whitening -> cracked shell` and `latch-window distortion -> broken latch ear` are better than pointing all observations to a broader root cause like `bracket side load`, unless the document explicitly states that exact observation-to-root-cause link.
+- Do not fan one observation out to multiple competing faults unless the text explicitly grounds each relation.
+- When structural subparts clearly belong to a stable assembly such as a connector, use that stable assembly as the head. Prefer `chiller-inlet connector contains internal retainer / green O-ring / quick-connector shell` over a contextual head like `cooling branch contains ...`.
+- If the only available structural head is a contextual container such as `branch`, `path`, or `section`, do not emit that structural edge unless the document clearly states a stable physical assembly head.
+- Do not rewrite a local observation such as `stress whitening` or `latch-window distortion` to a broader root-cause target when a more immediate grounded fault such as `cracked shell` or `broken latch ear` is also present.
+
+Direction constraints:
+- For `task_dependency`, the head should normally be a step `T<n>` when the relation expresses step action toward a concept or a step-to-step dependency.
+- Do not use `task_dependency` for concept-to-concept relations such as `Signal -> Fault`, `Fault -> Fault`, or `Asset -> Component`.
+- When both head and tail are non-step concepts, prefer `communication`, `propagation`, `structural`, or `lifecycle` as appropriate.
+- Prioritize high-value concept-to-concept relations such as `Asset contains Component`, `Signal indicates Fault`, and `Fault causes Fault`. Do not spend most relation budget on many near-duplicate step-local action edges.
 
 Avoid these mistakes:
+- Do not classify all step-local concepts as `Task`.
 - Do not use `communication` for step sequencing.
-- Do not use `communication` for `Task -> Signal` if `measures`, `observes`, `records`, or `confirms` is more precise.
-- Do not create generic `Document` nodes from report/document wording inside a step.
+- Do not use `task_dependency` for `Signal -> Fault` or `Fault -> Fault`.
+- Do not create `Document` concepts from wording like report, note, record, or photograph inside a step.
 
 ## Node-Worthy Guidance
-Usually set `node_worthy=true` for:
+Usually `node_worthy=true` for:
 - Asset
 - Component
-- Task
 - Signal
 - State
 - Fault
 
-Usually set `node_worthy=false` or skip extraction for:
-- overall document titles
+Usually skip or set `node_worthy=false` for:
+- document titles and report names
 - reviewer/technician bookkeeping roles
-- raw timestamps
-- generic closure text with no reusable concept value
+- timestamps and pure metadata
+- low-value textual fragments with little graph meaning
 
 ## Document Content
 __DOCUMENT_CONTENT__

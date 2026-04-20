@@ -23,11 +23,22 @@ def configure_logging(
     Returns:
         Root logger for the package
     """
-    handler = logging.StreamHandler(stream or sys.stderr)
-    handler.setFormatter(logging.Formatter(format_string))
-
     logger = logging.getLogger("crossextend_kg")
     logger.setLevel(level)
+    logger.propagate = False
+
+    target_stream = stream or sys.stderr
+    formatter = logging.Formatter(format_string)
+    for handler in list(logger.handlers):
+        if isinstance(handler, logging.StreamHandler):
+            if getattr(handler, "stream", None) is target_stream:
+                handler.setFormatter(formatter)
+                handler.setLevel(level)
+                return logger
+
+    handler = logging.StreamHandler(target_stream)
+    handler.setFormatter(formatter)
+    handler.setLevel(level)
     logger.addHandler(handler)
 
     return logger

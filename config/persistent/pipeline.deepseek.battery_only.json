@@ -1,0 +1,127 @@
+{
+  "_preset": "DeepSeek API + Local Ollama Embedding",
+  "_description": "Single-domain battery-only preset for focused formal verification",
+  "project_name": "CrossExtend-KG",
+  "benchmark_name": "deepseek_battery_experiment",
+  "prompts": {
+    "attachment_judge_template_path": "../prompts/attachment_judge.txt"
+  },
+  "llm": {
+    "base_url": "https://api.deepseek.com",
+    "api_key": "${DEEPSEEK_API_KEY}",
+    "model": "deepseek-chat",
+    "timeout_sec": 600,
+    "max_tokens": 4096,
+    "temperature": 0.1
+  },
+  "embedding": {
+    "base_url": "http://127.0.0.1:11434/v1",
+    "api_key": "",
+    "model": "bge-m3:latest",
+    "timeout_sec": 300,
+    "dimensions": 1024
+  },
+  "backbone": {
+    "seed_concepts": [
+      "Asset",
+      "Component",
+      "Process",
+      "Task",
+      "Signal",
+      "State",
+      "Fault",
+      "MaintenanceAction",
+      "Incident",
+      "Actor",
+      "Document"
+    ],
+    "seed_descriptions": {
+      "Asset": "industrial asset, machine, line, robot, battery pack, assembly, cabinet, robotic arm, control system, main equipment",
+      "Component": "part, module, bearing, reducer, lock, cooling module, hardware component, subassembly part, harness, sensor, motor, controller",
+      "Process": "industrial process or operational procedure, charging process, diagnostic process, maintenance workflow",
+      "Task": "maintenance or operational task, inspection task, calibration task, shutdown task, work order, repair task",
+      "Signal": "alarm, warning, telemetry, sensor reading, sensor signal, vibration signal, torque signal, temperature signal",
+      "State": "operating state, normal state, abnormal state, status condition, overload state, shortage status, shutdown state",
+      "Fault": "fault, failure, defect, damage, deviation, drift, anomaly root issue, isolation fault, temperature fault",
+      "MaintenanceAction": "repair, replacement action, reset action, recalibration action, power-off operation, refueling action",
+      "Incident": "event, abnormal incident, occurrence, fault event, shutdown event, safety incident",
+      "Actor": "technician, operator, engineer, actor, battery service technician, maintenance crew",
+      "Document": "report, ticket, document, manual, work order document, operation log, maintenance manual"
+    }
+  },
+  "relations": {
+    "relation_families": [
+      "task_dependency",
+      "communication",
+      "propagation",
+      "lifecycle",
+      "structural"
+    ],
+    "family_descriptions": {
+      "task_dependency": "dependency edges between assets, tasks, and actions",
+      "communication": "signal and reporting links",
+      "propagation": "fault propagation links",
+      "lifecycle": "event-state-action transitions",
+      "structural": "asset-component structural edges"
+    },
+    "allowed_routes": [
+      "reuse_backbone",
+      "vertical_specialize",
+      "reject"
+    ]
+  },
+  "data": {
+    "normalize_whitespace": true
+  },
+  "runtime": {
+    "artifact_root": "../../artifacts",
+    "retrieval_top_k": 3,
+    "llm_attachment_batch_size": 8,
+    "enable_temporal_memory_bank": true,
+    "temporal_memory_top_k": 3,
+    "temporal_memory_max_entries": 4000,
+    "temporal_memory_path": null,
+    "save_latest_summary": true,
+    "write_detailed_working_artifacts": false,
+    "write_jsonl_artifacts": false,
+    "write_graph_db_csv": false,
+    "write_property_graph_jsonl": false,
+    "run_prefix": "deepseek_battery",
+    "relation_constraints_path": "./relation_constraints.json",
+    "enable_relation_validation": true
+  },
+  "variants": [
+    {
+      "variant_id": "full_llm",
+      "description": "Main pipeline with LLM attachment, embedding routing, rule filtering, and memory bank",
+      "attachment_strategy": "llm",
+      "use_embedding_routing": true,
+      "use_rule_filter": true,
+      "allow_free_form_growth": false,
+      "enable_snapshots": true,
+      "enable_memory_bank": true,
+      "export_artifacts": true
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "battery",
+      "domain_name": "Battery System",
+      "role": "target",
+      "data_path": "../../data/evidence_records/battery_evidence_records_llm.json",
+      "ontology_seed_path": null,
+      "source_types": [
+        "om_manual"
+      ],
+      "domain_keywords": [
+        "battery",
+        "pack",
+        "cell",
+        "bms",
+        "cooling",
+        "capacity",
+        "degradation"
+      ]
+    }
+  ]
+}
