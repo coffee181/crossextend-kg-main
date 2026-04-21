@@ -1,82 +1,101 @@
 # CrossExtend-KG
 
-CrossExtend-KG currently constructs industrial knowledge graphs from O&M manuals with a fixed shared backbone and an auditable attachment pipeline.
+[中文说明](README_CN.md)
 
-## 本次相对上次的主要修改
+CrossExtend-KG is an industrial knowledge graph construction project centered on O&M manuals. The active paper-facing mainline is a no-fallback pipeline built around step-aware extraction, fixed-backbone routing, explicit attachment decisions, and rule-based graph refinement.
 
-- 将实验代码从扁平脚本重构为 `experiments/metrics/`、`experiments/ablation/`、`experiments/comparison/` 三个子模块，区分主指标计算、诊断指标、消融运行与结果对比。
-- 补齐三领域 O&M 数据与人工冻结 gold 标注，当前 `battery`、`cnc`、`nev` 均已有可直接进入评测链路的文档与 `data/ground_truth/*.json` 标注文件。
-- 收紧预处理、attachment、filtering、graph assembly 的主线逻辑，继续坚持 `no fallback`，避免用旁路逻辑掩盖真实问题。
-- 预处理侧强化了证据抽取约束，减少低价值碎片 concept、过度 structural relation 和错误 task 归类带来的后续噪声。
-- 评测侧保留严格主指标，同时新增 relaxed diagnostic metrics，用于区分“严格不匹配”和“接近正确”的误差类型，方便论文分析与调参。
-- 新增五轮优化执行与汇总文档、单轮运行脚本、实验报表脚本，以及图谱导出与可视化辅助工具，方便复现实验与论文展示。
-- 补充了覆盖 preprocessing、attachment、graph、router、experiments、reporting 等关键模块的测试，当前仓库测试可稳定通过。
+## Current Scope
 
-The active paper-facing setup is:
+- Input type: `om_manual`
+- Active domains: `battery`, `cnc`, `nev`
+- Paper-facing variant: `full_llm`
+- Paper metrics: human gold only
+- Highest execution principle: `no fallback`
 
-- O&M manuals only
-- three current domains: `battery`, `cnc`, `nev`
-- fixed backbone
-- `full_llm` as the recommended runtime variant
-- manual gold planned for final paper metrics
+## What Changed In This Update
 
-## Documentation
+- Reworked persistent configs from duplicated JSON presets into layered YAML configs.
+- Added shared base configs for pipeline and preprocessing.
+- Moved LLM and embedding model choices into backend registries.
+- Added `extends`, `llm_backend_id`, and `embedding_backend_id` support to the shared loader.
+- Kept JSON backward compatibility for generated configs, ablation materialization, and tests.
+- Aligned preprocessing with the current raw O&M directory names such as `battery_om_manual_en` and `ev_om_manual_en`.
+- Improved package-mode import stability by reducing hard dependence on root-only absolute imports for config, models, and file I/O helpers.
 
-- `docs/SYSTEM_DESIGN.md`
-  Current architecture rules and runtime phases
-- `docs/PIPELINE_INTEGRATION.md`
-  Commands, verification checkpoints, and validation notes
-- `docs/PROJECT_ARCHITECTURE.md`
-  Repository layout and module ownership
-- `docs/EXECUTION_MEMORY.md`
-  Latest fixes, validated runs, and next priorities
-- `docs/MANUAL_ANNOTATION_PROTOCOL.md`
-  Human gold protocol for publication-grade evaluation
-- `docs/REAL_RUN_DATA_FLOW_OM_3DOMAIN_20260418.md`
-  Main real-run document for the current three-domain O&M setup
-
-## Pipeline Flow
+## Active Architecture
 
 ```text
-markdown O&M -> EvidenceRecord -> fixed backbone -> retrieval -> attachment -> filtering -> graph assembly -> validation -> snapshots -> export
+O&M markdown
+  -> preprocessing extraction
+  -> step-aware EvidenceRecord
+  -> SchemaCandidate aggregation
+  -> fixed backbone retrieval / routing
+  -> attachment decisions
+  -> rule filtering
+  -> graph assembly
+  -> export + human-gold evaluation
 ```
+
+## Config Layout
+
+Human-maintained configs now live under `config/persistent/` as YAML:
+
+- `pipeline.base.yaml`
+  Stable backbone, relations, domains, and runtime defaults
+- `pipeline.deepseek.yaml`
+  Recommended main preset
+- `pipeline.deepseek.battery_only.yaml`
+  Battery-only debugging preset
+- `pipeline.deepseek_full.yaml`
+  Optional multi-variant stress preset
+- `preprocessing.base.yaml`
+  Shared preprocessing defaults
+- `preprocessing.deepseek.yaml`
+  Recommended preprocessing preset
+- `llm_backends.yaml`
+  LLM backend registry
+- `embedding_backends.yaml`
+  Embedding backend registry
+
+Typical model switching now only requires changing backend ids in a thin wrapper instead of cloning a full pipeline config.
 
 ## Recommended Commands
 
 Preprocess raw O&M markdown:
 
 ```bash
-python -m crossextend_kg.cli preprocess --config D:\crossextend_kg\config\persistent\preprocessing.deepseek.json
+python -m crossextend_kg.cli preprocess --config D:\crossextend_kg\config\persistent\preprocessing.deepseek.yaml
 ```
 
 Run the main pipeline:
 
 ```bash
-python -m crossextend_kg.cli run --config D:\crossextend_kg\config\persistent\pipeline.deepseek.json
+python -m crossextend_kg.cli run --config D:\crossextend_kg\config\persistent\pipeline.deepseek.yaml
 ```
 
-## Current Status
+Run the ablation suite:
 
-Verified on 2026-04-18:
+```bash
+python -m crossextend_kg.experiments.ablation.runner --config D:\crossextend_kg\config\persistent\pipeline.deepseek.yaml --output-dir D:\crossextend_kg\artifacts\ablation --ground-truth-dir D:\crossextend_kg\data\ground_truth --data-root D:\crossextend_kg\data
+```
 
-- preprocessing succeeded on all three current O&M documents
-- BOM-contaminated markdown input was cleaned correctly
-- MemoryBank retrieval no longer duplicates historical hits
-- the adapted three-domain O&M pipeline completed repeated real runs successfully
+Run the baseline suite:
 
-Best dense verified run:
+```bash
+python D:\crossextend_kg\scripts\run_baselines.py --config D:\crossextend_kg\config\persistent\pipeline.deepseek.yaml --output-dir D:\crossextend_kg\artifacts\baselines --ground-truth-dir D:\crossextend_kg\data\ground_truth --data-root D:\crossextend_kg\data
+```
 
-- `artifacts/deepseek-20260418T095937Z`
+Run repeated experiments:
 
-Latest confirmation run:
+```bash
+python D:\crossextend_kg\scripts\run_repeated_experiments.py --config D:\crossextend_kg\config\persistent\pipeline.deepseek.yaml --output-dir D:\crossextend_kg\artifacts\repeated --ground-truth-dir D:\crossextend_kg\data\ground_truth --repeats 3 --include-baselines --data-root D:\crossextend_kg\data
+```
 
-- `artifacts/deepseek-20260418T105526Z`
+## Documentation
 
-## Current Evaluation Position
-
-- auto-generated references should be treated as silver
-- main paper metrics should come from a human-adjudicated gold subset
-
-See:
-
+- `docs/README.md`
+- `docs/SYSTEM_DESIGN.md`
+- `docs/PIPELINE_INTEGRATION.md`
 - `docs/MANUAL_ANNOTATION_PROTOCOL.md`
+- `docs/AUTO_REVIEW_ACTION_PLAN.md`
+- `docs/FIVE_ROUND_OPTIMIZATION_REPORT.md`

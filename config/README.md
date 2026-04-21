@@ -1,88 +1,72 @@
 # Config Guide
 
-**Updated**: 2026-04-18
+**Updated**: 2026-04-20
 
 `config/` stores the active runtime configuration assets for the current O&M-form pipeline.
 
-## Main References
+## Active Layout
 
-- `templates/pipeline.config.reference.json`
-- `../docs/SYSTEM_DESIGN.md`
-- `../docs/PIPELINE_INTEGRATION.md`
+- `prompts/`
+  Prompt templates used by preprocessing and attachment.
+- `persistent/pipeline.base.yaml`
+  Stable pipeline skeleton.
+- `persistent/preprocessing.base.yaml`
+  Stable preprocessing skeleton.
+- `persistent/llm_backends.yaml`
+  LLM backend registry.
+- `persistent/embedding_backends.yaml`
+  Embedding backend registry.
+- `persistent/*.yaml`
+  Thin human-edited wrappers for concrete runs.
 
-## Current Presets
+## Why YAML Now
 
-Recommended presets:
+- The old persistent JSON presets duplicated backbone, relations, domains, and runtime blocks.
+- The new layout keeps those stable parts in base configs.
+- Backend switching now happens by `llm_backend_id` and `embedding_backend_id` instead of cloning full configs.
+- JSON is still supported for generated experiment configs and backward-compatible tests.
 
-- `persistent/preprocessing.deepseek.json`
-  O&M preprocessing with DeepSeek
-- `persistent/pipeline.deepseek.json`
-  Recommended main run
-- `persistent/pipeline.deepseek_full.json`
-  Optional multi-variant ablation/stress run on the same architecture
+## Key Loader Features
 
-Current active domains in the repository:
+- `.json`, `.yaml`, `.yml`
+- `extends`
+- environment variable expansion like `${DEEPSEEK_API_KEY}`
+- backend registry injection
+- path resolution relative to the config file itself
 
-- `battery`
-- `cnc`
-- `nev`
+## Recommended Presets
 
-Current active source type:
+- `persistent/preprocessing.deepseek.yaml`
+  Recommended O&M preprocessing preset.
+- `persistent/pipeline.deepseek.yaml`
+  Recommended main run.
+- `persistent/pipeline.deepseek.battery_only.yaml`
+  Focused battery-only debugging preset.
+- `persistent/pipeline.deepseek_full.yaml`
+  Optional multi-variant stress preset.
 
-- `om_manual`
+## What Usually Changes
 
-## What Matters Most
+Most daily changes should stay in thin wrappers:
 
-### Preprocessing Config
+- `llm_backend_id`
+- `embedding_backend_id`
+- `runtime.run_prefix`
+- `runtime.artifact_root`
+- `benchmark_name`
 
-Key fields:
-
-- `data_root`
-- `domain_ids`
-- `output_path`
-- `prompt_template_path`
-- `llm`
-
-Current recommended preprocessing prompt:
-
-- `prompts/preprocessing_extraction_om.txt`
-
-### Pipeline Config
-
-Key fields:
-
-- `backbone`
-- `relations`
-- `runtime`
-- `variants`
-- `domains`
-
-Current recommended pipeline prompt files:
-
-- `prompts/attachment_judge.txt`
-
-Current recommended relation constraints:
-
-- `persistent/relation_constraints.json`
-
-## Runtime Notes
-
-- The backbone is fixed.
-- The recommended paper variant is `full_llm`.
-- `domains[].source_types` should currently be `["om_manual"]` for the active real-data path.
-- MemoryBank retrieval is enabled and deduplicated by `memory_id` before scoring.
-- Config loading follows a no-fallback rule for the active schema; deleted legacy synthetic fields should not be reintroduced.
+Base files should only change when the mainline architecture itself changes.
 
 ## Commands
 
 Preprocess:
 
 ```bash
-python -m crossextend_kg.cli preprocess --config D:\crossextend_kg\config\persistent\preprocessing.deepseek.json
+python -m crossextend_kg.cli preprocess --config D:\crossextend_kg\config\persistent\preprocessing.deepseek.yaml
 ```
 
 Main run:
 
 ```bash
-python -m crossextend_kg.cli run --config D:\crossextend_kg\config\persistent\pipeline.deepseek.json
+python -m crossextend_kg.cli run --config D:\crossextend_kg\config\persistent\pipeline.deepseek.yaml
 ```

@@ -3,8 +3,11 @@
 
 from __future__ import annotations
 
-from ..backends.embeddings import cosine_similarity
-from ..models import RetrievedAnchor, SchemaCandidate
+from backends.embeddings import cosine_similarity
+try:
+    from crossextend_kg.models import RetrievedAnchor, SchemaCandidate
+except ImportError:  # pragma: no cover - direct script execution fallback
+    from models import RetrievedAnchor, SchemaCandidate
 
 _ANCHOR_VECTOR_CACHE: dict[tuple[int, tuple[str, ...]], list[list[float]]] = {}
 

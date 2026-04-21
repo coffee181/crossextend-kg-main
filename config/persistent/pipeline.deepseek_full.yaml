@@ -1,0 +1,53 @@
+extends: ./pipeline.base.yaml
+
+benchmark_name: deepseek_full_experiment
+llm_backend_id: deepseek
+embedding_backend_id: local_ollama_bge_m3
+
+runtime:
+  run_prefix: deepseek_full
+  write_jsonl_artifacts: true
+  write_graph_db_csv: true
+  write_property_graph_jsonl: true
+
+variants:
+  - variant_id: full_llm
+    description: Main pipeline with LLM attachment, embedding routing, and rule filtering
+    attachment_strategy: llm
+    use_embedding_routing: true
+    use_rule_filter: true
+    allow_free_form_growth: false
+    enable_snapshots: true
+    export_artifacts: true
+  - variant_id: no_embedding_routing
+    description: Ablation without embedding routing
+    attachment_strategy: llm
+    use_embedding_routing: false
+    use_rule_filter: true
+    allow_free_form_growth: false
+    enable_snapshots: true
+    export_artifacts: true
+  - variant_id: no_rule_filter
+    description: Ablation without rule filtering
+    attachment_strategy: llm
+    use_embedding_routing: true
+    use_rule_filter: false
+    allow_free_form_growth: false
+    enable_snapshots: true
+    export_artifacts: true
+  - variant_id: no_attachment_llm
+    description: Deterministic attachment baseline on top of LLM preprocessing
+    attachment_strategy: deterministic
+    use_embedding_routing: true
+    use_rule_filter: true
+    allow_free_form_growth: false
+    enable_snapshots: true
+    export_artifacts: true
+  - variant_id: embedding_top1
+    description: Embedding top-1 attachment baseline on top of LLM preprocessing
+    attachment_strategy: embedding_top1
+    use_embedding_routing: true
+    use_rule_filter: true
+    allow_free_form_growth: false
+    enable_snapshots: true
+    export_artifacts: true

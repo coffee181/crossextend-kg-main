@@ -16,8 +16,8 @@ from .pipeline.runner import run_pipeline
 from .preprocessing import run_preprocessing, load_preprocessing_config
 
 
-DEFAULT_CONFIG_PATH = Path(__file__).resolve().parent / "config" / "persistent" / "pipeline.deepseek.json"
-DEFAULT_PREPROCESSING_CONFIG = Path(__file__).resolve().parent / "config" / "persistent" / "preprocessing.deepseek.json"
+DEFAULT_CONFIG_PATH = Path(__file__).resolve().parent / "config" / "persistent" / "pipeline.deepseek.yaml"
+DEFAULT_PREPROCESSING_CONFIG = Path(__file__).resolve().parent / "config" / "persistent" / "preprocessing.deepseek.yaml"
 
 
 def _emit_error(command: str | None, config_path: str | None, exc: Exception) -> None:

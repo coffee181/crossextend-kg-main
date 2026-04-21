@@ -8,7 +8,10 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, Field, model_validator
 
-from ..config import LLMBackendConfig
+try:
+    from crossextend_kg.config import LLMBackendConfig
+except ImportError:  # pragma: no cover - direct script execution fallback
+    from config import LLMBackendConfig
 
 
 class DocumentInput(BaseModel):

@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+from copy import deepcopy
 import json
 import os
 import re
@@ -10,6 +11,11 @@ from pathlib import Path
 from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
+
+try:
+    import yaml
+except ImportError:  # pragma: no cover - dependency error is surfaced only when YAML is used
+    yaml = None
 
 
 def _normalize_api_base_url(value: str | None) -> str:
@@ -142,7 +148,6 @@ class VariantConfig(BaseModel):
     use_rule_filter: bool = True
     allow_free_form_growth: bool = False
     enable_snapshots: bool = True
-    enable_memory_bank: bool = True
     export_artifacts: bool = True
 
 
@@ -153,10 +158,6 @@ class RuntimeConfig(BaseModel):
     retrieval_top_k: int = Field(default=3, ge=1)
     min_relation_support_count: int = Field(default=1, ge=0)
     llm_attachment_batch_size: int = Field(default=8, ge=1)
-    enable_temporal_memory_bank: bool = True
-    temporal_memory_top_k: int = Field(default=3, ge=1)
-    temporal_memory_max_entries: int = Field(default=4000, ge=1)
-    temporal_memory_path: str | None = None
     save_latest_summary: bool = True
     write_detailed_working_artifacts: bool = False
     write_jsonl_artifacts: bool = True
@@ -237,18 +238,196 @@ def _resolve_path(base_dir: Path, value: str | None) -> str | None:
     return str((base_dir / path).resolve())
 
 
-def load_pipeline_config(config_path: str | Path) -> PipelineConfig:
+def _read_structured_file(path: Path) -> Any:
+    suffix = path.suffix.lower()
+    text = path.read_text(encoding="utf-8-sig")
+    if suffix == ".json":
+        return json.loads(text)
+    if suffix in {".yaml", ".yml"}:
+        if yaml is None:
+            raise RuntimeError(
+                "YAML config support requires PyYAML. Install it or use JSON configs."
+            )
+        payload = yaml.safe_load(text)
+        return {} if payload is None else payload
+    raise ValueError(f"unsupported config extension for {path}: expected .json, .yaml, or .yml")
+
+
+def _merge_payloads(base: Any, override: Any) -> Any:
+    if isinstance(base, dict) and isinstance(override, dict):
+        merged = {key: deepcopy(value) for key, value in base.items()}
+        for key, value in override.items():
+            if key in merged:
+                merged[key] = _merge_payloads(merged[key], value)
+            else:
+                merged[key] = deepcopy(value)
+        return merged
+    return deepcopy(override)
+
+
+def _normalize_extends_field(value: Any, *, source_path: Path) -> list[str]:
+    if value is None:
+        return []
+    if isinstance(value, str):
+        return [value]
+    if isinstance(value, list) and all(isinstance(item, str) for item in value):
+        return value
+    raise ValueError(f"'extends' in {source_path} must be a string or list of strings")
+
+
+def _load_raw_structured_payload(config_path: Path, seen_paths: set[Path] | None = None) -> dict[str, Any]:
+    resolved_path = config_path.resolve()
+    seen = set(seen_paths or set())
+    if resolved_path in seen:
+        cycle = " -> ".join(str(item) for item in [*seen, resolved_path])
+        raise ValueError(f"cyclic config extends detected: {cycle}")
+
+    payload = _read_structured_file(resolved_path)
+    if payload is None:
+        payload = {}
+    if not isinstance(payload, dict):
+        raise ValueError(f"config payload must be a mapping: {resolved_path}")
+
+    merged: dict[str, Any] = {}
+    for extends_item in _normalize_extends_field(payload.get("extends"), source_path=resolved_path):
+        expanded_extends = _expand_env_in_string(extends_item)
+        extends_path = Path(expanded_extends)
+        if not extends_path.is_absolute():
+            extends_path = (resolved_path.parent / extends_path).resolve()
+        parent_payload = _load_raw_structured_payload(extends_path, seen | {resolved_path})
+        merged = _merge_payloads(merged, parent_payload)
+
+    current_payload = {key: value for key, value in payload.items() if key != "extends"}
+    return _merge_payloads(merged, current_payload)
+
+
+def _default_backend_catalog_path(base_dir: Path, filename_stem: str) -> Path | None:
+    for extension in (".yaml", ".yml", ".json"):
+        candidate = (base_dir / f"{filename_stem}{extension}").resolve()
+        if candidate.exists():
+            return candidate
+    return None
+
+
+def _load_backend_catalog(path: Path) -> dict[str, Any]:
+    payload = _expand_env(_load_raw_structured_payload(path))
+    if not isinstance(payload, dict):
+        raise ValueError(f"backend catalog must be a mapping: {path}")
+    backends = payload.get("backends")
+    if not isinstance(backends, dict):
+        raise ValueError(f"backend catalog missing 'backends' mapping: {path}")
+    return payload
+
+
+def _resolve_backend_reference(
+    payload: dict[str, Any],
+    *,
+    base_dir: Path,
+    section_key: str,
+    backend_id_key: str,
+    catalog_path_key: str,
+    default_catalog_stem: str,
+) -> None:
+    backend_id = str(payload.get(backend_id_key, "")).strip()
+    if not backend_id:
+        return
+
+    catalog_path_value = payload.get(catalog_path_key)
+    if catalog_path_value:
+        catalog_path = Path(str(catalog_path_value))
+        if not catalog_path.is_absolute():
+            catalog_path = (base_dir / catalog_path).resolve()
+    else:
+        catalog_path = _default_backend_catalog_path(base_dir, default_catalog_stem)
+        if catalog_path is None:
+            raise FileNotFoundError(
+                f"could not resolve backend catalog for {backend_id_key} under {base_dir}"
+            )
+
+    catalog = _load_backend_catalog(catalog_path)
+    backends = catalog["backends"]
+    if backend_id not in backends:
+        available = ", ".join(sorted(backends))
+        raise KeyError(
+            f"unknown backend id '{backend_id}' in {catalog_path}; available backends: {available}"
+        )
+
+    existing_section = payload.get(section_key, {})
+    if existing_section is None:
+        existing_section = {}
+    if not isinstance(existing_section, dict):
+        raise ValueError(f"'{section_key}' must be a mapping when {backend_id_key} is used")
+
+    payload[section_key] = _merge_payloads(backends[backend_id], existing_section)
+
+
+def load_structured_config_payload(config_path: str | Path) -> tuple[Path, dict[str, Any]]:
     path = Path(config_path).resolve()
-    payload = _expand_env(json.loads(path.read_text(encoding="utf-8-sig")))
+    payload = _expand_env(_load_raw_structured_payload(path))
+    _resolve_backend_reference(
+        payload,
+        base_dir=path.parent,
+        section_key="llm",
+        backend_id_key="llm_backend_id",
+        catalog_path_key="llm_backend_catalog_path",
+        default_catalog_stem="llm_backends",
+    )
+    _resolve_backend_reference(
+        payload,
+        base_dir=path.parent,
+        section_key="embedding",
+        backend_id_key="embedding_backend_id",
+        catalog_path_key="embedding_backend_catalog_path",
+        default_catalog_stem="embedding_backends",
+    )
+    for meta_key in (
+        "llm_backend_id",
+        "llm_backend_catalog_path",
+        "embedding_backend_id",
+        "embedding_backend_catalog_path",
+    ):
+        payload.pop(meta_key, None)
+    return path, payload
+
+
+def resolve_pipeline_payload_paths(payload: dict[str, Any], *, base_dir: Path) -> dict[str, Any]:
+    resolved = deepcopy(payload)
+    prompts = resolved.get("prompts")
+    if isinstance(prompts, dict):
+        prompts["attachment_judge_template_path"] = _resolve_path(
+            base_dir,
+            prompts.get("attachment_judge_template_path"),
+        )
+
+    runtime = resolved.get("runtime")
+    if isinstance(runtime, dict):
+        runtime["artifact_root"] = _resolve_path(base_dir, runtime.get("artifact_root"))
+        runtime["relation_constraints_path"] = _resolve_path(
+            base_dir,
+            runtime.get("relation_constraints_path"),
+        )
+
+    for domain in resolved.get("domains", []):
+        if not isinstance(domain, dict):
+            continue
+        domain["data_path"] = _resolve_path(base_dir, domain.get("data_path"))
+        domain["ontology_seed_path"] = _resolve_path(base_dir, domain.get("ontology_seed_path"))
+    return resolved
+
+
+def resolve_preprocessing_payload_paths(payload: dict[str, Any], *, base_dir: Path) -> dict[str, Any]:
+    resolved = deepcopy(payload)
+    if "data_root" in resolved:
+        resolved["data_root"] = _resolve_path(base_dir, resolved.get("data_root"))
+    if "output_path" in resolved:
+        resolved["output_path"] = _resolve_path(base_dir, resolved.get("output_path"))
+    if "prompt_template_path" in resolved:
+        resolved["prompt_template_path"] = _resolve_path(base_dir, resolved.get("prompt_template_path"))
+    return resolved
+
+
+def load_pipeline_config(config_path: str | Path) -> PipelineConfig:
+    path, payload = load_structured_config_payload(config_path)
+    payload = resolve_pipeline_payload_paths(payload, base_dir=path.parent)
     config = PipelineConfig.model_validate(payload)
-    base_dir = path.parent
-
-    config.prompts.attachment_judge_template_path = _resolve_path(base_dir, config.prompts.attachment_judge_template_path) or ""
-    config.runtime.artifact_root = _resolve_path(base_dir, config.runtime.artifact_root) or ""
-    config.runtime.temporal_memory_path = _resolve_path(base_dir, config.runtime.temporal_memory_path)
-    config.runtime.relation_constraints_path = _resolve_path(base_dir, config.runtime.relation_constraints_path)
-
-    for domain in config.domains:
-        domain.data_path = _resolve_path(base_dir, domain.data_path) or ""
-        domain.ontology_seed_path = _resolve_path(base_dir, domain.ontology_seed_path)
     return config

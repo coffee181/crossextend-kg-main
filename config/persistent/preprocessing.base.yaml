@@ -1,0 +1,27 @@
+data_root: ../../data
+domain_ids:
+  - battery
+  - cnc
+  - nev
+output_path: ../../data/evidence_records/evidence_records_llm.json
+role: target
+prompt_template_path: ../prompts/preprocessing_extraction_om.txt
+batch_size: 5
+relation_families:
+  - task_dependency
+  - communication
+  - propagation
+  - lifecycle
+  - structural
+backbone_concepts:
+  - Asset
+  - Component
+  - Process
+  - Task
+  - Signal
+  - State
+  - Fault
+  - MaintenanceAction
+  - Incident
+  - Actor
+  - Document

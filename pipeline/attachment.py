@@ -5,10 +5,15 @@ from __future__ import annotations
 
 import logging
 
-from ..config import PipelineConfig, VariantConfig
-from ..models import AttachmentDecision, HistoricalContextHit, RejectReason, RetrievedAnchor, SchemaCandidate
-from .memory import top_historical_parent_anchor
-from .utils import json_pretty, load_text, render_prompt_template
+try:
+    from crossextend_kg.config import PipelineConfig, VariantConfig
+except ImportError:  # pragma: no cover - direct script execution fallback
+    from config import PipelineConfig, VariantConfig
+try:
+    from crossextend_kg.models import AttachmentDecision, RejectReason, RetrievedAnchor, SchemaCandidate
+except ImportError:  # pragma: no cover - direct script execution fallback
+    from models import AttachmentDecision, RejectReason, RetrievedAnchor, SchemaCandidate
+from pipeline.utils import json_pretty, load_text, render_prompt_template
 
 logger = logging.getLogger(__name__)
 
@@ -144,11 +149,64 @@ def _top_anchor(candidate: SchemaCandidate, retrievals: dict[str, list[Retrieved
     return None
 
 
+def _top_retrieval(candidate: SchemaCandidate, retrievals: dict[str, list[RetrievedAnchor]]) -> RetrievedAnchor | None:
+    items = retrievals.get(candidate.candidate_id, [])
+    if items:
+        return items[0]
+    return None
+
+
+def _build_prompt_priors(
+    candidate: SchemaCandidate,
+    retrievals: dict[str, list[RetrievedAnchor]],
+    backbone_concepts: set[str],
+) -> dict[str, object]:
+    top_retrieval = _top_retrieval(candidate, retrievals)
+    top_anchor = top_retrieval.anchor if top_retrieval else None
+    semantic_hint = _semantic_type_hint(candidate)
+    retrieved_anchor = _infer_anchor_from_relation_families(
+        candidate,
+        _apply_semantic_type_hint(candidate, top_anchor),
+    )
+    hint_anchor = _infer_anchor_from_relation_families(
+        candidate,
+        _apply_semantic_type_hint(candidate, None),
+    )
+    recommended_anchor = retrieved_anchor or hint_anchor
+    prior_agreement = (
+        retrieved_anchor is not None
+        and hint_anchor is not None
+        and retrieved_anchor == hint_anchor
+    )
+    if candidate.label in backbone_concepts:
+        recommended_route = "reuse_backbone"
+    elif recommended_anchor is not None:
+        recommended_route = "vertical_specialize"
+    else:
+        recommended_route = "reject"
+    if prior_agreement or (top_anchor and semantic_hint and top_anchor == semantic_hint):
+        prior_strength = "high"
+    elif recommended_anchor is not None:
+        prior_strength = "medium"
+    else:
+        prior_strength = "low"
+    return {
+        "semantic_type_hint": semantic_hint,
+        "top_retrieved_anchor": top_anchor,
+        "top_retrieved_score": round(float(top_retrieval.score), 4) if top_retrieval else None,
+        "retrieval_anchor_after_family_check": retrieved_anchor,
+        "hint_anchor_after_family_check": hint_anchor,
+        "recommended_parent_anchor": recommended_anchor,
+        "recommended_route_if_admitted": recommended_route,
+        "prior_agreement": prior_agreement,
+        "prior_strength": prior_strength,
+    }
+
+
 def _normalize_attachment_decision(
     candidate: SchemaCandidate,
     decision: AttachmentDecision,
     retrievals: dict[str, list[RetrievedAnchor]],
-    historical_context: dict[str, list[HistoricalContextHit]],
     backbone_concepts: set[str],
 ) -> AttachmentDecision:
     if decision.route != "reuse_backbone" or candidate.label in backbone_concepts:
@@ -161,17 +219,6 @@ def _normalize_attachment_decision(
         recovered_anchor = _infer_anchor_from_relation_families(
             candidate,
             _apply_semantic_type_hint(candidate, _top_anchor(candidate, retrievals)),
-        )
-    if recovered_anchor is None:
-        recovered_anchor = _infer_anchor_from_relation_families(
-            candidate,
-            _apply_semantic_type_hint(
-                candidate,
-                top_historical_parent_anchor(
-                    historical_context.get(candidate.candidate_id),
-                    backbone_concepts,
-                ),
-            ),
         )
     if recovered_anchor is None:
         recovered_anchor = _infer_anchor_from_relation_families(
@@ -206,7 +253,6 @@ def _normalize_attachment_decision(
 def build_embedding_top1_decisions(
     candidates: list[SchemaCandidate],
     retrievals: dict[str, list[RetrievedAnchor]],
-    historical_context: dict[str, list[HistoricalContextHit]],
     backbone_concepts: set[str],
     allow_free_form_growth: bool,
 ) -> list[AttachmentDecision]:
@@ -220,29 +266,13 @@ def build_embedding_top1_decisions(
             candidate,
             _apply_semantic_type_hint(candidate, _top_anchor(candidate, retrievals)),
         )
-        historical_anchor = _infer_anchor_from_relation_families(
-            candidate,
-            _apply_semantic_type_hint(
-                candidate,
-                top_historical_parent_anchor(
-                    historical_context.get(candidate.candidate_id),
-                    backbone_concepts,
-                ),
-            ),
-        )
         hint_anchor = _infer_anchor_from_relation_families(
             candidate,
             _apply_semantic_type_hint(candidate, None),
         )
-        parent_anchor = retrieved_anchor or historical_anchor or hint_anchor
+        parent_anchor = retrieved_anchor or hint_anchor
         accept = parent_anchor is not None or allow_free_form_growth
-        if retrieved_anchor and historical_anchor and retrieved_anchor == historical_anchor:
-            confidence = 0.7
-            justification = "embedding anchor reinforced by temporal memory"
-        elif historical_anchor is not None:
-            confidence = 0.65
-            justification = "temporal memory anchor"
-        elif retrieved_anchor is not None:
+        if retrieved_anchor is not None:
             confidence = 0.55
             justification = "embedding top-1 anchor"
         elif hint_anchor is not None:
@@ -271,14 +301,12 @@ def build_embedding_top1_decisions(
 def build_deterministic_decisions(
     candidates: list[SchemaCandidate],
     retrievals: dict[str, list[RetrievedAnchor]],
-    historical_context: dict[str, list[HistoricalContextHit]],
     backbone_concepts: set[str],
     allow_free_form_growth: bool,
 ) -> list[AttachmentDecision]:
     decisions = build_embedding_top1_decisions(
         candidates,
         retrievals,
-        historical_context,
         backbone_concepts,
         allow_free_form_growth,
     )
@@ -336,8 +364,8 @@ def _build_llm_prompt(
     domain_id: str,
     candidates: list[SchemaCandidate],
     retrievals: dict[str, list[RetrievedAnchor]],
-    historical_context: dict[str, list[HistoricalContextHit]],
     backbone_descriptions: dict[str, str],
+    backbone_concepts: set[str],
 ) -> str:
     template = load_text(config.prompts.attachment_judge_template_path)
     candidate_payload = []
@@ -349,8 +377,8 @@ def _build_llm_prompt(
             "evidence_ids": candidate.evidence_ids[:3],
             "evidence_examples": candidate.evidence_texts[:2],
             "routing_features": candidate.routing_features,
+            "prompt_priors": _build_prompt_priors(candidate, retrievals, backbone_concepts),
             "retrieved_anchors": [item.model_dump(mode="json") for item in retrievals.get(candidate.candidate_id, [])],
-            "historical_context": [item.model_dump(mode="json") for item in historical_context.get(candidate.candidate_id, [])],
         }
         candidate_payload.append(payload)
     return_schema = {
@@ -397,7 +425,6 @@ def decide_attachments_for_domain(
     domain_id: str,
     candidates: list[SchemaCandidate],
     retrievals: dict[str, list[RetrievedAnchor]],
-    historical_context: dict[str, list[HistoricalContextHit]],
     backbone_descriptions: dict[str, str],
     backbone_concepts: set[str],
 ) -> dict[str, AttachmentDecision]:
@@ -405,7 +432,6 @@ def decide_attachments_for_domain(
         decisions = build_embedding_top1_decisions(
             candidates,
             retrievals,
-            historical_context,
             backbone_concepts,
             variant.allow_free_form_growth,
         )
@@ -413,7 +439,6 @@ def decide_attachments_for_domain(
         decisions = build_deterministic_decisions(
             candidates,
             retrievals,
-            historical_context,
             backbone_concepts,
             variant.allow_free_form_growth,
         )
@@ -435,7 +460,15 @@ def decide_attachments_for_domain(
         for batch in _chunked(llm_candidates, config.runtime.llm_attachment_batch_size):
             batch_idx += 1
             logger.info("Domain %s: processing batch %d/%d (%d candidates)", domain_id, batch_idx, total_batches, len(batch))
-            prompt = _build_llm_prompt(config, variant, domain_id, batch, retrievals, historical_context, backbone_descriptions)
+            prompt = _build_llm_prompt(
+                config,
+                variant,
+                domain_id,
+                batch,
+                retrievals,
+                backbone_descriptions,
+                backbone_concepts,
+            )
             try:
                 payload = llm_backend.generate_json(prompt)
                 decisions.extend(_parse_llm_decisions(payload, batch))
@@ -462,7 +495,6 @@ def decide_attachments_for_domain(
                 candidate=candidate,
                 decision=decision,
                 retrievals=retrievals,
-                historical_context=historical_context,
                 backbone_concepts=backbone_concepts,
             )
         )

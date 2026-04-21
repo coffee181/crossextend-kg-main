@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "crossextend-kg"
+version = "0.1.0"
+description = "Backbone-Guided Adapter Schema Construction for Industrial Knowledge Graphs"
+requires-python = ">=3.10"
+dependencies = [
+    "pydantic>=2.0",
+    "openai>=1.0",
+    "PyYAML>=6.0",
+]
+
+[tool.setuptools]
+packages = ["crossextend_kg", "crossextend_kg.pipeline", "crossextend_kg.backends", "crossextend_kg.preprocessing", "crossextend_kg.rules", "crossextend_kg.experiments"]
+
+[tool.setuptools.package-dir]
+"crossextend_kg" = "."

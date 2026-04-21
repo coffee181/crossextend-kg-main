@@ -8,9 +8,9 @@ import time
 from pathlib import Path
 from typing import Any
 
-from ..backends.llm import build_llm_backend
-from ..pipeline.utils import render_prompt_template
-from .models import DocumentInput, ExtractionResult, PreprocessingConfig
+from backends.llm import build_llm_backend
+from pipeline.utils import render_prompt_template
+from preprocessing.models import DocumentInput, ExtractionResult, PreprocessingConfig
 
 
 def load_extraction_prompt(

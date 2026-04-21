@@ -5,7 +5,10 @@ from __future__ import annotations
 
 import re
 
-from ..models import AttachmentDecision, SchemaCandidate
+try:
+    from crossextend_kg.models import AttachmentDecision, SchemaCandidate
+except ImportError:  # pragma: no cover - direct script execution fallback
+    from models import AttachmentDecision, SchemaCandidate
 
 
 _PERSON_TITLE_PATTERN = re.compile(r"^(dr|mr|mrs|ms|prof)\.?\s+", re.IGNORECASE)
@@ -201,6 +204,11 @@ def _preferred_parent_anchor(candidate: SchemaCandidate) -> str | None:
     if _TASK_PATTERN.search(text):
         return "Task"
     return None
+
+
+def preferred_parent_anchor(candidate: SchemaCandidate) -> str | None:
+    """Public helper for anchor inference based on current filtering semantics."""
+    return _preferred_parent_anchor(candidate)
 
 
 def _should_override_parent_anchor(

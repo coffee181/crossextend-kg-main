@@ -8,13 +8,12 @@ Main components:
 - pipeline: Core pipeline implementation
 - backends: LLM and embedding backends
 - rules: Constraint-based filtering
-- memory: Temporal memory bank for retrieval-augmented construction
 
 Quick start:
     from crossextend_kg import load_pipeline_config, run_pipeline
 
-    config = load_pipeline_config("config/persistent/pipeline.deepseek.json")
-    result = run_pipeline("config/persistent/pipeline.deepseek.json")
+    config = load_pipeline_config("config/persistent/pipeline.deepseek.yaml")
+    result = run_pipeline("config/persistent/pipeline.deepseek.yaml")
 """
 
 from .config import load_pipeline_config, PipelineConfig
@@ -27,7 +26,6 @@ from .exceptions import (
     AttachmentDecisionError,
     GraphAssemblyError,
     ArtifactExportError,
-    MemoryBankError,
     LLMBackendError,
     EmbeddingBackendError,
 )
@@ -43,7 +41,9 @@ from .validation import (
 from .logging_config import configure_logging, get_logger
 from .experiments import (
     aggregate_metric_payloads,
+    aggregate_repeated_evaluations,
     build_default_ablation_variants,
+    build_rule_records_by_domain,
     compare_variant_evaluations,
     collect_variant_audit_summary,
     compute_metrics,
@@ -56,6 +56,8 @@ from .experiments import (
     resolve_gold_file,
     resolve_full_gold_alignment,
     run_ablation_experiment,
+    run_baseline_suite,
+    rule_extract_document,
     stage_aligned_input_corpus,
 )
 
@@ -74,7 +76,6 @@ __all__ = [
     "AttachmentDecisionError",
     "GraphAssemblyError",
     "ArtifactExportError",
-    "MemoryBankError",
     "LLMBackendError",
     "EmbeddingBackendError",
     # Validation
@@ -89,7 +90,9 @@ __all__ = [
     "configure_logging",
     "get_logger",
     "aggregate_metric_payloads",
+    "aggregate_repeated_evaluations",
     "build_default_ablation_variants",
+    "build_rule_records_by_domain",
     "compare_variant_evaluations",
     "collect_variant_audit_summary",
     "compute_metrics",
@@ -102,6 +105,8 @@ __all__ = [
     "resolve_gold_file",
     "resolve_full_gold_alignment",
     "run_ablation_experiment",
+    "run_baseline_suite",
+    "rule_extract_document",
     "stage_aligned_input_corpus",
     # Version
     "__version__",

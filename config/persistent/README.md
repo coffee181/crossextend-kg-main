@@ -1,37 +1,60 @@
 # Persistent Configs
 
-**Updated**: 2026-04-18
+**Updated**: 2026-04-20
 
-`config/persistent/` contains the presets intended for real execution and daily editing.
+`config/persistent/` now uses a layered YAML layout for human-maintained runtime presets.
 
-## Recommended Presets
+## Design
 
-- `pipeline.deepseek.json`
-  Recommended paper-facing run
-- `pipeline.deepseek_full.json`
-  Optional multi-variant ablation/stress run
-- `preprocessing.deepseek.json`
-  Recommended O&M preprocessing preset
+- Keep stable pipeline structure in shared base files.
+- Keep model switching in backend registries.
+- Keep daily run presets as thin wrappers that mainly choose backend ids and a small number of runtime overrides.
+- Keep generated experiment configs as materialized JSON when needed.
 
-## Current Active Assumptions
+## Recommended Files
 
-- domains: `battery`, `cnc`, `nev`
-- source type: `om_manual`
-- main variant: `full_llm`
-- relation constraints: `relation_constraints.json`
-- no fallback: unsupported markdown or failed extraction should stop the run
+- `pipeline.base.yaml`
+  Fixed backbone, relations, runtime defaults, and three-domain dataset wiring.
+- `pipeline.deepseek.yaml`
+  Recommended main preset.
+- `pipeline.deepseek.battery_only.yaml`
+  Battery-only wrapper for focused debugging.
+- `pipeline.deepseek_full.yaml`
+  Optional multi-variant stress preset.
+- `preprocessing.base.yaml`
+  Shared preprocessing defaults.
+- `preprocessing.deepseek.yaml`
+  Recommended preprocessing preset.
+- `llm_backends.yaml`
+  LLM backend registry.
+- `embedding_backends.yaml`
+  Embedding backend registry.
 
-## Usually Edited Fields
+## How To Switch Models
 
-1. `llm.base_url`, `llm.api_key`, `llm.model`
-2. `embedding.base_url`, `embedding.api_key`, `embedding.model`
-3. `runtime.artifact_root`
-4. `runtime.run_prefix`
-5. `domains[].data_path`
-6. `domains[].source_types`
+Edit only the thin wrapper in most cases:
+
+```yaml
+extends: ./pipeline.base.yaml
+llm_backend_id: deepseek
+embedding_backend_id: local_ollama_bge_m3
+runtime:
+  run_prefix: deepseek
+```
+
+To switch to another LLM or embedding model, change the backend id instead of copying the whole pipeline config.
+
+## Loader Features
+
+- Supports `.yaml`, `.yml`, and `.json`
+- Supports `extends`
+- Supports `llm_backend_id`
+- Supports `embedding_backend_id`
+- Keeps JSON backward compatibility for generated configs and tests
 
 ## Quick Run
 
 ```bash
-python -m crossextend_kg.cli run --config D:\crossextend_kg\config\persistent\pipeline.deepseek.json
+python -m crossextend_kg.cli preprocess --config D:\crossextend_kg\config\persistent\preprocessing.deepseek.yaml
+python -m crossextend_kg.cli run --config D:\crossextend_kg\config\persistent\pipeline.deepseek.yaml
 ```

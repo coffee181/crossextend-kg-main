@@ -1,0 +1,23 @@
+extends: ./pipeline.deepseek.yaml
+
+benchmark_name: deepseek_battery_experiment
+
+runtime:
+  run_prefix: deepseek_battery
+
+domains:
+  - domain_id: battery
+    domain_name: Battery System
+    role: target
+    data_path: ../../data/evidence_records/battery_evidence_records_llm.json
+    ontology_seed_path: null
+    source_types:
+      - om_manual
+    domain_keywords:
+      - battery
+      - pack
+      - cell
+      - bms
+      - cooling
+      - capacity
+      - degradation

@@ -1,36 +1,43 @@
 # Preprocessing Module
 
-**Updated**: 2026-04-18
+**Updated**: 2026-04-20
 
-`preprocessing/` converts raw O&M markdown into `EvidenceRecord` for the main CrossExtend-KG pipeline.
+`preprocessing/` converts raw O&M markdown into step-aware `EvidenceRecord` files for the main CrossExtend-KG pipeline.
 
 ## Current Scope
 
-The active preprocessing path is designed for:
+- Only `om_manual`
+- Markdown table steps such as `T1`, `T2`, `T3`
+- Three active domains: `battery`, `cnc`, `nev`
+- No fallback extraction path
 
-- O&M manuals
-- markdown table steps such as `T1`, `T2`, `T3`
-- three current domains: `battery`, `cnc`, `nev`
+## Supported Raw Directory Layout
 
-It is no longer optimized around the old `product_intro` / `fault_case` paper path.
-The active parser now enforces an O&M-only contract and fails explicitly on unsupported markdown instead of falling back to legacy doc types.
+The active parser now accepts the current corpus naming directly:
+
+- `data/battery_om_manual_en/`
+- `data/cnc_om_manual_en/`
+- `data/ev_om_manual_en/`
+
+It also still accepts canonical domain folders such as `data/battery/`, `data/cnc/`, and `data/nev/` when those are explicitly staged for experiments.
 
 ## Current Behavior
 
-- infer `om_manual` from filenames like `BATOM_*`, `CNCOM_*`, `EVMAN_*`
-- reject markdown that does not satisfy the active O&M filename/content contract
-- strip UTF-8 BOM if present
-- preserve markdown tables for step extraction
-- use an O&M-specific prompt
-- output one unified `EvidenceRecord` file for downstream loading
+- infers `om_manual` from filenames like `BATOM_*`, `CNCOM_*`, `EVMAN_*`
+- preserves markdown tables for step extraction
+- uses the O&M-specific prompt
+- emits a unified evidence bundle plus per-domain evidence files
+- resolves YAML or JSON preprocessing configs through the shared config loader
 
 ## Recommended Command
 
 ```bash
-python -m crossextend_kg.cli preprocess --config D:\crossextend_kg\config\persistent\preprocessing.deepseek.json
+python -m crossextend_kg.cli preprocess --config D:\crossextend_kg\config\persistent\preprocessing.deepseek.yaml
 ```
 
-## Output Shape
+## Current Output Shape
+
+Each document is represented as a step-aware record:
 
 ```json
 {
@@ -38,34 +45,33 @@ python -m crossextend_kg.cli preprocess --config D:\crossextend_kg\config\persis
   "domain_id": "battery",
   "role": "target",
   "source_type": "om_manual",
-  "timestamp": "2026-04-18T00:00:00Z",
+  "timestamp": "2026-04-20T00:00:00Z",
   "raw_text": "...",
-  "concept_mentions": [
+  "step_records": [
     {
-      "label": "T1 Record Coolant Condition",
-      "description": "Initial O&M inspection step",
-      "node_worthy": true
+      "step_id": "T1",
+      "task": {
+        "label": "T1",
+        "surface_form": "Inspect coolant outlet connector"
+      },
+      "concept_mentions": [
+        {
+          "label": "coolant outlet connector",
+          "node_worthy": true,
+          "semantic_type_hint": "Component"
+        }
+      ],
+      "relation_mentions": [
+        {
+          "label": "observes",
+          "family": "task_dependency",
+          "head": "T1",
+          "tail": "coolant outlet connector"
+        }
+      ]
     }
   ],
-  "relation_mentions": [
-    {
-      "label": "triggers",
-      "family": "task_dependency",
-      "head": "T1 Record Coolant Condition",
-      "tail": "T2 Isolate and Expose Outlet Area"
-    }
-  ]
+  "document_concept_mentions": [],
+  "document_relation_mentions": []
 }
 ```
-
-## Current Prompt
-
-- `config/prompts/preprocessing_extraction_om.txt`
-
-This prompt now explicitly:
-
-- keeps step rows under `Task`
-- discourages document-title extraction
-- discourages generic human-role extraction
-- grounds measurements and visual outcomes as `Signal`
-- grounds standing conditions as `State`

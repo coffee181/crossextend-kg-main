@@ -1,0 +1,10 @@
+description: Embedding backend registry for persistent runtime configs
+default_backend: local_ollama_bge_m3
+backends:
+  local_ollama_bge_m3:
+    base_url: http://127.0.0.1:11434/v1
+    api_key: ""
+    model: bge-m3:latest
+    timeout_sec: 300
+    dimensions: 1024
+  

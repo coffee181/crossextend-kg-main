@@ -8,7 +8,10 @@ import json
 from pathlib import Path
 from typing import Any, Iterable
 
-from .models import EvidenceRecord
+try:
+    from crossextend_kg.models import EvidenceRecord
+except ImportError:  # pragma: no cover - direct script execution fallback
+    from models import EvidenceRecord
 
 
 def ensure_dir(path: str | Path) -> Path:

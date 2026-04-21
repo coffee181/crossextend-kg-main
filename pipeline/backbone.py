@@ -3,8 +3,14 @@
 
 from __future__ import annotations
 
-from ..config import PipelineConfig
-from ..io import read_json
+try:
+    from crossextend_kg.config import PipelineConfig
+except ImportError:  # pragma: no cover - direct script execution fallback
+    from config import PipelineConfig
+try:
+    from crossextend_kg.file_io import read_json
+except ImportError:  # pragma: no cover - direct script execution fallback
+    from file_io import read_json
 
 
 def _load_curated_backbone_concepts(path: str | None) -> dict[str, str]:

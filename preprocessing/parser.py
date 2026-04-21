@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from .models import DocumentInput
+from preprocessing.models import DocumentInput
 
 
 _TIMESTAMP_PATTERNS: list[tuple[re.Pattern[str], str | None]] = [
@@ -45,6 +45,11 @@ _OM_CONTENT_MARKERS = (
     "| t8 |",
     "| t9 |",
 )
+_DOMAIN_DIRECTORY_CANDIDATES: dict[str, tuple[str, ...]] = {
+    "battery": ("battery", "battery_om_manual_en"),
+    "cnc": ("cnc", "cnc_om_manual_en"),
+    "nev": ("nev", "nev_om_manual_en", "ev_om_manual_en"),
+}
 
 
 def _read_markdown_text(file_path: Path) -> str:
@@ -133,8 +138,8 @@ def parse_multi_domain_directory(
     result: dict[str, dict[str, list[DocumentInput]]] = {}
 
     for domain_id in domain_ids:
-        domain_path = data_root / domain_id
-        if not domain_path.is_dir():
+        domain_path = _resolve_domain_directory(data_root, domain_id)
+        if domain_path is None:
             continue
 
         result[domain_id] = {"om_manual": []}
@@ -157,6 +162,19 @@ def parse_multi_domain_directory(
             result[domain_id][doc_type].append(doc)
 
     return result
+
+
+def _resolve_domain_directory(data_root: Path, domain_id: str) -> Path | None:
+    candidates = _DOMAIN_DIRECTORY_CANDIDATES.get(domain_id, (domain_id,))
+    matches = [candidate for name in candidates if (candidate := data_root / name).is_dir()]
+    if not matches:
+        return None
+    if len(matches) > 1:
+        raise ValueError(
+            f"ambiguous raw directory layout for domain '{domain_id}' under {data_root}: "
+            + ", ".join(str(path) for path in matches)
+        )
+    return matches[0]
 
 
 def extract_title(content: str, file_path: Path) -> str:

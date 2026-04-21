@@ -5,9 +5,15 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from ..io import ensure_dir, read_json, read_jsonl, write_csv, write_json, write_jsonl
-from ..models import PipelineBenchmarkResult, VariantRunResult
-from .utils import utc_now
+try:
+    from crossextend_kg.file_io import ensure_dir, read_json, read_jsonl, write_csv, write_json, write_jsonl
+except ImportError:  # pragma: no cover - direct script execution fallback
+    from file_io import ensure_dir, read_json, read_jsonl, write_csv, write_json, write_jsonl
+try:
+    from crossextend_kg.models import PipelineBenchmarkResult, VariantRunResult
+except ImportError:  # pragma: no cover - direct script execution fallback
+    from models import PipelineBenchmarkResult, VariantRunResult
+from pipeline.utils import utc_now
 
 ADAPTER_ROUTES = {"vertical_specialize"}
 
@@ -39,7 +45,6 @@ def _build_candidate_payloads(result: VariantRunResult, domain_id: str) -> list[
     backbone_labels = set(result.backbone_concepts)
     retrievals = result.retrievals[domain_id]
     decisions = result.attachment_decisions[domain_id]
-    historical_context = result.historical_context_by_domain.get(domain_id, {})
     payloads: list[dict[str, object]] = []
     for candidate in result.candidates_by_domain[domain_id]:
         decision = decisions[candidate.candidate_id]
@@ -48,10 +53,6 @@ def _build_candidate_payloads(result: VariantRunResult, domain_id: str) -> list[
                 "candidate": candidate.model_dump(mode="json"),
                 "decision": decision.model_dump(mode="json"),
                 "retrievals": [item.model_dump(mode="json") for item in retrievals.get(candidate.candidate_id, [])],
-                "historical_context": [
-                    item.model_dump(mode="json")
-                    for item in historical_context.get(candidate.candidate_id, [])
-                ],
                 "is_existing_backbone_label": candidate.label in backbone_labels,
                 "accepted_as_adapter": decision.admit_as_node and decision.route in ADAPTER_ROUTES,
                 "accepted_as_backbone_reuse": decision.admit_as_node and decision.route == "reuse_backbone",
@@ -184,7 +185,6 @@ def export_variant_run(
     )
     write_json(root / "backbone_final.json", _build_backbone_final_payload(result))
     write_json(root / "construction_summary.json", result.construction_summary)
-    write_jsonl(root / "temporal_memory_entries.jsonl", result.memory_entries)
 
     if write_detailed_working_artifacts:
         write_json(root / "backbone_seed.json", _build_backbone_seed_payload(result))
@@ -208,7 +208,6 @@ def export_variant_run(
         candidates = result.candidates_by_domain[domain_id]
         retrievals = result.retrievals[domain_id]
         decisions = result.attachment_decisions[domain_id]
-        historical_context = result.historical_context_by_domain.get(domain_id, {})
         candidate_payloads = _build_candidate_payloads(result, domain_id)
         accepted_adapter_candidates = [item for item in candidate_payloads if item["accepted_as_adapter"]]
         rejected_adapter_candidates = [item for item in candidate_payloads if item["rejected"]]
@@ -265,13 +264,6 @@ def export_variant_run(
             write_json(
                 domain_root / "attachment_decisions.json",
                 {key: value.model_dump(mode="json") for key, value in decisions.items()},
-            )
-            write_json(
-                domain_root / "historical_context.json",
-                {
-                    key: [item.model_dump(mode="json") for item in values]
-                    for key, values in historical_context.items()
-                },
             )
             write_json(domain_root / "relation_edges.candidates.json", relation_candidate_triples)
             write_json(domain_root / "relation_edges.accepted.json", accepted_relation_edges)

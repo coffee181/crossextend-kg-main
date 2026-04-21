@@ -258,38 +258,6 @@ class SnapshotState(BaseModel):
     edges: list[GraphEdge] = Field(default_factory=list)
 
 
-class HistoricalContextHit(BaseModel):
-    memory_id: str
-    entry_type: Literal["evidence", "attachment", "snapshot"]
-    domain_id: str
-    timestamp: str
-    score: float
-    summary: str
-    parent_anchor: str | None = None
-    snapshot_id: str | None = None
-    variant_id: str | None = None
-    matched_labels: list[str] = Field(default_factory=list)
-    evidence_ids: list[str] = Field(default_factory=list)
-
-
-class MemoryEntry(BaseModel):
-    memory_id: str
-    entry_type: Literal["evidence", "attachment", "snapshot"]
-    domain_id: str
-    timestamp: str
-    summary: str
-    label_refs: list[str] = Field(default_factory=list)
-    relation_families: list[str] = Field(default_factory=list)
-    evidence_ids: list[str] = Field(default_factory=list)
-    parent_anchor: str | None = None
-    snapshot_id: str | None = None
-    variant_id: str | None = None
-    run_root: str | None = None
-    tags: list[str] = Field(default_factory=list)
-    embedding_text: str = ""
-    confidence: float = 1.0
-
-
 class DomainGraphArtifacts(BaseModel):
     domain_id: str
     nodes: list[GraphNode] = Field(default_factory=list)
@@ -311,12 +279,10 @@ class VariantRunResult(BaseModel):
     evidence_units: list[EvidenceUnit]
     candidates_by_domain: dict[str, list[SchemaCandidate]]
     retrievals: dict[str, dict[str, list[RetrievedAnchor]]]
-    historical_context_by_domain: dict[str, dict[str, list[HistoricalContextHit]]] = Field(default_factory=dict)
     attachment_decisions: dict[str, dict[str, AttachmentDecision]]
     schemas: dict[str, DomainSchema]
     domain_graphs: dict[str, DomainGraphArtifacts]
     construction_summary: dict[str, Any]
-    memory_entries: list[MemoryEntry] = Field(default_factory=list)
 
 
 class PipelineBenchmarkResult(BaseModel):

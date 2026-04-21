@@ -34,7 +34,10 @@ from typing import Any, Protocol
 
 import numpy as np
 
-from ..io import ensure_dir, read_json, read_jsonl, write_json, write_jsonl
+try:
+    from crossextend_kg.file_io import ensure_dir, read_json, read_jsonl, write_json, write_jsonl
+except ImportError:  # pragma: no cover - direct script execution fallback
+    from file_io import ensure_dir, read_json, read_jsonl, write_json, write_jsonl
 
 logger = logging.getLogger(__name__)
 

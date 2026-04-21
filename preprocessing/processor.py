@@ -11,18 +11,35 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from ..io import ensure_dir, write_json
-from ..models import (
-    ConceptMention,
-    EvidenceRecord,
-    RelationMention,
-    SemanticTypeHint,
-    StepConceptMention,
-    StepRecord,
-)
-from .extractor import build_extractor
-from .models import DocumentInput, ExtractionResult, PreprocessingConfig, PreprocessingResult
-from .parser import (
+try:
+    from crossextend_kg.config import load_structured_config_payload, resolve_preprocessing_payload_paths
+except ImportError:  # pragma: no cover - direct script execution fallback
+    from config import load_structured_config_payload, resolve_preprocessing_payload_paths
+try:
+    from crossextend_kg.file_io import ensure_dir, write_json
+except ImportError:  # pragma: no cover - direct script execution fallback
+    from file_io import ensure_dir, write_json
+try:
+    from crossextend_kg.models import (
+        ConceptMention,
+        EvidenceRecord,
+        RelationMention,
+        SemanticTypeHint,
+        StepConceptMention,
+        StepRecord,
+    )
+except ImportError:  # pragma: no cover - direct script execution fallback
+    from models import (
+        ConceptMention,
+        EvidenceRecord,
+        RelationMention,
+        SemanticTypeHint,
+        StepConceptMention,
+        StepRecord,
+    )
+from preprocessing.extractor import build_extractor
+from preprocessing.models import DocumentInput, ExtractionResult, PreprocessingConfig, PreprocessingResult
+from preprocessing.parser import (
     classify_doc_type,
     infer_doc_type_from_filename,
     normalize_content,
@@ -748,14 +765,10 @@ def extraction_to_evidence_record(doc: DocumentInput, extraction: ExtractionResu
 
 
 def load_preprocessing_config(config_path: str) -> PreprocessingConfig:
-    """Load preprocessing config from JSON file."""
-    path = Path(config_path).resolve()
-    data = _expand_env(json.loads(path.read_text(encoding="utf-8-sig")))
+    """Load preprocessing config from a JSON or YAML file."""
+    path, data = load_structured_config_payload(config_path)
+    data = resolve_preprocessing_payload_paths(data, base_dir=path.parent)
     config = PreprocessingConfig.model_validate(data)
-    base_dir = path.parent
-    config.data_root = _resolve_path(base_dir, config.data_root)
-    config.output_path = _resolve_path(base_dir, config.output_path)
-    config.prompt_template_path = _resolve_path(base_dir, config.prompt_template_path)
     return config
 
 

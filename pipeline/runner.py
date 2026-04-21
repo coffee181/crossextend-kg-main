@@ -6,29 +6,29 @@ from __future__ import annotations
 import logging
 from pathlib import Path
 
-from ..backends.embeddings import build_embedding_backend
-from ..backends.llm import build_llm_backend
-from ..config import load_pipeline_config
-from ..models import PipelineBenchmarkResult, VariantRunResult
-from ..rules.filtering import filter_attachment_decision
-from .artifacts import export_benchmark_summary, export_variant_run, write_latest_summary
-from .attachment import decide_attachments_for_domain
-from .backbone import build_backbone
-from .evidence import (
+from backends.embeddings import build_embedding_backend
+from backends.llm import build_llm_backend
+try:
+    from crossextend_kg.config import load_pipeline_config
+except ImportError:  # pragma: no cover - direct script execution fallback
+    from config import load_pipeline_config
+try:
+    from crossextend_kg.models import PipelineBenchmarkResult, VariantRunResult
+except ImportError:  # pragma: no cover - direct script execution fallback
+    from models import PipelineBenchmarkResult, VariantRunResult
+from rules.filtering import filter_attachment_decision
+from pipeline.artifacts import export_benchmark_summary, export_variant_run, write_latest_summary
+from pipeline.attachment import decide_attachments_for_domain
+from pipeline.backbone import build_backbone
+from pipeline.evidence import (
     aggregate_schema_candidates,
     build_evidence_units,
     load_records_by_domain,
     normalize_records_by_domain,
 )
-from .graph import assemble_domain_graphs, build_domain_schemas
-from .memory import (
-    build_variant_memory_entries,
-    load_persistent_memory_bank,
-    retrieve_historical_context,
-    save_temporal_memory_bank,
-)
-from .router import empty_retrievals, retrieve_anchor_rankings
-from .utils import utc_now
+from pipeline.graph import assemble_domain_graphs, build_domain_schemas
+from pipeline.router import empty_retrievals, retrieve_anchor_rankings
+from pipeline.utils import utc_now
 
 logger = logging.getLogger(__name__)
 
@@ -69,7 +69,6 @@ def _build_variant_construction_summary(result: VariantRunResult) -> dict[str, o
         "backbone_size": len(result.backbone_concepts),
         "curated_backbone_concept_count": len(result.curated_backbone_concepts),
         "evidence_unit_count": len(result.evidence_units),
-        "memory_entry_count": len(result.memory_entries),
         "per_domain": per_domain,
     }
 
@@ -112,14 +111,6 @@ def run_pipeline(
     records_by_domain = normalize_records_by_domain(load_records_by_domain(config))
     evidence_units = build_evidence_units(config, records_by_domain)
     candidates_by_domain = aggregate_schema_candidates(records_by_domain, assume_normalized=True)
-    persistent_memory_entries = load_persistent_memory_bank(config)
-    historical_context_by_domain = retrieve_historical_context(
-        config=config,
-        embedding_backend=embedding_backend,
-        records_by_domain=records_by_domain,
-        candidates_by_domain=candidates_by_domain,
-        persistent_entries=persistent_memory_entries,
-    )
 
     if variant_ids:
         selected = {variant.variant_id for variant in config.variants if variant.variant_id in set(variant_ids)}
@@ -139,12 +130,6 @@ def run_pipeline(
         backbone_set = set(backbone_concepts)
         retrievals_by_domain: dict[str, dict[str, list]] = {}
         decisions_by_domain = {}
-
-        if variant.enable_memory_bank:
-            variant_historical_context = historical_context_by_domain
-        else:
-            variant_historical_context = {domain_id: {} for domain_id in candidates_by_domain}
-            logger.info("MemoryBank disabled for variant %s", variant.variant_id)
 
         for domain in config.domains:
             logger.info("Processing domain %s (%d candidates)", domain.domain_id, len(candidates_by_domain.get(domain.domain_id, [])))
@@ -167,7 +152,6 @@ def run_pipeline(
                 domain_id=domain.domain_id,
                 candidates=candidates,
                 retrievals=retrievals,
-                historical_context=variant_historical_context.get(domain.domain_id, {}),
                 backbone_descriptions=backbone_descriptions,
                 backbone_concepts=backbone_set,
             )
@@ -201,18 +185,6 @@ def run_pipeline(
         )
 
         variant_run_dir = run_root / variant.variant_id
-        if variant.enable_memory_bank:
-            memory_entries = build_variant_memory_entries(
-                variant_id=variant.variant_id,
-                run_root=str(run_root),
-                records_by_domain=records_by_domain,
-                candidates_by_domain=candidates_by_domain,
-                decisions_by_domain=decisions_by_domain,
-                historical_context_by_domain=variant_historical_context,
-                domain_graphs=domain_graphs,
-            )
-        else:
-            memory_entries = []
 
         result = VariantRunResult(
             variant_id=variant.variant_id,
@@ -225,12 +197,10 @@ def run_pipeline(
             evidence_units=evidence_units,
             candidates_by_domain=candidates_by_domain,
             retrievals=retrievals_by_domain,
-            historical_context_by_domain=variant_historical_context,
             attachment_decisions=decisions_by_domain,
             schemas=schemas,
             domain_graphs=domain_graphs,
             construction_summary={},
-            memory_entries=memory_entries,
         )
         result.construction_summary = _build_variant_construction_summary(result)
         variant_results[variant.variant_id] = result
@@ -257,11 +227,6 @@ def run_pipeline(
 
     if export_artifacts:
         export_benchmark_summary(run_root, benchmark_result)
-        combined_memory_entries = list(persistent_memory_entries)
-        for result in variant_results.values():
-            combined_memory_entries.extend(result.memory_entries)
-        save_temporal_memory_bank(run_root / "temporal_memory_bank.jsonl", combined_memory_entries, config.runtime.temporal_memory_max_entries)
-        save_temporal_memory_bank(Path(config.runtime.artifact_root) / "temporal_memory_bank.jsonl", combined_memory_entries, config.runtime.temporal_memory_max_entries)
         if config.runtime.save_latest_summary:
             write_latest_summary(config.runtime.artifact_root, summary)
     return benchmark_result

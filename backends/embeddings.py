@@ -9,7 +9,10 @@ from typing import Protocol
 
 import numpy as np
 
-from ..config import EmbeddingBackendConfig
+try:
+    from crossextend_kg.config import EmbeddingBackendConfig
+except ImportError:  # pragma: no cover - direct script execution fallback
+    from config import EmbeddingBackendConfig
 
 
 class EmbeddingBackend(Protocol):

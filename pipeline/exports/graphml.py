@@ -21,8 +21,14 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Any
 
-from ...io import ensure_dir
-from ...models import DomainGraphArtifacts, GraphEdge, GraphNode
+try:
+    from crossextend_kg.file_io import ensure_dir
+except ImportError:  # pragma: no cover - direct script execution fallback
+    from file_io import ensure_dir
+try:
+    from crossextend_kg.models import DomainGraphArtifacts, GraphEdge, GraphNode
+except ImportError:  # pragma: no cover - direct script execution fallback
+    from models import DomainGraphArtifacts, GraphEdge, GraphNode
 
 
 def build_node_id_from_label(domain_id: str, label: str) -> str:

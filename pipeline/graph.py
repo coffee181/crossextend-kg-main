@@ -7,20 +7,38 @@ import logging
 import re
 from collections import OrderedDict
 
-from ..config import PipelineConfig, VariantConfig
-from ..models import (
-    AdapterConcept,
-    CandidateTriple,
-    DomainGraphArtifacts,
-    DomainSchema,
-    GraphEdge,
-    GraphNode,
-    SchemaCandidate,
-    SnapshotManifest,
-    SnapshotState,
-    TemporalAssertion,
-)
-from .relation_validation import load_relation_constraints, validate_edge
+try:
+    from crossextend_kg.config import PipelineConfig, VariantConfig
+except ImportError:  # pragma: no cover - direct script execution fallback
+    from config import PipelineConfig, VariantConfig
+try:
+    from crossextend_kg.models import (
+        AdapterConcept,
+        CandidateTriple,
+        DomainGraphArtifacts,
+        DomainSchema,
+        GraphEdge,
+        GraphNode,
+        SchemaCandidate,
+        SnapshotManifest,
+        SnapshotState,
+        TemporalAssertion,
+    )
+except ImportError:  # pragma: no cover - direct script execution fallback
+    from models import (
+        AdapterConcept,
+        CandidateTriple,
+        DomainGraphArtifacts,
+        DomainSchema,
+        GraphEdge,
+        GraphNode,
+        SchemaCandidate,
+        SnapshotManifest,
+        SnapshotState,
+        TemporalAssertion,
+    )
+from pipeline.relation_validation import load_relation_constraints, validate_edge
+from rules.relation_filtering import filter_relation_mention
 
 logger = logging.getLogger(__name__)
 
@@ -236,20 +254,35 @@ def assemble_domain_graphs(
                     accepted = False
                     reject_reason = "task_dependency_explainability_only"
                 else:
-                    accepted = resolved_head in materialized_labels and resolved_tail in materialized_labels
-                    if not accepted:
-                        rejection_parts: list[str] = []
-                        if resolved_head not in materialized_labels:
-                            if head_decision and head_decision.reject_reason:
-                                rejection_parts.append(f"head:{head_decision.reject_reason}")
-                            else:
-                                rejection_parts.append("head:not_in_graph")
-                        if resolved_tail not in materialized_labels:
-                            if tail_decision and tail_decision.reject_reason:
-                                rejection_parts.append(f"tail:{tail_decision.reject_reason}")
-                            else:
-                                rejection_parts.append("tail:not_in_graph")
-                        reject_reason = ";".join(rejection_parts)
+                    head_in_graph = resolved_head in materialized_labels
+                    tail_in_graph = resolved_tail in materialized_labels
+                    relation_accepted, relation_filter_reason = filter_relation_mention(
+                        family=relation.family,
+                        head=resolved_head,
+                        tail=resolved_tail,
+                        relation_label=relation.label,
+                        head_in_graph=head_in_graph,
+                        tail_in_graph=tail_in_graph,
+                        node_anchor_map=current_node_types,
+                    )
+                    if not relation_accepted:
+                        accepted = False
+                        reject_reason = relation_filter_reason
+                    else:
+                        accepted = head_in_graph and tail_in_graph
+                        if not accepted:
+                            rejection_parts: list[str] = []
+                            if resolved_head not in materialized_labels:
+                                if head_decision and head_decision.reject_reason:
+                                    rejection_parts.append(f"head:{head_decision.reject_reason}")
+                                else:
+                                    rejection_parts.append("head:not_in_graph")
+                            if resolved_tail not in materialized_labels:
+                                if tail_decision and tail_decision.reject_reason:
+                                    rejection_parts.append(f"tail:{tail_decision.reject_reason}")
+                                else:
+                                    rejection_parts.append("tail:not_in_graph")
+                            reject_reason = ";".join(rejection_parts)
 
                 type_valid = True
                 if accepted and constraints:

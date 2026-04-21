@@ -1,31 +1,25 @@
 #!/usr/bin/env python3
-"""Preprocessing module for converting O&M markdown to EvidenceRecords.
+"""Preprocessing entrypoints for converting O&M markdown into EvidenceRecords.
 
-This module provides tools to:
-- parse markdown O&M manuals
-- extract concepts and relations using LLM
-- generate EvidenceRecords compatible with CrossExtend-KG
-
-Supported directory structure:
-    data_root/
-    ├── battery/
-    │   └── BATOM_001.md
-    ├── cnc/
-    │   └── CNCOM_001.md
-    └── nev/
-        └── EVMAN_001.md
+The active preprocessing path supports:
+- O&M markdown manuals
+- step-aware extraction from table rows such as `T1`, `T2`, `T3`
+- current raw directory layouts such as:
+  - `battery/` or `battery_om_manual_en/`
+  - `cnc/` or `cnc_om_manual_en/`
+  - `nev/` or `nev_om_manual_en/` or `ev_om_manual_en/`
 
 Public API:
-- run_preprocessing: Full preprocessing pipeline from config
-- preprocess_single_document: Convenience function for single files
-- load_preprocessing_config: Load config from JSON file
+- `run_preprocessing`
+- `preprocess_single_document`
+- `load_preprocessing_config`
 """
 
 from __future__ import annotations
 
-from .extractor import LLMExtractor, build_extractor
-from .models import DocumentInput, ExtractionResult, PreprocessingConfig, PreprocessingResult
-from .parser import (
+from preprocessing.extractor import LLMExtractor, build_extractor
+from preprocessing.models import DocumentInput, ExtractionResult, PreprocessingConfig, PreprocessingResult
+from preprocessing.parser import (
     classify_doc_type,
     infer_doc_type_from_filename,
     normalize_content,
@@ -33,7 +27,7 @@ from .parser import (
     parse_markdown_file,
     parse_multi_domain_directory,
 )
-from .processor import load_preprocessing_config, preprocess_single_document, run_preprocessing
+from preprocessing.processor import load_preprocessing_config, preprocess_single_document, run_preprocessing
 
 __all__ = [
     "DocumentInput",

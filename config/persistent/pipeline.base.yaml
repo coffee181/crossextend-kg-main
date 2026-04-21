@@ -1,0 +1,123 @@
+project_name: CrossExtend-KG
+benchmark_name: default_experiment
+
+prompts:
+  attachment_judge_template_path: ../prompts/attachment_judge.txt
+
+backbone:
+  seed_concepts:
+    - Asset
+    - Component
+    - Process
+    - Task
+    - Signal
+    - State
+    - Fault
+    - MaintenanceAction
+    - Incident
+    - Actor
+    - Document
+  seed_descriptions:
+    Asset: industrial asset, machine, line, robot, battery pack, assembly, cabinet, robotic arm, control system, main equipment
+    Component: part, module, bearing, reducer, lock, cooling module, hardware component, subassembly part, harness, sensor, motor, controller
+    Process: industrial process or operational procedure, charging process, diagnostic process, maintenance workflow
+    Task: maintenance or operational task, inspection task, calibration task, shutdown task, work order, repair task
+    Signal: alarm, warning, telemetry, sensor reading, sensor signal, vibration signal, torque signal, temperature signal
+    State: operating state, normal state, abnormal state, status condition, overload state, shortage status, shutdown state
+    Fault: fault, failure, defect, damage, deviation, drift, anomaly root issue, isolation fault, temperature fault
+    MaintenanceAction: repair, replacement action, reset action, recalibration action, power-off operation, refueling action
+    Incident: event, abnormal incident, occurrence, fault event, shutdown event, safety incident
+    Actor: technician, operator, engineer, actor, battery service technician, maintenance crew
+    Document: report, ticket, document, manual, work order document, operation log, maintenance manual
+
+relations:
+  relation_families:
+    - task_dependency
+    - communication
+    - propagation
+    - lifecycle
+    - structural
+  family_descriptions:
+    task_dependency: dependency edges between assets, tasks, and actions
+    communication: signal and reporting links
+    propagation: fault propagation links
+    lifecycle: event-state-action transitions
+    structural: asset-component structural edges
+  allowed_routes:
+    - reuse_backbone
+    - vertical_specialize
+    - reject
+
+data:
+  normalize_whitespace: true
+
+runtime:
+  artifact_root: ../../artifacts
+  retrieval_top_k: 3
+  min_relation_support_count: 1
+  llm_attachment_batch_size: 8
+  save_latest_summary: true
+  write_detailed_working_artifacts: false
+  write_jsonl_artifacts: false
+  write_graph_db_csv: false
+  write_property_graph_jsonl: false
+  run_prefix: run
+  relation_constraints_path: ./relation_constraints.json
+  enable_relation_validation: true
+
+variants:
+  - variant_id: full_llm
+    description: Main pipeline with LLM attachment, embedding routing, and rule filtering
+    attachment_strategy: llm
+    use_embedding_routing: true
+    use_rule_filter: true
+    allow_free_form_growth: false
+    enable_snapshots: true
+    export_artifacts: true
+
+domains:
+  - domain_id: battery
+    domain_name: Battery System
+    role: target
+    data_path: ../../data/evidence_records/battery_evidence_records_llm.json
+    ontology_seed_path: null
+    source_types:
+      - om_manual
+    domain_keywords:
+      - battery
+      - pack
+      - cell
+      - bms
+      - cooling
+      - capacity
+      - degradation
+  - domain_id: cnc
+    domain_name: CNC Machine
+    role: target
+    data_path: ../../data/evidence_records/cnc_evidence_records_llm.json
+    ontology_seed_path: null
+    source_types:
+      - om_manual
+    domain_keywords:
+      - cnc
+      - spindle
+      - servo
+      - axis
+      - coolant
+      - vibration
+      - bearing
+  - domain_id: nev
+    domain_name: New Energy Vehicle
+    role: target
+    data_path: ../../data/evidence_records/nev_evidence_records_llm.json
+    ontology_seed_path: null
+    source_types:
+      - om_manual
+    domain_keywords:
+      - nev
+      - vehicle
+      - battery
+      - module
+      - drive
+      - range
+      - charging

@@ -11,8 +11,11 @@ from typing import Any, Protocol
 
 import openai
 
-from .embeddings import normalize_api_base_url
-from ..config import LLMBackendConfig
+from backends.embeddings import normalize_api_base_url
+try:
+    from crossextend_kg.config import LLMBackendConfig
+except ImportError:  # pragma: no cover - direct script execution fallback
+    from config import LLMBackendConfig
 
 
 logger = logging.getLogger(__name__)
@@ -126,6 +129,23 @@ class ChatCompletionsLLMBackend:
                     )
                 content = choice.message.content or ""
                 return extract_json(_normalize_chat_content(content))
+            except ValueError as exc:
+                if attempt >= self.request_max_attempts:
+                    logger.error(
+                        "Failed to parse JSON from LLM response after %d attempts: %s",
+                        attempt,
+                        exc,
+                    )
+                    raise
+                delay_sec = min(10.0, 2.0 * attempt)
+                logger.warning(
+                    "LLM returned invalid JSON on attempt %d/%d: %s. Retrying in %.1fs",
+                    attempt,
+                    self.request_max_attempts,
+                    exc,
+                    delay_sec,
+                )
+                time.sleep(delay_sec)
             except retryable_errors as exc:
                 if attempt >= self.request_max_attempts:
                     logger.error("OpenAI API error after %d attempts: %s", attempt, exc)

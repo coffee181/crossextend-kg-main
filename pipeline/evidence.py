@@ -7,10 +7,19 @@ import re
 from collections import Counter, defaultdict
 from pathlib import Path
 
-from ..config import PipelineConfig
-from ..io import load_evidence_records
-from ..models import EvidenceRecord, EvidenceUnit, SchemaCandidate, SemanticTypeHint
-from .utils import normalize_text
+try:
+    from crossextend_kg.config import PipelineConfig
+except ImportError:  # pragma: no cover - direct script execution fallback
+    from config import PipelineConfig
+try:
+    from crossextend_kg.file_io import load_evidence_records
+except ImportError:  # pragma: no cover - direct script execution fallback
+    from file_io import load_evidence_records
+try:
+    from crossextend_kg.models import EvidenceRecord, EvidenceUnit, SchemaCandidate, SemanticTypeHint
+except ImportError:  # pragma: no cover - direct script execution fallback
+    from models import EvidenceRecord, EvidenceUnit, SchemaCandidate, SemanticTypeHint
+from pipeline.utils import normalize_text
 
 
 _STEP_ID_PATTERN = re.compile(r"^(T\d+)\b", re.IGNORECASE)

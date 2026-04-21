@@ -39,11 +39,6 @@ class ArtifactExportError(CrossExtendKGError):
     pass
 
 
-class MemoryBankError(CrossExtendKGError):
-    """MemoryBank operation failed."""
-    pass
-
-
 class LLMBackendError(CrossExtendKGError):
     """LLM backend operation failed."""
     pass
