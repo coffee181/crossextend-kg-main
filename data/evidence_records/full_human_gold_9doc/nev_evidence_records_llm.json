@@ -1,0 +1,2071 @@
+{
+  "project_name": "crossextend_kg_preprocessing",
+  "generated_at": "2026-04-22T13:02:48Z",
+  "domains": [
+    "nev"
+  ],
+  "role": "target",
+  "document_count": 3,
+  "domain_stats": {
+    "nev": {
+      "om_manual": 3
+    }
+  },
+  "evidence_records": [
+    {
+      "evidence_id": "EVMAN_001",
+      "domain_id": "nev",
+      "role": "target",
+      "source_type": "om_manual",
+      "timestamp": "2026-04-22T11:57:41Z",
+      "raw_text": "| Time step | O&M sample text |\n|---|---|\n| T1 | Begin the leak map on Aurex E-Motion-412 LR by recording battery coolant level, residue color, undertray wetness, recent thermal-system repair history, and whether seepage is already visible at the left coolant-plate outlet while the pack remains in the as-received condition with no covers moved. |\n| T2 | Power the vehicle down, isolate the high-voltage pack, and allow the local cooling branch to equalize. Then remove the rear underbody shield and the left pack-side splash cover while keeping the hose angle unchanged so the original quick-coupler seating witness can still be read. |\n| T3 | Wipe only the loose surface film first, leave the wet edge untouched, and trace the leak path from the coolant-plate seam toward the outlet hose, the quick-coupler lock window, the O-ring seat, and the nearby bracket drain edge so the actual origin is not blurred by cleaning too early. |\n| T4 | Install the local pressure tool on the coolant-plate inlet and outlet, cap the neighboring branch, and hold the specified pressure long enough to observe whether fresh wetting begins at the plate seam, the coupler body, the hose clamp line, or the tube insertion stop inside the connector. |\n| T5 | Compare the suspect joint with the opposite coolant-plate branch, paying attention to hose twist, clamp clocking, connector latch height, tube insertion depth, and any side-load mark where the support bracket may have forced the plastic coupler body off-axis. This comparison should distinguish a deformed connector body from a hose-routing load or a clamp-position error before the joint is opened. |\n| T6 | Inspect the aluminum plate edge, the molded quick connector, the green O-ring land, the hose end, and the nearby harness clip for dried coolant crystals, abrasion, plastic stress whitening, or metal staining that would separate connector leakage from a plate-side crack. |\n| T7 | Mark the confirmed leak boundary directly at the leaking hardware, photograph the coolant-plate seam and the quick-coupler seat from more than one angle, and note clearly whether the failure belongs to the plate seam, the O-ring interface, the connector shell, or the hose-routing condition. |\n| T8 | Refit only the access parts needed to protect the opened area, leave the identified leak point readable for downstream repair, and close the record with the exact hardware named as battery coolant-plate outlet quick connector or coolant-plate seam instead of leaving a generic leak description. The accepted leak map should still let the next repair start from one named outlet-side boundary rather than from a broad pack-coolant leak note. |",
+      "step_records": [
+        {
+          "step_id": "T1",
+          "task": {
+            "label": "T1",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Begin the leak map on Aurex E-Motion-412 LR by recording battery coolant level, residue color, undertray wetness, recent thermal-system repair history, and whether seepage is already visible at the left coolant-plate outlet while the pack remains in the as-received condition with no covers moved.",
+            "semantic_type_hint": null
+          },
+          "concept_mentions": [
+            {
+              "label": "as-received condition",
+              "kind": "concept",
+              "description": "initial condition state",
+              "node_worthy": true,
+              "surface_form": "as-received condition",
+              "semantic_type_hint": "State"
+            },
+            {
+              "label": "Aurex E-Motion-412 LR",
+              "kind": "concept",
+              "description": "vehicle or battery pack asset",
+              "node_worthy": true,
+              "surface_form": "Aurex E-Motion-412 LR",
+              "semantic_type_hint": "Asset"
+            },
+            {
+              "label": "battery coolant level",
+              "kind": "concept",
+              "description": "measured coolant level signal",
+              "node_worthy": true,
+              "surface_form": "battery coolant level",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "left coolant-plate outlet",
+              "kind": "concept",
+              "description": "coolant plate outlet component",
+              "node_worthy": true,
+              "surface_form": "left coolant-plate outlet",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "residue color",
+              "kind": "concept",
+              "description": "observed residue color signal",
+              "node_worthy": true,
+              "surface_form": "residue color",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "seepage",
+              "kind": "concept",
+              "description": "visible seepage signal",
+              "node_worthy": true,
+              "surface_form": "seepage",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "undertray wetness",
+              "kind": "concept",
+              "description": "wetness under the tray signal",
+              "node_worthy": true,
+              "surface_form": "undertray wetness",
+              "semantic_type_hint": "Signal"
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T1",
+              "tail": "battery coolant level"
+            },
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T1",
+              "tail": "residue color"
+            },
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T1",
+              "tail": "undertray wetness"
+            },
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T1",
+              "tail": "seepage"
+            },
+            {
+              "label": "performed_on",
+              "family": "task_dependency",
+              "head": "T1",
+              "tail": "Aurex E-Motion-412 LR"
+            },
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T1",
+              "tail": "as-received condition"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T1",
+              "tail": "T2"
+            }
+          ]
+        },
+        {
+          "step_id": "T2",
+          "task": {
+            "label": "T2",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Power the vehicle down, isolate the high-voltage pack, and allow the local cooling branch to equalize. Then remove the rear underbody shield and the left pack-side splash cover while keeping the hose angle unchanged so the original quick-coupler seating witness can still be read.",
+            "semantic_type_hint": null
+          },
+          "concept_mentions": [
+            {
+              "label": "high-voltage pack",
+              "kind": "concept",
+              "description": "battery pack component",
+              "node_worthy": true,
+              "surface_form": "high-voltage pack",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "hose angle",
+              "kind": "concept",
+              "description": "hose angle measurement signal",
+              "node_worthy": true,
+              "surface_form": "hose angle",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "left pack-side splash cover",
+              "kind": "concept",
+              "description": "splash cover component",
+              "node_worthy": true,
+              "surface_form": "left pack-side splash cover",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "local cooling branch",
+              "kind": "concept",
+              "description": "cooling branch component",
+              "node_worthy": true,
+              "surface_form": "local cooling branch",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "original quick-coupler seating witness",
+              "kind": "concept",
+              "description": "seating witness mark signal",
+              "node_worthy": true,
+              "surface_form": "original quick-coupler seating witness",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "rear underbody shield",
+              "kind": "concept",
+              "description": "shield component under the body",
+              "node_worthy": true,
+              "surface_form": "rear underbody shield",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "vehicle",
+              "kind": "concept",
+              "description": "overall vehicle asset",
+              "node_worthy": true,
+              "surface_form": "vehicle",
+              "semantic_type_hint": "Asset"
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "powers_down",
+              "family": "task_dependency",
+              "head": "T2",
+              "tail": "vehicle"
+            },
+            {
+              "label": "isolates",
+              "family": "task_dependency",
+              "head": "T2",
+              "tail": "high-voltage pack"
+            },
+            {
+              "label": "allows",
+              "family": "task_dependency",
+              "head": "T2",
+              "tail": "local cooling branch"
+            },
+            {
+              "label": "removes",
+              "family": "task_dependency",
+              "head": "T2",
+              "tail": "rear underbody shield"
+            },
+            {
+              "label": "removes",
+              "family": "task_dependency",
+              "head": "T2",
+              "tail": "left pack-side splash cover"
+            },
+            {
+              "label": "keeps",
+              "family": "task_dependency",
+              "head": "T2",
+              "tail": "hose angle"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T2",
+              "tail": "T3"
+            }
+          ]
+        },
+        {
+          "step_id": "T3",
+          "task": {
+            "label": "T3",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Wipe only the loose surface film first, leave the wet edge untouched, and trace the leak path from the coolant-plate seam toward the outlet hose, the quick-coupler lock window, the O-ring seat, and the nearby bracket drain edge so the actual origin is not blurred by cleaning too early.",
+            "semantic_type_hint": null
+          },
+          "concept_mentions": [
+            {
+              "label": "bracket drain edge",
+              "kind": "concept",
+              "description": "drain edge on bracket component",
+              "node_worthy": true,
+              "surface_form": "bracket drain edge",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "leak path",
+              "kind": "concept",
+              "description": "path of leak signal",
+              "node_worthy": true,
+              "surface_form": "leak path",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "loose surface film",
+              "kind": "concept",
+              "description": "surface film signal",
+              "node_worthy": true,
+              "surface_form": "loose surface film",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "O-ring seat",
+              "kind": "concept",
+              "description": "seat for O-ring component",
+              "node_worthy": true,
+              "surface_form": "O-ring seat",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "outlet hose",
+              "kind": "concept",
+              "description": "outlet hose component",
+              "node_worthy": true,
+              "surface_form": "outlet hose",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "quick-coupler lock window",
+              "kind": "concept",
+              "description": "lock window on quick coupler component",
+              "node_worthy": true,
+              "surface_form": "quick-coupler lock window",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "wet edge",
+              "kind": "concept",
+              "description": "wet edge signal",
+              "node_worthy": true,
+              "surface_form": "wet edge",
+              "semantic_type_hint": "Signal"
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "wipes",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "loose surface film"
+            },
+            {
+              "label": "leaves",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "wet edge"
+            },
+            {
+              "label": "traces",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "leak path"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "T4"
+            }
+          ]
+        },
+        {
+          "step_id": "T4",
+          "task": {
+            "label": "T4",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Install the local pressure tool on the coolant-plate inlet and outlet, cap the neighboring branch, and hold the specified pressure long enough to observe whether fresh wetting begins at the plate seam, the coupler body, the hose clamp line, or the tube insertion stop inside the connector.",
+            "semantic_type_hint": null
+          },
+          "concept_mentions": [
+            {
+              "label": "battery coolant-plate outlet quick connector",
+              "kind": "concept",
+              "description": "quick connector component",
+              "node_worthy": true,
+              "surface_form": "battery coolant-plate outlet quick connector",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "coolant-plate inlet",
+              "kind": "concept",
+              "description": "inlet on coolant plate component",
+              "node_worthy": true,
+              "surface_form": "coolant-plate inlet",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "fresh wetting",
+              "kind": "concept",
+              "description": "fresh wetting signal",
+              "node_worthy": true,
+              "surface_form": "fresh wetting",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "hose clamp line",
+              "kind": "concept",
+              "description": "line where clamp is component",
+              "node_worthy": true,
+              "surface_form": "hose clamp line",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "local pressure tool",
+              "kind": "concept",
+              "description": "pressure tool component",
+              "node_worthy": true,
+              "surface_form": "local pressure tool",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "neighboring branch",
+              "kind": "concept",
+              "description": "neighboring cooling branch component",
+              "node_worthy": true,
+              "surface_form": "neighboring branch",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "specified pressure",
+              "kind": "concept",
+              "description": "pressure measurement signal",
+              "node_worthy": true,
+              "surface_form": "specified pressure",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "tube insertion stop",
+              "kind": "concept",
+              "description": "stop inside connector component",
+              "node_worthy": true,
+              "surface_form": "tube insertion stop",
+              "semantic_type_hint": "Component"
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "installs",
+              "family": "task_dependency",
+              "head": "T4",
+              "tail": "local pressure tool"
+            },
+            {
+              "label": "installs_on",
+              "family": "task_dependency",
+              "head": "T4",
+              "tail": "coolant-plate inlet"
+            },
+            {
+              "label": "installs_on",
+              "family": "task_dependency",
+              "head": "T4",
+              "tail": "battery coolant-plate outlet quick connector"
+            },
+            {
+              "label": "caps",
+              "family": "task_dependency",
+              "head": "T4",
+              "tail": "neighboring branch"
+            },
+            {
+              "label": "holds",
+              "family": "task_dependency",
+              "head": "T4",
+              "tail": "specified pressure"
+            },
+            {
+              "label": "observes",
+              "family": "task_dependency",
+              "head": "T4",
+              "tail": "fresh wetting"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T4",
+              "tail": "T5"
+            }
+          ]
+        },
+        {
+          "step_id": "T5",
+          "task": {
+            "label": "T5",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Compare the suspect joint with the opposite coolant-plate branch, paying attention to hose twist, clamp clocking, connector latch height, tube insertion depth, and any side-load mark where the support bracket may have forced the plastic coupler body off-axis. This comparison should distinguish a deformed connector body from a hose-routing load or a clamp-position error before the joint is opened.",
+            "semantic_type_hint": null
+          },
+          "concept_mentions": [
+            {
+              "label": "clamp clocking",
+              "kind": "concept",
+              "description": "clamp clocking signal",
+              "node_worthy": true,
+              "surface_form": "clamp clocking",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "clamp-position error",
+              "kind": "concept",
+              "description": "error in clamp position fault",
+              "node_worthy": true,
+              "surface_form": "clamp-position error",
+              "semantic_type_hint": "Fault"
+            },
+            {
+              "label": "connector latch height",
+              "kind": "concept",
+              "description": "latch height signal",
+              "node_worthy": true,
+              "surface_form": "connector latch height",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "deformed connector body",
+              "kind": "concept",
+              "description": "deformed connector fault",
+              "node_worthy": true,
+              "surface_form": "deformed connector body",
+              "semantic_type_hint": "Fault"
+            },
+            {
+              "label": "hose twist",
+              "kind": "concept",
+              "description": "hose twist signal",
+              "node_worthy": true,
+              "surface_form": "hose twist",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "hose-routing load",
+              "kind": "concept",
+              "description": "load from hose routing fault",
+              "node_worthy": true,
+              "surface_form": "hose-routing load",
+              "semantic_type_hint": "Fault"
+            },
+            {
+              "label": "opposite coolant-plate branch",
+              "kind": "concept",
+              "description": "opposite branch component",
+              "node_worthy": true,
+              "surface_form": "opposite coolant-plate branch",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "plastic coupler body",
+              "kind": "concept",
+              "description": "body of coupler component",
+              "node_worthy": true,
+              "surface_form": "coupler body",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "side-load mark",
+              "kind": "concept",
+              "description": "side-load mark signal",
+              "node_worthy": true,
+              "surface_form": "side-load mark",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "support bracket",
+              "kind": "concept",
+              "description": "support bracket component",
+              "node_worthy": true,
+              "surface_form": "support bracket",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "suspect joint",
+              "kind": "concept",
+              "description": "joint under suspicion component",
+              "node_worthy": true,
+              "surface_form": "suspect joint",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "tube insertion depth",
+              "kind": "concept",
+              "description": "insertion depth signal",
+              "node_worthy": true,
+              "surface_form": "tube insertion depth",
+              "semantic_type_hint": "Signal"
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "compares",
+              "family": "task_dependency",
+              "head": "T5",
+              "tail": "suspect joint"
+            },
+            {
+              "label": "compares_with",
+              "family": "task_dependency",
+              "head": "T5",
+              "tail": "opposite coolant-plate branch"
+            },
+            {
+              "label": "pays_attention_to",
+              "family": "task_dependency",
+              "head": "T5",
+              "tail": "hose twist"
+            },
+            {
+              "label": "pays_attention_to",
+              "family": "task_dependency",
+              "head": "T5",
+              "tail": "clamp clocking"
+            },
+            {
+              "label": "pays_attention_to",
+              "family": "task_dependency",
+              "head": "T5",
+              "tail": "connector latch height"
+            },
+            {
+              "label": "pays_attention_to",
+              "family": "task_dependency",
+              "head": "T5",
+              "tail": "tube insertion depth"
+            },
+            {
+              "label": "pays_attention_to",
+              "family": "task_dependency",
+              "head": "T5",
+              "tail": "side-load mark"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T5",
+              "tail": "T6"
+            }
+          ]
+        },
+        {
+          "step_id": "T6",
+          "task": {
+            "label": "T6",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Inspect the aluminum plate edge, the molded quick connector, the green O-ring land, the hose end, and the nearby harness clip for dried coolant crystals, abrasion, plastic stress whitening, or metal staining that would separate connector leakage from a plate-side crack.",
+            "semantic_type_hint": null
+          },
+          "concept_mentions": [
+            {
+              "label": "abrasion",
+              "kind": "concept",
+              "description": "abrasion signal",
+              "node_worthy": true,
+              "surface_form": "abrasion",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "aluminum plate edge",
+              "kind": "concept",
+              "description": "edge of aluminum plate component",
+              "node_worthy": true,
+              "surface_form": "aluminum plate edge",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "connector leakage",
+              "kind": "concept",
+              "description": "leakage from connector fault",
+              "node_worthy": true,
+              "surface_form": "connector leakage",
+              "semantic_type_hint": "Fault"
+            },
+            {
+              "label": "dried coolant crystals",
+              "kind": "concept",
+              "description": "dried crystals signal",
+              "node_worthy": true,
+              "surface_form": "dried coolant crystals",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "green O-ring land",
+              "kind": "concept",
+              "description": "land for green O-ring component",
+              "node_worthy": true,
+              "surface_form": "green O-ring land",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "harness clip",
+              "kind": "concept",
+              "description": "clip for harness component",
+              "node_worthy": true,
+              "surface_form": "harness clip",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "hose end",
+              "kind": "concept",
+              "description": "end of hose component",
+              "node_worthy": true,
+              "surface_form": "hose end",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "metal staining",
+              "kind": "concept",
+              "description": "metal staining signal",
+              "node_worthy": true,
+              "surface_form": "metal staining",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "molded quick connector",
+              "kind": "concept",
+              "description": "molded quick connector component",
+              "node_worthy": true,
+              "surface_form": "molded quick connector",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "plastic stress whitening",
+              "kind": "concept",
+              "description": "stress whitening signal",
+              "node_worthy": true,
+              "surface_form": "plastic stress whitening",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "plate-side crack",
+              "kind": "concept",
+              "description": "crack on plate side fault",
+              "node_worthy": true,
+              "surface_form": "plate-side crack",
+              "semantic_type_hint": "Fault"
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "aluminum plate edge"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "molded quick connector"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "green O-ring land"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "hose end"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "harness clip"
+            },
+            {
+              "label": "observes",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "dried coolant crystals"
+            },
+            {
+              "label": "observes",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "abrasion"
+            },
+            {
+              "label": "observes",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "plastic stress whitening"
+            },
+            {
+              "label": "observes",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "metal staining"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "T7"
+            }
+          ]
+        },
+        {
+          "step_id": "T7",
+          "task": {
+            "label": "T7",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Mark the confirmed leak boundary directly at the leaking hardware, photograph the coolant-plate seam and the quick-coupler seat from more than one angle, and note clearly whether the failure belongs to the plate seam, the O-ring interface, the connector shell, or the hose-routing condition.",
+            "semantic_type_hint": null
+          },
+          "concept_mentions": [
+            {
+              "label": "confirmed leak boundary",
+              "kind": "concept",
+              "description": "confirmed boundary signal",
+              "node_worthy": true,
+              "surface_form": "confirmed leak boundary",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "connector shell",
+              "kind": "concept",
+              "description": "shell of connector component",
+              "node_worthy": true,
+              "surface_form": "connector shell",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "coolant-plate seam",
+              "kind": "concept",
+              "description": "seam on coolant plate component",
+              "node_worthy": true,
+              "surface_form": "coolant-plate seam",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "failure",
+              "kind": "concept",
+              "description": "failure fault",
+              "node_worthy": true,
+              "surface_form": "failure",
+              "semantic_type_hint": "Fault"
+            },
+            {
+              "label": "hose-routing condition",
+              "kind": "concept",
+              "description": "condition of hose routing state",
+              "node_worthy": true,
+              "surface_form": "hose-routing condition",
+              "semantic_type_hint": "State"
+            },
+            {
+              "label": "leaking hardware",
+              "kind": "concept",
+              "description": "hardware that is leaking component",
+              "node_worthy": true,
+              "surface_form": "leaking hardware",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "O-ring interface",
+              "kind": "concept",
+              "description": "interface for O-ring component",
+              "node_worthy": true,
+              "surface_form": "O-ring interface",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "quick-coupler seat",
+              "kind": "concept",
+              "description": "seat on quick coupler component",
+              "node_worthy": true,
+              "surface_form": "quick-coupler seat",
+              "semantic_type_hint": "Component"
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "marks",
+              "family": "task_dependency",
+              "head": "T7",
+              "tail": "confirmed leak boundary"
+            },
+            {
+              "label": "photographs",
+              "family": "task_dependency",
+              "head": "T7",
+              "tail": "coolant-plate seam"
+            },
+            {
+              "label": "photographs",
+              "family": "task_dependency",
+              "head": "T7",
+              "tail": "quick-coupler seat"
+            },
+            {
+              "label": "notes",
+              "family": "task_dependency",
+              "head": "T7",
+              "tail": "failure"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T7",
+              "tail": "T8"
+            }
+          ]
+        },
+        {
+          "step_id": "T8",
+          "task": {
+            "label": "T8",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Refit only the access parts needed to protect the opened area, leave the identified leak point readable for downstream repair, and close the record with the exact hardware named as battery coolant-plate outlet quick connector or coolant-plate seam instead of leaving a generic leak description. The accepted leak map should still let the next repair start from one named outlet-side boundary rather than from a broad pack-coolant leak note.",
+            "semantic_type_hint": null
+          },
+          "concept_mentions": [
+            {
+              "label": "accepted leak map",
+              "kind": "concept",
+              "description": "accepted leak map document",
+              "node_worthy": true,
+              "surface_form": "accepted leak map",
+              "semantic_type_hint": null
+            },
+            {
+              "label": "access parts",
+              "kind": "concept",
+              "description": "parts for access component",
+              "node_worthy": true,
+              "surface_form": "access parts",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "battery coolant-plate outlet quick connector",
+              "kind": "concept",
+              "description": "quick connector component",
+              "node_worthy": true,
+              "surface_form": "battery coolant-plate outlet quick connector",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "broad pack-coolant leak note",
+              "kind": "concept",
+              "description": "generic leak note document",
+              "node_worthy": true,
+              "surface_form": "broad pack-coolant leak note",
+              "semantic_type_hint": null
+            },
+            {
+              "label": "coolant-plate seam",
+              "kind": "concept",
+              "description": "seam on coolant plate component",
+              "node_worthy": true,
+              "surface_form": "coolant-plate seam",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "identified leak point",
+              "kind": "concept",
+              "description": "identified point signal",
+              "node_worthy": true,
+              "surface_form": "identified leak point",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "named outlet-side boundary",
+              "kind": "concept",
+              "description": "boundary on outlet side component",
+              "node_worthy": true,
+              "surface_form": "named outlet-side boundary",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "opened area",
+              "kind": "concept",
+              "description": "area that is opened component",
+              "node_worthy": true,
+              "surface_form": "opened area",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "record",
+              "kind": "concept",
+              "description": "maintenance record document",
+              "node_worthy": true,
+              "surface_form": "record",
+              "semantic_type_hint": null
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "refits",
+              "family": "task_dependency",
+              "head": "T8",
+              "tail": "access parts"
+            },
+            {
+              "label": "leaves",
+              "family": "task_dependency",
+              "head": "T8",
+              "tail": "identified leak point"
+            },
+            {
+              "label": "closes",
+              "family": "task_dependency",
+              "head": "T8",
+              "tail": "record"
+            },
+            {
+              "label": "names",
+              "family": "task_dependency",
+              "head": "T8",
+              "tail": "battery coolant-plate outlet quick connector"
+            },
+            {
+              "label": "names",
+              "family": "task_dependency",
+              "head": "T8",
+              "tail": "coolant-plate seam"
+            }
+          ]
+        }
+      ],
+      "document_concept_mentions": [],
+      "document_relation_mentions": []
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "domain_id": "nev",
+      "role": "target",
+      "source_type": "om_manual",
+      "timestamp": "2026-04-22T11:57:41Z",
+      "raw_text": "| Time step | O&M sample text |\n|---|---|\n| T1 | At Velorian PackLine-287 AWD, reproduce the service-disconnect seating complaint by noting latch feel, insertion force, handle flushness, any HVIL warning, and whether the orange handle sits proud of the battery access opening or snaps back after seating. Keep the opening complaint tied to the actual handle position and HVIL response so later seat checks stay on the same disconnect boundary. |\n| T2 | Depower the pack, verify zero residual high-voltage potential at the service-disconnect cavity, and remove the access lid so the disconnect plug, blade set, guide rail, interlock pins, latch window, and surrounding sealing edge are all visible in one service view. |\n| T3 | Pull the service disconnect straight out without rotating it, then inspect the male blades, female socket faces, guide ribs, CPA feature, handle pivot, and latch hook for burrs, arc marks, plastic rollover, uneven insertion witness lines, or debris in the guide channel. |\n| T4 | Compare the suspect disconnect with a known-good reference or spare, checking seating depth, latch travel, blade exposure, guide-rib alignment, and the shoulder position of the interlock pins so the seat issue is tied to geometry rather than to feel alone. |\n| T5 | Rework the seat condition by correcting the misaligned guide feature, removing only the minor burr or displaced plastic that blocks full travel, and cleaning the contact area without changing the original blade profile, terminal tension, or latch geometry. The correction has to preserve the blade path and the interlock-pin relationship rather than forcing the handle closed by cosmetic trimming. |\n| T6 | Reinstall the service disconnect in one continuous motion, confirm full blade entry, verify the latch hook snaps fully into the window, and check that the orange handle now remains flush with the cover plane instead of rebounding or sitting with a visible gap. |\n| T7 | Restore the service lid, wake the pack, and confirm through two seat checks that the HVIL path, service-disconnect status, and ready-state permissive remain stable with no handle movement, no latch relaxation, and no repeat interlock warning. The release condition is a disconnect that seats flush and keeps the HVIL path stable after the lid and surrounding trim return to final position. |",
+      "step_records": [
+        {
+          "step_id": "T1",
+          "task": {
+            "label": "T1",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "At Velorian PackLine-287 AWD, reproduce the service-disconnect seating complaint by noting latch feel, insertion force, handle flushness, any HVIL warning, and whether the orange handle sits proud of the battery access opening or snaps back after seating. Keep the opening complaint tied to the actual handle position and HVIL response so later seat checks stay on the same disconnect boundary.",
+            "semantic_type_hint": null
+          },
+          "concept_mentions": [
+            {
+              "label": "handle flushness",
+              "kind": "concept",
+              "description": "observed handle flushness",
+              "node_worthy": true,
+              "surface_form": "handle flushness",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "handle proud condition",
+              "kind": "concept",
+              "description": "handle sitting proud condition",
+              "node_worthy": true,
+              "surface_form": "handle proud condition",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "HVIL warning",
+              "kind": "concept",
+              "description": "HVIL warning signal",
+              "node_worthy": true,
+              "surface_form": "HVIL warning",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "insertion force",
+              "kind": "concept",
+              "description": "observed insertion force",
+              "node_worthy": true,
+              "surface_form": "insertion force",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "latch feel",
+              "kind": "concept",
+              "description": "observed latch feel",
+              "node_worthy": true,
+              "surface_form": "latch feel",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "service-disconnect seating complaint",
+              "kind": "concept",
+              "description": "complaint about seating",
+              "node_worthy": true,
+              "surface_form": "service-disconnect seating complaint",
+              "semantic_type_hint": "Fault"
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "observes",
+              "family": "task_dependency",
+              "head": "T1",
+              "tail": "latch feel"
+            },
+            {
+              "label": "observes",
+              "family": "task_dependency",
+              "head": "T1",
+              "tail": "insertion force"
+            },
+            {
+              "label": "observes",
+              "family": "task_dependency",
+              "head": "T1",
+              "tail": "handle flushness"
+            },
+            {
+              "label": "observes",
+              "family": "task_dependency",
+              "head": "T1",
+              "tail": "HVIL warning"
+            },
+            {
+              "label": "observes",
+              "family": "task_dependency",
+              "head": "T1",
+              "tail": "handle proud condition"
+            },
+            {
+              "label": "targets",
+              "family": "task_dependency",
+              "head": "T1",
+              "tail": "service-disconnect seating complaint"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T1",
+              "tail": "T2"
+            }
+          ]
+        },
+        {
+          "step_id": "T2",
+          "task": {
+            "label": "T2",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Depower the pack, verify zero residual high-voltage potential at the service-disconnect cavity, and remove the access lid so the disconnect plug, blade set, guide rail, interlock pins, latch window, and surrounding sealing edge are all visible in one service view.",
+            "semantic_type_hint": null
+          },
+          "concept_mentions": [
+            {
+              "label": "access lid",
+              "kind": "concept",
+              "description": "lid for access",
+              "node_worthy": true,
+              "surface_form": "access lid",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "blade set",
+              "kind": "concept",
+              "description": "set of blades in disconnect",
+              "node_worthy": true,
+              "surface_form": "blade set",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "disconnect plug",
+              "kind": "concept",
+              "description": "plug part of disconnect",
+              "node_worthy": true,
+              "surface_form": "disconnect plug",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "guide rail",
+              "kind": "concept",
+              "description": "rail for guidance",
+              "node_worthy": true,
+              "surface_form": "guide rail",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "latch window",
+              "kind": "concept",
+              "description": "window for latch",
+              "node_worthy": true,
+              "surface_form": "latch window",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "residual high-voltage potential",
+              "kind": "concept",
+              "description": "residual high-voltage potential",
+              "node_worthy": true,
+              "surface_form": "residual high-voltage potential",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "sealing edge",
+              "kind": "concept",
+              "description": "edge for sealing",
+              "node_worthy": true,
+              "surface_form": "sealing edge",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "service-disconnect cavity",
+              "kind": "concept",
+              "description": "service disconnect component",
+              "node_worthy": true,
+              "surface_form": "service disconnect",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "Velorian PackLine-287 AWD",
+              "kind": "concept",
+              "description": "AWD pack asset",
+              "node_worthy": true,
+              "surface_form": "Velorian PackLine-287 AWD",
+              "semantic_type_hint": "Asset"
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "requires",
+              "family": "task_dependency",
+              "head": "T2",
+              "tail": "Velorian PackLine-287 AWD"
+            },
+            {
+              "label": "observes",
+              "family": "task_dependency",
+              "head": "T2",
+              "tail": "residual high-voltage potential"
+            },
+            {
+              "label": "requires",
+              "family": "task_dependency",
+              "head": "T2",
+              "tail": "access lid"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T2",
+              "tail": "T3"
+            }
+          ]
+        },
+        {
+          "step_id": "T3",
+          "task": {
+            "label": "T3",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Pull the service disconnect straight out without rotating it, then inspect the male blades, female socket faces, guide ribs, CPA feature, handle pivot, and latch hook for burrs, arc marks, plastic rollover, uneven insertion witness lines, or debris in the guide channel.",
+            "semantic_type_hint": null
+          },
+          "concept_mentions": [
+            {
+              "label": "arc marks",
+              "kind": "concept",
+              "description": "observed arc marks",
+              "node_worthy": true,
+              "surface_form": "arc marks",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "burrs",
+              "kind": "concept",
+              "description": "observed burrs",
+              "node_worthy": true,
+              "surface_form": "burrs",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "CPA feature",
+              "kind": "concept",
+              "description": "CPA feature part",
+              "node_worthy": true,
+              "surface_form": "CPA feature",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "female socket faces",
+              "kind": "concept",
+              "description": "female socket faces",
+              "node_worthy": true,
+              "surface_form": "female socket faces",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "guide ribs",
+              "kind": "concept",
+              "description": "ribs for guidance",
+              "node_worthy": true,
+              "surface_form": "guide ribs",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "handle pivot",
+              "kind": "concept",
+              "description": "pivot for handle",
+              "node_worthy": true,
+              "surface_form": "handle pivot",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "male blades",
+              "kind": "concept",
+              "description": "male blade parts",
+              "node_worthy": true,
+              "surface_form": "male blades",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "plastic rollover",
+              "kind": "concept",
+              "description": "observed plastic rollover",
+              "node_worthy": true,
+              "surface_form": "plastic rollover",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "uneven insertion witness lines",
+              "kind": "concept",
+              "description": "observed uneven insertion witness lines",
+              "node_worthy": true,
+              "surface_form": "uneven insertion witness lines",
+              "semantic_type_hint": "Signal"
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "observes",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "burrs"
+            },
+            {
+              "label": "observes",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "arc marks"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "T4"
+            }
+          ]
+        },
+        {
+          "step_id": "T4",
+          "task": {
+            "label": "T4",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Compare the suspect disconnect with a known-good reference or spare, checking seating depth, latch travel, blade exposure, guide-rib alignment, and the shoulder position of the interlock pins so the seat issue is tied to geometry rather than to feel alone.",
+            "semantic_type_hint": null
+          },
+          "concept_mentions": [
+            {
+              "label": "blade exposure",
+              "kind": "concept",
+              "description": "measured blade exposure",
+              "node_worthy": true,
+              "surface_form": "blade exposure",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "guide-rib alignment",
+              "kind": "concept",
+              "description": "observed guide-rib alignment",
+              "node_worthy": true,
+              "surface_form": "guide-rib alignment",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "latch travel",
+              "kind": "concept",
+              "description": "measured latch travel",
+              "node_worthy": true,
+              "surface_form": "latch travel",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "seating depth",
+              "kind": "concept",
+              "description": "measured seating depth",
+              "node_worthy": true,
+              "surface_form": "seating depth",
+              "semantic_type_hint": "Signal"
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "observes",
+              "family": "task_dependency",
+              "head": "T4",
+              "tail": "seating depth"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T4",
+              "tail": "T5"
+            }
+          ]
+        },
+        {
+          "step_id": "T5",
+          "task": {
+            "label": "T5",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Rework the seat condition by correcting the misaligned guide feature, removing only the minor burr or displaced plastic that blocks full travel, and cleaning the contact area without changing the original blade profile, terminal tension, or latch geometry. The correction has to preserve the blade path and the interlock-pin relationship rather than forcing the handle closed by cosmetic trimming.",
+            "semantic_type_hint": null
+          },
+          "concept_mentions": [
+            {
+              "label": "displaced plastic",
+              "kind": "concept",
+              "description": "displaced plastic fault",
+              "node_worthy": true,
+              "surface_form": "displaced plastic",
+              "semantic_type_hint": "Fault"
+            },
+            {
+              "label": "minor burr",
+              "kind": "concept",
+              "description": "minor burr fault",
+              "node_worthy": true,
+              "surface_form": "minor burr",
+              "semantic_type_hint": "Fault"
+            },
+            {
+              "label": "misaligned guide feature",
+              "kind": "concept",
+              "description": "misaligned guide feature fault",
+              "node_worthy": true,
+              "surface_form": "misaligned guide feature",
+              "semantic_type_hint": "Fault"
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T5",
+              "tail": "T6"
+            }
+          ]
+        },
+        {
+          "step_id": "T6",
+          "task": {
+            "label": "T6",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Reinstall the service disconnect in one continuous motion, confirm full blade entry, verify the latch hook snaps fully into the window, and check that the orange handle now remains flush with the cover plane instead of rebounding or sitting with a visible gap.",
+            "semantic_type_hint": null
+          },
+          "concept_mentions": [
+            {
+              "label": "full blade entry",
+              "kind": "concept",
+              "description": "state of full blade entry",
+              "node_worthy": true,
+              "surface_form": "full blade entry",
+              "semantic_type_hint": "State"
+            },
+            {
+              "label": "handle flush with cover plane",
+              "kind": "concept",
+              "description": "state of handle flush with cover plane",
+              "node_worthy": true,
+              "surface_form": "handle flush with cover plane",
+              "semantic_type_hint": "State"
+            },
+            {
+              "label": "latch hook fully snapped",
+              "kind": "concept",
+              "description": "state of latch hook fully snapped",
+              "node_worthy": true,
+              "surface_form": "latch hook fully snapped",
+              "semantic_type_hint": "State"
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "confirms",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "full blade entry"
+            },
+            {
+              "label": "confirms",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "latch hook fully snapped"
+            },
+            {
+              "label": "confirms",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "handle flush with cover plane"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "T7"
+            }
+          ]
+        },
+        {
+          "step_id": "T7",
+          "task": {
+            "label": "T7",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Restore the service lid, wake the pack, and confirm through two seat checks that the HVIL path, service-disconnect status, and ready-state permissive remain stable with no handle movement, no latch relaxation, and no repeat interlock warning. The release condition is a disconnect that seats flush and keeps the HVIL path stable after the lid and surrounding trim return to final position.",
+            "semantic_type_hint": null
+          },
+          "concept_mentions": [
+            {
+              "label": "handle movement",
+              "kind": "concept",
+              "description": "fault of handle movement",
+              "node_worthy": true,
+              "surface_form": "handle movement",
+              "semantic_type_hint": "Fault"
+            },
+            {
+              "label": "HVIL path stable",
+              "kind": "concept",
+              "description": "state of HVIL path stable",
+              "node_worthy": true,
+              "surface_form": "HVIL path stable",
+              "semantic_type_hint": "State"
+            },
+            {
+              "label": "latch relaxation",
+              "kind": "concept",
+              "description": "fault of latch relaxation",
+              "node_worthy": true,
+              "surface_form": "latch relaxation",
+              "semantic_type_hint": "Fault"
+            },
+            {
+              "label": "repeat interlock warning",
+              "kind": "concept",
+              "description": "fault of repeat interlock warning",
+              "node_worthy": true,
+              "surface_form": "repeat interlock warning",
+              "semantic_type_hint": "Fault"
+            }
+          ],
+          "relation_mentions": []
+        }
+      ],
+      "document_concept_mentions": [
+        {
+          "label": "debris in guide channel",
+          "kind": "concept",
+          "description": "observed debris in guide channel",
+          "node_worthy": true,
+          "surface_form": "debris in guide channel",
+          "semantic_type_hint": "Signal"
+        },
+        {
+          "label": "interlock pin shoulder position",
+          "kind": "concept",
+          "description": "observed interlock pin shoulder position",
+          "node_worthy": true,
+          "surface_form": "interlock pin shoulder position",
+          "semantic_type_hint": "Signal"
+        },
+        {
+          "label": "interlock pins",
+          "kind": "concept",
+          "description": "pins for interlocking",
+          "node_worthy": true,
+          "surface_form": "interlock pins",
+          "semantic_type_hint": "Component"
+        },
+        {
+          "label": "latch hook",
+          "kind": "concept",
+          "description": "hook for latching",
+          "node_worthy": true,
+          "surface_form": "latch hook",
+          "semantic_type_hint": "Component"
+        },
+        {
+          "label": "ready-state permissive stable",
+          "kind": "concept",
+          "description": "state of ready-state permissive stable",
+          "node_worthy": true,
+          "surface_form": "ready-state permissive stable",
+          "semantic_type_hint": "State"
+        },
+        {
+          "label": "service-disconnect status stable",
+          "kind": "concept",
+          "description": "state of service-disconnect status stable",
+          "node_worthy": true,
+          "surface_form": "service-disconnect status stable",
+          "semantic_type_hint": "State"
+        }
+      ],
+      "document_relation_mentions": [
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "handle proud condition",
+          "tail": "service-disconnect seating complaint"
+        },
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "HVIL warning",
+          "tail": "service-disconnect seating complaint"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "service-disconnect cavity",
+          "tail": "disconnect plug"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "service-disconnect cavity",
+          "tail": "blade set"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "service-disconnect cavity",
+          "tail": "guide rail"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "service-disconnect cavity",
+          "tail": "interlock pins"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "service-disconnect cavity",
+          "tail": "latch window"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "service-disconnect cavity",
+          "tail": "sealing edge"
+        },
+        {
+          "label": "causes",
+          "family": "propagation",
+          "head": "misaligned guide feature",
+          "tail": "service-disconnect seating complaint"
+        }
+      ]
+    },
+    {
+      "evidence_id": "EVMAN_003",
+      "domain_id": "nev",
+      "role": "target",
+      "source_type": "om_manual",
+      "timestamp": "2026-04-22T11:57:41Z",
+      "raw_text": "| Time step | O&M sample text |\n|---|---|\n| T1 | Start the HV output corrosion review on Helion E-Motion-536 Plus by noting whether corrosion was found during scheduled service or after a moisture complaint, and capture the as-found condition of the HV output boot, stud cover, cable tray, and surrounding pack wall before any hardware is loosened. |\n| T2 | Isolate the pack, remove the HV output stud cover, and expose the copper cable lug, terminal nut, washer stack, plated stud thread, insulating boot, and stud shoulder without changing the cable angle more than necessary. Keep the cable angle and boot clocking readable so the later moisture-path check is tied to the true as-found geometry. |\n| T3 | Inspect the corrosion pattern across the terminal nut flats, lug face, stud thread, washer stack, boot interior, and nearby insulator surface to determine whether the source is trapped water, road contamination, galvanic attack, or reduced clamp load. This pattern review should separate clamp-loss corrosion at the contact stack from moisture trapped under the boot or runoff entering from outside the pocket. |\n| T4 | Remove the nut and washers in sequence, lay the hardware out by order, and examine the underside of the cable lug, the stud seating land, and the first thread turns for pitting, oxide buildup, contact shadowing, or heat tint beneath the contact face. |\n| T5 | Measure contact resistance from the cable lug to the stud and compare it with the opposite-side output connection, taking care that the probe points land on clean metal and not on corroded thread, coated washer faces, or discolored nut surfaces. |\n| T6 | Inspect the rubber boot lip, the drain path around the cover edge, the cable-entry orientation, and the nearby harness support to see whether water tracked down the cable, bypassed the boot seal, or sat trapped at the bottom of the stud pocket. |\n| T7 | If the joint is under inspection only, reassemble the washer stack in the documented order and restore the insulating boot with the cable held at its natural exit angle. If pitting, thread damage, or heat history exceeds reuse limits, tag the exact stud, lug, washer, or nut for replacement and name that failed hardware explicitly in the record. |\n| T8 | Close the stud pocket and restore the cover only after the record includes the corrosion location, corrosion severity, hardware order, moisture path assessment, and measured resistance comparison to the healthy reference output joint. The release note should still let the next technician identify the exact stud stack, corrosion source, and moisture path without reopening the pocket to rediscover the boundary. |",
+      "step_records": [
+        {
+          "step_id": "T1",
+          "task": {
+            "label": "T1",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Start the HV output corrosion review on Helion E-Motion-536 Plus by noting whether corrosion was found during scheduled service or after a moisture complaint, and capture the as-found condition of the HV output boot, stud cover, cable tray, and surrounding pack wall before any hardware is loosened.",
+            "semantic_type_hint": null
+          },
+          "concept_mentions": [
+            {
+              "label": "cable tray",
+              "kind": "concept",
+              "description": "tray component",
+              "node_worthy": true,
+              "surface_form": "cable tray",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "corrosion",
+              "kind": "concept",
+              "description": "corrosion defect",
+              "node_worthy": true,
+              "surface_form": "corrosion",
+              "semantic_type_hint": "Fault"
+            },
+            {
+              "label": "Helion E-Motion-536 Plus",
+              "kind": "concept",
+              "description": "named asset vehicle",
+              "node_worthy": true,
+              "surface_form": "Helion E-Motion-536 Plus",
+              "semantic_type_hint": "Asset"
+            },
+            {
+              "label": "HV output boot",
+              "kind": "concept",
+              "description": "insulating boot component",
+              "node_worthy": true,
+              "surface_form": "HV output boot",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "pack wall",
+              "kind": "concept",
+              "description": "wall component of pack",
+              "node_worthy": true,
+              "surface_form": "pack wall",
+              "semantic_type_hint": "Component"
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "observes",
+              "family": "task_dependency",
+              "head": "T1",
+              "tail": "corrosion"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T1",
+              "tail": "T2"
+            }
+          ]
+        },
+        {
+          "step_id": "T2",
+          "task": {
+            "label": "T2",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Isolate the pack, remove the HV output stud cover, and expose the copper cable lug, terminal nut, washer stack, plated stud thread, insulating boot, and stud shoulder without changing the cable angle more than necessary. Keep the cable angle and boot clocking readable so the later moisture-path check is tied to the true as-found geometry.",
+            "semantic_type_hint": null
+          },
+          "concept_mentions": [
+            {
+              "label": "boot clocking",
+              "kind": "concept",
+              "description": "clocking of boot",
+              "node_worthy": true,
+              "surface_form": "boot clocking",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "cable angle",
+              "kind": "concept",
+              "description": "angle of cable",
+              "node_worthy": true,
+              "surface_form": "cable angle",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "copper cable lug",
+              "kind": "concept",
+              "description": "cable lug component",
+              "node_worthy": true,
+              "surface_form": "copper cable lug",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "pack",
+              "kind": "concept",
+              "description": "asset unit",
+              "node_worthy": true,
+              "surface_form": "pack",
+              "semantic_type_hint": "Asset"
+            },
+            {
+              "label": "plated stud thread",
+              "kind": "concept",
+              "description": "threaded stud component",
+              "node_worthy": true,
+              "surface_form": "plated stud thread",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "stud cover",
+              "kind": "concept",
+              "description": "cover component",
+              "node_worthy": true,
+              "surface_form": "stud cover",
+              "semantic_type_hint": "Component"
+            },
+            {
+              "label": "stud shoulder",
+              "kind": "concept",
+              "description": "shoulder of stud",
+              "node_worthy": true,
+              "surface_form": "stud shoulder",
+              "semantic_type_hint": "Component"
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "requires",
+              "family": "task_dependency",
+              "head": "T2",
+              "tail": "pack"
+            },
+            {
+              "label": "requires",
+              "family": "task_dependency",
+              "head": "T2",
+              "tail": "stud cover"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T2",
+              "tail": "T3"
+            }
+          ]
+        },
+        {
+          "step_id": "T3",
+          "task": {
+            "label": "T3",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Inspect the corrosion pattern across the terminal nut flats, lug face, stud thread, washer stack, boot interior, and nearby insulator surface to determine whether the source is trapped water, road contamination, galvanic attack, or reduced clamp load. This pattern review should separate clamp-loss corrosion at the contact stack from moisture trapped under the boot or runoff entering from outside the pocket.",
+            "semantic_type_hint": null
+          },
+          "concept_mentions": [
+            {
+              "label": "corrosion pattern",
+              "kind": "concept",
+              "description": "pattern of corrosion",
+              "node_worthy": true,
+              "surface_form": "corrosion pattern",
+              "semantic_type_hint": "Signal"
+            },
+            {
+              "label": "reduced clamp load",
+              "kind": "concept",
+              "description": "reduced clamp load fault",
+              "node_worthy": true,
+              "surface_form": "reduced clamp load",
+              "semantic_type_hint": "Fault"
+            },
+            {
+              "label": "trapped water",
+              "kind": "concept",
+              "description": "trapped water fault",
+              "node_worthy": true,
+              "surface_form": "trapped water",
+              "semantic_type_hint": "Fault"
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "observes",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "corrosion pattern"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "T4"
+            }
+          ]
+        },
+        {
+          "step_id": "T4",
+          "task": {
+            "label": "T4",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Remove the nut and washers in sequence, lay the hardware out by order, and examine the underside of the cable lug, the stud seating land, and the first thread turns for pitting, oxide buildup, contact shadowing, or heat tint beneath the contact face.",
+            "semantic_type_hint": null
+          },
+          "concept_mentions": [],
+          "relation_mentions": [
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T4",
+              "tail": "T5"
+            }
+          ]
+        },
+        {
+          "step_id": "T5",
+          "task": {
+            "label": "T5",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Measure contact resistance from the cable lug to the stud and compare it with the opposite-side output connection, taking care that the probe points land on clean metal and not on corroded thread, coated washer faces, or discolored nut surfaces.",
+            "semantic_type_hint": null
+          },
+          "concept_mentions": [
+            {
+              "label": "contact resistance",
+              "kind": "concept",
+              "description": "measured contact resistance",
+              "node_worthy": true,
+              "surface_form": "contact resistance",
+              "semantic_type_hint": "Signal"
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "measures",
+              "family": "task_dependency",
+              "head": "T5",
+              "tail": "contact resistance"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T5",
+              "tail": "T6"
+            }
+          ]
+        },
+        {
+          "step_id": "T6",
+          "task": {
+            "label": "T6",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Inspect the rubber boot lip, the drain path around the cover edge, the cable-entry orientation, and the nearby harness support to see whether water tracked down the cable, bypassed the boot seal, or sat trapped at the bottom of the stud pocket.",
+            "semantic_type_hint": null
+          },
+          "concept_mentions": [],
+          "relation_mentions": [
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "T7"
+            }
+          ]
+        },
+        {
+          "step_id": "T7",
+          "task": {
+            "label": "T7",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "If the joint is under inspection only, reassemble the washer stack in the documented order and restore the insulating boot with the cable held at its natural exit angle. If pitting, thread damage, or heat history exceeds reuse limits, tag the exact stud, lug, washer, or nut for replacement and name that failed hardware explicitly in the record.",
+            "semantic_type_hint": null
+          },
+          "concept_mentions": [],
+          "relation_mentions": [
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T7",
+              "tail": "T8"
+            }
+          ]
+        },
+        {
+          "step_id": "T8",
+          "task": {
+            "label": "T8",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Close the stud pocket and restore the cover only after the record includes the corrosion location, corrosion severity, hardware order, moisture path assessment, and measured resistance comparison to the healthy reference output joint. The release note should still let the next technician identify the exact stud stack, corrosion source, and moisture path without reopening the pocket to rediscover the boundary.",
+            "semantic_type_hint": null
+          },
+          "concept_mentions": [],
+          "relation_mentions": []
+        }
+      ],
+      "document_concept_mentions": [
+        {
+          "label": "pitting",
+          "kind": "concept",
+          "description": "pitting defect",
+          "node_worthy": true,
+          "surface_form": "pitting",
+          "semantic_type_hint": "Fault"
+        },
+        {
+          "label": "stud pocket",
+          "kind": "concept",
+          "description": "pocket containing stud assembly",
+          "node_worthy": true,
+          "surface_form": "stud pocket",
+          "semantic_type_hint": "Component"
+        },
+        {
+          "label": "terminal nut",
+          "kind": "concept",
+          "description": "nut component",
+          "node_worthy": true,
+          "surface_form": "terminal nut",
+          "semantic_type_hint": "Component"
+        },
+        {
+          "label": "washer stack",
+          "kind": "concept",
+          "description": "stack of washers",
+          "node_worthy": true,
+          "surface_form": "washer stack",
+          "semantic_type_hint": "Component"
+        }
+      ],
+      "document_relation_mentions": [
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "corrosion pattern",
+          "tail": "trapped water"
+        },
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "corrosion pattern",
+          "tail": "reduced clamp load"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "stud pocket",
+          "tail": "copper cable lug"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "stud pocket",
+          "tail": "terminal nut"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "stud pocket",
+          "tail": "washer stack"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "stud pocket",
+          "tail": "plated stud thread"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "stud pocket",
+          "tail": "stud shoulder"
+        }
+      ]
+    }
+  ]
+}

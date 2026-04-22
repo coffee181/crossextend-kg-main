@@ -7,6 +7,7 @@ import logging
 from pathlib import Path
 
 from backends.embeddings import build_embedding_backend
+from backends.faiss_cache import build_cached_embedding_backend
 from backends.llm import build_llm_backend
 try:
     from crossextend_kg.config import load_pipeline_config
@@ -97,7 +98,14 @@ def run_pipeline(
     logger.info("Loading pipeline config from %s", config_path)
     config = load_pipeline_config(config_path)
     llm_backend = build_llm_backend(config.llm)
-    embedding_backend = build_embedding_backend(config.embedding)
+    base_embedding_backend = build_embedding_backend(config.embedding)
+    embedding_backend = build_cached_embedding_backend(
+        base_embedding_backend,
+        cache_dir=config.runtime.embedding_cache_dir or None,
+        dimension=config.embedding.dimensions,
+        model_name=config.embedding.model,
+        enabled=config.runtime.enable_embedding_cache,
+    )
 
     required_paths = [Path(domain.data_path) for domain in config.domains]
     missing_paths = [str(p) for p in required_paths if not p.exists()]
@@ -140,6 +148,7 @@ def run_pipeline(
                     backbone_descriptions=backbone_descriptions,
                     candidates=candidates,
                     top_k=config.runtime.retrieval_top_k,
+                    domain_id=domain.domain_id,
                 )
             else:
                 retrievals = empty_retrievals(candidates)
@@ -211,6 +220,7 @@ def run_pipeline(
                 result=result,
                 write_detailed_working_artifacts=config.runtime.write_detailed_working_artifacts,
                 write_jsonl_artifacts=config.runtime.write_jsonl_artifacts,
+                write_graphml=config.runtime.write_graphml,
                 write_property_graph_jsonl=config.runtime.write_property_graph_jsonl,
                 write_graph_db_csv=config.runtime.write_graph_db_csv,
             )
@@ -229,4 +239,44 @@ def run_pipeline(
         export_benchmark_summary(run_root, benchmark_result)
         if config.runtime.save_latest_summary:
             write_latest_summary(config.runtime.artifact_root, summary)
+    if hasattr(embedding_backend, "save_all_caches"):
+        embedding_backend.save_all_caches()
     return benchmark_result
+
+
+def run_pipeline_for_domains(
+    config_path: str,
+    domain_ids: list[str],
+    regenerate: bool = False,
+    variant_ids: list[str] | None = None,
+    export_artifacts: bool = True,
+) -> PipelineBenchmarkResult:
+    """Convenience wrapper: run pipeline on a subset of domains.
+
+    Loads the config, filters to only the specified domains, and runs
+    the pipeline. Useful for LODO and domain-specific experiments.
+    """
+    config = load_pipeline_config(config_path)
+    filtered_config = config.config_for_domains(domain_ids)
+
+    # Write filtered config to a temporary file and run
+    import json
+    import tempfile
+    from pathlib import Path as _Path
+
+    payload = filtered_config.model_dump(mode="json")
+    with tempfile.NamedTemporaryFile(
+        mode="w", suffix=".json", delete=False, encoding="utf-8"
+    ) as tmp:
+        json.dump(payload, tmp, ensure_ascii=False, indent=2)
+        tmp_path = tmp.name
+
+    try:
+        return run_pipeline(
+            config_path=tmp_path,
+            regenerate=regenerate,
+            variant_ids=variant_ids,
+            export_artifacts=export_artifacts,
+        )
+    finally:
+        _Path(tmp_path).unlink(missing_ok=True)

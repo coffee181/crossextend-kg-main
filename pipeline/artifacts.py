@@ -13,9 +13,21 @@ try:
     from crossextend_kg.models import PipelineBenchmarkResult, VariantRunResult
 except ImportError:  # pragma: no cover - direct script execution fallback
     from models import PipelineBenchmarkResult, VariantRunResult
+from pipeline.exports.graphml import export_domain_graphml
 from pipeline.utils import utc_now
 
 ADAPTER_ROUTES = {"vertical_specialize"}
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ARTIFACTS_ROOT = PROJECT_ROOT / "artifacts"
+
+
+def _graphml_variant_root(run_root: Path, variant_id: str) -> Path:
+    graphml_root = PROJECT_ROOT / "graphml"
+    try:
+        relative_run_root = run_root.resolve().relative_to(PROJECT_ARTIFACTS_ROOT.resolve())
+        return graphml_root / relative_run_root / variant_id
+    except ValueError:
+        return graphml_root / run_root.name / variant_id
 
 
 def _build_backbone_seed_payload(result: VariantRunResult) -> dict[str, object]:
@@ -75,21 +87,26 @@ def _group_rejected_candidates_by_reason(candidate_payloads: list[dict[str, obje
 
 def _build_final_graph_payload(result: VariantRunResult, domain_id: str) -> dict[str, object]:
     graph_root = result.domain_graphs[domain_id]
-    schema = result.schemas[domain_id]
     accepted_triples = [triple for triple in graph_root.triples if triple.status == "accepted"]
     rejected_triples = [triple for triple in graph_root.triples if triple.status == "rejected"]
     rejected_type_triples = [triple for triple in graph_root.triples if triple.status == "rejected_type"]
+    workflow_nodes = [node for node in graph_root.nodes if node.node_layer == "workflow"]
+    semantic_nodes = [node for node in graph_root.nodes if node.node_layer == "semantic"]
+    workflow_edges = [edge for edge in graph_root.edges if edge.edge_layer == "workflow"]
+    semantic_edges = [edge for edge in graph_root.edges if edge.edge_layer == "semantic"]
 
     total_triples = len(graph_root.triples)
     type_rejected_count = len(rejected_type_triples)
 
     return {
         "domain_id": domain_id,
-        "backbone_concepts": schema.backbone_concepts,
-        "adapter_schema": schema.model_dump(mode="json"),
         "summary": {
             "node_count": len(graph_root.nodes),
             "edge_count": len(graph_root.edges),
+            "workflow_step_node_count": len(workflow_nodes),
+            "semantic_node_count": len(semantic_nodes),
+            "workflow_edge_count": len(workflow_edges),
+            "semantic_edge_count": len(semantic_edges),
             "candidate_triple_count": len(graph_root.triples),
             "accepted_triple_count": len(accepted_triples),
             "rejected_triple_count": len(rejected_triples),
@@ -113,6 +130,59 @@ def _build_final_graph_payload(result: VariantRunResult, domain_id: str) -> dict
         },
         "nodes": [node.model_dump(mode="json") for node in graph_root.nodes],
         "edges": [edge.model_dump(mode="json") for edge in graph_root.edges],
+    }
+
+
+def _build_relation_audit_payload(result: VariantRunResult, domain_id: str) -> dict[str, object]:
+    graph_root = result.domain_graphs[domain_id]
+    triples = graph_root.triples
+    status_counts: dict[str, int] = {}
+    family_counts: dict[str, int] = {}
+    graph_layer_counts: dict[str, int] = {}
+    workflow_kind_counts: dict[str, int] = {}
+    reject_reason_counts: dict[str, int] = {}
+
+    for triple in triples:
+        status_counts[triple.status] = status_counts.get(triple.status, 0) + 1
+        family_counts[triple.relation_family] = family_counts.get(triple.relation_family, 0) + 1
+        graph_layer_counts[triple.graph_layer] = graph_layer_counts.get(triple.graph_layer, 0) + 1
+        if triple.workflow_kind:
+            workflow_kind_counts[triple.workflow_kind] = workflow_kind_counts.get(triple.workflow_kind, 0) + 1
+        if triple.reject_reason:
+            reject_reason_counts[triple.reject_reason] = reject_reason_counts.get(triple.reject_reason, 0) + 1
+
+    items = [
+        {
+            "triple_id": triple.triple_id,
+            "head": triple.head,
+            "relation": triple.relation,
+            "tail": triple.tail,
+            "family": triple.relation_family,
+            "graph_layer": triple.graph_layer,
+            "workflow_kind": triple.workflow_kind,
+            "status": triple.status,
+            "reject_reason": triple.reject_reason,
+            "confidence": triple.confidence,
+            "evidence_ids": triple.evidence_ids,
+            "attachment_refs": triple.attachment_refs,
+        }
+        for triple in triples
+    ]
+
+    return {
+        "domain_id": domain_id,
+        "summary": {
+            "candidate_relation_count": len(triples),
+            "accepted_count": status_counts.get("accepted", 0),
+            "rejected_count": status_counts.get("rejected", 0),
+            "rejected_type_count": status_counts.get("rejected_type", 0),
+            "status_counts": status_counts,
+            "family_counts": family_counts,
+            "graph_layer_counts": graph_layer_counts,
+            "workflow_kind_counts": workflow_kind_counts,
+            "reject_reason_counts": reject_reason_counts,
+        },
+        "items": items,
     }
 
 
@@ -142,6 +212,10 @@ def _build_data_flow_trace_payload(result: VariantRunResult) -> dict[str, object
             "adapter_concept_count": len(result.schemas[domain_id].adapter_concepts),
             "graph_node_count": len(graph_root.nodes),
             "graph_edge_count": len(graph_root.edges),
+            "workflow_step_node_count": sum(1 for node in graph_root.nodes if node.node_layer == "workflow"),
+            "semantic_node_count": sum(1 for node in graph_root.nodes if node.node_layer == "semantic"),
+            "workflow_edge_count": sum(1 for edge in graph_root.edges if edge.edge_layer == "workflow"),
+            "semantic_edge_count": sum(1 for edge in graph_root.edges if edge.edge_layer == "semantic"),
             "candidate_triple_count": len(graph_root.triples),
             "accepted_triple_count": sum(1 for triple in graph_root.triples if triple.status == "accepted"),
             "rejected_triple_count": sum(1 for triple in graph_root.triples if triple.status == "rejected"),
@@ -153,6 +227,8 @@ def _build_data_flow_trace_payload(result: VariantRunResult) -> dict[str, object
                     "relation": edge.label,
                     "tail": edge.tail,
                     "family": edge.family,
+                    "edge_layer": edge.edge_layer,
+                    "workflow_kind": edge.workflow_kind,
                 }
                 for edge in graph_root.edges
             ],
@@ -170,10 +246,13 @@ def export_variant_run(
     result: VariantRunResult,
     write_detailed_working_artifacts: bool,
     write_jsonl_artifacts: bool,
+    write_graphml: bool,
     write_property_graph_jsonl: bool,
     write_graph_db_csv: bool,
 ) -> None:
     root = ensure_dir(run_dir)
+    run_root = root.parent
+    graphml_variant_root = _graphml_variant_root(run_root, result.variant_id)
     write_json(
         root / "run_meta.json",
         {
@@ -213,14 +292,6 @@ def export_variant_run(
         rejected_adapter_candidates = [item for item in candidate_payloads if item["rejected"]]
         rejected_adapter_candidates_by_reason = _group_rejected_candidates_by_reason(candidate_payloads)
         backbone_reuse_candidates = [item for item in candidate_payloads if item["accepted_as_backbone_reuse"]]
-        rejected_relation_triples = [
-            triple.model_dump(mode="json") for triple in graph_root.triples if triple.status == "rejected"
-        ]
-        rejected_type_triples = [
-            triple.model_dump(mode="json") for triple in graph_root.triples if triple.status == "rejected_type"
-        ]
-        relation_candidate_triples = [triple.model_dump(mode="json") for triple in graph_root.triples]
-        accepted_relation_edges = [edge.model_dump(mode="json") for edge in graph_root.edges]
 
         if write_detailed_working_artifacts and write_jsonl_artifacts:
             write_jsonl(domain_root / "evidence_units.jsonl", evidence_units)
@@ -249,6 +320,13 @@ def export_variant_run(
             },
         )
         write_json(domain_root / "final_graph.json", _build_final_graph_payload(result, domain_id))
+        write_json(domain_root / "relation_audit.json", _build_relation_audit_payload(result, domain_id))
+        if write_graphml:
+            export_domain_graphml(
+                domain_graph=graph_root,
+                graphml_variant_root=graphml_variant_root,
+                domain_id=domain_id,
+            )
 
         if write_detailed_working_artifacts:
             write_json(domain_root / "adapter_schema.json", schema.model_dump(mode="json"))
@@ -265,34 +343,27 @@ def export_variant_run(
                 domain_root / "attachment_decisions.json",
                 {key: value.model_dump(mode="json") for key, value in decisions.items()},
             )
-            write_json(domain_root / "relation_edges.candidates.json", relation_candidate_triples)
-            write_json(domain_root / "relation_edges.accepted.json", accepted_relation_edges)
-            write_json(domain_root / "relation_edges.rejected.json", rejected_relation_triples)
-            write_json(domain_root / "relation_edges.rejected_type.json", rejected_type_triples)
 
-        snapshots_root = ensure_dir(domain_root / "snapshots")
-        if len(graph_root.snapshots) != len(graph_root.snapshot_states):
-            raise ValueError(
-                f"snapshot manifest/state length mismatch for domain {domain_id}: "
-                f"{len(graph_root.snapshots)} manifests vs {len(graph_root.snapshot_states)} states"
-            )
-        for manifest, state in zip(graph_root.snapshots, graph_root.snapshot_states, strict=True):
-            snapshot_root = ensure_dir(snapshots_root / manifest.snapshot_id)
-            # Snapshot replay always depends on these state files, so they must be
-            # exported even when general JSONL artifact emission is disabled.
-            write_jsonl(snapshot_root / "nodes.jsonl", state.nodes)
-            write_jsonl(snapshot_root / "edges.jsonl", state.edges)
-            write_json(
-                snapshot_root / "consistency.json",
-                {
-                    "snapshot_id": manifest.snapshot_id,
-                    "node_count": manifest.node_count,
-                    "edge_count": manifest.edge_count,
-                    "accepted_evidence_ids": manifest.accepted_evidence_ids,
-                },
-            )
+            if len(graph_root.snapshots) != len(graph_root.snapshot_states):
+                raise ValueError(
+                    f"snapshot manifest/state length mismatch for domain {domain_id}: "
+                    f"{len(graph_root.snapshots)} manifests vs {len(graph_root.snapshot_states)} states"
+                )
+            snapshots_root = ensure_dir(domain_root / "snapshots")
+            for manifest, state in zip(graph_root.snapshots, graph_root.snapshot_states, strict=True):
+                snapshot_root = ensure_dir(snapshots_root / manifest.snapshot_id)
+                write_jsonl(snapshot_root / "nodes.jsonl", state.nodes)
+                write_jsonl(snapshot_root / "edges.jsonl", state.edges)
+                write_json(
+                    snapshot_root / "consistency.json",
+                    {
+                        "snapshot_id": manifest.snapshot_id,
+                        "node_count": manifest.node_count,
+                        "edge_count": manifest.edge_count,
+                        "accepted_evidence_ids": manifest.accepted_evidence_ids,
+                    },
+                )
 
-        if write_detailed_working_artifacts:
             exports_root = ensure_dir(domain_root / "exports")
             if write_property_graph_jsonl:
                 property_root = ensure_dir(exports_root / "property_graph")
@@ -303,12 +374,33 @@ def export_variant_run(
                 write_csv(
                     graph_db_root / "nodes.csv",
                     [node.model_dump(mode="json") for node in graph_root.nodes],
-                    fieldnames=["node_id", "label", "domain_id", "node_type", "parent_anchor", "provenance_evidence_ids"],
+                    fieldnames=[
+                        "node_id",
+                        "label",
+                        "display_label",
+                        "domain_id",
+                        "node_type",
+                        "node_layer",
+                        "parent_anchor",
+                        "step_id",
+                        "order_index",
+                        "provenance_evidence_ids",
+                    ],
                 )
                 write_csv(
                     graph_db_root / "edges.csv",
                     [edge.model_dump(mode="json") for edge in graph_root.edges],
-                    fieldnames=["edge_id", "domain_id", "label", "family", "head", "tail", "provenance_evidence_ids"],
+                    fieldnames=[
+                        "edge_id",
+                        "domain_id",
+                        "label",
+                        "family",
+                        "edge_layer",
+                        "workflow_kind",
+                        "head",
+                        "tail",
+                        "provenance_evidence_ids",
+                    ],
                 )
 
 

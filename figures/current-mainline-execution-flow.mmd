@@ -1,0 +1,62 @@
+flowchart TB
+    classDef data fill:#f7f1e8,stroke:#8b6f47,color:#1f1f1f,stroke-width:1px;
+    classDef proc fill:#eaf2fb,stroke:#4f81bd,color:#1f1f1f,stroke-width:1px;
+    classDef decision fill:#fff4d6,stroke:#b58900,color:#1f1f1f,stroke-width:1px;
+    classDef model fill:#efe8fb,stroke:#7e57c2,color:#1f1f1f,stroke-width:1px;
+    classDef output fill:#e9f7ef,stroke:#2e8b57,color:#1f1f1f,stroke-width:1px;
+    classDef note fill:#f8f9fa,stroke:#8a8a8a,color:#333333,stroke-dasharray: 4 2;
+
+    A["Raw O&amp;M Markdown<br/>data/*_om_manual_en/*.md"]:::data
+
+    subgraph PRE["Preprocessing"]
+        B["parser / extractor / processor<br/>LLM extraction + normalization"]:::proc
+        C["Step-aware EvidenceRecord"]:::data
+    end
+
+    subgraph MAIN["Per-domain / per-variant mainline"]
+        D["aggregate_schema_candidates"]:::proc
+        E["build_backbone<br/>11 anchors + descriptions"]:::proc
+        F{"use_embedding_routing?"}:::decision
+        G["Embedding backend<br/>local_ollama_bge_m3"]:::model
+        H["retrieve_anchor_rankings<br/>candidate text vs. backbone descriptions<br/>cosine similarity, top_k = 3"]:::proc
+        I["retrievals per candidate<br/>top-3 anchor list"]:::data
+        J["empty retrievals"]:::data
+        K{"attachment_strategy"}:::decision
+        L["LLM path<br/>build prompt with candidates + prompt_priors + retrieved_anchors"]:::proc
+        M["LLM attachment<br/>generate_json"]:::model
+        O["embedding_top1 path<br/>use top-1 retrieved anchor<br/>or semantic hint"]:::proc
+        P["deterministic path<br/>embedding_top1 + fixed routing"]:::proc
+        N["normalize attachment decisions"]:::proc
+        Q{"use_rule_filter?"}:::decision
+        R["filter_attachment_decision"]:::proc
+        S["build_domain_schemas"]:::proc
+        T["assemble_domain_graphs"]:::proc
+    end
+
+    U["export_variant_run<br/>graph.json / adapter_candidates.json / retrievals.json"]:::output
+    V["optional experiment evaluation<br/>experiments/metrics"]:::output
+    N1["Default full_llm<br/>attachment_strategy = llm<br/>use_embedding_routing = true<br/>use_rule_filter = true"]:::note
+    N2["Embedding retrieval targets backbone anchors only<br/>not external document chunks"]:::note
+
+    A --> B --> C --> D
+    D --> E
+    E --> F
+    F -- "true" --> G
+    G --> H
+    H --> I
+    F -- "false" --> J
+
+    I --> K
+    J --> K
+    K -- "llm" --> L --> M --> N
+    K -- "embedding_top1" --> O --> N
+    K -- "deterministic" --> P --> N
+
+    N --> Q
+    Q -- "true" --> R --> S
+    Q -- "false" --> S
+    S --> T --> U
+    U --> V
+
+    N1 -.-> K
+    N2 -.-> H

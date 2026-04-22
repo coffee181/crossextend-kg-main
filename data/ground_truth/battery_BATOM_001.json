@@ -1,11 +1,10 @@
 {
-  "schema_version": "human_gold.v2",
+  "schema_version": "human_gold.v3",
   "domain_id": "battery",
-  "label_tier": "human_annotation_v1",
   "annotation_status": "human_annotated",
-  "annotator_id": "human_expert_01",
-  "annotation_date": "2026-04-19",
-  "annotation_basis": "Independent human annotation from source O&M text only. Annotator did not consult pipeline extraction outputs. Task labels taken verbatim from O&M text.",
+  "annotator_id": "blind_human_annotator",
+  "annotation_date": "2026-04-22",
+  "annotation_basis": "Blind annotation from source O&M text only, without viewing any experimental results or model outputs.",
   "documents": [
     {
       "doc_id": "BATOM_001",
@@ -16,154 +15,199 @@
     {
       "evidence_id": "BATOM_001",
       "label": "T1",
-      "step_id": "T1",
-      "surface_form": "On Aurex BatteryHub-612 LR, record coolant level, residue color, undertray wetness, recent chiller work, and whether the seepage already points to the left coolant-plate outlet before any shield or hose support is moved.",
+      "surface_form": "At the left-rear coolant-plate outlet on Aurex BatteryHub-612 LR, record the complaint as seepage, dried residue, or undertray drip, and capture the coolant concentration, pack serial, and the last chiller or hose service that touched this branch. Save the as-found stain path from the outlet neck to the shield edge before any clip, hose, or connector body is moved.",
       "should_be_in_graph": true,
       "expected_anchor": "Task",
-      "reason": "O&M step T1, diagnostic observation phase"
+      "reason": "O&M step T1 retained verbatim from the source document."
     },
     {
       "evidence_id": "BATOM_001",
       "label": "T2",
-      "step_id": "T2",
-      "surface_form": "Isolate the high-voltage pack, remove the local underbody shield, and expose the outlet quick connector, aluminum cooling-plate edge, hose support bracket, and nearby harness clip while keeping the hose angle unchanged so the original witness pattern remains readable.",
+      "surface_form": "Make the pack safe, remove the local underbody shield, and expose the aluminum outlet neck, PA12 quick-connector shell, green EPDM O-ring seat, stainless retainer clip, hose saddle bracket, and nearby harness fir-tree clip without changing the hose angle. Keep the connector-to-bracket path intact so the original side load can still be judged.",
       "should_be_in_graph": true,
       "expected_anchor": "Task",
-      "reason": "O&M step T2, hardware access phase"
+      "reason": "O&M step T2 retained verbatim from the source document."
     },
     {
       "evidence_id": "BATOM_001",
       "label": "T3",
-      "step_id": "T3",
-      "surface_form": "Wipe only loose dirt, leave the wet boundary intact, and trace fresh coolant from the lowest drip point back toward the outlet tube bead, connector latch window, green O-ring land, and plate seam instead of assuming the largest stain marks the source.",
+      "surface_form": "Clean only the loose dirt and then trace the residue from the lowest drip point upward with a lamp, separating wetting at the latch window from wetting at the tube bead or the cold-plate seam. Residue that begins above the retainer clip and then runs down the shell suggests a different boundary than residue that forms first at the aluminum neck.",
       "should_be_in_graph": true,
       "expected_anchor": "Task",
-      "reason": "O&M step T3, leak tracing phase"
+      "reason": "O&M step T3 retained verbatim from the source document."
     },
     {
       "evidence_id": "BATOM_001",
       "label": "T4",
-      "step_id": "T4",
-      "surface_form": "Cap the neighboring branch, apply pressure to the suspect cooling section, and hold long enough to see whether new wetting starts at the connector shell, the O-ring interface, the hose end, or the aluminum plate seam beside the outlet neck.",
+      "surface_form": "Cap the neighboring branch and apply a controlled pressure hold to the suspect section, then watch the connector shell, O-ring land, and plate seam for the first fresh bead. Record the applied pressure and the time to first wetting so the leak proof is tied to one repeatable condition.",
       "should_be_in_graph": true,
       "expected_anchor": "Task",
-      "reason": "O&M step T4, pressure verification phase"
+      "reason": "O&M step T4 retained verbatim from the source document."
     },
     {
       "evidence_id": "BATOM_001",
       "label": "T5",
-      "step_id": "T5",
-      "surface_form": "Compare latch height, tube insertion depth, hose twist, and bracket side load with the opposite-side outlet branch, because a coupler body held off-axis by the support bracket often leaks while the plate seam stays dry.",
+      "surface_form": "Compare insertion depth, retainer-clip seating, hose twist, and bracket position against the right-rear outlet on the same pack because a coupler held 3 mm short of full engagement can mimic a seam leak. Use the opposite-side outlet as the geometry reference before deciding which part is actually failed.",
       "should_be_in_graph": true,
       "expected_anchor": "Task",
-      "reason": "O&M step T5, cross-comparison phase"
+      "reason": "O&M step T5 retained verbatim from the source document."
     },
     {
       "evidence_id": "BATOM_001",
       "label": "T6",
-      "step_id": "T6",
-      "surface_form": "Close the inspection only after the report names the exact leak boundary as coolant-plate seam, outlet O-ring seat, connector shell crack, or hose-end distortion, with the pressure result and residue path tied to that hardware.",
+      "surface_form": "Correct only the identified interface by renewing the O-ring, replacing the cracked connector shell, deburring the outlet bead, or resetting the saddle bracket so the hose leaves the neck without upward pull. Confirm that the retainer clip locks fully into both grooves and that the bracket no longer pushes the shell off axis.",
       "should_be_in_graph": true,
       "expected_anchor": "Task",
-      "reason": "O&M step T6, record closure phase"
+      "reason": "O&M step T6 retained verbatim from the source document."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "label": "T7",
+      "surface_form": "Circulate coolant through the restored branch and compare inlet and outlet temperatures plus the local shell condition with the pre-repair state while the branch remains visible. The proof is incomplete if the connector stays dry at static pressure but begins to sweat once flow and vibration return.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T7 retained verbatim from the source document."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "label": "T8",
+      "surface_form": "Release this branch only when the note names the exact failed boundary, such as O-ring seat, connector shell, retainer clip engagement, outlet bead, or saddle bracket side load, and includes the pressure and circulation results taken after repair. The accepted condition is a dry left-rear outlet path with stable hose alignment and no renewed staining from neck to shield edge.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T8 retained verbatim from the source document."
     },
     {
       "evidence_id": "BATOM_001",
       "label": "Aurex BatteryHub-612 LR",
       "should_be_in_graph": true,
       "expected_anchor": "Asset",
-      "reason": "Named battery pack platform"
+      "reason": "Explicitly named battery pack asset in the source document."
     },
     {
       "evidence_id": "BATOM_001",
-      "label": "outlet quick connector",
+      "label": "left-rear coolant-plate outlet",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "Primary hardware component for coolant outlet"
+      "reason": "Explicitly named service boundary component in the source document."
     },
     {
       "evidence_id": "BATOM_001",
-      "label": "coolant plate",
+      "label": "aluminum outlet neck",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "Aluminum cooling plate, leak boundary candidate"
+      "reason": "Explicitly named hardware component in the source document."
     },
     {
       "evidence_id": "BATOM_001",
-      "label": "hose support bracket",
+      "label": "PA12 quick-connector shell",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "Bracket that may induce side-load on connector"
+      "reason": "Explicitly named connector component in the source document."
     },
     {
       "evidence_id": "BATOM_001",
-      "label": "connector shell",
+      "label": "green EPDM O-ring",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "Shell of quick connector, potential leak point"
+      "reason": "Explicitly named seal component in the source document."
     },
     {
       "evidence_id": "BATOM_001",
-      "label": "O-ring",
+      "label": "stainless retainer clip",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "Seal element in connector"
+      "reason": "Explicitly named retention hardware in the source document."
     },
     {
       "evidence_id": "BATOM_001",
-      "label": "plate seam",
+      "label": "hose saddle bracket",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "Seam between plate sections, leak boundary"
+      "reason": "Explicitly named support bracket in the source document."
     },
     {
       "evidence_id": "BATOM_001",
-      "label": "coolant level",
+      "label": "harness fir-tree clip",
       "should_be_in_graph": true,
-      "expected_anchor": "Signal",
-      "reason": "Measured coolant quantity"
+      "expected_anchor": "Component",
+      "reason": "Explicitly named harness fastener in the source document."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "label": "latch window",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Explicitly named connector feature in the source document."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "label": "tube bead",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Explicitly named tube sealing surface in the source document."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "label": "cold-plate seam",
+      "should_be_in_graph": true,
+      "expected_anchor": "Component",
+      "reason": "Explicitly named plate boundary in the source document."
     },
     {
       "evidence_id": "BATOM_001",
       "label": "seepage",
       "should_be_in_graph": true,
       "expected_anchor": "Signal",
-      "reason": "Observable leak symptom"
+      "reason": "Explicitly recorded complaint signal in the source document."
     },
     {
       "evidence_id": "BATOM_001",
-      "label": "pressure result",
+      "label": "dried residue",
       "should_be_in_graph": true,
       "expected_anchor": "Signal",
-      "reason": "Test pressure outcome"
+      "reason": "Explicitly recorded complaint signal in the source document."
     },
     {
       "evidence_id": "BATOM_001",
-      "label": "coolant leak",
+      "label": "undertray drip",
       "should_be_in_graph": true,
-      "expected_anchor": "Fault",
-      "reason": "Top-level fault being diagnosed"
+      "expected_anchor": "Signal",
+      "reason": "Explicitly recorded complaint signal in the source document."
     },
     {
       "evidence_id": "BATOM_001",
-      "label": "connector shell crack",
+      "label": "coolant concentration",
       "should_be_in_graph": true,
-      "expected_anchor": "Fault",
-      "reason": "Named leak boundary in T6"
+      "expected_anchor": "Signal",
+      "reason": "Explicitly captured measurement in the source document."
     },
     {
       "evidence_id": "BATOM_001",
-      "label": "hose-end distortion",
+      "label": "applied pressure",
       "should_be_in_graph": true,
-      "expected_anchor": "Fault",
-      "reason": "Named leak boundary in T6"
+      "expected_anchor": "Signal",
+      "reason": "Explicitly recorded test parameter in the source document."
     },
     {
       "evidence_id": "BATOM_001",
-      "label": "recent chiller work",
-      "should_be_in_graph": false,
-      "expected_anchor": null,
-      "reason": "Historical context, not a graph-worthy concept"
+      "label": "time to first wetting",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Explicitly recorded test measurement in the source document."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "label": "insertion depth",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Explicitly compared geometry measurement in the source document."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "label": "inlet and outlet temperatures",
+      "should_be_in_graph": true,
+      "expected_anchor": "Signal",
+      "reason": "Explicitly compared temperature measurements in the source document."
     }
   ],
   "relation_ground_truth": [
@@ -174,7 +218,7 @@
       "tail": "T2",
       "family": "task_dependency",
       "valid": true,
-      "reason": "T1 observation before T2 hardware access"
+      "reason": "The source procedure order places T1 before T2."
     },
     {
       "evidence_id": "BATOM_001",
@@ -183,7 +227,7 @@
       "tail": "T3",
       "family": "task_dependency",
       "valid": true,
-      "reason": "T2 access before T3 leak tracing"
+      "reason": "The source procedure order places T2 before T3."
     },
     {
       "evidence_id": "BATOM_001",
@@ -192,7 +236,7 @@
       "tail": "T4",
       "family": "task_dependency",
       "valid": true,
-      "reason": "T3 tracing before T4 pressure test"
+      "reason": "The source procedure order places T3 before T4."
     },
     {
       "evidence_id": "BATOM_001",
@@ -201,7 +245,7 @@
       "tail": "T5",
       "family": "task_dependency",
       "valid": true,
-      "reason": "T4 verification before T5 comparison"
+      "reason": "The source procedure order places T4 before T5."
     },
     {
       "evidence_id": "BATOM_001",
@@ -210,41 +254,315 @@
       "tail": "T6",
       "family": "task_dependency",
       "valid": true,
-      "reason": "T5 comparison before T6 closure"
+      "reason": "The source procedure order places T5 before T6."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T6",
+      "relation": "triggers",
+      "tail": "T7",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "The source procedure order places T6 before T7."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T7",
+      "relation": "triggers",
+      "tail": "T8",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "The source procedure order places T7 before T8."
     },
     {
       "evidence_id": "BATOM_001",
       "head": "Aurex BatteryHub-612 LR",
       "relation": "contains",
-      "tail": "coolant plate",
+      "tail": "left-rear coolant-plate outlet",
       "family": "structural",
       "valid": true,
-      "reason": "Coolant plate is part of battery pack"
+      "reason": "The outlet is explicitly located on Aurex BatteryHub-612 LR."
     },
     {
       "evidence_id": "BATOM_001",
-      "head": "coolant plate",
+      "head": "left-rear coolant-plate outlet",
       "relation": "contains",
-      "tail": "outlet quick connector",
+      "tail": "aluminum outlet neck",
       "family": "structural",
       "valid": true,
-      "reason": "Connector attached to plate outlet"
+      "reason": "The source exposes the aluminum outlet neck within the outlet service boundary."
     },
     {
       "evidence_id": "BATOM_001",
-      "head": "seepage",
-      "relation": "indicates",
-      "tail": "coolant leak",
-      "family": "communication",
+      "head": "left-rear coolant-plate outlet",
+      "relation": "contains",
+      "tail": "PA12 quick-connector shell",
+      "family": "structural",
       "valid": true,
-      "reason": "Visible seepage indicates active leak"
+      "reason": "The source exposes the quick-connector shell within the outlet service boundary."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "left-rear coolant-plate outlet",
+      "relation": "contains",
+      "tail": "green EPDM O-ring",
+      "family": "structural",
+      "valid": true,
+      "reason": "The source exposes the O-ring within the outlet service boundary."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "left-rear coolant-plate outlet",
+      "relation": "contains",
+      "tail": "stainless retainer clip",
+      "family": "structural",
+      "valid": true,
+      "reason": "The source exposes the retainer clip within the outlet service boundary."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "left-rear coolant-plate outlet",
+      "relation": "contains",
+      "tail": "hose saddle bracket",
+      "family": "structural",
+      "valid": true,
+      "reason": "The source exposes the saddle bracket within the outlet service boundary."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "left-rear coolant-plate outlet",
+      "relation": "contains",
+      "tail": "cold-plate seam",
+      "family": "structural",
+      "valid": true,
+      "reason": "The source references the cold-plate seam as part of the outlet boundary."
+    }
+  ],
+  "workflow_relation_ground_truth": [
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T1",
+      "relation": "records",
+      "tail": "seepage",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T1 explicitly records seepage as a complaint option."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T1",
+      "relation": "records",
+      "tail": "dried residue",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T1 explicitly records dried residue as a complaint option."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T1",
+      "relation": "records",
+      "tail": "undertray drip",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T1 explicitly records undertray drip as a complaint option."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T1",
+      "relation": "captures",
+      "tail": "coolant concentration",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T1 explicitly captures coolant concentration."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T2",
+      "relation": "exposes",
+      "tail": "aluminum outlet neck",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T2 explicitly exposes the aluminum outlet neck."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T2",
+      "relation": "exposes",
+      "tail": "PA12 quick-connector shell",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T2 explicitly exposes the PA12 quick-connector shell."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T2",
+      "relation": "exposes",
+      "tail": "green EPDM O-ring",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T2 explicitly exposes the green EPDM O-ring."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T2",
+      "relation": "exposes",
+      "tail": "stainless retainer clip",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T2 explicitly exposes the stainless retainer clip."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T2",
+      "relation": "exposes",
+      "tail": "hose saddle bracket",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T2 explicitly exposes the hose saddle bracket."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T3",
+      "relation": "inspects",
+      "tail": "latch window",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T3 explicitly separates wetting at the latch window."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T3",
+      "relation": "inspects",
+      "tail": "tube bead",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T3 explicitly separates wetting at the tube bead."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T3",
+      "relation": "inspects",
+      "tail": "cold-plate seam",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T3 explicitly separates wetting at the cold-plate seam."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T4",
+      "relation": "observes",
+      "tail": "PA12 quick-connector shell",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T4 explicitly watches the connector shell for fresh wetting."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T4",
+      "relation": "observes",
+      "tail": "green EPDM O-ring",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T4 explicitly watches the O-ring land for fresh wetting."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T4",
+      "relation": "observes",
+      "tail": "cold-plate seam",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T4 explicitly watches the plate seam for fresh wetting."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T4",
+      "relation": "records",
+      "tail": "applied pressure",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T4 explicitly records the applied pressure."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T4",
+      "relation": "records",
+      "tail": "time to first wetting",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T4 explicitly records the time to first wetting."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T5",
+      "relation": "compares",
+      "tail": "insertion depth",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T5 explicitly compares insertion depth."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T5",
+      "relation": "checks",
+      "tail": "stainless retainer clip",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T5 explicitly compares retainer-clip seating."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T5",
+      "relation": "checks",
+      "tail": "hose saddle bracket",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T5 explicitly compares bracket position."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T6",
+      "relation": "confirms",
+      "tail": "stainless retainer clip",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T6 explicitly confirms the retainer clip locks fully."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T6",
+      "relation": "confirms",
+      "tail": "hose saddle bracket",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T6 explicitly confirms the bracket no longer pushes the shell off axis."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T7",
+      "relation": "measures",
+      "tail": "inlet and outlet temperatures",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T7 explicitly compares inlet and outlet temperatures."
+    },
+    {
+      "evidence_id": "BATOM_001",
+      "head": "T7",
+      "relation": "observes",
+      "tail": "PA12 quick-connector shell",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T7 explicitly compares the local shell condition."
     }
   ],
   "_statistics": {
-    "total_concepts": 20,
-    "positive_concepts": 19,
-    "negative_concepts": 1,
-    "total_relations": 8,
-    "valid_relations": 8
+    "total_concepts": 27,
+    "positive_concepts": 27,
+    "negative_concepts": 0,
+    "total_relations": 14,
+    "valid_relations": 14,
+    "total_workflow_relations": 24,
+    "valid_workflow_relations": 24
   }
 }

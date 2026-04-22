@@ -45,6 +45,21 @@
 - `persistent/pipeline.deepseek_full.yaml`
   Optional multi-variant stress preset.
 
+## Current LLM Default
+
+- The `deepseek` backend id now resolves to `deepseek-reasoner`.
+- The old chat-model preset remains available as `deepseek_chat`.
+- This means the existing `persistent/preprocessing.deepseek.yaml` and
+  `persistent/pipeline.deepseek.yaml` wrappers now use `deepseek-reasoner`
+  without requiring a wrapper rename.
+
+## Current Embedding Default
+
+- The `dashscope_text_embedding_v4` backend id is now the default embedding backend.
+- It points to `https://dashscope.aliyuncs.com/compatible-mode/v1`.
+- Its API key is read from `${TONGYI_API_KEY}`.
+- The active embedding model is `text-embedding-v4`.
+
 ## What Usually Changes
 
 Most daily changes should stay in thin wrappers:

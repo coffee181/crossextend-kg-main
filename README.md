@@ -9,6 +9,8 @@ CrossExtend-KG is an industrial knowledge graph construction project centered on
 - Input type: `om_manual`
 - Active domains: `battery`, `cnc`, `nev`
 - Paper-facing variant: `full_llm`
+- Default paper-facing ablations: `full_llm`, `no_preprocessing_llm`, `no_rule_filter`, `no_embedding_routing`, `no_attachment_llm`, `embedding_top1`
+- Paper-facing baselines: `rule_pipeline`, `llm_direct_graph`
 - Paper metrics: human gold only
 - Highest execution principle: `no fallback`
 
@@ -22,17 +24,29 @@ CrossExtend-KG is an industrial knowledge graph construction project centered on
 - Aligned preprocessing with the current raw O&M directory names such as `battery_om_manual_en` and `ev_om_manual_en`.
 - Improved package-mode import stability by reducing hard dependence on root-only absolute imports for config, models, and file I/O helpers.
 
+## Workflow Dual-Layer Graph
+
+The active graph representation is now a `single graph, dual layer` runtime:
+
+- `workflow_step` nodes are first-class graph nodes with `node_layer="workflow"`.
+- semantic concepts remain normal graph nodes with `node_layer="semantic"`.
+- `Task` is kept only as a legacy evaluation projection for current human gold, not as a real semantic attachment target.
+- `task_dependency` is now split by graph role:
+  - `workflow_step -> workflow_step` stays as workflow sequence edges
+  - `workflow_step -> semantic node` is promoted as workflow grounding edges
+- strict paper metrics still evaluate the legacy projection, while workflow diagnostics report how much real O&M chain visibility the graph gained.
+
 ## Active Architecture
 
 ```text
 O&M markdown
   -> preprocessing extraction
   -> step-aware EvidenceRecord
-  -> SchemaCandidate aggregation
+  -> semantic SchemaCandidate aggregation
   -> fixed backbone retrieval / routing
-  -> attachment decisions
+  -> semantic attachment decisions
   -> rule filtering
-  -> graph assembly
+  -> dual-layer graph assembly
   -> export + human-gold evaluation
 ```
 
@@ -88,8 +102,10 @@ python D:\crossextend_kg\scripts\run_baselines.py --config D:\crossextend_kg\con
 Run repeated experiments:
 
 ```bash
-python D:\crossextend_kg\scripts\run_repeated_experiments.py --config D:\crossextend_kg\config\persistent\pipeline.deepseek.yaml --output-dir D:\crossextend_kg\artifacts\repeated --ground-truth-dir D:\crossextend_kg\data\ground_truth --repeats 3 --include-baselines --data-root D:\crossextend_kg\data
+python D:\crossextend_kg\scripts\run_repeated_experiments.py --config D:\crossextend_kg\config\persistent\pipeline.deepseek.yaml --output-dir D:\crossextend_kg\artifacts\repeated --ground-truth-dir D:\crossextend_kg\data\ground_truth --repeats 5 --include-baselines --data-root D:\crossextend_kg\data
 ```
+
+Current validation uses real-run artifacts, targeted `py_compile`, focused `unittest` regressions under `tests/`, and repeated-run summaries.
 
 ## Documentation
 
@@ -97,5 +113,5 @@ python D:\crossextend_kg\scripts\run_repeated_experiments.py --config D:\crossex
 - `docs/SYSTEM_DESIGN.md`
 - `docs/PIPELINE_INTEGRATION.md`
 - `docs/MANUAL_ANNOTATION_PROTOCOL.md`
-- `docs/AUTO_REVIEW_ACTION_PLAN.md`
+- `docs/GROUND_TRUTH_QUALITY_ANALYSIS.md`
 - `docs/FIVE_ROUND_OPTIMIZATION_REPORT.md`

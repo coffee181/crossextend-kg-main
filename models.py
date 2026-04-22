@@ -23,6 +23,9 @@ RejectReason = Literal[
 ]
 
 SemanticTypeHint = Literal["Asset", "Component", "Signal", "State", "Fault"]
+NodeLayer = Literal["semantic", "workflow"]
+EdgeLayer = Literal["semantic", "workflow"]
+WorkflowKind = Literal["sequence", "action_object"]
 
 
 def _normalize_semantic_type_hint(value: Any) -> SemanticTypeHint | None:
@@ -196,11 +199,18 @@ class DomainSchema(BaseModel):
 class GraphNode(BaseModel):
     node_id: str
     label: str
+    display_label: str = ""
     domain_id: str
     node_type: str
+    node_layer: NodeLayer = "semantic"
     parent_anchor: str | None = None
     surface_form: str = ""
+    step_id: str | None = None
+    order_index: int | None = None
     provenance_evidence_ids: list[str] = Field(default_factory=list)
+    valid_from: str | None = None
+    valid_to: str | None = None
+    lifecycle_stage: str | None = None
 
 
 class GraphEdge(BaseModel):
@@ -208,9 +218,13 @@ class GraphEdge(BaseModel):
     domain_id: str
     label: str
     family: str
+    edge_layer: EdgeLayer = "semantic"
+    workflow_kind: WorkflowKind | None = None
     head: str
     tail: str
     provenance_evidence_ids: list[str] = Field(default_factory=list)
+    valid_from: str | None = None
+    valid_to: str | None = None
 
 
 class CandidateTriple(BaseModel):
@@ -220,6 +234,8 @@ class CandidateTriple(BaseModel):
     relation: str
     tail: str
     relation_family: str
+    graph_layer: EdgeLayer = "semantic"
+    workflow_kind: WorkflowKind | None = None
     evidence_ids: list[str] = Field(default_factory=list)
     attachment_refs: list[str] = Field(default_factory=list)
     confidence: float | None = None
@@ -258,6 +274,26 @@ class SnapshotState(BaseModel):
     edges: list[GraphEdge] = Field(default_factory=list)
 
 
+LifecycleEventType = Literal[
+    "creation",
+    "update",
+    "deprecation",
+    "replacement",
+    "fault_occurrence",
+    "maintenance",
+]
+
+
+class LifecycleEvent(BaseModel):
+    event_id: str
+    domain_id: str
+    event_type: LifecycleEventType
+    object_id: str
+    timestamp: str
+    description: str = ""
+    superseded_by: str | None = None
+
+
 class DomainGraphArtifacts(BaseModel):
     domain_id: str
     nodes: list[GraphNode] = Field(default_factory=list)
@@ -266,6 +302,7 @@ class DomainGraphArtifacts(BaseModel):
     temporal_assertions: list[TemporalAssertion] = Field(default_factory=list)
     snapshots: list[SnapshotManifest] = Field(default_factory=list)
     snapshot_states: list[SnapshotState] = Field(default_factory=list)
+    lifecycle_events: list[LifecycleEvent] = Field(default_factory=list)
 
 
 class VariantRunResult(BaseModel):

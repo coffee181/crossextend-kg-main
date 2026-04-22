@@ -4,6 +4,13 @@ backends:
   deepseek:
     base_url: https://api.deepseek.com
     api_key: ${DEEPSEEK_API_KEY}
+    model: deepseek-reasoner
+    timeout_sec: 1200
+    max_tokens: 16384
+    temperature: 0.0
+  deepseek_chat:
+    base_url: https://api.deepseek.com
+    api_key: ${DEEPSEEK_API_KEY}
     model: deepseek-chat
     timeout_sec: 600
     max_tokens: 4096
@@ -13,6 +20,6 @@ backends:
     api_key: ${DEEPSEEK_API_KEY}
     model: deepseek-reasoner
     timeout_sec: 1200
-    max_tokens: 8192
+    max_tokens: 16384
     temperature: 0.0
   

@@ -39,21 +39,26 @@ Return JSON only.
 }
 ```
 
-## Hard Rules
+## Core Rules
 1. Extract only concepts and relations explicitly grounded in the source document.
-2. Do not extract the document title, filename, table title, or generic report name as a graph concept.
-3. Do not extract generic human bookkeeping roles such as technician, reviewer, or approver unless they are operationally essential and directly participate in a grounded relation.
-4. Keep concept labels concise and reusable. Do not output whole clauses as labels.
-5. Prefer fewer high-value concepts over noisy fragments.
-6. Prefer the most specific stable label stated in the document. If the text gives a specific component such as `green O-ring`, `internal retainer`, or `chiller-inlet connector`, do not also emit a generic alias like `O-ring`, `seal`, `retainer`, or `replacement connector` unless it clearly refers to a different physical object.
-7. Include grounded geometry or operating-condition concepts when the procedure explicitly records, verifies, or compares them as reusable inspection targets, such as `operating state`, `bend radius`, `clearance`, or `upper-to-lower offset`.
-8. When the document explicitly names a final failure boundary or exact hardware boundary, reuse that exact label. Do not replace it with generic alternatives such as `failure`, `leakage`, `suspect joint`, or `generic leak description`.
-9. Each concept may optionally include `semantic_type_hint`, and if present it must be one of `Asset`, `Component`, `Signal`, `State`, `Fault`.
-10. `semantic_type_hint` is a soft semantic prior, not a hard ontology claim. Choose the closest type based on meaning.
-11. Do not extract tiny quantitative fragments or modifiers as standalone concepts, such as isolated colors, directions, magnitudes, or vague descriptors, unless they function as stable diagnostic concepts in the document.
-12. Do not promote step-local bookkeeping fragments such as exact angle notes, clip-path reminders, proof-result bookkeeping, or temporary geometry reminders into graph concepts unless they are reused as stable diagnostic concepts.
-13. Every non-step concept that appears in a valid relation head or tail must also appear in `concepts`.
-14. Do not invent unlabeled abstractions that are not clearly stated in the document.
+2. Skip document titles, generic report names, pure metadata, and generic bookkeeping roles unless they directly participate in a grounded relation.
+3. Keep concept labels concise and reusable. Do not output whole clauses. When uncertain, prefer the smallest stable noun phrase that still carries reusable meaning.
+4. Prefer the most specific stable label stated in the document, including disambiguating modifiers such as `front`, `rear`, `upper`, `lower`, `inner`, `outer`, `inlet`, or `outlet` when they are part of the grounded hardware name. If the text gives a specific part such as `front manifold face`, `connector shell`, `upper hose neck`, or `O-ring seat`, do not collapse it to a broader alias such as `manifold face`, `connector`, `hose neck`, `seal`, or `replacement part` unless the broader term clearly refers to a different object.
+5. Keep exact named hardware parts, local assembly boundaries, and explicit reusable inspection targets even when they appear only once. Cross-domain examples include `tube bead`, `support bracket`, `front manifold face`, `coolant level`, `insertion depth`, `flow condition`, and `vibration load`.
+6. Distinguish evidence from state from fault:
+   - `Signal`: what is observed, measured, inspected, or used as evidence
+   - `State`: a concluded or verified condition/status
+   - `Fault`: the named defect, failure mode, or root cause being diagnosed or repaired
+7. A label containing words like `state`, `condition`, or `status` may still be a `Signal` if it names the inspection dimension rather than the final conclusion.
+8. Reuse the exact named failure boundary or hardware boundary. Do not replace it with a broader abstraction such as `failure` or generic `leak` when the document already gives a more specific label.
+9. Skip tiny modifiers, clause fragments, vague abstractions, comparison-reference wording, and verification-result bundles unless the text clearly uses them as reusable graph concepts. Typical non-node examples include `verification results` and `as-found stain path`.
+10. Do not create acceptance-bundle relations such as `verification results indicates dry`. Skip the bundle, but keep the stable underlying `Signal`, `State`, or `Fault` if it is explicitly named.
+11. Every non-step concept used in a valid relation head or tail must also appear in `concepts`.
+12. Do not invent unlabeled abstractions that are not clearly stated in the document.
+13. Each concept may optionally include `semantic_type_hint`, and if present it must be one of `Asset`, `Component`, `Signal`, `State`, `Fault`. It is a soft prior, not a hard ontology claim.
+14. Set `node_worthy=true` for stable `Asset`, `Component`, `Signal`, `State`, and `Fault` nodes. Otherwise prefer skipping the concept; use `node_worthy=false` only for clearly low-value residual items that must still be surfaced.
+15. For physical parts, prefer the part itself over a temporary inspection view. Good: `EPDM O-ring`, `connector shell`, `seal land`. Usually avoid turning the part into a view-only label such as `EPDM O-ring cross-section` or `connector profile` unless the view or measurement itself is the reusable node.
+16. When the text names a stable local assembly, boundary, or interface and then lists its visible parts or features, keep that local assembly/boundary as a concept too. Cross-domain examples include a connector boundary with retainer and seal parts, a manifold face with bolts and seal channel, or a spindle nose with clamp parts.
 
 ## Step Handling
 The document usually contains markdown table rows such as `T1`, `T2`, `T3`, ...
@@ -64,25 +69,27 @@ The document usually contains markdown table rows such as `T1`, `T2`, `T3`, ...
 - Do not output neighboring `T1 triggers T2` sequence edges unless the document explicitly states a non-local dependency. The pipeline already reconstructs the normal linear step chain.
 - A concept mentioned inside a step is not automatically a `Task`. Classify it by its own semantics.
 
-## Concept Priority
-1. `Asset`: named vehicle, pack, machine, line, cabinet, platform
-2. `Component`: physical parts, assemblies, fittings, hoses, clamps, connectors, brackets, manifolds, seals, clips, sensors
-3. `Signal`: measured or observed evidence such as result, path, wetting, residue, odor, reading, load, offset, depth, level
-4. `State`: persistent condition or status such as dry, wet after shutdown, under circulation, fully latched, naturally supported
-5. `Fault`: defect, failure, crack, leak, distortion, incomplete insertion, side load root cause
-
-Important distinction:
-- observed evidence such as `stress whitening`, `witness marks`, `wear`, `burrs`, `nicks`, or `corrosion` is usually better typed as `Signal`
-- the defect or root cause they imply, such as `cracked shell`, `broken latch ear`, or `bracket side load`, is the `Fault`
+## Semantic Hints
+- `Asset`: named vehicle, pack, machine, line, cabinet, or platform.
+- `Component`: physical parts, interfaces, subassemblies, fittings, clamps, hoses, connectors, brackets, ribs, seats, lands, beads, clips, and sensors.
+- `Signal`: observed evidence or measured inspection target such as wetting, residue, witness marks, whitening, wear, corrosion, offset, level, depth, path, or condition-like inspection target.
+- `State`: concluded or verified condition such as `dry`, `fully latched`, `naturally supported`, or `under circulation`.
+- `Fault`: defect, failure mode, crack, seepage mode, incomplete insertion, or causal loading root cause.
+- If a label could be either evidence or failure, choose `Signal` when it is what the technician sees/measures/records, and choose `Fault` only when it names the diagnosed failure or root cause.
+- Hardware surfaces and interfaces such as `O-ring seat`, `tube bead`, `plate edge`, or `support bracket` remain `Component`, not `Signal` or `State`.
 
 ## Relation Guidance
 Use active direction.
 
-Good patterns:
-- `T1 requires Component` -> `task_dependency`
-- `T1 observes Signal` -> `task_dependency`
-- `T1 confirms State` -> `task_dependency`
-- `T1 measures Signal` -> `task_dependency`
+These are valid relation prototypes, not quotas. Do not create a relation unless the source text explicitly grounds that relation.
+
+Step-to-concept patterns:
+- `T<n> requires Component` -> `task_dependency`
+- `T<n> observes Signal` -> `task_dependency`
+- `T<n> confirms State` -> `task_dependency`
+- `T<n> measures Signal` -> `task_dependency`
+
+Concept-to-concept patterns:
 - `Signal indicates Fault` -> `communication`
 - `Signal indicates State` -> `communication`
 - `State indicates Fault` -> `communication`
@@ -90,38 +97,32 @@ Good patterns:
 - `Asset contains Component` or `Component contains Component` -> `structural`
 - `State transitionsTo State` -> `lifecycle`
 
-Specific guidance for this corpus:
-- Prefer the most immediate grounded fault target. For example, `stress whitening -> cracked shell` and `latch-window distortion -> broken latch ear` are better than pointing all observations to a broader root cause like `bracket side load`, unless the document explicitly states that exact observation-to-root-cause link.
-- Do not fan one observation out to multiple competing faults unless the text explicitly grounds each relation.
-- When structural subparts clearly belong to a stable assembly such as a connector, use that stable assembly as the head. Prefer `chiller-inlet connector contains internal retainer / green O-ring / quick-connector shell` over a contextual head like `cooling branch contains ...`.
-- If the only available structural head is a contextual container such as `branch`, `path`, or `section`, do not emit that structural edge unless the document clearly states a stable physical assembly head.
-- Do not rewrite a local observation such as `stress whitening` or `latch-window distortion` to a broader root-cause target when a more immediate grounded fault such as `cracked shell` or `broken latch ear` is also present.
+Here `T<n>` is only a placeholder for any concrete step id such as `T1`, `T2`, or `T7`. Do not rewrite all step-action examples to literal `T1` unless the source step is actually `T1`.
 
 Direction constraints:
 - For `task_dependency`, the head should normally be a step `T<n>` when the relation expresses step action toward a concept or a step-to-step dependency.
+- For `task_dependency`, do not connect a step to every concept mentioned in that step. Keep only direct action targets, direct observations, direct measurements, direct confirmations, or explicit non-local task dependencies.
 - Do not use `task_dependency` for concept-to-concept relations such as `Signal -> Fault`, `Fault -> Fault`, or `Asset -> Component`.
 - When both head and tail are non-step concepts, prefer `communication`, `propagation`, `structural`, or `lifecycle` as appropriate.
+- If a step sentence both describes an action and reveals a stable part-whole structure, you may emit both the step-local action edge and the concept-to-concept structural edge when both are grounded.
+- For `communication`, require explicit evidential grounding such as indicates, shows, confirms, reveals, or another clearly diagnostic wording. Do not create a communication edge from mere co-occurrence.
+- For `propagation`, require explicit causal grounding such as causes, leads to, results in, drives, creates, or another clearly causal wording. Do not use `propagation` for weak association or diagnostic evidence.
+- Prefer the most immediate grounded fault target for `communication`. Do not fan one observation out to multiple competing targets unless the text explicitly supports each edge.
+- For `structural`, use stable physical assembly heads such as assets, connectors, couplers, manifolds, housings, boundaries, faces, noses, brackets, channels, seats, or other explicit local hardware interfaces. Avoid purely contextual heads such as `branch`, `path`, or `section` unless the text clearly states a stable physical assembly.
+- For `structural`, the document does not need to use the literal word `contains`. If the text clearly presents one named assembly, boundary, or interface as the local place where listed parts/features belong, `structural` is appropriate.
+- For `structural`, choose the right parent level. When the document frames the complaint or repair around a named service locus such as a face, mouth, cavity, joint, interface, or named disconnect boundary, use that locus as the parent rather than a lower-level sibling part.
+- Good parent selection across domains:
+  - use `front manifold face contains M6 retaining bolts`, not `composite manifold body contains M6 retaining bolts`
+  - use `BT40 taper mouth contains drive dogs`, not `deeper taper zone contains drive dogs`
+  - use `service disconnect contains blade set` or `service-disconnect cavity contains guide rail`, not `disconnect plug contains blade set`
+- If both a named asset and a named local locus are explicit, include the upper containment too, for example `Asset contains local locus`.
+- If a host component such as a channel, seat, cavity, nozzle, or similar interface clearly retains or hosts another part, include that deeper containment too, for example `perimeter O-ring channel contains EPDM O-ring`.
+- Good structural grounding includes patterns like:
+  - named asset + named local boundary/interface + listed parts/features
+  - connector/coupler/shell + retainer/O-ring/seat/bead
+  - housing/manifold/face + bolts/inserts/channel/loom
+- Use `lifecycle` only when the text clearly expresses a state transition, persistence change, replacement-driven state change, or temporal evolution from one state to another. Do not use `lifecycle` for ordinary status mention.
 - Prioritize high-value concept-to-concept relations such as `Asset contains Component`, `Signal indicates Fault`, and `Fault causes Fault`. Do not spend most relation budget on many near-duplicate step-local action edges.
-
-Avoid these mistakes:
-- Do not classify all step-local concepts as `Task`.
-- Do not use `communication` for step sequencing.
-- Do not use `task_dependency` for `Signal -> Fault` or `Fault -> Fault`.
-- Do not create `Document` concepts from wording like report, note, record, or photograph inside a step.
-
-## Node-Worthy Guidance
-Usually `node_worthy=true` for:
-- Asset
-- Component
-- Signal
-- State
-- Fault
-
-Usually skip or set `node_worthy=false` for:
-- document titles and report names
-- reviewer/technician bookkeeping roles
-- timestamps and pure metadata
-- low-value textual fragments with little graph meaning
 
 ## Document Content
 __DOCUMENT_CONTENT__

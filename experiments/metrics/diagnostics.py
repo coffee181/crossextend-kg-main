@@ -6,7 +6,7 @@ from __future__ import annotations
 from collections import defaultdict
 from typing import Any
 
-from .matching import (
+from experiments.metrics.matching import (
     family_agnostic_relation_key,
     normalize_diagnostic_label,
     normalize_label_set,

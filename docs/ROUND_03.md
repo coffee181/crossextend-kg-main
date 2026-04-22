@@ -1,5 +1,0 @@
-# Round 3
-
-Round 3 expanded the scope to `BATOM_002`, `CNCOM_002`, and `EVMAN_002` to check whether the post-Round-2 logic still held across domains. The most important discovery was not a code bug but a data issue: [cnc_CNCOM_002.json](D:/crossextend_kg/data/ground_truth/cnc_CNCOM_002.json) aligns to the content currently stored in [CNCOM_003.md](D:/crossextend_kg/data/cnc/CNCOM_003.md), not [CNCOM_002.md](D:/crossextend_kg/data/cnc/CNCOM_002.md). The round therefore introduced an explicit alignment record in [data_alignment.json](D:/crossextend_kg/artifacts/optimization_rounds/round_03/data_alignment.json) and reran the three-domain evaluation with the corrected staged inputs.
-
-After the rerun, the three-domain macro concept F1 improved from `0.5765` to `0.8183`, and relation F1 improved from `0.5532` to `0.6073`. Battery stayed strong, CNC became meaningfully evaluable again, and NEV remained the main domain needing further cleanup around exact leak-boundary naming. That makes Round 4’s full-gold run feasible, but only if the CNC alignment policy is carried forward explicitly instead of relying on the current raw filenames.

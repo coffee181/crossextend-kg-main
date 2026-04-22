@@ -2,7 +2,7 @@ extends: ./pipeline.base.yaml
 
 benchmark_name: deepseek_experiment
 llm_backend_id: deepseek
-embedding_backend_id: local_ollama_bge_m3
+embedding_backend_id: dashscope_text_embedding_v4
 
 runtime:
   run_prefix: deepseek

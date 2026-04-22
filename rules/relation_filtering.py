@@ -11,11 +11,15 @@ _STRUCTURAL_CONTEXTUAL_HEAD_PATTERN = re.compile(
     re.IGNORECASE,
 )
 _LOW_VALUE_STRUCTURAL_TAIL_PATTERN = re.compile(
-    r"\b(access panels?|shield|cover|window|land|path|angle|offset|clearance)\b",
+    r"\b(access panels?|shield|cover|window|path|angle|offset|clearance)\b",
     re.IGNORECASE,
 )
 _GENERIC_COMMUNICATION_TARGET_PATTERN = re.compile(
     r"^(root cause|underlying issue|generic fault)$",
+    re.IGNORECASE,
+)
+_VERIFICATION_RESULT_HEAD_PATTERN = re.compile(
+    r"\b(static|dynamic|pressure|proof|test|verification)\s+(?:hold\s+)?results?\b",
     re.IGNORECASE,
 )
 _SIDE_LOAD_TARGET_PATTERN = re.compile(r"^bracket side load$", re.IGNORECASE)
@@ -81,6 +85,9 @@ def should_filter_communication_relation(
 
     if _GENERIC_COMMUNICATION_TARGET_PATTERN.match(tail.strip()):
         return (True, "communication_generic_target")
+
+    if _VERIFICATION_RESULT_HEAD_PATTERN.search(head) and tail.strip().lower() in _LOW_VALUE_LIFECYCLE_ENDPOINTS:
+        return (True, "communication_verification_bundle")
 
     if _SIDE_LOAD_TARGET_PATTERN.match(tail.strip()) and not _SIDE_LOAD_OBSERVATION_PATTERN.search(head):
         return (True, "communication_generic_side_load_target")

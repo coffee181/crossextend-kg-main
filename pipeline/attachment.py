@@ -52,20 +52,15 @@ def _semantic_type_hint(candidate: SchemaCandidate) -> str | None:
     return None
 
 
-def _is_task_candidate(candidate: SchemaCandidate) -> bool:
-    if candidate.routing_features.get("is_task_candidate"):
-        return True
-    task_step_id = candidate.routing_features.get("task_step_id")
-    return isinstance(task_step_id, str) and task_step_id.startswith("T")
-
-
 def _apply_semantic_type_hint(candidate: SchemaCandidate, proposed_anchor: str | None) -> str | None:
     hint = _semantic_type_hint(candidate)
     if hint is None:
+        if proposed_anchor == "Task":
+            return None
         return proposed_anchor
     if proposed_anchor is None:
         return hint
-    if proposed_anchor == "Task" and not _is_task_candidate(candidate):
+    if proposed_anchor == "Task":
         return hint
     return proposed_anchor
 
@@ -113,19 +108,6 @@ def _infer_anchor_from_relation_families(
 
 
 def _seed_decision(candidate: SchemaCandidate, backbone_concepts: set[str]) -> AttachmentDecision | None:
-    if _is_task_candidate(candidate) and "Task" in backbone_concepts:
-        return AttachmentDecision(
-            candidate_id=candidate.candidate_id,
-            label=candidate.label,
-            route="vertical_specialize",
-            parent_anchor="Task",
-            accept=True,
-            admit_as_node=True,
-            reject_reason=None,
-            confidence=1.0,
-            justification="preserved O&M step candidate as Task",
-            evidence_ids=list(candidate.evidence_ids),
-        )
     if candidate.label not in backbone_concepts:
         return None
     return AttachmentDecision(

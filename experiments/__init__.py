@@ -1,19 +1,31 @@
 #!/usr/bin/env python3
 """Experiment utilities for metrics, ablations, comparisons, and reporting."""
 
-from .ablation import (
+from experiments.ablation import (
     DEFAULT_ABLATION_SPECS,
     build_default_ablation_variants,
     main as ablation_main,
     materialize_ablation_config,
+    materialize_ablation_variant_config,
     run_ablation_experiment,
 )
-from .comparison import (
+from experiments.baselines import (
+    DEFAULT_BASELINE_SPECS,
+    baseline_spec_index,
+    build_rule_records_by_domain,
+    rule_extract_document,
+    run_baseline_suite,
+    write_rule_records_bundle,
+)
+from experiments.comparison import (
+    aggregate_repeated_evaluations,
     build_variant_summary_rows,
+    build_variant_table_groups,
     compare_variant_evaluations,
     write_comparison_csv,
+    write_repeated_csv,
 )
-from .metrics import (
+from experiments.metrics import (
     aggregate_metric_payloads,
     classification_metrics,
     compute_metrics,
@@ -26,7 +38,7 @@ from .metrics import (
     set_metrics,
     write_ablation_csv,
 )
-from .reporting import (
+from experiments.reporting import (
     ROUND_TEXT_FILES,
     compile_five_round_report,
     initialize_round_directory,
@@ -34,7 +46,7 @@ from .reporting import (
     update_run_manifest,
     write_metrics_diff,
 )
-from .rounds import (
+from experiments.rounds import (
     DEFAULT_FULL_GOLD_ALIGNMENT,
     collect_variant_audit_summary,
     evaluate_round_variant,
@@ -48,11 +60,17 @@ from .rounds import (
 
 __all__ = [
     "DEFAULT_ABLATION_SPECS",
+    "DEFAULT_BASELINE_SPECS",
     "ablation_main",
+    "baseline_spec_index",
+    "aggregate_repeated_evaluations",
     "build_default_ablation_variants",
+    "build_variant_table_groups",
+    "build_rule_records_by_domain",
     "build_variant_summary_rows",
     "compare_variant_evaluations",
     "materialize_ablation_config",
+    "materialize_ablation_variant_config",
     "run_ablation_experiment",
     "aggregate_metric_payloads",
     "classification_metrics",
@@ -62,10 +80,14 @@ __all__ = [
     "list_gold_files",
     "normalize_step_label",
     "resolve_gold_file",
+    "rule_extract_document",
     "safe_div",
     "set_metrics",
     "write_ablation_csv",
     "write_comparison_csv",
+    "write_repeated_csv",
+    "write_rule_records_bundle",
+    "run_baseline_suite",
     "ROUND_TEXT_FILES",
     "compile_five_round_report",
     "initialize_round_directory",

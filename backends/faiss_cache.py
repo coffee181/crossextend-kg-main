@@ -9,7 +9,7 @@ Architecture:
 - CachedEmbeddingBackend: Wrapper that provides caching for any embedding backend
 
 Storage Structure:
-    data/embeddings/{domain}/
+    data/faiss-data/{domain}/
         index.faiss           # FAISS index file
         metadata.jsonl        # text→id mapping and embeddings
         manifest.json         # metadata: dimension, count, model, created_at
@@ -68,7 +68,7 @@ class FaissEmbeddingCache:
     - Manifest JSON for cache metadata
 
     Attributes:
-        cache_dir: Root directory for all caches (e.g., data/embeddings)
+        cache_dir: Root directory for all caches (e.g., data/faiss-data)
         domain_id: Domain identifier (e.g., "battery")
         dimension: Embedding vector dimension
         model_name: Name of embedding model used
@@ -419,7 +419,7 @@ def build_cached_embedding_backend(
 
     Args:
         backend: Base embedding backend
-        cache_dir: Directory for cache storage (default: data/embeddings)
+        cache_dir: Directory for cache storage (default: data/faiss-data)
         dimension: Embedding dimension
         model_name: Model name for manifest
         enabled: Whether caching is enabled
@@ -428,7 +428,7 @@ def build_cached_embedding_backend(
         CachedEmbeddingBackend instance
     """
     if cache_dir is None:
-        cache_dir = Path("data/embeddings")
+        cache_dir = Path("data/faiss-data")
     else:
         cache_dir = Path(cache_dir)
 

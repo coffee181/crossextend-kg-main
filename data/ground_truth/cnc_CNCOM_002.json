@@ -1,11 +1,11 @@
 {
-  "schema_version": "human_gold.v2",
+  "schema_version": "human_gold.v3",
   "domain_id": "cnc",
-  "label_tier": "human_annotation_v1",
+  "label_tier": "human_annotation_v2",
   "annotation_status": "human_annotated",
-  "annotator_id": "human_expert_01",
-  "annotation_date": "2026-04-19",
-  "annotation_basis": "Independent human annotation from source O&M text only. Annotator did not consult pipeline extraction outputs. Task labels taken verbatim from O&M text.",
+  "annotator_id": "blind_human_annotator",
+  "annotation_date": "2026-04-22",
+  "annotation_basis": "Blind annotation from source O&M text only.",
   "documents": [
     {
       "doc_id": "CNCOM_002",
@@ -16,310 +16,172 @@
     {
       "evidence_id": "CNCOM_002",
       "label": "T1",
-      "step_id": "T1",
-      "surface_form": "On Kestrel VMC-850, record whether the spindle chiller leak appears only under circulation or remains wet after shutdown, and note the exact hose branch, residue color, and cabinet-side drip path before the cover is opened.",
+      "surface_form": "On Arcline VTC-630, record the complaint as tool pull-out during face milling, weak unclamp feel, or drawbar alarm on a CAT40 spindle, and note the toolholder style, cutting load, and whether the issue followed recent drawbar service. The intake note must already tie the problem to the drawbar clamp stack and not to a generic spindle fault.",
       "should_be_in_graph": true,
       "expected_anchor": "Task",
-      "reason": "O&M step T1, leak observation recording phase"
+      "reason": "O&M step T1 retained verbatim from the source document."
     },
     {
       "evidence_id": "CNCOM_002",
       "label": "T2",
-      "step_id": "T2",
-      "surface_form": "Isolate machine power as required, expose the spindle chiller hoses, hose clamps, tube necks, and nearby cable tray, and preserve the as-found hose twist so the original side load can still be judged.",
+      "surface_form": "Warm the spindle to the service temperature if required, then expose the drawbar booster cylinder, Belleville stack housing, unclamp valve, pressure transducer port, and the access path to the spindle pull-force test point. Keep the upper actuator side and lower retention side visible in the same inspection window so stroke and clamp force can be judged against the same hardware state.",
       "should_be_in_graph": true,
       "expected_anchor": "Task",
-      "reason": "O&M step T2, power isolation and component exposure phase"
+      "reason": "O&M step T2 retained verbatim from the source document."
     },
     {
       "evidence_id": "CNCOM_002",
       "label": "T3",
-      "step_id": "T3",
-      "surface_form": "Wipe only loose coolant film, then trace the wet boundary from the lowest drip point back toward the hose neck, clamp line, quick connector, or chiller manifold seam instead of assuming the largest stain is the source.",
+      "surface_form": "Install the calibrated clamp-force gauge in a verified CAT40 holder, run the clamp cycle, and record the measured pull force rather than relying on sound or feel. Compare the cold and warmed values if the complaint changes with temperature, because a weak Belleville stack and a short hydraulic stroke do not deteriorate in the same way.",
       "should_be_in_graph": true,
       "expected_anchor": "Task",
-      "reason": "O&M step T3, leak tracing phase"
+      "reason": "O&M step T3 retained verbatim from the source document."
     },
     {
       "evidence_id": "CNCOM_002",
       "label": "T4",
-      "step_id": "T4",
-      "surface_form": "Pressure-test the local cooling branch and hold long enough to see whether fresh coolant appears at the clamp gap, molded hose bend, tube bead, or manifold fitting, because tracking can blur the origin if the branch is released too early.",
+      "surface_form": "Measure unclamp pressure at the booster cylinder and compare it with the machine target while watching drawbar movement. If the supply pressure is healthy but clamp force remains low, the next split should stay inside the mechanical stack, whereas low pressure with normal stack height pushes the boundary toward the hydraulic side of the circuit.",
       "should_be_in_graph": true,
       "expected_anchor": "Task",
-      "reason": "O&M step T4, pressure test phase"
+      "reason": "O&M step T4 retained verbatim from the source document."
     },
     {
       "evidence_id": "CNCOM_002",
       "label": "T5",
-      "step_id": "T5",
-      "surface_form": "Compare clamp clocking, hose insertion depth, and bracket preload with a dry reference branch so a hose forced off-axis by the machine frame clip is not misread as a failed fitting.",
+      "surface_form": "Inspect the Belleville stack height, washer orientation, release-piston clearance, and actuator linkage from upper cylinder to lower drawbar seat. Pay attention to whether one washer pair is inverted or whether the stack height is short at the lower end, because a single reversed pair can reduce clamp force without leaving obvious damage on the piston or pressure circuit.",
       "should_be_in_graph": true,
       "expected_anchor": "Task",
-      "reason": "O&M step T5, comparison and preload analysis phase"
+      "reason": "O&M step T5 retained verbatim from the source document."
     },
     {
       "evidence_id": "CNCOM_002",
       "label": "T6",
-      "step_id": "T6",
-      "surface_form": "Close the inspection only after the report names the exact leak boundary as upper spindle-chiller hose clamp, return-hose elbow, quick connector body, or manifold fitting, with the pressure result tied to that hardware.",
+      "surface_form": "Compare measured stack height and washer sequence with the service layout, then isolate the fault boundary only after pressure, stroke, and stack geometry are read together. If pressure reaches the target and release stroke is normal while pull force stays low, keep the fault on the Belleville stack orientation or drawbar hardware instead of blaming the valve or pressure supply.",
       "should_be_in_graph": true,
       "expected_anchor": "Task",
-      "reason": "O&M step T6, inspection closure phase"
+      "reason": "O&M step T6 retained verbatim from the source document."
     },
     {
       "evidence_id": "CNCOM_002",
       "label": "T7",
-      "step_id": "T7",
-      "surface_form": "Repeat the same speed, orientation, or clamp event after the local hardware settles so the accepted result reflects the true spindle operating condition rather than a one-time static check.",
+      "surface_form": "Rebuild the stack in the correct order, restore the actuator linkage, and repeat the pull-force test with the same toolholder and the same spindle temperature window. Confirm that the stack sits against the lower seat, the linkage travels freely, and the pull-force gauge now follows the corrected washer orientation rather than random warm-up variation.",
       "should_be_in_graph": true,
       "expected_anchor": "Task",
-      "reason": "O&M step T7, operating condition verification phase"
+      "reason": "O&M step T7 retained verbatim from the source document."
     },
     {
       "evidence_id": "CNCOM_002",
-      "label": "Kestrel VMC-850",
+      "label": "T8",
+      "surface_form": "Run three clamp and unclamp cycles while watching pressure recovery, release stroke, and holder retention, then inspect the actuator and cylinder for fresh oil trace or misalignment. The machine is not released on one good force reading if the drawbar still hangs up on the second or third cycle.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T8 retained verbatim from the source document."
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "T9",
+      "surface_form": "Close the work only after the report names the exact failed boundary, such as an inverted lower Belleville pair, reduced stack height, hydraulic short-stroke, or actuator-linkage misalignment, and ties it to the measured force and pressure results. Accept the repair when clamp force, release stroke, and repeated tool retention all remain stable on the corrected drawbar stack.",
+      "should_be_in_graph": true,
+      "expected_anchor": "Task",
+      "reason": "O&M step T9 retained verbatim from the source document."
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "label": "Arcline VTC-630",
       "should_be_in_graph": true,
       "expected_anchor": "Asset",
-      "reason": "Named CNC machine platform"
+      "reason": "Explicitly named CNC machine in the source document."
     },
     {
       "evidence_id": "CNCOM_002",
-      "label": "spindle chiller hoses",
+      "label": "CAT40 spindle",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "Primary coolant hose components"
+      "reason": "Explicitly named spindle interface in the source document."
     },
     {
       "evidence_id": "CNCOM_002",
-      "label": "hose clamps",
+      "label": "drawbar booster cylinder",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "Clamps securing hoses"
+      "reason": "Explicitly named actuator component in the source document."
     },
     {
       "evidence_id": "CNCOM_002",
-      "label": "tube necks",
+      "label": "Belleville stack housing",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "Neck sections of tube connections"
+      "reason": "Explicitly named stack housing in the source document."
     },
     {
       "evidence_id": "CNCOM_002",
-      "label": "cable tray",
+      "label": "unclamp valve",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "Tray routing cables near coolant system"
+      "reason": "Explicitly named hydraulic component in the source document."
     },
     {
       "evidence_id": "CNCOM_002",
-      "label": "hose neck",
+      "label": "pressure transducer port",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "Hose connection neck area"
+      "reason": "Explicitly named measurement access point in the source document."
     },
     {
       "evidence_id": "CNCOM_002",
-      "label": "clamp line",
+      "label": "spindle pull-force test point",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "Clamp position reference line"
+      "reason": "Explicitly named test point in the source document."
     },
     {
       "evidence_id": "CNCOM_002",
-      "label": "quick connector",
+      "label": "actuator linkage",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "Quick-disconnect coolant connector"
+      "reason": "Explicitly named linkage component in the source document."
     },
     {
       "evidence_id": "CNCOM_002",
-      "label": "chiller manifold seam",
-      "should_be_in_graph": true,
-      "expected_anchor": "Component",
-      "reason": "Seam on manifold body"
-    },
-    {
-      "evidence_id": "CNCOM_002",
-      "label": "molded hose bend",
-      "should_be_in_graph": true,
-      "expected_anchor": "Component",
-      "reason": "Pre-formed bend in hose"
-    },
-    {
-      "evidence_id": "CNCOM_002",
-      "label": "tube bead",
-      "should_be_in_graph": true,
-      "expected_anchor": "Component",
-      "reason": "Bead on tube for hose retention"
-    },
-    {
-      "evidence_id": "CNCOM_002",
-      "label": "manifold fitting",
-      "should_be_in_graph": true,
-      "expected_anchor": "Component",
-      "reason": "Fitting on manifold body"
-    },
-    {
-      "evidence_id": "CNCOM_002",
-      "label": "dry reference branch",
-      "should_be_in_graph": true,
-      "expected_anchor": "Component",
-      "reason": "Non-leaking branch for comparison"
-    },
-    {
-      "evidence_id": "CNCOM_002",
-      "label": "machine frame clip",
-      "should_be_in_graph": true,
-      "expected_anchor": "Component",
-      "reason": "Clip on machine frame supporting hose"
-    },
-    {
-      "evidence_id": "CNCOM_002",
-      "label": "upper spindle-chiller hose clamp",
-      "should_be_in_graph": true,
-      "expected_anchor": "Component",
-      "reason": "Named leak boundary in T6"
-    },
-    {
-      "evidence_id": "CNCOM_002",
-      "label": "return-hose elbow",
-      "should_be_in_graph": true,
-      "expected_anchor": "Component",
-      "reason": "Named leak boundary in T6"
-    },
-    {
-      "evidence_id": "CNCOM_002",
-      "label": "quick connector body",
-      "should_be_in_graph": true,
-      "expected_anchor": "Component",
-      "reason": "Named leak boundary in T6"
-    },
-    {
-      "evidence_id": "CNCOM_002",
-      "label": "spindle chiller leak",
-      "should_be_in_graph": true,
-      "expected_anchor": "Fault",
-      "reason": "Top-level fault being diagnosed"
-    },
-    {
-      "evidence_id": "CNCOM_002",
-      "label": "hose forced off-axis",
-      "should_be_in_graph": true,
-      "expected_anchor": "Fault",
-      "reason": "Hose routing causing side load"
-    },
-    {
-      "evidence_id": "CNCOM_002",
-      "label": "failed fitting",
-      "should_be_in_graph": true,
-      "expected_anchor": "Fault",
-      "reason": "Fitting failure at connection point"
-    },
-    {
-      "evidence_id": "CNCOM_002",
-      "label": "circulation condition",
+      "label": "measured pull force",
       "should_be_in_graph": true,
       "expected_anchor": "Signal",
-      "reason": "Operating state during coolant flow"
+      "reason": "Explicitly recorded force signal in the source document."
     },
     {
       "evidence_id": "CNCOM_002",
-      "label": "wet after shutdown",
+      "label": "unclamp pressure",
       "should_be_in_graph": true,
       "expected_anchor": "Signal",
-      "reason": "Observable moisture after machine stops"
+      "reason": "Explicitly measured pressure signal in the source document."
     },
     {
       "evidence_id": "CNCOM_002",
-      "label": "residue color",
+      "label": "Belleville stack height",
       "should_be_in_graph": true,
       "expected_anchor": "Signal",
-      "reason": "Visual characteristic of coolant residue"
+      "reason": "Explicitly inspected stack geometry in the source document."
     },
     {
       "evidence_id": "CNCOM_002",
-      "label": "cabinet-side drip path",
+      "label": "washer orientation",
       "should_be_in_graph": true,
       "expected_anchor": "Signal",
-      "reason": "Path of coolant drips on cabinet side"
+      "reason": "Explicitly inspected stack geometry in the source document."
     },
     {
       "evidence_id": "CNCOM_002",
-      "label": "as-found hose twist",
+      "label": "release stroke",
       "should_be_in_graph": true,
       "expected_anchor": "Signal",
-      "reason": "Original hose rotation position"
+      "reason": "Explicitly observed motion signal in the source document."
     },
     {
       "evidence_id": "CNCOM_002",
-      "label": "side load",
+      "label": "holder retention",
       "should_be_in_graph": true,
       "expected_anchor": "Signal",
-      "reason": "Lateral force on hose/connector"
-    },
-    {
-      "evidence_id": "CNCOM_002",
-      "label": "wet boundary",
-      "should_be_in_graph": true,
-      "expected_anchor": "Signal",
-      "reason": "Edge of visible coolant wetting"
-    },
-    {
-      "evidence_id": "CNCOM_002",
-      "label": "lowest drip point",
-      "should_be_in_graph": true,
-      "expected_anchor": "Signal",
-      "reason": "Bottom of visible drip path"
-    },
-    {
-      "evidence_id": "CNCOM_002",
-      "label": "fresh coolant",
-      "should_be_in_graph": true,
-      "expected_anchor": "Signal",
-      "reason": "New coolant appearance during test"
-    },
-    {
-      "evidence_id": "CNCOM_002",
-      "label": "clamp gap",
-      "should_be_in_graph": true,
-      "expected_anchor": "Signal",
-      "reason": "Gap at clamp interface"
-    },
-    {
-      "evidence_id": "CNCOM_002",
-      "label": "clamp clocking",
-      "should_be_in_graph": true,
-      "expected_anchor": "Signal",
-      "reason": "Rotation position of clamp screw"
-    },
-    {
-      "evidence_id": "CNCOM_002",
-      "label": "hose insertion depth",
-      "should_be_in_graph": true,
-      "expected_anchor": "Signal",
-      "reason": "How far hose is inserted onto tube"
-    },
-    {
-      "evidence_id": "CNCOM_002",
-      "label": "bracket preload",
-      "should_be_in_graph": true,
-      "expected_anchor": "Signal",
-      "reason": "Force from bracket on hose routing"
-    },
-    {
-      "evidence_id": "CNCOM_002",
-      "label": "pressure result",
-      "should_be_in_graph": true,
-      "expected_anchor": "Signal",
-      "reason": "Outcome of pressure test"
-    },
-    {
-      "evidence_id": "CNCOM_002",
-      "label": "true spindle operating condition",
-      "should_be_in_graph": true,
-      "expected_anchor": "State",
-      "reason": "Acceptable final operating state"
+      "reason": "Explicitly checked retention state in the source document."
     }
   ],
   "relation_ground_truth": [
@@ -330,7 +192,7 @@
       "tail": "T2",
       "family": "task_dependency",
       "valid": true,
-      "reason": "T1 recording before T2 isolation"
+      "reason": "The source procedure order places T1 before T2."
     },
     {
       "evidence_id": "CNCOM_002",
@@ -339,7 +201,7 @@
       "tail": "T3",
       "family": "task_dependency",
       "valid": true,
-      "reason": "T2 exposure before T3 tracing"
+      "reason": "The source procedure order places T2 before T3."
     },
     {
       "evidence_id": "CNCOM_002",
@@ -348,7 +210,7 @@
       "tail": "T4",
       "family": "task_dependency",
       "valid": true,
-      "reason": "T3 tracing before T4 pressure test"
+      "reason": "The source procedure order places T3 before T4."
     },
     {
       "evidence_id": "CNCOM_002",
@@ -357,7 +219,7 @@
       "tail": "T5",
       "family": "task_dependency",
       "valid": true,
-      "reason": "T4 pressure test before T5 comparison"
+      "reason": "The source procedure order places T4 before T5."
     },
     {
       "evidence_id": "CNCOM_002",
@@ -366,7 +228,7 @@
       "tail": "T6",
       "family": "task_dependency",
       "valid": true,
-      "reason": "T5 comparison before T6 closure"
+      "reason": "The source procedure order places T5 before T6."
     },
     {
       "evidence_id": "CNCOM_002",
@@ -375,113 +237,162 @@
       "tail": "T7",
       "family": "task_dependency",
       "valid": true,
-      "reason": "T6 closure before T7 operating verification"
+      "reason": "The source procedure order places T6 before T7."
     },
     {
       "evidence_id": "CNCOM_002",
-      "head": "Kestrel VMC-850",
+      "head": "T7",
+      "relation": "triggers",
+      "tail": "T8",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "The source procedure order places T7 before T8."
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "head": "T8",
+      "relation": "triggers",
+      "tail": "T9",
+      "family": "task_dependency",
+      "valid": true,
+      "reason": "The source procedure order places T8 before T9."
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "head": "Arcline VTC-630",
       "relation": "contains",
-      "tail": "spindle chiller hoses",
+      "tail": "CAT40 spindle",
       "family": "structural",
       "valid": true,
-      "reason": "Chiller hoses are part of machine"
+      "reason": "The complaint is explicitly on a CAT40 spindle of Arcline VTC-630."
     },
     {
       "evidence_id": "CNCOM_002",
-      "head": "spindle chiller hoses",
+      "head": "Arcline VTC-630",
       "relation": "contains",
-      "tail": "hose clamps",
+      "tail": "drawbar booster cylinder",
       "family": "structural",
       "valid": true,
-      "reason": "Clamps are attached to hoses"
+      "reason": "The source exposes the drawbar booster cylinder on the machine."
     },
     {
       "evidence_id": "CNCOM_002",
-      "head": "spindle chiller hoses",
+      "head": "Arcline VTC-630",
       "relation": "contains",
-      "tail": "molded hose bend",
+      "tail": "Belleville stack housing",
       "family": "structural",
       "valid": true,
-      "reason": "Molded bend is part of hose"
+      "reason": "The source exposes the Belleville stack housing on the machine."
     },
     {
       "evidence_id": "CNCOM_002",
-      "head": "spindle chiller hoses",
+      "head": "Arcline VTC-630",
       "relation": "contains",
-      "tail": "quick connector",
+      "tail": "unclamp valve",
       "family": "structural",
       "valid": true,
-      "reason": "Connector is at hose end"
+      "reason": "The source exposes the unclamp valve on the machine."
     },
     {
       "evidence_id": "CNCOM_002",
-      "head": "wet after shutdown",
-      "relation": "indicates",
-      "tail": "spindle chiller leak",
-      "family": "communication",
+      "head": "Arcline VTC-630",
+      "relation": "contains",
+      "tail": "pressure transducer port",
+      "family": "structural",
       "valid": true,
-      "reason": "Wetness indicates active leak"
+      "reason": "The source exposes the pressure transducer port on the machine."
+    }
+  ],
+  "workflow_relation_ground_truth": [
+    {
+      "evidence_id": "CNCOM_002",
+      "head": "T3",
+      "relation": "records",
+      "tail": "measured pull force",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T3 explicitly records the measured pull force."
     },
     {
       "evidence_id": "CNCOM_002",
-      "head": "fresh coolant",
-      "relation": "indicates",
-      "tail": "spindle chiller leak",
-      "family": "communication",
+      "head": "T4",
+      "relation": "measures",
+      "tail": "unclamp pressure",
+      "family": "action_object",
       "valid": true,
-      "reason": "Fresh coolant appearance confirms leak"
+      "reason": "T4 explicitly measures unclamp pressure."
     },
     {
       "evidence_id": "CNCOM_002",
-      "head": "as-found hose twist",
-      "relation": "indicates",
-      "tail": "side load",
-      "family": "communication",
+      "head": "T5",
+      "relation": "inspects",
+      "tail": "Belleville stack height",
+      "family": "action_object",
       "valid": true,
-      "reason": "Twist position indicates side load history"
+      "reason": "T5 explicitly inspects Belleville stack height."
     },
     {
       "evidence_id": "CNCOM_002",
-      "head": "clamp gap",
-      "relation": "indicates",
-      "tail": "failed fitting",
-      "family": "communication",
+      "head": "T5",
+      "relation": "inspects",
+      "tail": "washer orientation",
+      "family": "action_object",
       "valid": true,
-      "reason": "Gap at clamp indicates potential fitting issue"
+      "reason": "T5 explicitly inspects washer orientation."
     },
     {
       "evidence_id": "CNCOM_002",
-      "head": "bracket preload",
-      "relation": "indicates",
-      "tail": "hose forced off-axis",
-      "family": "communication",
+      "head": "T5",
+      "relation": "inspects",
+      "tail": "actuator linkage",
+      "family": "action_object",
       "valid": true,
-      "reason": "Preload indicates hose routing issue"
+      "reason": "T5 explicitly inspects the actuator linkage."
     },
     {
       "evidence_id": "CNCOM_002",
-      "head": "hose forced off-axis",
-      "relation": "causes",
-      "tail": "spindle chiller leak",
-      "family": "propagation",
+      "head": "T7",
+      "relation": "confirms",
+      "tail": "actuator linkage",
+      "family": "action_object",
       "valid": true,
-      "reason": "Off-axis routing causes leak"
+      "reason": "T7 explicitly confirms the linkage travels freely."
     },
     {
       "evidence_id": "CNCOM_002",
-      "head": "side load",
-      "relation": "causes",
-      "tail": "failed fitting",
-      "family": "propagation",
+      "head": "T7",
+      "relation": "checks",
+      "tail": "measured pull force",
+      "family": "action_object",
       "valid": true,
-      "reason": "Side load causes fitting failure"
+      "reason": "T7 explicitly repeats the pull-force test."
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "head": "T8",
+      "relation": "checks",
+      "tail": "release stroke",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T8 explicitly watches release stroke through repeated cycles."
+    },
+    {
+      "evidence_id": "CNCOM_002",
+      "head": "T8",
+      "relation": "checks",
+      "tail": "holder retention",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T8 explicitly watches holder retention through repeated cycles."
     }
   ],
   "_statistics": {
-    "total_concepts": 42,
-    "positive_concepts": 42,
+    "total_concepts": 23,
+    "positive_concepts": 23,
     "negative_concepts": 0,
-    "total_relations": 17,
-    "valid_relations": 17
+    "total_relations": 13,
+    "valid_relations": 13,
+    "total_workflow_relations": 9,
+    "valid_workflow_relations": 9
   }
 }

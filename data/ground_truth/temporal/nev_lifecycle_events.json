@@ -1,0 +1,44 @@
+{
+  "schema_version": "lifecycle_gold.v2",
+  "domain_id": "nev",
+  "annotation_date": "2026-04-21",
+  "annotation_basis": "Blind support annotation from source O&M text only. Pairs, chains, questions, and lifecycle events were curated without consulting model outputs. When source support was weak, the item was omitted instead of guessed.",
+  "timestamp_policy": "Synthetic relative timestamps encode manual procedure order only. They are not real-world event dates and must not be interpreted as operational history.",
+  "lifecycle_events": [
+    {
+      "event_id": "NLE_001",
+      "object_id": "nev::fault::EVMAN_001_left_coolant_plate_outlet_boundary",
+      "event_type": "fault_occurrence",
+      "timestamp": "2000-01-01T01:00:00Z",
+      "description": "EVMAN_001 maps a leak boundary at the left coolant-plate outlet without performing downstream repair."
+    },
+    {
+      "event_id": "NLE_002",
+      "object_id": "nev::fault::EVMAN_002_service_disconnect_seating",
+      "event_type": "fault_occurrence",
+      "timestamp": "2000-01-02T01:00:00Z",
+      "description": "EVMAN_002 opens with a service-disconnect seating complaint defined by handle position and HVIL response."
+    },
+    {
+      "event_id": "NLE_003",
+      "object_id": "nev::component::EVMAN_002_service disconnect",
+      "event_type": "maintenance",
+      "timestamp": "2000-01-02T05:00:00Z",
+      "description": "EVMAN_002 corrects the seat condition and verifies stable seating after trim is restored."
+    },
+    {
+      "event_id": "NLE_004",
+      "object_id": "nev::fault::EVMAN_003_HV_output_corrosion",
+      "event_type": "fault_occurrence",
+      "timestamp": "2000-01-03T01:00:00Z",
+      "description": "EVMAN_003 reviews corrosion at the HV output stud stack and separates moisture path from clamp-loss evidence."
+    },
+    {
+      "event_id": "NLE_005",
+      "object_id": "nev::component::EVMAN_003_HV output stud pocket",
+      "event_type": "maintenance",
+      "timestamp": "2000-01-03T06:00:00Z",
+      "description": "EVMAN_003 restores the documented hardware order and closes the stud pocket with the moisture path recorded."
+    }
+  ]
+}

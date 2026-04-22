@@ -45,6 +45,15 @@ def concept_anchor_pairs(concept_map: dict[str, str]) -> set[tuple[str, str]]:
     return {(label, anchor) for label, anchor in concept_map.items()}
 
 
+def canonical_concept_anchor_pairs(concept_map: dict[str, str]) -> set[tuple[str, str]]:
+    pairs: set[tuple[str, str]] = set()
+    for label, anchor in concept_map.items():
+        normalized = normalize_diagnostic_label(label)
+        if normalized and anchor:
+            pairs.add((normalized, anchor))
+    return pairs
+
+
 def normalized_relation_key(
     relation: tuple[str, str, str, str],
 ) -> tuple[str, str, str, str]:

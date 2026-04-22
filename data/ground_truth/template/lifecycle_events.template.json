@@ -1,0 +1,16 @@
+{
+  "schema_version": "lifecycle_gold.v2",
+  "domain_id": "<battery|cnc|nev>",
+  "annotation_date": "YYYY-MM-DD",
+  "annotation_basis": "Blind support annotation from source O&M text only.",
+  "timestamp_policy": "Synthetic relative timestamps encode manual step order only.",
+  "lifecycle_events": [
+    {
+      "event_id": "<PREFIX>_001",
+      "object_id": "<domain>::<kind>::<stable_object_name>",
+      "event_type": "fault_occurrence",
+      "timestamp": "2000-01-01T01:00:00Z",
+      "description": "<one-sentence grounded event description>"
+    }
+  ]
+}

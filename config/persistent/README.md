@@ -30,6 +30,13 @@
 - `embedding_backends.yaml`
   Embedding backend registry.
 
+## Current LLM Default
+
+- `deepseek` now points to `deepseek-reasoner`.
+- `deepseek_chat` is kept as the explicit legacy chat-model entry.
+- Existing presets such as `pipeline.deepseek.yaml` and `preprocessing.deepseek.yaml`
+  will therefore use `deepseek-reasoner` by default.
+
 ## How To Switch Models
 
 Edit only the thin wrapper in most cases:
@@ -37,12 +44,19 @@ Edit only the thin wrapper in most cases:
 ```yaml
 extends: ./pipeline.base.yaml
 llm_backend_id: deepseek
-embedding_backend_id: local_ollama_bge_m3
+embedding_backend_id: dashscope_text_embedding_v4
 runtime:
   run_prefix: deepseek
 ```
 
 To switch to another LLM or embedding model, change the backend id instead of copying the whole pipeline config.
+
+Current embedding default:
+
+- `dashscope_text_embedding_v4`
+- base URL: `https://dashscope.aliyuncs.com/compatible-mode/v1`
+- API key source: `${TONGYI_API_KEY}`
+- model: `text-embedding-v4`
 
 ## Loader Features
 

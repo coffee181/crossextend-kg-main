@@ -9,7 +9,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from .metrics import read_json
+from experiments.metrics import read_json
 
 
 ROUND_TEXT_FILES: tuple[str, ...] = (
@@ -140,15 +140,32 @@ def initialize_round_directory(
 
 
 def _metric_value(metrics: dict[str, Any], section: str, key: str) -> float:
+    if section == "node_coverage_metrics" and section not in metrics:
+        value = metrics.get("diagnostic_metrics", {}).get("concept_relaxed_label_metrics", {}).get(key)
+        if value is None:
+            value = metrics.get("concept_label_metrics", {}).get(key, 0.0)
+        return float(value)
+    if section == "anchored_node_canonical_metrics" and section not in metrics:
+        value = metrics.get("concept_metrics", {}).get(key, 0.0)
+        return float(value)
     value = metrics.get(section, {}).get(key, 0.0)
     return float(value)
 
 
 def build_metrics_diff(baseline: dict[str, Any], post: dict[str, Any]) -> dict[str, Any]:
     fields = (
-        ("concept_metrics", "precision"),
-        ("concept_metrics", "recall"),
-        ("concept_metrics", "f1"),
+        ("workflow_step_metrics", "precision"),
+        ("workflow_step_metrics", "recall"),
+        ("workflow_step_metrics", "f1"),
+        ("workflow_sequence_metrics", "precision"),
+        ("workflow_sequence_metrics", "recall"),
+        ("workflow_sequence_metrics", "f1"),
+        ("node_coverage_metrics", "precision"),
+        ("node_coverage_metrics", "recall"),
+        ("node_coverage_metrics", "f1"),
+        ("anchored_node_canonical_metrics", "precision"),
+        ("anchored_node_canonical_metrics", "recall"),
+        ("anchored_node_canonical_metrics", "f1"),
         ("anchor_metrics", "accuracy"),
         ("anchor_metrics", "macro_f1"),
         ("relation_metrics", "precision"),
@@ -216,9 +233,12 @@ def update_run_manifest(round_dir: str | Path, updates: dict[str, Any]) -> Path:
 
 
 def render_metrics_table(rows: list[dict[str, Any]]) -> str:
-    header = "| Round | Concept F1 | Anchor Acc | Anchor Macro-F1 | Relation F1 |\n|---|---:|---:|---:|---:|"
+    header = (
+        "| Round | Workflow Step F1 | Workflow Sequence F1 | Anchor Acc | Anchor Macro-F1 | Semantic Node F1 | Semantic Relation F1 |\n"
+        "|---|---:|---:|---:|---:|---:|---:|"
+    )
     body = [
-        f"| {row['round']} | {row['concept_f1']:.4f} | {row['anchor_accuracy']:.4f} | {row['anchor_macro_f1']:.4f} | {row['relation_f1']:.4f} |"
+        f"| {row['round']} | {row['workflow_step_f1']:.4f} | {row['workflow_sequence_f1']:.4f} | {row['anchor_accuracy']:.4f} | {row['anchor_macro_f1']:.4f} | {row['anchored_node_canonical_f1']:.4f} | {row['relation_f1']:.4f} |"
         for row in rows
     ]
     return "\n".join([header, *body])
@@ -347,7 +367,8 @@ def _overview_result(context: dict[str, Any]) -> str:
     if not diff:
         return "No post-run metrics recorded."
     return (
-        f"concept F1 {_format_metric_transition(diff, 'concept_metrics.f1')}; "
+        f"node coverage F1 {_format_metric_transition(diff, 'node_coverage_metrics.f1')}; "
+        f"anchored node F1 {_format_metric_transition(diff, 'anchored_node_canonical_metrics.f1')}; "
         f"anchor acc {_format_metric_transition(diff, 'anchor_metrics.accuracy')}; "
         f"relation F1 {_format_metric_transition(diff, 'relation_metrics.f1')}"
     )
@@ -430,25 +451,38 @@ def _render_issue_table(contexts: list[dict[str, Any]]) -> str:
 
 def _render_ablation_table(ablation_report: dict[str, Any]) -> str:
     evaluations = ablation_report.get("evaluations", {})
-    lines = [
-        "| Variant | Concept F1 | Anchor Acc | Anchor Macro-F1 | Relation F1 | Predicted Concepts | Predicted Relations |",
-        "|---|---:|---:|---:|---:|---:|---:|",
+    comparison = ablation_report.get("comparison", {})
+    preferred_order = [
+        row["variant_id"]
+        for row in comparison.get("paper_table_variant_rows", [])
+        if row.get("variant_id") in evaluations
     ]
-    for variant_id in (
-        "full_llm",
-        "no_memory_bank",
-        "no_rule_filter",
-        "no_embedding_routing",
-        "embedding_top1",
-        "deterministic",
-    ):
+    if not preferred_order:
+        preferred_order = [
+            variant_id
+            for variant_id in (
+                "full_llm",
+                "no_preprocessing_llm",
+                "no_rule_filter",
+                "no_embedding_routing",
+                "no_attachment_llm",
+                "embedding_top1",
+            )
+            if variant_id in evaluations
+        ]
+    lines = [
+        "| Variant | Node Coverage F1 | Anchored Node F1 | Anchor Acc | Anchor Macro-F1 | Relation F1 | Predicted Concepts | Predicted Relations |",
+        "|---|---:|---:|---:|---:|---:|---:|---:|",
+    ]
+    for variant_id in preferred_order:
         payload = evaluations.get(variant_id)
         if not payload:
             continue
         lines.append(
-            "| {variant} | {concept} | {anchor} | {anchor_macro} | {relation} | {concept_count} | {relation_count} |".format(
+            "| {variant} | {node_coverage} | {anchored_node} | {anchor} | {anchor_macro} | {relation} | {concept_count} | {relation_count} |".format(
                 variant=variant_id,
-                concept=_format_metric(payload.get("concept_metrics", {}).get("f1")),
+                node_coverage=_format_metric(_metric_value(payload, "node_coverage_metrics", "f1")),
+                anchored_node=_format_metric(_metric_value(payload, "anchored_node_canonical_metrics", "f1")),
                 anchor=_format_metric(payload.get("anchor_metrics", {}).get("accuracy")),
                 anchor_macro=_format_metric(payload.get("anchor_metrics", {}).get("macro_f1")),
                 relation=_format_metric(payload.get("relation_metrics", {}).get("f1")),
@@ -519,7 +553,10 @@ def compile_five_round_report(
     metric_rows = [
         {
             "round": _round_label(context["round_id"]),
-            "concept_f1": _metric_value(context["post_metrics"], "concept_metrics", "f1"),
+            "workflow_step_f1": _metric_value(context["post_metrics"], "workflow_step_metrics", "f1"),
+            "workflow_sequence_f1": _metric_value(context["post_metrics"], "workflow_sequence_metrics", "f1"),
+            "node_coverage_relaxed_f1": _metric_value(context["post_metrics"], "node_coverage_metrics", "f1"),
+            "anchored_node_canonical_f1": _metric_value(context["post_metrics"], "anchored_node_canonical_metrics", "f1"),
             "anchor_accuracy": _metric_value(context["post_metrics"], "anchor_metrics", "accuracy"),
             "anchor_macro_f1": _metric_value(context["post_metrics"], "anchor_metrics", "macro_f1"),
             "relation_f1": _metric_value(context["post_metrics"], "relation_metrics", "f1"),
@@ -581,10 +618,10 @@ def compile_five_round_report(
             [
                 _render_ablation_table(ablation_report),
                 "",
-                "- `no_rule_filter` is the only ablation that clearly degrades all major metrics at once, so rule filtering is the strongest demonstrated contributor on the 9-document human-gold set.",
-                "- `no_memory_bank` is slightly worse on concept F1 but effectively tied on relation F1, which means the current corpus is too small to claim a strong memory-bank advantage.",
-                "- `no_embedding_routing`, `embedding_top1`, and `deterministic` stay very close to `full_llm`, so LLM attachment should be described as marginally helpful rather than decisively superior on the current benchmark.",
-                "- These results support the pipeline as a whole, but they do not support an aggressive claim that the LLM attachment component is the main source of gains.",
+                "- `no_rule_filter` is the only ablation that clearly degrades node coverage, anchored node quality, and relation quality at once, so rule filtering is the strongest demonstrated contributor on the 9-document human-gold set.",
+                "- `no_preprocessing_llm` is now the primary isolation control for preprocessing-stage LLM contribution, and it should be interpreted separately from attachment-stage controls.",
+                "- `no_attachment_llm` and `embedding_top1` stay close to `full_llm`, so the current ablation should be read as attachment-stage evidence only, not as a full test of preprocessing LLM contribution.",
+                "- These results support the pipeline as a whole, but they do not support an aggressive claim that LLM attachment is the main source of gains; the honest framing is LLM extraction plus rule-based refinement.",
                 "",
             ]
         )
@@ -611,7 +648,7 @@ def compile_five_round_report(
             "## 15. Next Recommendations",
             "",
             "- Repair BATOM_001 human gold so every staged step is represented before using the corpus as a final paper benchmark.",
-            "- Expand human-gold coverage or repeated-run sampling if the paper wants to claim stronger evidence for memory-bank or LLM-attachment benefits.",
+            "- Expand human-gold coverage or repeated-run sampling if the paper wants to claim stronger evidence for preprocessing-stage or attachment-stage LLM benefits.",
             "- Continue tightening structural locus labeling so concepts such as manifold face, quick connector, outlet boundary, and clamp stack map to the same specificity as gold.",
             "- Keep new experiment or paper tables routed through the round-manifest / metrics-diff / ablation-report path instead of adding new ad-hoc scripts or output folders.",
         ]

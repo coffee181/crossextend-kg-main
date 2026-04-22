@@ -101,22 +101,11 @@ def _extract_step_id(value: str) -> str | None:
     return match.group(1).upper()
 
 
-def _task_candidate_label(evidence_id: str, step_id: str) -> str:
-    return f"{evidence_id}:{step_id}"
-
-
-def _task_candidate_key(domain_id: str, evidence_id: str, step_id: str) -> tuple[str, str, str, str]:
-    return ("task", domain_id, evidence_id, step_id)
-
-
 def _concept_candidate_key(domain_id: str, label: str) -> tuple[str, str, str]:
     return ("concept", domain_id, label)
 
 
 def _endpoint_candidate_key(domain_id: str, evidence_id: str, label: str) -> tuple[str, ...]:
-    step_id = _extract_step_id(label)
-    if step_id:
-        return _task_candidate_key(domain_id, evidence_id, step_id)
     return _concept_candidate_key(domain_id, label)
 
 
@@ -219,28 +208,6 @@ def aggregate_schema_candidates(
                 relation_families[tail_key].add(relation.family)
 
             for step_record in record.step_records:
-                key = _task_candidate_key(domain_id, record.evidence_id, step_record.step_id)
-                scoped_label = _task_candidate_label(record.evidence_id, step_record.step_id)
-                grouped.setdefault(
-                    key,
-                    {
-                        "candidate_id": f"{domain_id}::{scoped_label}",
-                        "domain_id": domain_id,
-                        "role": record.role,
-                        "label": scoped_label,
-                        "description": "",
-                        "evidence_ids": [],
-                        "evidence_texts": [],
-                        "routing_features": {},
-                        "_is_task_candidate": True,
-                        "_task_step_id": step_record.step_id,
-                        "_task_evidence_id": record.evidence_id,
-                        "_task_surface_form": step_record.task.surface_form,
-                    },
-                )
-                _append_unique(grouped[key]["evidence_ids"], record.evidence_id)
-                _append_unique(grouped[key]["evidence_texts"], step_record.task.surface_form)
-
                 for mention in step_record.concept_mentions:
                     if not mention.node_worthy:
                         continue
@@ -256,7 +223,6 @@ def aggregate_schema_candidates(
                             "evidence_ids": [],
                             "evidence_texts": [],
                             "routing_features": {},
-                            "_is_task_candidate": False,
                         },
                     )
                     _append_unique(grouped[concept_key]["evidence_ids"], record.evidence_id)
@@ -286,7 +252,6 @@ def aggregate_schema_candidates(
                         "evidence_ids": [],
                         "evidence_texts": [],
                         "routing_features": {},
-                        "_is_task_candidate": False,
                     },
                 )
                 _append_unique(grouped[key]["evidence_ids"], record.evidence_id)
@@ -323,15 +288,7 @@ def aggregate_schema_candidates(
             "semantic_type_hint": dominant_hint,
             "semantic_type_hint_candidates": hint_candidates,
             "support_count": len(item["evidence_ids"]),
-            "is_task_candidate": bool(item.pop("_is_task_candidate", False)),
         }
-        task_step_id = item.pop("_task_step_id", "")
-        task_evidence_id = item.pop("_task_evidence_id", "")
-        task_surface_form = item.pop("_task_surface_form", "")
-        if task_step_id:
-            routing_features["task_step_id"] = task_step_id
-            routing_features["task_evidence_id"] = task_evidence_id
-            routing_features["task_surface_form"] = task_surface_form
         item["routing_features"] = routing_features
         results[item["domain_id"]].append(SchemaCandidate.model_validate(item))
 

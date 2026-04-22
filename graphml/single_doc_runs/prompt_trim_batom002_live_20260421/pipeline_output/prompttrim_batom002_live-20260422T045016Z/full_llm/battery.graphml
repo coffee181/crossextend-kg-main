@@ -1,0 +1,805 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns">
+  <key id="n_label" for="node" attr.name="label" attr.type="string" />
+  <key id="n_domain_id" for="node" attr.name="domain_id" attr.type="string" />
+  <key id="n_node_type" for="node" attr.name="node_type" attr.type="string" />
+  <key id="n_parent_anchor" for="node" attr.name="parent_anchor" attr.type="string" />
+  <key id="n_surface_form" for="node" attr.name="surface_form" attr.type="string" />
+  <key id="n_provenance_evidence_ids" for="node" attr.name="provenance_evidence_ids" attr.type="string" />
+  <key id="n_valid_from" for="node" attr.name="valid_from" attr.type="string" />
+  <key id="n_valid_to" for="node" attr.name="valid_to" attr.type="string" />
+  <key id="n_lifecycle_stage" for="node" attr.name="lifecycle_stage" attr.type="string" />
+  <key id="e_label" for="edge" attr.name="label" attr.type="string" />
+  <key id="e_domain_id" for="edge" attr.name="domain_id" attr.type="string" />
+  <key id="e_family" for="edge" attr.name="family" attr.type="string" />
+  <key id="e_head" for="edge" attr.name="head" attr.type="string" />
+  <key id="e_tail" for="edge" attr.name="tail" attr.type="string" />
+  <key id="e_provenance_evidence_ids" for="edge" attr.name="provenance_evidence_ids" attr.type="string" />
+  <key id="e_valid_from" for="edge" attr.name="valid_from" attr.type="string" />
+  <key id="e_valid_to" for="edge" attr.name="valid_to" attr.type="string" />
+  <graph id="G" edgedefault="directed">
+    <node id="battery::node::BATOM_002:T1">
+      <data key="n_label">BATOM_002:T1</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Task</data>
+      <data key="n_surface_form">For Helion PackCore-544 AWD, capture whether the issue at the front manifold face is coolant odor, slow level loss, or wetness after recent manifold removal, and note the service history that may have altered bolt clamp load or seal compression. Record the manifold-side residue pattern before the first bolt is touched.</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::BATOM_002:T2">
+      <data key="n_label">BATOM_002:T2</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Task</data>
+      <data key="n_surface_form">Safe the pack and remove the front manifold cover so the composite manifold body, M6 retaining bolts, steel inserts, upper and lower hose necks, perimeter O-ring channel, and nearby NTC loom can be seen together. The manifold and its adjacent hose loads need to be read in one view because a distorted hose path can change flange compression.</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::BATOM_002:T3">
+      <data key="n_label">BATOM_002:T3</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Task</data>
+      <data key="n_surface_form">Inspect bolt witness paint, washer seating, flange gap, and dried coolant crystals around the full perimeter, then compare the upper-left and lower-right corners where clamp load often diverges first. A local flange opening at one boss points to a different repair boundary than even residue around the entire channel.</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::BATOM_002:T4">
+      <data key="n_label">BATOM_002:T4</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Task</data>
+      <data key="n_surface_form">Lift the manifold only enough to inspect the EPDM O-ring cross-section and the groove corners at the inlet crossover, checking for twist, flattening, nicked lips, or dry installation marks. Keep dirt out of the aluminum seal land so the later compression evidence remains reliable.</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::BATOM_002:T5">
+      <data key="n_label">BATOM_002:T5</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Task</data>
+      <data key="n_surface_form">Lay the manifold back against the face and measure flange stand-off at several bolts while watching whether one hose neck or bracket pushes the body off the header plate. If the top hose must be forced downward to start the bolt, the boundary is likely hose-induced preload or manifold warp rather than the seal alone.</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::BATOM_002:T6">
+      <data key="n_label">BATOM_002:T6</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Task</data>
+      <data key="n_surface_form">Inspect the plastic body for bow, the steel inserts for pull-up, and the bolt stack for extra washer thickness or uneven bolt stretch so clamp loss is assigned to a real mechanical cause. This prevents the same leak from being mislabeled as a generic O-ring failure.</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::BATOM_002:T7">
+      <data key="n_label">BATOM_002:T7</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Task</data>
+      <data key="n_surface_form">Replace or reseat only the failed manifold, O-ring, bolt stack, or hose support item, then torque the manifold in sequence from the center outward and confirm that the flange gap closes evenly at all corners. The hose necks should sit naturally with no side pull on the composite body.</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::BATOM_002:T8">
+      <data key="n_label">BATOM_002:T8</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Task</data>
+      <data key="n_surface_form">Pressure-test and circulate the restored manifold branch while monitoring the manifold face, hose spigots, and the nearby NTC temperature trend because a trapped air pocket or warped flange can reopen only after the plastic body warms. Record both the dry condition and the thermal behavior during this proof cycle.</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::BATOM_002:T9">
+      <data key="n_label">BATOM_002:T9</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Task</data>
+      <data key="n_surface_form">Mark the manifold repair complete only when the record identifies the exact failure mode, such as twisted perimeter O-ring, warped composite flange, insert pull-up, overlength bolt stack, or hose-side preload, and ties it to the repeated pressure and circulation result. The release boundary is a manifold face that stays dry at all bosses with even clamp witness and stable temperature response across the repaired front branch.</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::bolt">
+      <data key="n_label">bolt</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Component</data>
+      <data key="n_surface_form">bolt</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::bolt stack">
+      <data key="n_label">bolt stack</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Component</data>
+      <data key="n_surface_form">bolt stack</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::boss">
+      <data key="n_label">boss</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Component</data>
+      <data key="n_surface_form">boss</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::bow">
+      <data key="n_label">bow</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Signal</data>
+      <data key="n_surface_form">bow</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::bracket">
+      <data key="n_label">bracket</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Component</data>
+      <data key="n_surface_form">bracket</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::dry">
+      <data key="n_label">dry</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">State</data>
+      <data key="n_surface_form">dry</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::flange gap">
+      <data key="n_label">flange gap</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Signal</data>
+      <data key="n_surface_form">flange gap</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::leak">
+      <data key="n_label">leak</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Fault</data>
+      <data key="n_surface_form">leak</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::lower hose neck">
+      <data key="n_label">lower hose neck</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Component</data>
+      <data key="n_surface_form">lower hose neck</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::plastic body">
+      <data key="n_label">plastic body</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Component</data>
+      <data key="n_surface_form">plastic body</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::pull-up">
+      <data key="n_label">pull-up</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">State</data>
+      <data key="n_surface_form">pull-up</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::steel inserts">
+      <data key="n_label">steel inserts</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Component</data>
+      <data key="n_surface_form">steel inserts</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::twist">
+      <data key="n_label">twist</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Signal</data>
+      <data key="n_surface_form">twist</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::upper hose neck">
+      <data key="n_label">upper hose neck</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Component</data>
+      <data key="n_surface_form">upper hose neck</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::wetness">
+      <data key="n_label">wetness</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Signal</data>
+      <data key="n_surface_form">wetness</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::bolt clamp load">
+      <data key="n_label">bolt clamp load</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Signal</data>
+      <data key="n_surface_form">bolt clamp load</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::coolant odor">
+      <data key="n_label">coolant odor</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Signal</data>
+      <data key="n_surface_form">coolant odor</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::front manifold face">
+      <data key="n_label">front manifold face</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Component</data>
+      <data key="n_surface_form">front manifold face</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::Helion PackCore-544 AWD">
+      <data key="n_label">Helion PackCore-544 AWD</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Asset</data>
+      <data key="n_surface_form">Helion PackCore-544 AWD</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::manifold-side residue pattern">
+      <data key="n_label">manifold-side residue pattern</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Signal</data>
+      <data key="n_surface_form">manifold-side residue pattern</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::seal compression">
+      <data key="n_label">seal compression</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">State</data>
+      <data key="n_surface_form">seal compression</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::slow level loss">
+      <data key="n_label">slow level loss</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Fault</data>
+      <data key="n_surface_form">slow level loss</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::composite manifold body">
+      <data key="n_label">composite manifold body</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Component</data>
+      <data key="n_surface_form">composite manifold body</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::distorted hose path">
+      <data key="n_label">distorted hose path</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Signal</data>
+      <data key="n_surface_form">distorted hose path</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::flange compression">
+      <data key="n_label">flange compression</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Signal</data>
+      <data key="n_surface_form">flange compression</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::front manifold cover">
+      <data key="n_label">front manifold cover</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Component</data>
+      <data key="n_surface_form">front manifold cover</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::hose loads">
+      <data key="n_label">hose loads</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Signal</data>
+      <data key="n_surface_form">adjacent hose loads</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::M6 retaining bolts">
+      <data key="n_label">M6 retaining bolts</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Component</data>
+      <data key="n_surface_form">M6 retaining bolts</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::NTC loom">
+      <data key="n_label">NTC loom</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Component</data>
+      <data key="n_surface_form">NTC loom</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::perimeter O-ring channel">
+      <data key="n_label">perimeter O-ring channel</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Component</data>
+      <data key="n_surface_form">perimeter O-ring channel</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::bolt witness paint">
+      <data key="n_label">bolt witness paint</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Signal</data>
+      <data key="n_surface_form">bolt witness paint</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::dried coolant crystals">
+      <data key="n_label">dried coolant crystals</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Signal</data>
+      <data key="n_surface_form">dried coolant crystals</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::local flange opening">
+      <data key="n_label">local flange opening</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Signal</data>
+      <data key="n_surface_form">local flange opening</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::washer seating">
+      <data key="n_label">washer seating</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Signal</data>
+      <data key="n_surface_form">washer seating</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::aluminum seal land">
+      <data key="n_label">aluminum seal land</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Component</data>
+      <data key="n_surface_form">aluminum seal land</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::compression evidence">
+      <data key="n_label">compression evidence</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Signal</data>
+      <data key="n_surface_form">compression evidence</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::dry installation marks">
+      <data key="n_label">dry installation marks</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Signal</data>
+      <data key="n_surface_form">dry installation marks</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::EPDM O-ring">
+      <data key="n_label">EPDM O-ring</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Component</data>
+      <data key="n_surface_form">EPDM O-ring</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::flattening">
+      <data key="n_label">flattening</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">State</data>
+      <data key="n_surface_form">flattening</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::groove corners">
+      <data key="n_label">groove corners</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Component</data>
+      <data key="n_surface_form">groove corners</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::inlet crossover">
+      <data key="n_label">inlet crossover</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Component</data>
+      <data key="n_surface_form">inlet crossover</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::nicked lips">
+      <data key="n_label">nicked lips</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Fault</data>
+      <data key="n_surface_form">nicked lips</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::flange stand-off">
+      <data key="n_label">flange stand-off</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Signal</data>
+      <data key="n_surface_form">flange stand-off</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::header plate">
+      <data key="n_label">header plate</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Component</data>
+      <data key="n_surface_form">header plate</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::hose-induced preload">
+      <data key="n_label">hose-induced preload</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Signal</data>
+      <data key="n_surface_form">hose-induced preload</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::manifold warp">
+      <data key="n_label">manifold warp</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Fault</data>
+      <data key="n_surface_form">manifold warp</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::top hose">
+      <data key="n_label">top hose</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Component</data>
+      <data key="n_surface_form">top hose</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::clamp loss">
+      <data key="n_label">clamp loss</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Fault</data>
+      <data key="n_surface_form">clamp loss</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::extra washer thickness">
+      <data key="n_label">extra washer thickness</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Signal</data>
+      <data key="n_surface_form">extra washer thickness</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::generic O-ring failure">
+      <data key="n_label">generic O-ring failure</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Fault</data>
+      <data key="n_surface_form">generic O-ring failure</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::uneven bolt stretch">
+      <data key="n_label">uneven bolt stretch</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Signal</data>
+      <data key="n_surface_form">uneven bolt stretch</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::hose support item">
+      <data key="n_label">hose support item</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Component</data>
+      <data key="n_surface_form">hose support item</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::side pull">
+      <data key="n_label">side pull</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Signal</data>
+      <data key="n_surface_form">side pull</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::dry condition">
+      <data key="n_label">dry condition</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">State</data>
+      <data key="n_surface_form">dry condition</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::hose spigots">
+      <data key="n_label">hose spigots</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Component</data>
+      <data key="n_surface_form">hose spigots</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::manifold branch">
+      <data key="n_label">manifold branch</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Component</data>
+      <data key="n_surface_form">manifold branch</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::NTC temperature trend">
+      <data key="n_label">NTC temperature trend</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Signal</data>
+      <data key="n_surface_form">NTC temperature trend</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::thermal behavior">
+      <data key="n_label">thermal behavior</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Signal</data>
+      <data key="n_surface_form">thermal behavior</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::trapped air pocket">
+      <data key="n_label">trapped air pocket</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Fault</data>
+      <data key="n_surface_form">trapped air pocket</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::clamp witness">
+      <data key="n_label">clamp witness</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Signal</data>
+      <data key="n_surface_form">clamp witness</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::hose-side preload">
+      <data key="n_label">hose-side preload</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Signal</data>
+      <data key="n_surface_form">hose-side preload</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::insert pull-up">
+      <data key="n_label">insert pull-up</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Fault</data>
+      <data key="n_surface_form">insert pull-up</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::overlength bolt stack">
+      <data key="n_label">overlength bolt stack</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Fault</data>
+      <data key="n_surface_form">overlength bolt stack</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::repaired front branch">
+      <data key="n_label">repaired front branch</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Component</data>
+      <data key="n_surface_form">repaired front branch</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::stable temperature response">
+      <data key="n_label">stable temperature response</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">State</data>
+      <data key="n_surface_form">stable temperature response</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::twisted perimeter O-ring">
+      <data key="n_label">twisted perimeter O-ring</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Fault</data>
+      <data key="n_surface_form">twisted perimeter O-ring</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <node id="battery::node::warped composite flange">
+      <data key="n_label">warped composite flange</data>
+      <data key="n_domain_id">battery</data>
+      <data key="n_node_type">adapter_concept</data>
+      <data key="n_parent_anchor">Fault</data>
+      <data key="n_surface_form">warped flange</data>
+      <data key="n_provenance_evidence_ids">BATOM_002</data>
+      <data key="n_valid_from">2026-04-22T04:20:51Z</data>
+    </node>
+    <edge id="battery::edge::composite manifold body::contains::M6 retaining bolts" source="battery::node::composite manifold body" target="battery::node::M6 retaining bolts">
+      <data key="e_label">contains</data>
+      <data key="e_domain_id">battery</data>
+      <data key="e_family">structural</data>
+      <data key="e_head">composite manifold body</data>
+      <data key="e_tail">M6 retaining bolts</data>
+      <data key="e_provenance_evidence_ids">BATOM_002</data>
+      <data key="e_valid_from">2026-04-22T04:20:51Z</data>
+    </edge>
+    <edge id="battery::edge::composite manifold body::contains::steel inserts" source="battery::node::composite manifold body" target="battery::node::steel inserts">
+      <data key="e_label">contains</data>
+      <data key="e_domain_id">battery</data>
+      <data key="e_family">structural</data>
+      <data key="e_head">composite manifold body</data>
+      <data key="e_tail">steel inserts</data>
+      <data key="e_provenance_evidence_ids">BATOM_002</data>
+      <data key="e_valid_from">2026-04-22T04:20:51Z</data>
+    </edge>
+    <edge id="battery::edge::composite manifold body::contains::perimeter O-ring channel" source="battery::node::composite manifold body" target="battery::node::perimeter O-ring channel">
+      <data key="e_label">contains</data>
+      <data key="e_domain_id">battery</data>
+      <data key="e_family">structural</data>
+      <data key="e_head">composite manifold body</data>
+      <data key="e_tail">perimeter O-ring channel</data>
+      <data key="e_provenance_evidence_ids">BATOM_002</data>
+      <data key="e_valid_from">2026-04-22T04:20:51Z</data>
+    </edge>
+    <edge id="battery::edge::BATOM_002:T1::triggers::BATOM_002:T2" source="battery::node::BATOM_002:T1" target="battery::node::BATOM_002:T2">
+      <data key="e_label">triggers</data>
+      <data key="e_domain_id">battery</data>
+      <data key="e_family">task_dependency</data>
+      <data key="e_head">BATOM_002:T1</data>
+      <data key="e_tail">BATOM_002:T2</data>
+      <data key="e_provenance_evidence_ids">BATOM_002</data>
+      <data key="e_valid_from">2026-04-22T04:20:51Z</data>
+    </edge>
+    <edge id="battery::edge::BATOM_002:T2::triggers::BATOM_002:T3" source="battery::node::BATOM_002:T2" target="battery::node::BATOM_002:T3">
+      <data key="e_label">triggers</data>
+      <data key="e_domain_id">battery</data>
+      <data key="e_family">task_dependency</data>
+      <data key="e_head">BATOM_002:T2</data>
+      <data key="e_tail">BATOM_002:T3</data>
+      <data key="e_provenance_evidence_ids">BATOM_002</data>
+      <data key="e_valid_from">2026-04-22T04:20:51Z</data>
+    </edge>
+    <edge id="battery::edge::BATOM_002:T3::triggers::BATOM_002:T4" source="battery::node::BATOM_002:T3" target="battery::node::BATOM_002:T4">
+      <data key="e_label">triggers</data>
+      <data key="e_domain_id">battery</data>
+      <data key="e_family">task_dependency</data>
+      <data key="e_head">BATOM_002:T3</data>
+      <data key="e_tail">BATOM_002:T4</data>
+      <data key="e_provenance_evidence_ids">BATOM_002</data>
+      <data key="e_valid_from">2026-04-22T04:20:51Z</data>
+    </edge>
+    <edge id="battery::edge::BATOM_002:T4::triggers::BATOM_002:T5" source="battery::node::BATOM_002:T4" target="battery::node::BATOM_002:T5">
+      <data key="e_label">triggers</data>
+      <data key="e_domain_id">battery</data>
+      <data key="e_family">task_dependency</data>
+      <data key="e_head">BATOM_002:T4</data>
+      <data key="e_tail">BATOM_002:T5</data>
+      <data key="e_provenance_evidence_ids">BATOM_002</data>
+      <data key="e_valid_from">2026-04-22T04:20:51Z</data>
+    </edge>
+    <edge id="battery::edge::BATOM_002:T5::triggers::BATOM_002:T6" source="battery::node::BATOM_002:T5" target="battery::node::BATOM_002:T6">
+      <data key="e_label">triggers</data>
+      <data key="e_domain_id">battery</data>
+      <data key="e_family">task_dependency</data>
+      <data key="e_head">BATOM_002:T5</data>
+      <data key="e_tail">BATOM_002:T6</data>
+      <data key="e_provenance_evidence_ids">BATOM_002</data>
+      <data key="e_valid_from">2026-04-22T04:20:51Z</data>
+    </edge>
+    <edge id="battery::edge::BATOM_002:T6::triggers::BATOM_002:T7" source="battery::node::BATOM_002:T6" target="battery::node::BATOM_002:T7">
+      <data key="e_label">triggers</data>
+      <data key="e_domain_id">battery</data>
+      <data key="e_family">task_dependency</data>
+      <data key="e_head">BATOM_002:T6</data>
+      <data key="e_tail">BATOM_002:T7</data>
+      <data key="e_provenance_evidence_ids">BATOM_002</data>
+      <data key="e_valid_from">2026-04-22T04:20:51Z</data>
+    </edge>
+    <edge id="battery::edge::BATOM_002:T7::triggers::BATOM_002:T8" source="battery::node::BATOM_002:T7" target="battery::node::BATOM_002:T8">
+      <data key="e_label">triggers</data>
+      <data key="e_domain_id">battery</data>
+      <data key="e_family">task_dependency</data>
+      <data key="e_head">BATOM_002:T7</data>
+      <data key="e_tail">BATOM_002:T8</data>
+      <data key="e_provenance_evidence_ids">BATOM_002</data>
+      <data key="e_valid_from">2026-04-22T04:20:51Z</data>
+    </edge>
+    <edge id="battery::edge::BATOM_002:T8::triggers::BATOM_002:T9" source="battery::node::BATOM_002:T8" target="battery::node::BATOM_002:T9">
+      <data key="e_label">triggers</data>
+      <data key="e_domain_id">battery</data>
+      <data key="e_family">task_dependency</data>
+      <data key="e_head">BATOM_002:T8</data>
+      <data key="e_tail">BATOM_002:T9</data>
+      <data key="e_provenance_evidence_ids">BATOM_002</data>
+      <data key="e_valid_from">2026-04-22T04:20:51Z</data>
+    </edge>
+  </graph>
+</graphml>

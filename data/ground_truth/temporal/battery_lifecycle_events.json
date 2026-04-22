@@ -1,0 +1,51 @@
+{
+  "schema_version": "lifecycle_gold.v2",
+  "domain_id": "battery",
+  "annotation_date": "2026-04-21",
+  "annotation_basis": "Blind support annotation from source O&M text only. Pairs, chains, questions, and lifecycle events were curated without consulting model outputs. When source support was weak, the item was omitted instead of guessed.",
+  "timestamp_policy": "Synthetic relative timestamps encode manual procedure order only. They are not real-world event dates and must not be interpreted as operational history.",
+  "lifecycle_events": [
+    {
+      "event_id": "BLE_001",
+      "object_id": "battery::fault::BATOM_001_outlet_boundary",
+      "event_type": "fault_occurrence",
+      "timestamp": "2000-01-01T01:00:00Z",
+      "description": "BATOM_001 records an active leak complaint at the left-rear coolant-plate outlet."
+    },
+    {
+      "event_id": "BLE_002",
+      "object_id": "battery::component::BATOM_001_left-rear coolant-plate outlet",
+      "event_type": "maintenance",
+      "timestamp": "2000-01-01T06:00:00Z",
+      "description": "BATOM_001 performs targeted correction and verification at the outlet-side boundary."
+    },
+    {
+      "event_id": "BLE_003",
+      "object_id": "battery::fault::BATOM_002_front_manifold_boundary",
+      "event_type": "fault_occurrence",
+      "timestamp": "2000-01-02T01:00:00Z",
+      "description": "BATOM_002 opens with a front-manifold-face complaint tied to seal compression or clamp load."
+    },
+    {
+      "event_id": "BLE_004",
+      "object_id": "battery::component::BATOM_002_front manifold face",
+      "event_type": "maintenance",
+      "timestamp": "2000-01-02T07:00:00Z",
+      "description": "BATOM_002 replaces or reseats only the failed manifold, seal, bolt stack, or hose support item."
+    },
+    {
+      "event_id": "BLE_005",
+      "object_id": "battery::fault::BATOM_003_chiller_inlet_boundary",
+      "event_type": "fault_occurrence",
+      "timestamp": "2000-01-03T01:00:00Z",
+      "description": "BATOM_003 documents a failed chiller-inlet connector boundary before replacement."
+    },
+    {
+      "event_id": "BLE_006",
+      "object_id": "battery::component::BATOM_003_chiller-inlet connector",
+      "event_type": "replacement",
+      "timestamp": "2000-01-03T05:00:00Z",
+      "description": "BATOM_003 installs and proves the replacement chiller-inlet connector stack."
+    }
+  ]
+}

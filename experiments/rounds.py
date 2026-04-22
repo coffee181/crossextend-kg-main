@@ -3,64 +3,80 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from ..io import ensure_dir, write_json
-from .metrics import evaluate_variant_run, read_json
+try:
+    from crossextend_kg.config import (
+        load_structured_config_payload,
+        resolve_pipeline_payload_paths,
+        resolve_preprocessing_payload_paths,
+    )
+except ImportError:  # pragma: no cover - direct script execution fallback
+    from config import (
+        load_structured_config_payload,
+        resolve_pipeline_payload_paths,
+        resolve_preprocessing_payload_paths,
+    )
+try:
+    from crossextend_kg.file_io import ensure_dir, write_json
+except ImportError:  # pragma: no cover - direct script execution fallback
+    from file_io import ensure_dir, write_json
+from experiments.metrics import evaluate_variant_run, read_json
 
 
 DEFAULT_FULL_GOLD_ALIGNMENT: dict[str, dict[str, dict[str, str]]] = {
     "battery": {
         "BATOM_001": {
             "gold_file": "data/ground_truth/battery_BATOM_001.json",
-            "source_markdown": "data/battery/BATOM_001.md",
+            "source_markdown": "data/battery_om_manual_en/BATOM_001.md",
             "alignment_mode": "direct",
         },
         "BATOM_002": {
             "gold_file": "data/ground_truth/battery_BATOM_002.json",
-            "source_markdown": "data/battery/BATOM_002.md",
+            "source_markdown": "data/battery_om_manual_en/BATOM_002.md",
             "alignment_mode": "direct",
         },
         "BATOM_003": {
             "gold_file": "data/ground_truth/battery_BATOM_003.json",
-            "source_markdown": "data/battery/BATOM_003.md",
+            "source_markdown": "data/battery_om_manual_en/BATOM_003.md",
             "alignment_mode": "direct",
         },
     },
     "cnc": {
         "CNCOM_001": {
             "gold_file": "data/ground_truth/cnc_CNCOM_001.json",
-            "source_markdown": "data/cnc/CNCOM_002.md",
-            "alignment_mode": "content_aligned_alias",
+            "source_markdown": "data/cnc_om_manual_en/CNCOM_001.md",
+            "alignment_mode": "direct",
         },
         "CNCOM_002": {
             "gold_file": "data/ground_truth/cnc_CNCOM_002.json",
-            "source_markdown": "data/cnc/CNCOM_003.md",
-            "alignment_mode": "content_aligned_alias",
+            "source_markdown": "data/cnc_om_manual_en/CNCOM_002.md",
+            "alignment_mode": "direct",
         },
         "CNCOM_003": {
             "gold_file": "data/ground_truth/cnc_CNCOM_003.json",
-            "source_markdown": "data/cnc/CNCOM_001.md",
-            "alignment_mode": "content_aligned_alias",
+            "source_markdown": "data/cnc_om_manual_en/CNCOM_003.md",
+            "alignment_mode": "direct",
         },
     },
     "nev": {
         "EVMAN_001": {
             "gold_file": "data/ground_truth/nev_EVMAN_001.json",
-            "source_markdown": "data/nev/EVMAN_001.md",
+            "source_markdown": "data/ev_om_manual_en/EVMAN_001.md",
             "alignment_mode": "direct",
         },
         "EVMAN_002": {
             "gold_file": "data/ground_truth/nev_EVMAN_002.json",
-            "source_markdown": "data/nev/EVMAN_002.md",
+            "source_markdown": "data/ev_om_manual_en/EVMAN_002.md",
             "alignment_mode": "direct",
         },
         "EVMAN_003": {
             "gold_file": "data/ground_truth/nev_EVMAN_003.json",
-            "source_markdown": "data/nev/EVMAN_003.md",
+            "source_markdown": "data/ev_om_manual_en/EVMAN_003.md",
             "alignment_mode": "direct",
         },
     },
@@ -75,13 +91,21 @@ def _repo_root() -> Path:
     return Path(__file__).resolve().parents[1]
 
 
-def _resolve_relative(base_dir: Path, value: str | None) -> str | None:
-    if not value:
-        return value
-    path = Path(value)
-    if path.is_absolute():
-        return str(path)
-    return str((base_dir / path).resolve())
+def _stable_docset_key(doc_ids: list[str], alignment: dict[str, dict[str, dict[str, str]]]) -> str:
+    selected = sorted(doc_ids)
+    all_doc_ids = sorted(
+        doc_id
+        for domain_map in alignment.values()
+        for doc_id in domain_map
+    )
+    if selected == all_doc_ids:
+        return "full_human_gold_9doc"
+    digest = hashlib.sha1("|".join(selected).encode("utf-8")).hexdigest()[:10]
+    return f"docset_{len(selected)}docs_{digest}"
+
+
+def _persistent_evidence_root(doc_ids: list[str], alignment: dict[str, dict[str, dict[str, str]]]) -> Path:
+    return _repo_root() / "data" / "evidence_records" / _stable_docset_key(doc_ids, alignment)
 
 
 def resolve_full_gold_alignment(repo_root: str | Path | None = None) -> dict[str, dict[str, dict[str, str]]]:
@@ -178,12 +202,12 @@ def materialize_round_preprocessing_config(
 ) -> Path:
     base_config_path = Path(base_config_path).resolve()
     config_output_path = Path(config_output_path).resolve()
-    payload = json.loads(base_config_path.read_text(encoding="utf-8-sig"))
+    _, payload = load_structured_config_payload(base_config_path)
+    payload = resolve_preprocessing_payload_paths(payload, base_dir=base_config_path.parent)
 
     payload["data_root"] = str(Path(data_root).resolve())
     payload["domain_ids"] = list(domain_ids)
     payload["output_path"] = str(Path(output_path).resolve())
-    payload["prompt_template_path"] = _resolve_relative(base_config_path.parent, payload.get("prompt_template_path")) or ""
     if llm_temperature is not None:
         payload.setdefault("llm", {})["temperature"] = llm_temperature
 
@@ -208,7 +232,8 @@ def materialize_round_pipeline_config(
 ) -> Path:
     base_config_path = Path(base_config_path).resolve()
     config_output_path = Path(config_output_path).resolve()
-    payload = json.loads(base_config_path.read_text(encoding="utf-8-sig"))
+    _, payload = load_structured_config_payload(base_config_path)
+    payload = resolve_pipeline_payload_paths(payload, base_dir=base_config_path.parent)
 
     selected_domain_ids = list(evidence_paths_by_domain)
     domain_payloads = []
@@ -227,9 +252,6 @@ def materialize_round_pipeline_config(
 
     payload["benchmark_name"] = benchmark_name
     payload["domains"] = domain_payloads
-    payload.setdefault("prompts", {})["attachment_judge_template_path"] = (
-        _resolve_relative(base_config_path.parent, payload.get("prompts", {}).get("attachment_judge_template_path")) or ""
-    )
     if llm_temperature is not None:
         payload.setdefault("llm", {})["temperature"] = llm_temperature
 
@@ -240,9 +262,6 @@ def materialize_round_pipeline_config(
     runtime["write_jsonl_artifacts"] = write_jsonl_artifacts
     runtime["write_graph_db_csv"] = write_graph_db_csv
     runtime["write_property_graph_jsonl"] = write_property_graph_jsonl
-    runtime["relation_constraints_path"] = (
-        _resolve_relative(base_config_path.parent, runtime.get("relation_constraints_path"))
-    )
 
     ensure_dir(config_output_path.parent)
     config_output_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -268,7 +287,8 @@ def prepare_round_workspace(
     input_root = round_dir / "input"
     config_root = round_dir / "configs"
     output_root = round_dir / "output"
-    evidence_root = round_dir / "evidence_records"
+    alignment = alignment or resolve_full_gold_alignment()
+    evidence_root = _persistent_evidence_root(doc_ids, alignment)
 
     alignment_manifest = stage_aligned_input_corpus(input_root, doc_ids=doc_ids, alignment=alignment)
     domain_ids = sorted(alignment_manifest["domains"])
@@ -309,6 +329,7 @@ def prepare_round_workspace(
         "preprocess_config_path": str(preprocess_config_path),
         "pipeline_config_path": str(pipeline_config_path),
         "artifact_root": str(output_root),
+        "persistent_evidence_root": str(evidence_root),
         "evidence_paths_by_domain": evidence_paths_by_domain,
     }
     write_json(round_dir / "prepared_workspace.json", manifest)

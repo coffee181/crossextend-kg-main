@@ -148,6 +148,8 @@ class VariantConfig(BaseModel):
     use_rule_filter: bool = True
     allow_free_form_growth: bool = False
     enable_snapshots: bool = True
+    write_temporal_metadata: bool = True
+    detect_lifecycle_events: bool = True
     export_artifacts: bool = True
 
 
@@ -160,9 +162,12 @@ class RuntimeConfig(BaseModel):
     llm_attachment_batch_size: int = Field(default=8, ge=1)
     save_latest_summary: bool = True
     write_detailed_working_artifacts: bool = False
-    write_jsonl_artifacts: bool = True
-    write_graph_db_csv: bool = True
-    write_property_graph_jsonl: bool = True
+    write_jsonl_artifacts: bool = False
+    write_graphml: bool = True
+    write_graph_db_csv: bool = False
+    write_property_graph_jsonl: bool = False
+    enable_embedding_cache: bool = True
+    embedding_cache_dir: str = ""
     run_prefix: str = "run"
     relation_constraints_path: str | None = None
     enable_relation_validation: bool = True
@@ -180,6 +185,7 @@ class PipelineConfig(BaseModel):
     runtime: RuntimeConfig
     variants: list[VariantConfig]
     domains: list[DomainConfig]
+    exclude_domains: list[str] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def validate_roles(self) -> "PipelineConfig":
@@ -199,10 +205,21 @@ class PipelineConfig(BaseModel):
         return self
 
     def all_domains(self) -> list[DomainConfig]:
+        if self.exclude_domains:
+            excluded = set(self.exclude_domains)
+            return [d for d in self.domains if d.domain_id not in excluded]
         return self.domains
 
     def variant_map(self) -> dict[str, VariantConfig]:
         return {variant.variant_id: variant for variant in self.variants}
+
+    def config_for_domains(self, domain_ids: list[str]) -> "PipelineConfig":
+        """Return a copy including only the specified domains."""
+        selected = {d for d in domain_ids}
+        filtered_domains = [d for d in self.domains if d.domain_id in selected]
+        if not filtered_domains:
+            raise ValueError(f"none of the requested domains exist in config: {domain_ids}")
+        return self.model_copy(update={"domains": filtered_domains, "exclude_domains": []})
 
 
 _ENV_PATTERN = re.compile(r"\$\{([^}:]+)(?::-([^}]*))?\}")
@@ -402,6 +419,10 @@ def resolve_pipeline_payload_paths(payload: dict[str, Any], *, base_dir: Path) -
     runtime = resolved.get("runtime")
     if isinstance(runtime, dict):
         runtime["artifact_root"] = _resolve_path(base_dir, runtime.get("artifact_root"))
+        runtime["embedding_cache_dir"] = _resolve_path(
+            base_dir,
+            runtime.get("embedding_cache_dir"),
+        )
         runtime["relation_constraints_path"] = _resolve_path(
             base_dir,
             runtime.get("relation_constraints_path"),

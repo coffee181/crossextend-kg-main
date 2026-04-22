@@ -1,11 +1,11 @@
 {
-  "schema_version": "human_gold.v2",
+  "schema_version": "human_gold.v3",
   "domain_id": "battery",
-  "label_tier": "human_annotation_v1",
+  "label_tier": "human_annotation_v2",
   "annotation_status": "human_annotated",
-  "annotator_id": "human_expert_01",
-  "annotation_date": "2026-04-19",
-  "annotation_basis": "Independent human annotation from source O&M text only. Annotator did not consult pipeline extraction outputs. Task labels taken verbatim from O&M text.",
+  "annotator_id": "blind_human_annotator",
+  "annotation_date": "2026-04-22",
+  "annotation_basis": "Blind annotation from source O&M text only.",
   "documents": [
     {
       "doc_id": "BATOM_002",
@@ -16,351 +16,179 @@
     {
       "evidence_id": "BATOM_002",
       "label": "T1",
-      "step_id": "T1",
-      "surface_form": "Before replacing the chiller-inlet connector on Novaris ThermalPack-481, document the original failure as cracked shell, broken latch ear, incomplete insertion, or recurring seepage at the inlet tube bead, and note the exact operating state that exposed it. Keep the pack-to-chiller hose and the adjacent support clip undisturbed until the as-found angle is recorded.",
+      "surface_form": "For Helion PackCore-544 AWD, capture whether the issue at the front manifold face is coolant odor, slow level loss, or wetness after recent manifold removal, and note the service history that may have altered bolt clamp load or seal compression. Record the manifold-side residue pattern before the first bolt is touched.",
       "should_be_in_graph": true,
       "expected_anchor": "Task",
-      "reason": "O&M step T1, pre-replacement documentation phase"
+      "reason": "O&M step T1 retained verbatim from the source document."
     },
     {
       "evidence_id": "BATOM_002",
       "label": "T2",
-      "step_id": "T2",
-      "surface_form": "Isolate the cooling branch, recover residual coolant, and expose the tube neck, quick-connector shell, internal retainer, green O-ring, hose overmold, support clip, and nearby case rib while preserving the original hose clocking. Photograph the connector-to-clip path so the load direction remains traceable after removal.",
+      "surface_form": "Safe the pack and remove the front manifold cover so the composite manifold body, M6 retaining bolts, steel inserts, upper and lower hose necks, perimeter O-ring channel, and nearby NTC loom can be seen together. The manifold and its adjacent hose loads need to be read in one view because a distorted hose path can change flange compression.",
       "should_be_in_graph": true,
       "expected_anchor": "Task",
-      "reason": "O&M step T2, branch isolation and exposure phase"
+      "reason": "O&M step T2 retained verbatim from the source document."
     },
     {
       "evidence_id": "BATOM_002",
       "label": "T3",
-      "step_id": "T3",
-      "surface_form": "Release the connector with the approved tool and inspect the removed shell for stress whitening, latch-window distortion, inner-retainer wear, and witness marks that show whether the shell rotated or walked under vibration. A shell that is polished on one side only usually indicates bracket side load rather than poor seal material.",
+      "surface_form": "Inspect bolt witness paint, washer seating, flange gap, and dried coolant crystals around the full perimeter, then compare the upper-left and lower-right corners where clamp load often diverges first. A local flange opening at one boss points to a different repair boundary than even residue around the entire channel.",
       "should_be_in_graph": true,
       "expected_anchor": "Task",
-      "reason": "O&M step T3, connector removal and inspection phase"
+      "reason": "O&M step T3 retained verbatim from the source document."
     },
     {
       "evidence_id": "BATOM_002",
       "label": "T4",
-      "step_id": "T4",
-      "surface_form": "Inspect the aluminum tube bead, lead-in chamfer, and O-ring land for burrs, nicks, or corrosion that could cut the fresh seal during installation. Measure the bead condition and insertion depth reference before fitting the new hardware so the new connector is not asked to mask a damaged neck.",
+      "surface_form": "Lift the manifold only enough to inspect the EPDM O-ring cross-section and the groove corners at the inlet crossover, checking for twist, flattening, nicked lips, or dry installation marks. Keep dirt out of the aluminum seal land so the later compression evidence remains reliable.",
       "should_be_in_graph": true,
       "expected_anchor": "Task",
-      "reason": "O&M step T4, tube neck inspection phase"
+      "reason": "O&M step T4 retained verbatim from the source document."
     },
     {
       "evidence_id": "BATOM_002",
       "label": "T5",
-      "step_id": "T5",
-      "surface_form": "Compare the replacement connector, seal, and retainer with the removed parts, then lubricate the new O-ring as specified and install the shell square to the tube neck. Confirm that the retainer windows show full engagement and that the hose overmold is not twisted relative to the case rib.",
+      "surface_form": "Lay the manifold back against the face and measure flange stand-off at several bolts while watching whether one hose neck or bracket pushes the body off the header plate. If the top hose must be forced downward to start the bolt, the boundary is likely hose-induced preload or manifold warp rather than the seal alone.",
       "should_be_in_graph": true,
       "expected_anchor": "Task",
-      "reason": "O&M step T5, replacement installation phase"
+      "reason": "O&M step T5 retained verbatim from the source document."
     },
     {
       "evidence_id": "BATOM_002",
       "label": "T6",
-      "step_id": "T6",
-      "surface_form": "Refit the support clip and verify that the hose leaves the connector with the intended bend radius, upper-to-lower offset, and clearance to the pack case. If the clip position shortens the hose path and starts to tilt the shell, correct the support geometry before any pressure test begins.",
+      "surface_form": "Inspect the plastic body for bow, the steel inserts for pull-up, and the bolt stack for extra washer thickness or uneven bolt stretch so clamp loss is assigned to a real mechanical cause. This prevents the same leak from being mislabeled as a generic O-ring failure.",
       "should_be_in_graph": true,
       "expected_anchor": "Task",
-      "reason": "O&M step T6, clip refit and geometry verification phase"
+      "reason": "O&M step T6 retained verbatim from the source document."
     },
     {
       "evidence_id": "BATOM_002",
       "label": "T7",
-      "step_id": "T7",
-      "surface_form": "Apply a static pressure hold and watch the new shell, O-ring interface, and tube bead for fresh wetting, then compare the result with the as-found leak path. Static proof is useful only if the connector remains centered while pressure rises.",
+      "surface_form": "Replace or reseat only the failed manifold, O-ring, bolt stack, or hose support item, then torque the manifold in sequence from the center outward and confirm that the flange gap closes evenly at all corners. The hose necks should sit naturally with no side pull on the composite body.",
       "should_be_in_graph": true,
       "expected_anchor": "Task",
-      "reason": "O&M step T7, static pressure test phase"
+      "reason": "O&M step T7 retained verbatim from the source document."
     },
     {
       "evidence_id": "BATOM_002",
       "label": "T8",
-      "step_id": "T8",
-      "surface_form": "Run coolant through the repaired inlet branch and observe the connector while the pump cycles and the branch warms, because some replacement connectors stay dry at rest but sweat once the hose relaxes into its loaded position. Record both flow condition and surface state during this dynamic check.",
+      "surface_form": "Pressure-test and circulate the restored manifold branch while monitoring the manifold face, hose spigots, and the nearby NTC temperature trend because a trapped air pocket or warped flange can reopen only after the plastic body warms. Record both the dry condition and the thermal behavior during this proof cycle.",
       "should_be_in_graph": true,
       "expected_anchor": "Task",
-      "reason": "O&M step T8, dynamic flow test phase"
+      "reason": "O&M step T8 retained verbatim from the source document."
     },
     {
       "evidence_id": "BATOM_002",
       "label": "T9",
-      "step_id": "T9",
-      "surface_form": "Reinstall the access panels and repeat the same operating state that originally produced the leak so the final judgment reflects the guarded configuration and the real support path from connector to clip. The restored branch has to survive shield preload as well as coolant flow.",
+      "surface_form": "Mark the manifold repair complete only when the record identifies the exact failure mode, such as twisted perimeter O-ring, warped composite flange, insert pull-up, overlength bolt stack, or hose-side preload, and ties it to the repeated pressure and circulation result. The release boundary is a manifold face that stays dry at all bosses with even clamp witness and stable temperature response across the repaired front branch.",
       "should_be_in_graph": true,
       "expected_anchor": "Task",
-      "reason": "O&M step T9, final configuration test phase"
+      "reason": "O&M step T9 retained verbatim from the source document."
     },
     {
       "evidence_id": "BATOM_002",
-      "label": "T10",
-      "step_id": "T10",
-      "surface_form": "Close the work only after the note names the replaced and inspected items at component level, such as quick-connector shell, O-ring, inner retainer, tube bead, or support clip, and records the static and dynamic proof results beside them. The accepted state is a chiller-inlet joint that remains dry, fully latched, and naturally supported from tube neck to first clip.",
-      "should_be_in_graph": true,
-      "expected_anchor": "Task",
-      "reason": "O&M step T10, work closure and documentation phase"
-    },
-    {
-      "evidence_id": "BATOM_002",
-      "label": "Novaris ThermalPack-481",
+      "label": "Helion PackCore-544 AWD",
       "should_be_in_graph": true,
       "expected_anchor": "Asset",
-      "reason": "Named battery thermal management platform"
+      "reason": "Explicitly named battery pack in the source document."
     },
     {
       "evidence_id": "BATOM_002",
-      "label": "chiller-inlet connector",
+      "label": "front manifold face",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "Primary component being replaced"
+      "reason": "Explicit service boundary named in the source document."
     },
     {
       "evidence_id": "BATOM_002",
-      "label": "pack-to-chiller hose",
+      "label": "composite manifold body",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "Hose connecting pack to chiller"
+      "reason": "Explicitly named manifold hardware in the source document."
     },
     {
       "evidence_id": "BATOM_002",
-      "label": "support clip",
+      "label": "M6 retaining bolts",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "Clip supporting hose/connector"
+      "reason": "Explicitly named retaining hardware in the source document."
     },
     {
       "evidence_id": "BATOM_002",
-      "label": "inlet tube bead",
+      "label": "steel inserts",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "Tube bead at inlet connection point"
+      "reason": "Explicitly named manifold subcomponent in the source document."
     },
     {
       "evidence_id": "BATOM_002",
-      "label": "tube neck",
+      "label": "upper hose neck",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "Neck of tube for connector attachment"
+      "reason": "Explicitly named manifold neck location in the source document."
     },
     {
       "evidence_id": "BATOM_002",
-      "label": "quick-connector shell",
+      "label": "lower hose neck",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "Shell housing of quick connector"
+      "reason": "Explicitly named manifold neck location in the source document."
     },
     {
       "evidence_id": "BATOM_002",
-      "label": "internal retainer",
+      "label": "perimeter O-ring channel",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "Internal retention mechanism"
+      "reason": "Explicitly named seal channel in the source document."
     },
     {
       "evidence_id": "BATOM_002",
-      "label": "green O-ring",
+      "label": "EPDM O-ring",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "Seal element identified by color"
+      "reason": "Explicitly named sealing component in the source document."
     },
     {
       "evidence_id": "BATOM_002",
-      "label": "hose overmold",
-      "should_be_in_graph": true,
-      "expected_anchor": "Component",
-      "reason": "Overmolded portion of hose"
-    },
-    {
-      "evidence_id": "BATOM_002",
-      "label": "case rib",
-      "should_be_in_graph": true,
-      "expected_anchor": "Component",
-      "reason": "Structural rib on case"
-    },
-    {
-      "evidence_id": "BATOM_002",
-      "label": "aluminum tube bead",
-      "should_be_in_graph": true,
-      "expected_anchor": "Component",
-      "reason": "Aluminum bead on tube for seal engagement"
-    },
-    {
-      "evidence_id": "BATOM_002",
-      "label": "lead-in chamfer",
-      "should_be_in_graph": true,
-      "expected_anchor": "Component",
-      "reason": "Chamfered edge for tube insertion"
-    },
-    {
-      "evidence_id": "BATOM_002",
-      "label": "O-ring land",
-      "should_be_in_graph": true,
-      "expected_anchor": "Component",
-      "reason": "Sealing surface for O-ring"
-    },
-    {
-      "evidence_id": "BATOM_002",
-      "label": "access panels",
-      "should_be_in_graph": true,
-      "expected_anchor": "Component",
-      "reason": "Panels for equipment access"
-    },
-    {
-      "evidence_id": "BATOM_002",
-      "label": "operating state",
+      "label": "flange gap",
       "should_be_in_graph": true,
       "expected_anchor": "Signal",
-      "reason": "Measured state condition that exposed the failure"
+      "reason": "Explicit inspection target in the source document."
     },
     {
       "evidence_id": "BATOM_002",
-      "label": "stress whitening",
+      "label": "flange stand-off",
       "should_be_in_graph": true,
       "expected_anchor": "Signal",
-      "reason": "Visual indicator of plastic stress"
+      "reason": "Explicit measured quantity in the source document."
     },
     {
       "evidence_id": "BATOM_002",
-      "label": "latch-window distortion",
+      "label": "coolant odor",
       "should_be_in_graph": true,
       "expected_anchor": "Signal",
-      "reason": "Observable deformation of latch window"
+      "reason": "Explicit complaint signal in the source document."
     },
     {
       "evidence_id": "BATOM_002",
-      "label": "inner-retainer wear",
+      "label": "slow level loss",
       "should_be_in_graph": true,
       "expected_anchor": "Signal",
-      "reason": "Observable wear pattern on retainer"
+      "reason": "Explicit complaint signal in the source document."
     },
     {
       "evidence_id": "BATOM_002",
-      "label": "witness marks",
+      "label": "wetness",
       "should_be_in_graph": true,
       "expected_anchor": "Signal",
-      "reason": "Visible marks indicating movement or rotation"
+      "reason": "Explicit complaint signal in the source document."
     },
     {
       "evidence_id": "BATOM_002",
-      "label": "burrs",
+      "label": "NTC temperature trend",
       "should_be_in_graph": true,
       "expected_anchor": "Signal",
-      "reason": "Surface defect on tube bead"
-    },
-    {
-      "evidence_id": "BATOM_002",
-      "label": "nicks",
-      "should_be_in_graph": true,
-      "expected_anchor": "Signal",
-      "reason": "Surface damage on sealing surfaces"
-    },
-    {
-      "evidence_id": "BATOM_002",
-      "label": "corrosion",
-      "should_be_in_graph": true,
-      "expected_anchor": "Signal",
-      "reason": "Corrosion damage on metal surfaces"
-    },
-    {
-      "evidence_id": "BATOM_002",
-      "label": "bend radius",
-      "should_be_in_graph": true,
-      "expected_anchor": "Signal",
-      "reason": "Measured hose bend geometry"
-    },
-    {
-      "evidence_id": "BATOM_002",
-      "label": "upper-to-lower offset",
-      "should_be_in_graph": true,
-      "expected_anchor": "Signal",
-      "reason": "Measured offset between upper and lower positions"
-    },
-    {
-      "evidence_id": "BATOM_002",
-      "label": "clearance",
-      "should_be_in_graph": true,
-      "expected_anchor": "Signal",
-      "reason": "Measured clearance to pack case"
-    },
-    {
-      "evidence_id": "BATOM_002",
-      "label": "fresh wetting",
-      "should_be_in_graph": true,
-      "expected_anchor": "Signal",
-      "reason": "Observable new coolant leakage"
-    },
-    {
-      "evidence_id": "BATOM_002",
-      "label": "flow condition",
-      "should_be_in_graph": true,
-      "expected_anchor": "Signal",
-      "reason": "Measured coolant flow state"
-    },
-    {
-      "evidence_id": "BATOM_002",
-      "label": "surface state",
-      "should_be_in_graph": true,
-      "expected_anchor": "Signal",
-      "reason": "Observable surface condition during test"
-    },
-    {
-      "evidence_id": "BATOM_002",
-      "label": "cracked shell",
-      "should_be_in_graph": true,
-      "expected_anchor": "Fault",
-      "reason": "Named failure mode in T1"
-    },
-    {
-      "evidence_id": "BATOM_002",
-      "label": "broken latch ear",
-      "should_be_in_graph": true,
-      "expected_anchor": "Fault",
-      "reason": "Named failure mode in T1"
-    },
-    {
-      "evidence_id": "BATOM_002",
-      "label": "incomplete insertion",
-      "should_be_in_graph": true,
-      "expected_anchor": "Fault",
-      "reason": "Named failure mode in T1"
-    },
-    {
-      "evidence_id": "BATOM_002",
-      "label": "recurring seepage",
-      "should_be_in_graph": true,
-      "expected_anchor": "Fault",
-      "reason": "Named failure mode in T1"
-    },
-    {
-      "evidence_id": "BATOM_002",
-      "label": "bracket side load",
-      "should_be_in_graph": true,
-      "expected_anchor": "Fault",
-      "reason": "Root cause indicated by shell polishing pattern"
-    },
-    {
-      "evidence_id": "BATOM_002",
-      "label": "dry",
-      "should_be_in_graph": true,
-      "expected_anchor": "State",
-      "reason": "Acceptable final state condition"
-    },
-    {
-      "evidence_id": "BATOM_002",
-      "label": "fully latched",
-      "should_be_in_graph": true,
-      "expected_anchor": "State",
-      "reason": "Acceptable final latch state"
-    },
-    {
-      "evidence_id": "BATOM_002",
-      "label": "naturally supported",
-      "should_be_in_graph": true,
-      "expected_anchor": "State",
-      "reason": "Acceptable final support geometry state"
+      "reason": "Explicitly monitored thermal signal in the source document."
     }
   ],
   "relation_ground_truth": [
@@ -371,7 +199,7 @@
       "tail": "T2",
       "family": "task_dependency",
       "valid": true,
-      "reason": "T1 documentation before T2 isolation"
+      "reason": "The source procedure order places T1 before T2."
     },
     {
       "evidence_id": "BATOM_002",
@@ -380,7 +208,7 @@
       "tail": "T3",
       "family": "task_dependency",
       "valid": true,
-      "reason": "T2 exposure before T3 connector release"
+      "reason": "The source procedure order places T2 before T3."
     },
     {
       "evidence_id": "BATOM_002",
@@ -389,7 +217,7 @@
       "tail": "T4",
       "family": "task_dependency",
       "valid": true,
-      "reason": "T3 removal before T4 tube inspection"
+      "reason": "The source procedure order places T3 before T4."
     },
     {
       "evidence_id": "BATOM_002",
@@ -398,7 +226,7 @@
       "tail": "T5",
       "family": "task_dependency",
       "valid": true,
-      "reason": "T4 inspection before T5 installation"
+      "reason": "The source procedure order places T4 before T5."
     },
     {
       "evidence_id": "BATOM_002",
@@ -407,7 +235,7 @@
       "tail": "T6",
       "family": "task_dependency",
       "valid": true,
-      "reason": "T5 installation before T6 clip refit"
+      "reason": "The source procedure order places T5 before T6."
     },
     {
       "evidence_id": "BATOM_002",
@@ -416,7 +244,7 @@
       "tail": "T7",
       "family": "task_dependency",
       "valid": true,
-      "reason": "T6 geometry verification before T7 pressure test"
+      "reason": "The source procedure order places T6 before T7."
     },
     {
       "evidence_id": "BATOM_002",
@@ -425,7 +253,7 @@
       "tail": "T8",
       "family": "task_dependency",
       "valid": true,
-      "reason": "T7 static test before T8 dynamic test"
+      "reason": "The source procedure order places T7 before T8."
     },
     {
       "evidence_id": "BATOM_002",
@@ -434,104 +262,171 @@
       "tail": "T9",
       "family": "task_dependency",
       "valid": true,
-      "reason": "T8 dynamic test before T9 final configuration"
+      "reason": "The source procedure order places T8 before T9."
     },
     {
       "evidence_id": "BATOM_002",
-      "head": "T9",
-      "relation": "triggers",
-      "tail": "T10",
-      "family": "task_dependency",
-      "valid": true,
-      "reason": "T9 final test before T10 closure"
-    },
-    {
-      "evidence_id": "BATOM_002",
-      "head": "Novaris ThermalPack-481",
+      "head": "Helion PackCore-544 AWD",
       "relation": "contains",
-      "tail": "chiller-inlet connector",
+      "tail": "composite manifold body",
       "family": "structural",
       "valid": true,
-      "reason": "Connector is part of thermal pack system"
+      "reason": "The named pack includes the exposed front manifold hardware."
     },
     {
       "evidence_id": "BATOM_002",
-      "head": "chiller-inlet connector",
+      "head": "composite manifold body",
       "relation": "contains",
-      "tail": "quick-connector shell",
+      "tail": "steel inserts",
       "family": "structural",
       "valid": true,
-      "reason": "Shell is part of connector assembly"
+      "reason": "The source presents steel inserts as part of the manifold body assembly."
     },
     {
       "evidence_id": "BATOM_002",
-      "head": "chiller-inlet connector",
+      "head": "composite manifold body",
       "relation": "contains",
-      "tail": "internal retainer",
+      "tail": "upper hose neck",
       "family": "structural",
       "valid": true,
-      "reason": "Retainer is internal to connector"
+      "reason": "The source presents the upper hose neck as part of the manifold body assembly."
     },
     {
       "evidence_id": "BATOM_002",
-      "head": "chiller-inlet connector",
+      "head": "composite manifold body",
       "relation": "contains",
-      "tail": "green O-ring",
+      "tail": "lower hose neck",
       "family": "structural",
       "valid": true,
-      "reason": "O-ring is seal in connector assembly"
+      "reason": "The source presents the lower hose neck as part of the manifold body assembly."
     },
     {
       "evidence_id": "BATOM_002",
-      "head": "stress whitening",
-      "relation": "indicates",
-      "tail": "cracked shell",
-      "family": "communication",
+      "head": "composite manifold body",
+      "relation": "contains",
+      "tail": "perimeter O-ring channel",
+      "family": "structural",
       "valid": true,
-      "reason": "Visual stress indicator points to shell crack potential"
+      "reason": "The source presents the perimeter O-ring channel as part of the manifold body assembly."
+    }
+  ],
+  "workflow_relation_ground_truth": [
+    {
+      "evidence_id": "BATOM_002",
+      "head": "T1",
+      "relation": "records",
+      "tail": "coolant odor",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T1 explicitly captures coolant odor as an issue option."
     },
     {
       "evidence_id": "BATOM_002",
-      "head": "latch-window distortion",
-      "relation": "indicates",
-      "tail": "broken latch ear",
-      "family": "communication",
+      "head": "T1",
+      "relation": "records",
+      "tail": "slow level loss",
+      "family": "action_object",
       "valid": true,
-      "reason": "Distortion indicates latch mechanism failure"
+      "reason": "T1 explicitly captures slow level loss as an issue option."
     },
     {
       "evidence_id": "BATOM_002",
-      "head": "witness marks",
-      "relation": "indicates",
-      "tail": "bracket side load",
-      "family": "communication",
+      "head": "T1",
+      "relation": "records",
+      "tail": "wetness",
+      "family": "action_object",
       "valid": true,
-      "reason": "Movement marks indicate side load condition"
+      "reason": "T1 explicitly captures wetness as an issue option."
     },
     {
       "evidence_id": "BATOM_002",
-      "head": "fresh wetting",
-      "relation": "indicates",
-      "tail": "recurring seepage",
-      "family": "communication",
+      "head": "T3",
+      "relation": "inspects",
+      "tail": "M6 retaining bolts",
+      "family": "action_object",
       "valid": true,
-      "reason": "New wetting indicates continued leak"
+      "reason": "T3 explicitly inspects bolt witness paint and washer seating."
     },
     {
       "evidence_id": "BATOM_002",
-      "head": "bracket side load",
-      "relation": "causes",
-      "tail": "cracked shell",
-      "family": "propagation",
+      "head": "T3",
+      "relation": "inspects",
+      "tail": "flange gap",
+      "family": "action_object",
       "valid": true,
-      "reason": "Side load can cause shell cracking"
+      "reason": "T3 explicitly inspects the flange gap."
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "head": "T4",
+      "relation": "inspects",
+      "tail": "EPDM O-ring",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T4 explicitly inspects the EPDM O-ring cross-section."
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "head": "T5",
+      "relation": "measures",
+      "tail": "flange stand-off",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T5 explicitly measures flange stand-off."
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "head": "T6",
+      "relation": "inspects",
+      "tail": "composite manifold body",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T6 explicitly inspects the plastic body for bow."
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "head": "T6",
+      "relation": "inspects",
+      "tail": "steel inserts",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T6 explicitly inspects the steel inserts for pull-up."
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "head": "T7",
+      "relation": "confirms",
+      "tail": "flange gap",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T7 explicitly confirms that the flange gap closes evenly."
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "head": "T8",
+      "relation": "observes",
+      "tail": "front manifold face",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T8 explicitly monitors the manifold face during proof."
+    },
+    {
+      "evidence_id": "BATOM_002",
+      "head": "T8",
+      "relation": "measures",
+      "tail": "NTC temperature trend",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T8 explicitly monitors the nearby NTC temperature trend."
     }
   ],
   "_statistics": {
-    "total_concepts": 47,
-    "positive_concepts": 47,
+    "total_concepts": 24,
+    "positive_concepts": 24,
     "negative_concepts": 0,
-    "total_relations": 18,
-    "valid_relations": 18
+    "total_relations": 13,
+    "valid_relations": 13,
+    "total_workflow_relations": 12,
+    "valid_workflow_relations": 12
   }
 }

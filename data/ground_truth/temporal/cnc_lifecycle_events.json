@@ -1,0 +1,51 @@
+{
+  "schema_version": "lifecycle_gold.v2",
+  "domain_id": "cnc",
+  "annotation_date": "2026-04-21",
+  "annotation_basis": "Blind support annotation from source O&M text only. Pairs, chains, questions, and lifecycle events were curated without consulting model outputs. When source support was weak, the item was omitted instead of guessed.",
+  "timestamp_policy": "Synthetic relative timestamps encode manual procedure order only. They are not real-world event dates and must not be interpreted as operational history.",
+  "lifecycle_events": [
+    {
+      "event_id": "CLE_001",
+      "object_id": "cnc::fault::CNCOM_001_return_hose_boundary",
+      "event_type": "fault_occurrence",
+      "timestamp": "2000-01-01T01:00:00Z",
+      "description": "CNCOM_001 opens with a spindle-chiller branch leak under the true circulation state."
+    },
+    {
+      "event_id": "CLE_002",
+      "object_id": "cnc::component::CNCOM_001_upper return-hose clamp",
+      "event_type": "maintenance",
+      "timestamp": "2000-01-01T06:00:00Z",
+      "description": "CNCOM_001 repositions the hose and clamp and restores the original clip path."
+    },
+    {
+      "event_id": "CLE_003",
+      "object_id": "cnc::fault::CNCOM_002_drawbar_clamp_stack",
+      "event_type": "fault_occurrence",
+      "timestamp": "2000-01-02T01:00:00Z",
+      "description": "CNCOM_002 records a drawbar clamp-stack fault tied to force, pressure, and stack geometry."
+    },
+    {
+      "event_id": "CLE_004",
+      "object_id": "cnc::component::CNCOM_002_Belleville stack",
+      "event_type": "maintenance",
+      "timestamp": "2000-01-02T07:00:00Z",
+      "description": "CNCOM_002 rebuilds the Belleville stack in the correct order and verifies the repair."
+    },
+    {
+      "event_id": "CLE_005",
+      "object_id": "cnc::fault::CNCOM_003_taper_contamination",
+      "event_type": "fault_occurrence",
+      "timestamp": "2000-01-03T01:00:00Z",
+      "description": "CNCOM_003 isolates the boundary to taper contamination and blocked purge rather than bearings."
+    },
+    {
+      "event_id": "CLE_006",
+      "object_id": "cnc::component::CNCOM_003_BT40 taper mouth",
+      "event_type": "maintenance",
+      "timestamp": "2000-01-03T05:00:00Z",
+      "description": "CNCOM_003 accepts the spindle only after cleaning and purge recovery restore contact and runout."
+    }
+  ]
+}

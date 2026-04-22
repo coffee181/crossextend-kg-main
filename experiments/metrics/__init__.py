@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Metrics package for strict evaluation plus relaxed diagnostics."""
 
-from .core import (
+from experiments.metrics.core import (
     classification_metrics,
     compute_metrics,
     f1_score,
@@ -16,7 +16,7 @@ from .core import (
     safe_div,
     set_metrics,
 )
-from .evaluate import aggregate_metric_payloads, evaluate_variant_run, write_ablation_csv
+from experiments.metrics.evaluate import aggregate_metric_payloads, evaluate_variant_run, write_ablation_csv
 
 __all__ = [
     "aggregate_metric_payloads",

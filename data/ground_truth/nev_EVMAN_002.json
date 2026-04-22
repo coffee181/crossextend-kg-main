@@ -1,11 +1,11 @@
 {
-  "schema_version": "human_gold.v2",
+  "schema_version": "human_gold.v3",
   "domain_id": "nev",
-  "label_tier": "human_annotation_v1",
+  "label_tier": "human_annotation_v2",
   "annotation_status": "human_annotated",
-  "annotator_id": "human_expert_01",
-  "annotation_date": "2026-04-20",
-  "annotation_basis": "Independent human annotation from source O&M text. Task labels use step_id (T1-T8), concepts extracted with semantic type hints.",
+  "annotator_id": "blind_human_annotator",
+  "annotation_date": "2026-04-22",
+  "annotation_basis": "Blind annotation from source O&M text only.",
   "documents": [
     {
       "doc_id": "EVMAN_002",
@@ -16,361 +16,205 @@
     {
       "evidence_id": "EVMAN_002",
       "label": "T1",
-      "step_id": "T1",
-      "surface_form": "On vehicle Aurex E-Motion-412 LR, record battery coolant level, residue color, undertray wetness, recent thermal-system repair history, and whether seepage is already visible at the left coolant-plate outlet while the pack remains in the as-received condition with no covers moved.",
+      "surface_form": "At Velorian PackLine-287 AWD, reproduce the service-disconnect seating complaint by noting latch feel, insertion force, handle flushness, any HVIL warning, and whether the orange handle sits proud of the battery access opening or snaps back after seating. Keep the opening complaint tied to the actual handle position and HVIL response so later seat checks stay on the same disconnect boundary.",
       "should_be_in_graph": true,
       "expected_anchor": "Task",
-      "reason": "O&M step T1, intake documentation"
+      "reason": "O&M step T1 retained verbatim from the source document."
     },
     {
       "evidence_id": "EVMAN_002",
       "label": "T2",
-      "step_id": "T2",
-      "surface_form": "Power the vehicle down, isolate the high-voltage pack, and allow the local cooling branch to equalize; then remove the rear underbody shield and the left pack-side splash cover while keeping the hose angle unchanged so the original quick-coupler seating witness can still be read.",
+      "surface_form": "Depower the pack, verify zero residual high-voltage potential at the service-disconnect cavity, and remove the access lid so the disconnect plug, blade set, guide rail, interlock pins, latch window, and surrounding sealing edge are all visible in one service view.",
       "should_be_in_graph": true,
       "expected_anchor": "Task",
-      "reason": "O&M step T2, vehicle isolation and access"
+      "reason": "O&M step T2 retained verbatim from the source document."
     },
     {
       "evidence_id": "EVMAN_002",
       "label": "T3",
-      "step_id": "T3",
-      "surface_form": "Wipe only the loose surface film first, leave the wet edge untouched, and trace the leak path from the coolant-plate seam toward the outlet hose, the quick-coupler lock window, the O-ring seat, and the nearby bracket drain edge so the actual origin is not blurred by cleaning too early.",
+      "surface_form": "Pull the service disconnect straight out without rotating it, then inspect the male blades, female socket faces, guide ribs, CPA feature, handle pivot, and latch hook for burrs, arc marks, plastic rollover, uneven insertion witness lines, or debris in the guide channel.",
       "should_be_in_graph": true,
       "expected_anchor": "Task",
-      "reason": "O&M step T3, leak tracing"
+      "reason": "O&M step T3 retained verbatim from the source document."
     },
     {
       "evidence_id": "EVMAN_002",
       "label": "T4",
-      "step_id": "T4",
-      "surface_form": "Install the local pressure tool on the coolant-plate inlet and outlet, cap the neighboring branch, and hold the specified pressure long enough to observe whether fresh wetting begins at the plate seam, the coupler body, the hose clamp line, or the tube insertion stop inside the connector.",
+      "surface_form": "Compare the suspect disconnect with a known-good reference or spare, checking seating depth, latch travel, blade exposure, guide-rib alignment, and the shoulder position of the interlock pins so the seat issue is tied to geometry rather than to feel alone.",
       "should_be_in_graph": true,
       "expected_anchor": "Task",
-      "reason": "O&M step T4, pressure test"
+      "reason": "O&M step T4 retained verbatim from the source document."
     },
     {
       "evidence_id": "EVMAN_002",
       "label": "T5",
-      "step_id": "T5",
-      "surface_form": "Compare the suspect joint with the opposite coolant-plate branch, paying attention to hose twist, clamp clocking, connector latch height, tube insertion depth, and any side-load mark where the support bracket may have forced the plastic coupler body off-axis.",
+      "surface_form": "Rework the seat condition by correcting the misaligned guide feature, removing only the minor burr or displaced plastic that blocks full travel, and cleaning the contact area without changing the original blade profile, terminal tension, or latch geometry. The correction has to preserve the blade path and the interlock-pin relationship rather than forcing the handle closed by cosmetic trimming.",
       "should_be_in_graph": true,
       "expected_anchor": "Task",
-      "reason": "O&M step T5, cross-comparison"
+      "reason": "O&M step T5 retained verbatim from the source document."
     },
     {
       "evidence_id": "EVMAN_002",
       "label": "T6",
-      "step_id": "T6",
-      "surface_form": "Inspect the aluminum plate edge, the molded quick connector, the green O-ring land, the hose end, and the nearby harness clip for dried coolant crystals, abrasion, plastic stress whitening, or metal staining that would separate connector leakage from a plate-side crack.",
+      "surface_form": "Reinstall the service disconnect in one continuous motion, confirm full blade entry, verify the latch hook snaps fully into the window, and check that the orange handle now remains flush with the cover plane instead of rebounding or sitting with a visible gap.",
       "should_be_in_graph": true,
       "expected_anchor": "Task",
-      "reason": "O&M step T6, component inspection"
+      "reason": "O&M step T6 retained verbatim from the source document."
     },
     {
       "evidence_id": "EVMAN_002",
       "label": "T7",
-      "step_id": "T7",
-      "surface_form": "Mark the confirmed leak boundary directly at the leaking hardware, photograph the coolant-plate seam and the quick-coupler seat from more than one angle, and note clearly whether the failure belongs to the plate seam, the O-ring interface, the connector shell, or the hose-routing condition.",
+      "surface_form": "Restore the service lid, wake the pack, and confirm through two seat checks that the HVIL path, service-disconnect status, and ready-state permissive remain stable with no handle movement, no latch relaxation, and no repeat interlock warning. The release condition is a disconnect that seats flush and keeps the HVIL path stable after the lid and surrounding trim return to final position.",
       "should_be_in_graph": true,
       "expected_anchor": "Task",
-      "reason": "O&M step T7, boundary confirmation"
+      "reason": "O&M step T7 retained verbatim from the source document."
     },
     {
       "evidence_id": "EVMAN_002",
-      "label": "T8",
-      "step_id": "T8",
-      "surface_form": "Refit only the access parts needed to protect the opened area, leave the identified leak point readable for downstream repair, and close the record with the exact hardware named as battery coolant-plate outlet quick connector or coolant-plate seam instead of leaving a generic leak description.",
-      "should_be_in_graph": true,
-      "expected_anchor": "Task",
-      "reason": "O&M step T8, closure"
-    },
-    {
-      "evidence_id": "EVMAN_002",
-      "label": "Aurex E-Motion-412 LR",
+      "label": "Velorian PackLine-287 AWD",
       "should_be_in_graph": true,
       "expected_anchor": "Asset",
-      "reason": "Named EV vehicle platform"
+      "reason": "Explicitly named EV platform in the source document."
     },
     {
       "evidence_id": "EVMAN_002",
-      "label": "high-voltage pack",
+      "label": "service disconnect",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "Primary component being diagnosed"
+      "reason": "Explicit service boundary named in the source document."
     },
     {
       "evidence_id": "EVMAN_002",
-      "label": "coolant plate",
+      "label": "blade set",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "Cooling plate assembly"
+      "reason": "Explicitly named connector subcomponent in the source document."
     },
     {
       "evidence_id": "EVMAN_002",
-      "label": "left coolant-plate outlet",
+      "label": "guide rail",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "Specific outlet being investigated"
+      "reason": "Explicitly named guide feature in the source document."
     },
     {
       "evidence_id": "EVMAN_002",
-      "label": "outlet hose",
+      "label": "interlock pins",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "Hose at coolant outlet"
+      "reason": "Explicitly named interlock feature in the source document."
     },
     {
       "evidence_id": "EVMAN_002",
-      "label": "quick coupler",
+      "label": "latch window",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "Connector at outlet"
+      "reason": "Explicitly named latch feature in the source document."
     },
     {
       "evidence_id": "EVMAN_002",
-      "label": "quick-coupler lock window",
+      "label": "male blades",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "Latch mechanism visibility"
+      "reason": "Explicitly named blade feature in the source document."
     },
     {
       "evidence_id": "EVMAN_002",
-      "label": "O-ring seat",
+      "label": "female socket faces",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "O-ring sealing surface"
+      "reason": "Explicitly named socket feature in the source document."
     },
     {
       "evidence_id": "EVMAN_002",
-      "label": "bracket drain edge",
+      "label": "guide ribs",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "Support bracket drainage"
+      "reason": "Explicitly named guide feature in the source document."
     },
     {
       "evidence_id": "EVMAN_002",
-      "label": "local pressure tool",
+      "label": "latch hook",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "Test equipment"
+      "reason": "Explicitly named latch feature in the source document."
     },
     {
       "evidence_id": "EVMAN_002",
-      "label": "coolant-plate inlet",
+      "label": "orange handle",
       "should_be_in_graph": true,
       "expected_anchor": "Component",
-      "reason": "Plate inlet port"
+      "reason": "Explicitly named handle feature in the source document."
     },
     {
       "evidence_id": "EVMAN_002",
-      "label": "coolant-plate outlet",
-      "should_be_in_graph": true,
-      "expected_anchor": "Component",
-      "reason": "Plate outlet port"
-    },
-    {
-      "evidence_id": "EVMAN_002",
-      "label": "molded quick connector",
-      "should_be_in_graph": true,
-      "expected_anchor": "Component",
-      "reason": "Plastic connector body"
-    },
-    {
-      "evidence_id": "EVMAN_002",
-      "label": "green O-ring land",
-      "should_be_in_graph": true,
-      "expected_anchor": "Component",
-      "reason": "O-ring sealing groove"
-    },
-    {
-      "evidence_id": "EVMAN_002",
-      "label": "hose end",
-      "should_be_in_graph": true,
-      "expected_anchor": "Component",
-      "reason": "Hose termination"
-    },
-    {
-      "evidence_id": "EVMAN_002",
-      "label": "harness clip",
-      "should_be_in_graph": true,
-      "expected_anchor": "Component",
-      "reason": "Wire routing fixture"
-    },
-    {
-      "evidence_id": "EVMAN_002",
-      "label": "rear underbody shield",
-      "should_be_in_graph": true,
-      "expected_anchor": "Component",
-      "reason": "Vehicle cover panel"
-    },
-    {
-      "evidence_id": "EVMAN_002",
-      "label": "left pack-side splash cover",
-      "should_be_in_graph": true,
-      "expected_anchor": "Component",
-      "reason": "Pack-side protection panel"
-    },
-    {
-      "evidence_id": "EVMAN_002",
-      "label": "support bracket",
-      "should_be_in_graph": true,
-      "expected_anchor": "Component",
-      "reason": "Bracket supporting hose routing"
-    },
-    {
-      "evidence_id": "EVMAN_002",
-      "label": "battery coolant-plate outlet quick connector",
-      "should_be_in_graph": true,
-      "expected_anchor": "Component",
-      "reason": "Named leak boundary in T8"
-    },
-    {
-      "evidence_id": "EVMAN_002",
-      "label": "seepage",
+      "label": "latch feel",
       "should_be_in_graph": true,
       "expected_anchor": "Signal",
-      "reason": "Observable leak symptom"
+      "reason": "Explicitly recorded seating signal in the source document."
     },
     {
       "evidence_id": "EVMAN_002",
-      "label": "battery coolant level",
+      "label": "insertion force",
       "should_be_in_graph": true,
       "expected_anchor": "Signal",
-      "reason": "Measured coolant quantity"
+      "reason": "Explicitly recorded seating signal in the source document."
     },
     {
       "evidence_id": "EVMAN_002",
-      "label": "residue color",
+      "label": "handle flushness",
       "should_be_in_graph": true,
       "expected_anchor": "Signal",
-      "reason": "Observed residue characteristic"
+      "reason": "Explicitly recorded seating signal in the source document."
     },
     {
       "evidence_id": "EVMAN_002",
-      "label": "undertray wetness",
+      "label": "HVIL warning",
       "should_be_in_graph": true,
       "expected_anchor": "Signal",
-      "reason": "Observed wetness indicator"
+      "reason": "Explicitly recorded interlock signal in the source document."
     },
     {
       "evidence_id": "EVMAN_002",
-      "label": "fresh wetting",
+      "label": "seating depth",
       "should_be_in_graph": true,
       "expected_anchor": "Signal",
-      "reason": "Observed new leak during test"
+      "reason": "Explicitly checked geometry signal in the source document."
     },
     {
       "evidence_id": "EVMAN_002",
-      "label": "hose twist",
+      "label": "latch travel",
       "should_be_in_graph": true,
       "expected_anchor": "Signal",
-      "reason": "Measured hose orientation"
+      "reason": "Explicitly checked latch motion signal in the source document."
     },
     {
       "evidence_id": "EVMAN_002",
-      "label": "clamp clocking",
+      "label": "blade exposure",
       "should_be_in_graph": true,
       "expected_anchor": "Signal",
-      "reason": "Measured clamp orientation"
+      "reason": "Explicitly checked geometry signal in the source document."
     },
     {
       "evidence_id": "EVMAN_002",
-      "label": "connector latch height",
+      "label": "HVIL path",
       "should_be_in_graph": true,
       "expected_anchor": "Signal",
-      "reason": "Measured latch position"
+      "reason": "Explicitly confirmed interlock path in the source document."
     },
     {
       "evidence_id": "EVMAN_002",
-      "label": "tube insertion depth",
+      "label": "service-disconnect status",
       "should_be_in_graph": true,
       "expected_anchor": "Signal",
-      "reason": "Measured tube seating"
+      "reason": "Explicitly confirmed status signal in the source document."
     },
     {
       "evidence_id": "EVMAN_002",
-      "label": "side-load mark",
+      "label": "ready-state permissive",
       "should_be_in_graph": true,
       "expected_anchor": "Signal",
-      "reason": "Evidence of mechanical load"
-    },
-    {
-      "evidence_id": "EVMAN_002",
-      "label": "dried coolant crystals",
-      "should_be_in_graph": true,
-      "expected_anchor": "Signal",
-      "reason": "Residue evidence"
-    },
-    {
-      "evidence_id": "EVMAN_002",
-      "label": "abrasion",
-      "should_be_in_graph": true,
-      "expected_anchor": "Signal",
-      "reason": "Observed wear pattern"
-    },
-    {
-      "evidence_id": "EVMAN_002",
-      "label": "plastic stress whitening",
-      "should_be_in_graph": true,
-      "expected_anchor": "Signal",
-      "reason": "Observed plastic stress"
-    },
-    {
-      "evidence_id": "EVMAN_002",
-      "label": "metal staining",
-      "should_be_in_graph": true,
-      "expected_anchor": "Signal",
-      "reason": "Observed corrosion evidence"
-    },
-    {
-      "evidence_id": "EVMAN_002",
-      "label": "coolant-plate seam leak",
-      "should_be_in_graph": true,
-      "expected_anchor": "Fault",
-      "reason": "Named leak boundary candidate"
-    },
-    {
-      "evidence_id": "EVMAN_002",
-      "label": "O-ring interface leak",
-      "should_be_in_graph": true,
-      "expected_anchor": "Fault",
-      "reason": "Named leak boundary candidate"
-    },
-    {
-      "evidence_id": "EVMAN_002",
-      "label": "connector shell leak",
-      "should_be_in_graph": true,
-      "expected_anchor": "Fault",
-      "reason": "Named leak boundary candidate"
-    },
-    {
-      "evidence_id": "EVMAN_002",
-      "label": "hose-routing condition fault",
-      "should_be_in_graph": true,
-      "expected_anchor": "Fault",
-      "reason": "Named leak boundary candidate"
-    },
-    {
-      "evidence_id": "EVMAN_002",
-      "label": "as-received condition",
-      "should_be_in_graph": true,
-      "expected_anchor": "State",
-      "reason": "Vehicle state before any work"
-    },
-    {
-      "evidence_id": "EVMAN_002",
-      "label": "hose angle",
-      "should_be_in_graph": true,
-      "expected_anchor": "State",
-      "reason": "Original hose orientation preserved"
-    },
-    {
-      "evidence_id": "EVMAN_002",
-      "label": "recent thermal-system repair history",
-      "should_be_in_graph": false,
-      "expected_anchor": null,
-      "reason": "Historical context, not graph-worthy"
+      "reason": "Explicitly confirmed ready-state signal in the source document."
     }
   ],
   "relation_ground_truth": [
@@ -381,7 +225,7 @@
       "tail": "T2",
       "family": "task_dependency",
       "valid": true,
-      "reason": "Documentation before vehicle isolation"
+      "reason": "The source procedure order places T1 before T2."
     },
     {
       "evidence_id": "EVMAN_002",
@@ -390,7 +234,7 @@
       "tail": "T3",
       "family": "task_dependency",
       "valid": true,
-      "reason": "Access before leak tracing"
+      "reason": "The source procedure order places T2 before T3."
     },
     {
       "evidence_id": "EVMAN_002",
@@ -399,7 +243,7 @@
       "tail": "T4",
       "family": "task_dependency",
       "valid": true,
-      "reason": "Tracing before pressure test"
+      "reason": "The source procedure order places T3 before T4."
     },
     {
       "evidence_id": "EVMAN_002",
@@ -408,7 +252,7 @@
       "tail": "T5",
       "family": "task_dependency",
       "valid": true,
-      "reason": "Pressure test before comparison"
+      "reason": "The source procedure order places T4 before T5."
     },
     {
       "evidence_id": "EVMAN_002",
@@ -417,7 +261,7 @@
       "tail": "T6",
       "family": "task_dependency",
       "valid": true,
-      "reason": "Comparison before component inspection"
+      "reason": "The source procedure order places T5 before T6."
     },
     {
       "evidence_id": "EVMAN_002",
@@ -426,104 +270,216 @@
       "tail": "T7",
       "family": "task_dependency",
       "valid": true,
-      "reason": "Inspection before boundary confirmation"
+      "reason": "The source procedure order places T6 before T7."
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "Velorian PackLine-287 AWD",
+      "relation": "contains",
+      "tail": "service disconnect",
+      "family": "structural",
+      "valid": true,
+      "reason": "The complaint is explicitly on the service disconnect of Velorian PackLine-287 AWD."
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "service disconnect",
+      "relation": "contains",
+      "tail": "blade set",
+      "family": "structural",
+      "valid": true,
+      "reason": "The source exposes the blade set within the service disconnect."
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "service disconnect",
+      "relation": "contains",
+      "tail": "guide rail",
+      "family": "structural",
+      "valid": true,
+      "reason": "The source exposes the guide rail within the service disconnect."
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "service disconnect",
+      "relation": "contains",
+      "tail": "interlock pins",
+      "family": "structural",
+      "valid": true,
+      "reason": "The source exposes the interlock pins within the service disconnect."
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "service disconnect",
+      "relation": "contains",
+      "tail": "latch window",
+      "family": "structural",
+      "valid": true,
+      "reason": "The source exposes the latch window within the service disconnect."
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "service disconnect",
+      "relation": "contains",
+      "tail": "orange handle",
+      "family": "structural",
+      "valid": true,
+      "reason": "The source explicitly ties handle position to the disconnect boundary."
+    }
+  ],
+  "workflow_relation_ground_truth": [
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "T1",
+      "relation": "records",
+      "tail": "latch feel",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T1 explicitly notes latch feel."
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "T1",
+      "relation": "records",
+      "tail": "insertion force",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T1 explicitly notes insertion force."
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "T1",
+      "relation": "records",
+      "tail": "handle flushness",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T1 explicitly notes handle flushness."
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "T1",
+      "relation": "records",
+      "tail": "HVIL warning",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T1 explicitly notes any HVIL warning."
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "T3",
+      "relation": "inspects",
+      "tail": "male blades",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T3 explicitly inspects the male blades."
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "T3",
+      "relation": "inspects",
+      "tail": "female socket faces",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T3 explicitly inspects the female socket faces."
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "T3",
+      "relation": "inspects",
+      "tail": "guide ribs",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T3 explicitly inspects the guide ribs."
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "T3",
+      "relation": "inspects",
+      "tail": "latch hook",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T3 explicitly inspects the latch hook."
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "T4",
+      "relation": "checks",
+      "tail": "seating depth",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T4 explicitly checks seating depth."
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "T4",
+      "relation": "checks",
+      "tail": "latch travel",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T4 explicitly checks latch travel."
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "T4",
+      "relation": "checks",
+      "tail": "blade exposure",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T4 explicitly checks blade exposure."
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "T6",
+      "relation": "confirms",
+      "tail": "latch hook",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T6 explicitly verifies the latch hook snaps fully into the window."
+    },
+    {
+      "evidence_id": "EVMAN_002",
+      "head": "T6",
+      "relation": "confirms",
+      "tail": "orange handle",
+      "family": "action_object",
+      "valid": true,
+      "reason": "T6 explicitly checks that the orange handle remains flush."
     },
     {
       "evidence_id": "EVMAN_002",
       "head": "T7",
-      "relation": "triggers",
-      "tail": "T8",
-      "family": "task_dependency",
+      "relation": "confirms",
+      "tail": "HVIL path",
+      "family": "action_object",
       "valid": true,
-      "reason": "Confirmation before closure"
+      "reason": "T7 explicitly confirms HVIL path stability."
     },
     {
       "evidence_id": "EVMAN_002",
-      "head": "support bracket",
-      "relation": "causes",
-      "tail": "side-load mark",
-      "family": "propagation",
+      "head": "T7",
+      "relation": "confirms",
+      "tail": "service-disconnect status",
+      "family": "action_object",
       "valid": true,
-      "reason": "Bracket forces hose off-axis"
+      "reason": "T7 explicitly confirms service-disconnect status stability."
     },
     {
       "evidence_id": "EVMAN_002",
-      "head": "side-load mark",
-      "relation": "causes",
-      "tail": "connector shell leak",
-      "family": "propagation",
+      "head": "T7",
+      "relation": "confirms",
+      "tail": "ready-state permissive",
+      "family": "action_object",
       "valid": true,
-      "reason": "Side load causes connector distortion"
-    },
-    {
-      "evidence_id": "EVMAN_002",
-      "head": "seepage",
-      "relation": "indicates",
-      "tail": "coolant-plate seam leak",
-      "family": "communication",
-      "valid": true,
-      "reason": "Visible seepage points to leak boundary"
-    },
-    {
-      "evidence_id": "EVMAN_002",
-      "head": "fresh wetting",
-      "relation": "indicates",
-      "tail": "O-ring interface leak",
-      "family": "communication",
-      "valid": true,
-      "reason": "Test result reveals leak location"
-    },
-    {
-      "evidence_id": "EVMAN_002",
-      "head": "plastic stress whitening",
-      "relation": "indicates",
-      "tail": "side-load mark",
-      "family": "communication",
-      "valid": true,
-      "reason": "Whitening reveals mechanical stress history"
-    },
-    {
-      "evidence_id": "EVMAN_002",
-      "head": "Aurex E-Motion-412 LR",
-      "relation": "contains",
-      "tail": "high-voltage pack",
-      "family": "structural",
-      "valid": true,
-      "reason": "Pack is part of vehicle"
-    },
-    {
-      "evidence_id": "EVMAN_002",
-      "head": "high-voltage pack",
-      "relation": "contains",
-      "tail": "coolant plate",
-      "family": "structural",
-      "valid": true,
-      "reason": "Coolant plate is in battery pack"
-    },
-    {
-      "evidence_id": "EVMAN_002",
-      "head": "coolant plate",
-      "relation": "contains",
-      "tail": "coolant-plate outlet",
-      "family": "structural",
-      "valid": true,
-      "reason": "Outlet is plate feature"
-    },
-    {
-      "evidence_id": "EVMAN_002",
-      "head": "coolant-plate outlet",
-      "relation": "contains",
-      "tail": "quick coupler",
-      "family": "structural",
-      "valid": true,
-      "reason": "Connector attaches to outlet"
+      "reason": "T7 explicitly confirms ready-state permissive stability."
     }
   ],
   "_statistics": {
-    "total_concepts": 49,
-    "positive_concepts": 48,
-    "negative_concepts": 1,
-    "total_relations": 16,
-    "valid_relations": 16
+    "total_concepts": 28,
+    "positive_concepts": 28,
+    "negative_concepts": 0,
+    "total_relations": 12,
+    "valid_relations": 12,
+    "total_workflow_relations": 16,
+    "valid_workflow_relations": 16
   }
 }

@@ -16,18 +16,12 @@ def empty_retrievals(candidates: list[SchemaCandidate]) -> dict[str, list[Retrie
     return {candidate.candidate_id: [] for candidate in candidates}
 
 
-def _is_task_candidate(candidate: SchemaCandidate) -> bool:
-    if candidate.routing_features.get("is_task_candidate"):
-        return True
-    task_step_id = candidate.routing_features.get("task_step_id")
-    return isinstance(task_step_id, str) and task_step_id.startswith("T")
-
-
 def retrieve_anchor_rankings(
     embedding_backend,
     backbone_descriptions: dict[str, str],
     candidates: list[SchemaCandidate],
     top_k: int,
+    domain_id: str | None = None,
 ) -> dict[str, list[RetrievedAnchor]]:
     if not candidates:
         return {}
@@ -35,20 +29,21 @@ def retrieve_anchor_rankings(
     rankings = empty_retrievals(candidates)
     anchor_names = list(backbone_descriptions)
     anchor_texts = [f"{anchor}: {backbone_descriptions[anchor]}" for anchor in anchor_names]
-
-    routable_candidates = [candidate for candidate in candidates if not _is_task_candidate(candidate)]
-    if not routable_candidates:
-        return rankings
-
-    candidate_texts = [f"{candidate.label}: {candidate.description}".strip() for candidate in routable_candidates]
+    candidate_texts = [f"{candidate.label}: {candidate.description}".strip() for candidate in candidates]
     cache_key = (id(embedding_backend), tuple(anchor_texts))
     anchor_vectors = _ANCHOR_VECTOR_CACHE.get(cache_key)
     if anchor_vectors is None:
-        anchor_vectors = embedding_backend.embed_texts(anchor_texts)
+        try:
+            anchor_vectors = embedding_backend.embed_texts(anchor_texts, domain_id=domain_id)
+        except TypeError:
+            anchor_vectors = embedding_backend.embed_texts(anchor_texts)
         _ANCHOR_VECTOR_CACHE[cache_key] = anchor_vectors
-    candidate_vectors = embedding_backend.embed_texts(candidate_texts)
+    try:
+        candidate_vectors = embedding_backend.embed_texts(candidate_texts, domain_id=domain_id)
+    except TypeError:
+        candidate_vectors = embedding_backend.embed_texts(candidate_texts)
 
-    for candidate, candidate_vector in zip(routable_candidates, candidate_vectors, strict=False):
+    for candidate, candidate_vector in zip(candidates, candidate_vectors, strict=False):
         scored: list[RetrievedAnchor] = []
         for anchor_name, anchor_vector in zip(anchor_names, anchor_vectors, strict=False):
             scored.append(

@@ -59,8 +59,11 @@ runtime:
   save_latest_summary: true
   write_detailed_working_artifacts: false
   write_jsonl_artifacts: false
+  write_graphml: true
   write_graph_db_csv: false
   write_property_graph_jsonl: false
+  enable_embedding_cache: true
+  embedding_cache_dir: ../../data/faiss-data
   run_prefix: run
   relation_constraints_path: ./relation_constraints.json
   enable_relation_validation: true
