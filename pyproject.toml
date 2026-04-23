@@ -14,7 +14,18 @@ dependencies = [
 ]
 
 [tool.setuptools]
-packages = ["crossextend_kg", "crossextend_kg.pipeline", "crossextend_kg.backends", "crossextend_kg.preprocessing", "crossextend_kg.rules", "crossextend_kg.experiments"]
+packages = [
+    "crossextend_kg",
+    "crossextend_kg.pipeline",
+    "crossextend_kg.pipeline.exports",
+    "crossextend_kg.backends",
+    "crossextend_kg.preprocessing",
+    "crossextend_kg.rules",
+    "crossextend_kg.experiments",
+    "crossextend_kg.experiments.metrics",
+    "crossextend_kg.experiments.downstream",
+    "crossextend_kg.temporal",
+]
 
 [tool.setuptools.package-dir]
 "crossextend_kg" = "."

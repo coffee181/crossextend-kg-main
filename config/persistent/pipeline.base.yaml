@@ -8,27 +8,17 @@ backbone:
   seed_concepts:
     - Asset
     - Component
-    - Process
     - Task
     - Signal
     - State
     - Fault
-    - MaintenanceAction
-    - Incident
-    - Actor
-    - Document
   seed_descriptions:
     Asset: industrial asset, machine, line, robot, battery pack, assembly, cabinet, robotic arm, control system, main equipment
     Component: part, module, bearing, reducer, lock, cooling module, hardware component, subassembly part, harness, sensor, motor, controller
-    Process: industrial process or operational procedure, charging process, diagnostic process, maintenance workflow
-    Task: maintenance or operational task, inspection task, calibration task, shutdown task, work order, repair task
+    Task: legacy workflow projection anchor for O&M step nodes
     Signal: alarm, warning, telemetry, sensor reading, sensor signal, vibration signal, torque signal, temperature signal
     State: operating state, normal state, abnormal state, status condition, overload state, shortage status, shutdown state
     Fault: fault, failure, defect, damage, deviation, drift, anomaly root issue, isolation fault, temperature fault
-    MaintenanceAction: repair, replacement action, reset action, recalibration action, power-off operation, refueling action
-    Incident: event, abnormal incident, occurrence, fault event, shutdown event, safety incident
-    Actor: technician, operator, engineer, actor, battery service technician, maintenance crew
-    Document: report, ticket, document, manual, work order document, operation log, maintenance manual
 
 relations:
   relation_families:

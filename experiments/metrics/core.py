@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Core strict metrics plus relaxed diagnostics for graph evaluation."""
+"""Workflow-first graph metrics with nested legacy diagnostics."""
 
 from __future__ import annotations
 
@@ -429,6 +429,35 @@ def workflow_diagnostics_payload(
     }
 
 
+def strict_error_examples(
+    gold_concept_map: dict[str, str],
+    predicted_concept_map: dict[str, str],
+    gold_relation_set: set[tuple[str, str, str, str]],
+    predicted_relation_set: set[tuple[str, str, str, str]],
+) -> dict[str, Any]:
+    return {
+        "missing_concepts": sorted(set(gold_concept_map) - set(predicted_concept_map))[:15],
+        "extra_concepts": sorted(set(predicted_concept_map) - set(gold_concept_map))[:15],
+        "missing_relations": [
+            {"head": head, "relation": relation, "tail": tail, "family": family}
+            for head, relation, tail, family in sorted(gold_relation_set - predicted_relation_set)[:15]
+        ],
+        "extra_relations": [
+            {"head": head, "relation": relation, "tail": tail, "family": family}
+            for head, relation, tail, family in sorted(predicted_relation_set - gold_relation_set)[:15]
+        ],
+        "anchor_confusions": [
+            {
+                "label": label,
+                "predicted_anchor": predicted_concept_map[label],
+                "gold_anchor": gold_concept_map[label],
+            }
+            for label in sorted(set(predicted_concept_map) & set(gold_concept_map))
+            if predicted_concept_map[label] != gold_concept_map[label]
+        ][:15],
+    }
+
+
 def compute_metrics(gold_path: str | Path, graph_path: str | Path) -> dict[str, Any]:
     gold_payload = read_json(gold_path)
     graph_payload = read_json(graph_path)
@@ -451,11 +480,15 @@ def compute_metrics(gold_path: str | Path, graph_path: str | Path) -> dict[str, 
     predicted_canonical_concept_pairs = canonical_concept_anchor_pairs(predicted_concept_map)
     gold_relaxed_labels = normalize_label_set(gold_concept_map)
     predicted_relaxed_labels = normalize_label_set(predicted_concept_map)
-
-    payload = {
-        "gold_path": str(Path(gold_path).resolve()),
-        "graph_path": str(Path(graph_path).resolve()),
-        "documents": sorted(doc_ids),
+    workflow_payload = workflow_diagnostics_payload(gold_payload, graph_payload, doc_ids)
+    relaxed_diagnostics = build_relaxed_diagnostics(
+        predicted_concept_map=predicted_concept_map,
+        gold_concept_map=gold_concept_map,
+        predicted_relation_set=predicted_relation_set,
+        gold_relation_set=gold_relation_set,
+        set_metrics_fn=set_metrics,
+    )
+    strict_metrics = {
         "node_coverage_metrics": set_metrics(predicted_relaxed_labels, gold_relaxed_labels),
         "anchored_node_canonical_metrics": set_metrics(
             predicted_canonical_concept_pairs,
@@ -463,46 +496,37 @@ def compute_metrics(gold_path: str | Path, graph_path: str | Path) -> dict[str, 
         ),
         "concept_metrics": set_metrics(predicted_concept_pairs, gold_concept_pairs),
         "concept_label_metrics": set_metrics(set(predicted_concept_map), set(gold_concept_map)),
-        "anchor_metrics": classification_metrics(predicted_concept_map, gold_concept_map),
         "relation_metrics": set_metrics(predicted_relation_set, gold_relation_set),
-        "predicted_counts": {
-            "concepts": len(predicted_concept_map),
-            "relations": len(predicted_relation_set),
+    }
+
+    return {
+        "gold_path": str(Path(gold_path).resolve()),
+        "graph_path": str(Path(graph_path).resolve()),
+        "documents": sorted(doc_ids),
+        "workflow_step_metrics": workflow_payload["workflow_step_metrics"],
+        "workflow_sequence_metrics": workflow_payload["workflow_sequence_metrics"],
+        "workflow_grounding_metrics": workflow_payload["workflow_grounding_metrics"],
+        "anchor_metrics": classification_metrics(predicted_concept_map, gold_concept_map),
+        "graph_stats": {
+            "predicted_concepts": len(predicted_concept_map),
+            "predicted_relations": len(predicted_relation_set),
+            "gold_concepts": len(gold_concept_map),
+            "gold_relations": len(gold_relation_set),
         },
-        "gold_counts": {
-            "concepts": len(gold_concept_map),
-            "relations": len(gold_relation_set),
-        },
-        "error_examples": {
-            "missing_concepts": sorted(set(gold_concept_map) - set(predicted_concept_map))[:15],
-            "extra_concepts": sorted(set(predicted_concept_map) - set(gold_concept_map))[:15],
-            "missing_relations": [
-                {"head": head, "relation": relation, "tail": tail, "family": family}
-                for head, relation, tail, family in sorted(gold_relation_set - predicted_relation_set)[:15]
-            ],
-            "extra_relations": [
-                {"head": head, "relation": relation, "tail": tail, "family": family}
-                for head, relation, tail, family in sorted(predicted_relation_set - gold_relation_set)[:15]
-            ],
-            "anchor_confusions": [
-                {
-                    "label": label,
-                    "predicted_anchor": predicted_concept_map[label],
-                    "gold_anchor": gold_concept_map[label],
-                }
-                for label in sorted(set(predicted_concept_map) & set(gold_concept_map))
-                if predicted_concept_map[label] != gold_concept_map[label]
-            ][:15],
+        "diagnostics": {
+            "legacy_strict_metrics": strict_metrics,
+            "workflow_diagnostics": {
+                "workflow_grounding_stats": workflow_payload["workflow_grounding_stats"],
+                "isolated_node_delta": workflow_payload["isolated_node_delta"],
+                "workflow_edge_examples": workflow_payload["workflow_edge_examples"],
+                "workflow_error_examples": workflow_payload["workflow_error_examples"],
+            },
+            "strict_error_examples": strict_error_examples(
+                gold_concept_map=gold_concept_map,
+                predicted_concept_map=predicted_concept_map,
+                gold_relation_set=gold_relation_set,
+                predicted_relation_set=predicted_relation_set,
+            ),
+            "relaxed": relaxed_diagnostics,
         },
     }
-    payload.update(workflow_diagnostics_payload(gold_payload, graph_payload, doc_ids))
-    payload.update(
-        build_relaxed_diagnostics(
-            predicted_concept_map=predicted_concept_map,
-            gold_concept_map=gold_concept_map,
-            predicted_relation_set=predicted_relation_set,
-            gold_relation_set=gold_relation_set,
-            set_metrics_fn=set_metrics,
-        )
-    )
-    return payload

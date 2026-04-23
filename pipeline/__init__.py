@@ -1,6 +1,6 @@
 """Pipeline package for CrossExtend-KG."""
 
-from pipeline.runner import run_pipeline
+from pipeline.runner import run_pipeline, run_pipeline_for_domains
 from pipeline.evidence import (
     load_records_by_domain,
     build_evidence_units,
@@ -27,6 +27,7 @@ from pipeline.utils import (
 __all__ = [
     # Runner
     "run_pipeline",
+    "run_pipeline_for_domains",
     # Evidence
     "load_records_by_domain",
     "build_evidence_units",

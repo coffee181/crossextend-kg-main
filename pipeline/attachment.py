@@ -20,11 +20,11 @@ logger = logging.getLogger(__name__)
 _PROPAGATION_FAMILIES: frozenset[str] = frozenset({"propagation", "communication"})
 _SEMANTIC_TYPE_HINTS: frozenset[str] = frozenset({"Asset", "Component", "Signal", "State", "Fault"})
 _FAMILY_COMPATIBLE_ANCHORS: dict[str, frozenset[str]] = {
-    "task_dependency": frozenset({"Task", "Process", "Actor", "Signal", "State", "Fault", "Asset", "Component", "Document"}),
-    "communication": frozenset({"Component", "Signal", "Process", "State", "Asset", "Actor", "Task", "Fault"}),
-    "propagation": frozenset({"Fault", "Signal", "State", "Process", "Component"}),
+    "task_dependency": frozenset({"Task", "Signal", "State", "Fault", "Asset", "Component"}),
+    "communication": frozenset({"Component", "Signal", "State", "Fault"}),
+    "propagation": frozenset({"Fault", "Signal", "State", "Component"}),
     "structural": frozenset({"Asset", "Component"}),
-    "lifecycle": frozenset({"Asset", "Component", "Fault", "State", "MaintenanceAction", "Incident", "Process"}),
+    "lifecycle": frozenset({"Asset", "Component", "Fault", "State"}),
 }
 
 ALLOWED_REJECT_REASONS: tuple[RejectReason, ...] = (

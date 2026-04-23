@@ -44,8 +44,10 @@ from rules.relation_filtering import filter_relation_mention
 
 logger = logging.getLogger(__name__)
 
-_STRUCTURAL_CONTEXTUAL_HEAD_PATTERN = re.compile(r"\b(branch|path|condition|state)\b", re.IGNORECASE)
-_INTERFACE_CONTAINER_PATTERN = re.compile(r"\b(face|surface|interface)\b", re.IGNORECASE)
+_STRUCTURAL_CONTEXTUAL_HEAD_PATTERN = re.compile(
+    r"\b(branch|path|condition|state|section|geometry|position|circuit|loop|face|surface|interface|cavity|pocket|edge)\b",
+    re.IGNORECASE,
+)
 _STEP_SUMMARY_PREFIX_PATTERN = re.compile(r"^(?:for|on|at)\s+[^,]+,\s*", re.IGNORECASE)
 _STEP_SUMMARY_WORD_PATTERN = re.compile(r"[A-Za-z0-9][A-Za-z0-9\-./]*")
 _STEP_SUMMARY_SPLITTERS = (
@@ -59,6 +61,142 @@ _STEP_SUMMARY_SPLITTERS = (
     " before ",
     " after ",
 )
+_WORKFLOW_DISPLAY_ACTIONS = ("record", "inspect", "measure", "expose", "compare", "repair", "verify", "remove")
+_WORKFLOW_ACTION_LOOKUP = {
+    "record": "record",
+    "records": "record",
+    "capture": "record",
+    "captures": "record",
+    "document": "record",
+    "documents": "record",
+    "note": "record",
+    "notes": "record",
+    "log": "record",
+    "logs": "record",
+    "inspect": "inspect",
+    "inspects": "inspect",
+    "inspection": "inspect",
+    "observe": "inspect",
+    "observes": "inspect",
+    "check": "inspect",
+    "checks": "inspect",
+    "review": "inspect",
+    "reviews": "inspect",
+    "watch": "inspect",
+    "watches": "inspect",
+    "examine": "inspect",
+    "examines": "inspect",
+    "identify": "inspect",
+    "identifies": "inspect",
+    "trace": "inspect",
+    "traces": "inspect",
+    "measure": "measure",
+    "measures": "measure",
+    "measurement": "measure",
+    "gauge": "measure",
+    "gauges": "measure",
+    "quantify": "measure",
+    "quantifies": "measure",
+    "expose": "expose",
+    "exposes": "expose",
+    "exposure": "expose",
+    "open": "expose",
+    "opens": "expose",
+    "access": "expose",
+    "accesses": "expose",
+    "uncover": "expose",
+    "uncovers": "expose",
+    "isolate": "expose",
+    "isolates": "expose",
+    "safe": "expose",
+    "lift": "expose",
+    "compare": "compare",
+    "compares": "compare",
+    "comparison": "compare",
+    "compares with": "compare",
+    "compares_with": "compare",
+    "align": "compare",
+    "aligns": "compare",
+    "match": "compare",
+    "matches": "compare",
+    "repair": "repair",
+    "repairs": "repair",
+    "replacement": "repair",
+    "replace": "repair",
+    "replaces": "repair",
+    "reseat": "repair",
+    "reseats": "repair",
+    "reset": "repair",
+    "resets": "repair",
+    "correct": "repair",
+    "corrects": "repair",
+    "refit": "repair",
+    "refits": "repair",
+    "install": "repair",
+    "installs": "repair",
+    "installs on": "repair",
+    "installs_on": "repair",
+    "renew": "repair",
+    "renews": "repair",
+    "restore": "repair",
+    "restores": "repair",
+    "torque": "repair",
+    "torques": "repair",
+    "tighten": "repair",
+    "tightens": "repair",
+    "lubricate": "repair",
+    "lubricates": "repair",
+    "verify": "verify",
+    "verifies": "verify",
+    "verification": "verify",
+    "validation": "verify",
+    "confirm": "verify",
+    "confirms": "verify",
+    "validate": "verify",
+    "validates": "verify",
+    "prove": "verify",
+    "proves": "verify",
+    "test": "verify",
+    "tests": "verify",
+    "pressure-test": "verify",
+    "pressure-tests": "verify",
+    "circulate": "verify",
+    "circulates": "verify",
+    "monitor": "verify",
+    "monitors": "verify",
+    "release": "verify",
+    "remove": "remove",
+    "removes": "remove",
+    "removal": "remove",
+    "detach": "remove",
+    "detaches": "remove",
+}
+_WEAK_WORKFLOW_RELATION_LABELS = {
+    "allows",
+    "allow",
+    "holds",
+    "hold",
+    "keeps",
+    "keep",
+    "leaves",
+    "leave",
+    "names",
+    "name",
+    "marks",
+    "mark",
+    "performed on",
+    "performed_on",
+    "pays attention to",
+    "pays_attention_to",
+    "requires",
+    "require",
+    "runs",
+    "run",
+    "targets",
+    "target",
+}
+_WORKFLOW_GENERIC_CONTEXT_PATTERN = re.compile(r"\b(branch|path|history|context|process|cycle)\b", re.IGNORECASE)
+_WORKFLOW_LABEL_TOKEN_PATTERN = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)?", re.IGNORECASE)
 
 
 def _task_candidate_label(evidence_id: str, step_id: str) -> str:
@@ -125,19 +263,213 @@ def _step_summary_source(step_record) -> str:
     return _normalize_space(step_record.task.label)
 
 
-def _build_step_display_label(step_record) -> str:
+def _normalize_relation_phrase(value: str) -> str:
+    return _normalize_space(str(value).replace("_", " ").replace("/", " ")).lower()
+
+
+def _canonical_action_from_phrase(value: str) -> str | None:
+    normalized = _normalize_relation_phrase(value)
+    if not normalized:
+        return None
+    if normalized in _WEAK_WORKFLOW_RELATION_LABELS:
+        return None
+    if normalized in _WORKFLOW_ACTION_LOOKUP:
+        return _WORKFLOW_ACTION_LOOKUP[normalized]
+    for token in _WORKFLOW_LABEL_TOKEN_PATTERN.findall(normalized):
+        canonical = _WORKFLOW_ACTION_LOOKUP.get(token)
+        if canonical:
+            return canonical
+    return None
+
+
+def _sentence_case(value: str) -> str:
+    compact = value.strip()
+    if not compact:
+        return ""
+    return compact[:1].upper() + compact[1:]
+
+
+def _step_summary_text(step_record) -> str:
     source = _step_summary_source(step_record)
     if not source:
-        return step_record.step_id
+        return ""
 
     summary = _STEP_SUMMARY_PREFIX_PATTERN.sub("", source, count=1).strip()
     lowered = summary.lower()
     split_points = [lowered.find(splitter) for splitter in _STEP_SUMMARY_SPLITTERS if lowered.find(splitter) > 0]
     if split_points:
         summary = summary[: min(split_points)].strip()
-    summary = _truncate_step_summary(summary)
+    return summary
+
+
+def _canonical_step_action(step_record) -> str | None:
+    summary = _normalize_relation_phrase(_step_summary_text(step_record))
     if not summary:
-        return step_record.step_id
+        return None
+    if "pressure hold" in summary or "proof cycle" in summary:
+        return "verify"
+    if "time to first" in summary:
+        return "measure"
+    return _canonical_action_from_phrase(summary)
+
+
+def _step_tail_anchor_map(step_record) -> dict[str, str | None]:
+    return {
+        mention.label: mention.semantic_type_hint
+        for mention in step_record.concept_mentions
+    }
+
+
+def _workflow_display_action(
+    *,
+    raw_label: str,
+    step_action: str | None,
+    tail_anchor: str | None,
+) -> str | None:
+    raw_action = _canonical_action_from_phrase(raw_label)
+    if raw_action == "inspect" and step_action in {"record", "verify"} and tail_anchor in {"Signal", "State", "Fault"}:
+        return step_action
+    if raw_action == "record" and step_action == "verify" and tail_anchor in {"Signal", "State", "Fault"}:
+        return "verify"
+    if raw_action in _WORKFLOW_DISPLAY_ACTIONS:
+        return raw_action
+    if step_action in _WORKFLOW_DISPLAY_ACTIONS:
+        return step_action
+    return None
+
+
+def _workflow_edge_display_policy(
+    *,
+    raw_label: str,
+    display_action: str | None,
+    tail_label: str,
+    tail_anchor: str | None,
+) -> tuple[str, bool, str | None]:
+    if not display_action:
+        return ("low", False, "unsupported_workflow_action")
+
+    normalized_raw = _normalize_relation_phrase(raw_label)
+    normalized_tail = _normalize_relation_phrase(tail_label)
+    is_weak_raw = normalized_raw in _WEAK_WORKFLOW_RELATION_LABELS
+
+    if tail_anchor == "Asset":
+        return ("low", False, "workflow_asset_context")
+
+    if is_weak_raw:
+        if (
+            display_action in {"expose", "remove", "repair"}
+            and tail_anchor == "Component"
+            and not _WORKFLOW_GENERIC_CONTEXT_PATTERN.search(normalized_tail)
+        ):
+            return ("medium", True, None)
+        if display_action == "verify" and tail_anchor in {"State", "Fault"}:
+            return ("medium", True, None)
+        return ("low", False, "weak_workflow_relation")
+
+    if display_action == "record":
+        if tail_anchor in {"Signal", "State", "Fault"}:
+            return ("high", True, None)
+        return ("low", False, "record_requires_signal_like_target")
+
+    if display_action == "inspect":
+        if tail_anchor in {"Signal", "Component", "State", "Fault"}:
+            return ("high", True, None)
+        return ("low", False, "inspect_requires_grounded_target")
+
+    if display_action == "measure":
+        if tail_anchor in {"Signal", "Component", "State"}:
+            return ("high", True, None)
+        return ("low", False, "measure_requires_grounded_target")
+
+    if display_action == "compare":
+        if tail_anchor in {"Signal", "Component", "State"}:
+            return ("medium", True, None)
+        return ("low", False, "compare_requires_grounded_target")
+
+    if display_action in {"expose", "remove", "repair"}:
+        if tail_anchor == "Component":
+            return ("high", True, None)
+        if display_action == "repair" and tail_anchor in {"State", "Fault"}:
+            return ("medium", True, None)
+        return ("low", False, f"{display_action}_requires_component_target")
+
+    if display_action == "verify":
+        if tail_anchor in {"State", "Fault"}:
+            return ("high", True, None)
+        if tail_anchor in {"Signal", "Component"}:
+            return ("medium", True, None)
+        return ("low", False, "verify_requires_grounded_target")
+
+    return ("low", False, "unsupported_workflow_action")
+
+
+def _default_step_object_phrase(action: str, dominant_anchor: str | None) -> str:
+    if action == "record":
+        return "issue evidence"
+    if action == "inspect":
+        if dominant_anchor == "Component":
+            return "critical components"
+        if dominant_anchor in {"State", "Fault"}:
+            return "fault boundary"
+        return "key evidence"
+    if action == "measure":
+        return "critical dimensions"
+    if action == "expose":
+        return "local assembly"
+    if action == "compare":
+        return "reference dimensions"
+    if action == "repair":
+        return "failed interface"
+    if action == "verify":
+        return "repair outcome"
+    if action == "remove":
+        return "access cover"
+    return "workflow step"
+
+
+def _build_step_display_label(step_record) -> str:
+    step_action = _canonical_step_action(step_record)
+    tail_anchor_map = _step_tail_anchor_map(step_record)
+    candidate_edges: list[tuple[int, str, str | None, str]] = []
+
+    for relation in step_record.relation_mentions:
+        if _extract_step_id(relation.head) != _extract_step_id(step_record.step_id):
+            continue
+        display_action = _workflow_display_action(
+            raw_label=relation.label,
+            step_action=step_action,
+            tail_anchor=tail_anchor_map.get(relation.tail),
+        )
+        salience, admitted, _ = _workflow_edge_display_policy(
+            raw_label=relation.label,
+            display_action=display_action,
+            tail_label=relation.tail,
+            tail_anchor=tail_anchor_map.get(relation.tail),
+        )
+        if not admitted or not display_action:
+            continue
+        salience_rank = {"high": 0, "medium": 1, "low": 2}[salience]
+        candidate_edges.append((salience_rank, display_action, tail_anchor_map.get(relation.tail), relation.tail))
+
+    chosen_action = step_action or (candidate_edges[0][1] if candidate_edges else None)
+    if not chosen_action:
+        fallback = _truncate_step_summary(_step_summary_text(step_record))
+        if not fallback:
+            return step_record.step_id
+        return f"{fallback} ({step_record.step_id})"
+
+    candidate_edges.sort(key=lambda item: (item[0], item[1] != chosen_action, len(item[3]), item[3]))
+    matching_tails = [item for item in candidate_edges if item[1] == chosen_action]
+    dominant_anchor = matching_tails[0][2] if matching_tails else (candidate_edges[0][2] if candidate_edges else None)
+
+    if len(matching_tails) == 1:
+        object_phrase = matching_tails[0][3]
+    elif len(matching_tails) > 1:
+        object_phrase = _default_step_object_phrase(chosen_action, dominant_anchor)
+    else:
+        object_phrase = _default_step_object_phrase(chosen_action, dominant_anchor)
+
+    summary = f"{_sentence_case(chosen_action)} {object_phrase}"
     return f"{summary} ({step_record.step_id})"
 
 
@@ -161,79 +493,53 @@ def _dedupe_relation_mentions(relations):
     return deduped
 
 
-def _build_structural_interface_maps(
-    relations,
-    node_anchor_map: dict[str, str | None],
-) -> tuple[dict[str, str], dict[str, str]]:
-    component_interface_candidates: dict[str, set[str]] = {}
-    for relation in relations:
-        if relation.family != "structural" or relation.label != "contains":
-            continue
-        if node_anchor_map.get(relation.head) != "Component" or node_anchor_map.get(relation.tail) != "Component":
-            continue
-        if not _INTERFACE_CONTAINER_PATTERN.search(relation.tail):
-            continue
-        component_interface_candidates.setdefault(relation.head, set()).add(relation.tail)
-
-    component_interface_map = {
-        head: next(iter(candidates))
-        for head, candidates in component_interface_candidates.items()
-        if len(candidates) == 1
-    }
-
-    asset_interface_candidates: dict[str, set[str]] = {}
-    for relation in relations:
-        if relation.family != "structural" or relation.label != "contains":
-            continue
-        if node_anchor_map.get(relation.head) != "Asset":
-            continue
-        candidate = None
-        if node_anchor_map.get(relation.tail) == "Component" and _INTERFACE_CONTAINER_PATTERN.search(relation.tail):
-            candidate = relation.tail
-        elif relation.tail in component_interface_map:
-            candidate = component_interface_map[relation.tail]
-        if candidate is not None:
-            asset_interface_candidates.setdefault(relation.head, set()).add(candidate)
-
-    asset_interface_map = {
-        head: next(iter(candidates))
-        for head, candidates in asset_interface_candidates.items()
-        if len(candidates) == 1
-    }
-    return component_interface_map, asset_interface_map
-
-
 def _normalize_document_relations(
     relations,
     node_anchor_map: dict[str, str | None],
 ):
-    component_interface_map, asset_interface_map = _build_structural_interface_maps(relations, node_anchor_map)
-    normalized = []
-    for relation in relations:
-        current = relation
-        if relation.family == "structural" and relation.label == "contains":
-            head_anchor = node_anchor_map.get(relation.head)
-            tail_anchor = node_anchor_map.get(relation.tail)
-            if (
-                head_anchor == "Component"
-                and tail_anchor == "Component"
-                and _INTERFACE_CONTAINER_PATTERN.search(relation.tail)
-            ):
-                current = relation.model_copy(update={"head": relation.tail, "tail": relation.head})
-            elif head_anchor == "Asset" and tail_anchor == "Component":
-                tail_interface = component_interface_map.get(relation.tail)
-                if tail_interface and tail_interface != relation.tail:
-                    current = relation.model_copy(update={"tail": tail_interface})
-                else:
-                    preferred_interface = asset_interface_map.get(relation.head)
-                    if preferred_interface and preferred_interface != relation.tail:
-                        current = relation.model_copy(update={"head": preferred_interface})
-            elif head_anchor == "Component" and tail_anchor == "Component":
-                preferred_interface = component_interface_map.get(relation.head)
-                if preferred_interface and preferred_interface != relation.tail:
-                    current = relation.model_copy(update={"head": preferred_interface})
-        normalized.append(current)
-    return _dedupe_relation_mentions(normalized)
+    _ = node_anchor_map
+    return _dedupe_relation_mentions(relations)
+
+
+def _build_record_step_support(record) -> dict[str, set[str]]:
+    support: dict[str, set[str]] = {}
+    for step_record in record.step_records:
+        step_id = _extract_step_id(step_record.step_id) or step_record.step_id
+        if not step_id:
+            continue
+        for mention in step_record.concept_mentions:
+            label = _normalize_space(mention.label)
+            if label:
+                support.setdefault(label, set()).add(step_id)
+        for relation in step_record.relation_mentions:
+            for endpoint in (relation.head, relation.tail):
+                label = _normalize_space(endpoint)
+                if not label or _extract_step_id(label):
+                    continue
+                support.setdefault(label, set()).add(step_id)
+    return support
+
+
+def _document_semantic_reject_reason(
+    *,
+    relation_origin: str,
+    relation_family: str,
+    head: str,
+    tail: str,
+    concept_step_support: dict[str, set[str]],
+) -> str | None:
+    if relation_origin != "document" or relation_family not in {"communication", "propagation", "lifecycle"}:
+        return None
+
+    head_steps = concept_step_support.get(head, set())
+    tail_steps = concept_step_support.get(tail, set())
+    if not head_steps or not tail_steps:
+        return "document_semantic_requires_step_grounding"
+
+    if len(head_steps | tail_steps) == 1:
+        return "single_step_diagnostic_hypothesis"
+
+    return None
 
 
 def _classify_task_dependency(
@@ -258,6 +564,14 @@ def _classify_task_dependency(
     if head_layer == "semantic" and tail_layer == "workflow":
         return ("semantic", None, "semantic_to_workflow_not_allowed")
     return ("semantic", None, "task_dependency_requires_workflow_head")
+
+
+def _semantic_edge_display_policy(family: str) -> tuple[str, bool, str | None]:
+    if family in {"communication", "propagation", "lifecycle"}:
+        return ("high", True, None)
+    if family == "structural":
+        return ("medium", True, None)
+    return ("low", True, None)
 
 
 def build_domain_schemas(
@@ -338,9 +652,11 @@ def assemble_domain_graphs(
             accepted_evidence_ids.append(record.evidence_id)
             new_node_ids: list[str] = []
             new_edge_ids: list[str] = []
+            step_action_by_label: dict[str, str | None] = {}
 
             for step_position, step_record in enumerate(record.step_records, start=1):
                 scoped_label = _task_candidate_label(record.evidence_id, step_record.step_id)
+                step_action_by_label[scoped_label] = _canonical_step_action(step_record)
                 materialized_candidate_ids.add(f"{domain.domain_id}::workflow_step::{scoped_label}")
                 node_id = f"{domain.domain_id}::node::{scoped_label}"
                 if node_id not in node_map:
@@ -421,11 +737,21 @@ def assemble_domain_graphs(
                 for node in node_map.values()
             }
 
-            document_concept_labels = {mention.label for mention in record.document_concept_mentions}
             normalized_document_relations = _normalize_document_relations(
                 record.document_relation_mentions,
                 current_node_types,
             )
+            concept_step_support = _build_record_step_support(record)
+            multi_target_document_relation_keys: set[tuple[str, str, str]] = set()
+            document_relation_targets: dict[tuple[str, str, str], set[str]] = {}
+            for relation in normalized_document_relations:
+                if relation.family not in {"communication", "propagation"}:
+                    continue
+                key = (relation.head, relation.label, relation.family)
+                document_relation_targets.setdefault(key, set()).add(relation.tail)
+            for key, tails in document_relation_targets.items():
+                if len(tails) > 1:
+                    multi_target_document_relation_keys.add(key)
             relation_stream: list[tuple[object, str]] = [
                 (relation, "document")
                 for relation in normalized_document_relations
@@ -454,11 +780,14 @@ def assemble_domain_graphs(
                     reject_reason = "invalid_relation_family"
                 elif (
                     relation_origin == "document"
-                    and relation.family in {"communication", "propagation", "lifecycle"}
-                    and (resolved_head not in document_concept_labels or resolved_tail not in document_concept_labels)
+                    and relation.family in {"communication", "propagation"}
+                    and (relation.head, relation.label, relation.family) in multi_target_document_relation_keys
                 ):
                     accepted = False
-                    reject_reason = "document_local_semantic_relation"
+                    reject_reason = "multi_target_diagnostic_hypothesis"
+                elif relation.family == "structural" and resolved_head == resolved_tail:
+                    accepted = False
+                    reject_reason = "structural_self_loop"
                 elif relation.family == "structural" and _STRUCTURAL_CONTEXTUAL_HEAD_PATTERN.search(resolved_head):
                     accepted = False
                     reject_reason = "structural_contextual_head"
@@ -505,35 +834,49 @@ def assemble_domain_graphs(
                         accepted = False
                         reject_reason = "semantic_relation_requires_semantic_nodes"
                     else:
-                        relation_accepted, relation_filter_reason = filter_relation_mention(
-                            family=relation.family,
+                        semantic_gate_reason = _document_semantic_reject_reason(
+                            relation_origin=relation_origin,
+                            relation_family=relation.family,
                             head=resolved_head,
                             tail=resolved_tail,
-                            relation_label=relation.label,
-                            head_in_graph=head_in_graph,
-                            tail_in_graph=tail_in_graph,
-                            node_anchor_map=current_node_types,
+                            concept_step_support=concept_step_support,
                         )
-                        if not relation_accepted:
+                        if semantic_gate_reason:
                             accepted = False
-                            reject_reason = relation_filter_reason
-                        else:
-                            accepted = head_in_graph and tail_in_graph
-                            if not accepted:
-                                rejection_parts = []
-                                if not head_in_graph:
-                                    if head_decision and head_decision.reject_reason:
-                                        rejection_parts.append(f"head:{head_decision.reject_reason}")
-                                    else:
-                                        rejection_parts.append("head:not_in_graph")
-                                if not tail_in_graph:
-                                    if tail_decision and tail_decision.reject_reason:
-                                        rejection_parts.append(f"tail:{tail_decision.reject_reason}")
-                                    else:
-                                        rejection_parts.append("tail:not_in_graph")
-                                reject_reason = ";".join(rejection_parts)
+                            reject_reason = semantic_gate_reason
                             graph_layer = "semantic"
                             workflow_kind = None
+                            relation_accepted = False
+                        else:
+                            relation_accepted, relation_filter_reason = filter_relation_mention(
+                                family=relation.family,
+                                head=resolved_head,
+                                tail=resolved_tail,
+                                relation_label=relation.label,
+                                head_in_graph=head_in_graph,
+                                tail_in_graph=tail_in_graph,
+                                node_anchor_map=current_node_types,
+                            )
+                            if not relation_accepted:
+                                accepted = False
+                                reject_reason = relation_filter_reason
+                            else:
+                                accepted = head_in_graph and tail_in_graph
+                                if not accepted:
+                                    rejection_parts = []
+                                    if not head_in_graph:
+                                        if head_decision and head_decision.reject_reason:
+                                            rejection_parts.append(f"head:{head_decision.reject_reason}")
+                                        else:
+                                            rejection_parts.append("head:not_in_graph")
+                                    if not tail_in_graph:
+                                        if tail_decision and tail_decision.reject_reason:
+                                            rejection_parts.append(f"tail:{tail_decision.reject_reason}")
+                                        else:
+                                            rejection_parts.append("tail:not_in_graph")
+                                    reject_reason = ";".join(rejection_parts)
+                                graph_layer = "semantic"
+                                workflow_kind = None
 
                 type_valid = True
                 if accepted and constraints:
@@ -556,16 +899,54 @@ def assemble_domain_graphs(
 
                 final_accepted = accepted and type_valid
                 final_status = "accepted" if final_accepted else ("rejected_type" if accepted and not type_valid else "rejected")
+                raw_relation = relation.label
+                display_relation = relation.label
+                edge_salience: str | None = None
+                display_admitted = False
+                display_reject_reason = "not_accepted"
+
+                if final_accepted:
+                    if graph_layer == "workflow" and workflow_kind == "sequence":
+                        display_relation = "triggers"
+                        edge_salience = "high"
+                        display_admitted = True
+                        display_reject_reason = None
+                    elif graph_layer == "workflow" and workflow_kind == "action_object":
+                        step_action = step_action_by_label.get(resolved_head)
+                        tail_anchor = current_node_types.get(resolved_tail)
+                        display_relation = (
+                            _workflow_display_action(
+                                raw_label=raw_relation,
+                                step_action=step_action,
+                                tail_anchor=tail_anchor,
+                            )
+                            or raw_relation
+                        )
+                        edge_salience, display_admitted, display_reject_reason = _workflow_edge_display_policy(
+                            raw_label=raw_relation,
+                            display_action=display_relation if display_relation in _WORKFLOW_DISPLAY_ACTIONS else None,
+                            tail_label=resolved_tail,
+                            tail_anchor=tail_anchor,
+                        )
+                    else:
+                        edge_salience, display_admitted, display_reject_reason = _semantic_edge_display_policy(relation.family)
+                        display_relation = relation.label
+
                 triples.append(
                     CandidateTriple(
                         triple_id=triple_id,
                         domain_id=domain.domain_id,
                         head=resolved_head,
                         relation=relation.label,
+                        raw_relation=raw_relation,
+                        display_relation=display_relation,
                         tail=resolved_tail,
                         relation_family=relation.family,
                         graph_layer=graph_layer,
                         workflow_kind=workflow_kind,
+                        edge_salience=edge_salience,
+                        display_admitted=display_admitted,
+                        display_reject_reason=display_reject_reason,
                         evidence_ids=[record.evidence_id],
                         attachment_refs=[
                             head_decision.candidate_id if head_decision else resolved_head,
@@ -579,15 +960,24 @@ def assemble_domain_graphs(
                 if not final_accepted:
                     continue
 
+                # Fix: workflow grounding edges should have family="action_object"
+                # not the original family from relation_mentions (which is "task_dependency")
+                edge_family = "action_object" if workflow_kind == "action_object" else relation.family
+
                 edge_id = f"{domain.domain_id}::edge::{resolved_head}::{relation.label}::{resolved_tail}"
                 if edge_id not in edge_map:
                     edge_map[edge_id] = GraphEdge(
                         edge_id=edge_id,
                         domain_id=domain.domain_id,
                         label=relation.label,
-                        family=relation.family,
+                        raw_label=raw_relation,
+                        display_label=display_relation,
+                        family=edge_family,
                         edge_layer=graph_layer,
                         workflow_kind=workflow_kind,
+                        edge_salience=edge_salience,
+                        display_admitted=display_admitted,
+                        display_reject_reason=display_reject_reason,
                         head=resolved_head,
                         tail=resolved_tail,
                         provenance_evidence_ids=[record.evidence_id],

@@ -84,10 +84,14 @@ Use active direction.
 These are valid relation prototypes, not quotas. Do not create a relation unless the source text explicitly grounds that relation.
 
 Step-to-concept patterns:
-- `T<n> requires Component` -> `task_dependency`
-- `T<n> observes Signal` -> `task_dependency`
-- `T<n> confirms State` -> `task_dependency`
+- `T<n> records Signal` -> `task_dependency`
+- `T<n> inspects Component/Signal/Fault/State` -> `task_dependency`
 - `T<n> measures Signal` -> `task_dependency`
+- `T<n> exposes Component` -> `task_dependency`
+- `T<n> compares Signal/Component` -> `task_dependency`
+- `T<n> repairs Component/Fault boundary` -> `task_dependency`
+- `T<n> verifies State/Fault/Signal` -> `task_dependency`
+- `T<n> removes Component` -> `task_dependency`
 
 Concept-to-concept patterns:
 - `Signal indicates Fault` -> `communication`
@@ -102,6 +106,9 @@ Here `T<n>` is only a placeholder for any concrete step id such as `T1`, `T2`, o
 Direction constraints:
 - For `task_dependency`, the head should normally be a step `T<n>` when the relation expresses step action toward a concept or a step-to-step dependency.
 - For `task_dependency`, do not connect a step to every concept mentioned in that step. Keep only direct action targets, direct observations, direct measurements, direct confirmations, or explicit non-local task dependencies.
+- For step-to-concept relations, prefer a small reusable O&M action vocabulary: `record`, `inspect`, `measure`, `expose`, `compare`, `repair`, `verify`, `remove`.
+- Avoid weak or indirect workflow verbs such as `requires`, `allows`, `keeps`, `performed_on`, `names`, or `marks` when the text really describes one of the reusable actions above.
+- If the source wording is indirect, choose the nearest reusable maintenance action rather than inventing a new workflow verb.
 - Do not use `task_dependency` for concept-to-concept relations such as `Signal -> Fault`, `Fault -> Fault`, or `Asset -> Component`.
 - When both head and tail are non-step concepts, prefer `communication`, `propagation`, `structural`, or `lifecycle` as appropriate.
 - If a step sentence both describes an action and reveals a stable part-whole structure, you may emit both the step-local action edge and the concept-to-concept structural edge when both are grounded.

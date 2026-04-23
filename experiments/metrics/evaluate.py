@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Aggregate evaluation payloads across files and variants."""
+"""Aggregate workflow-first evaluation payloads across files and variants."""
 
 from __future__ import annotations
 
@@ -22,7 +22,8 @@ def _aggregate_error_summary(per_file_metrics: dict[str, dict[str, Any]]) -> dic
     }
 
     for payload in per_file_metrics.values():
-        error_examples = payload.get("error_examples", {})
+        diagnostics = payload.get("diagnostics", {})
+        error_examples = diagnostics.get("strict_error_examples", {})
         for item in error_examples.get("anchor_confusions", []):
             key = (
                 str(item.get("label", "")).strip(),
@@ -88,24 +89,26 @@ def aggregate_metric_payloads(per_file_metrics: dict[str, dict[str, Any]]) -> di
             current = current.get(part)
         if current is None:
             return 0.0
+        if isinstance(current, bool):
+            return float(current)
         return float(current)
 
-    def avg(section: str, key: str) -> float:
-        values = [nested_value(item.get(section, {}), key) for item in per_file_metrics.values()]
+    def avg(dotted_key: str) -> float:
+        values = [nested_value(item, dotted_key) for item in per_file_metrics.values()]
         return round(sum(values) / len(values), 4)
 
-    def avg_when_available(section: str, key: str, availability_key: str = "available") -> float:
+    def avg_when_available(metric_prefix: str, key: str, availability_key: str = "available") -> float:
         values = [
-            nested_value(item.get(section, {}), key)
+            nested_value(item, f"{metric_prefix}.{key}")
             for item in per_file_metrics.values()
-            if bool(item.get(section, {}).get(availability_key, False))
+            if bool(item.get(metric_prefix, {}).get(availability_key, False))
         ]
         if not values:
             return 0.0
         return round(sum(values) / len(values), 4)
 
-    def total(section: str, key: str) -> int:
-        values = [int(item.get(section, {}).get(key, 0)) for item in per_file_metrics.values()]
+    def total(dotted_key: str) -> int:
+        values = [int(nested_value(item, dotted_key)) for item in per_file_metrics.values()]
         return sum(values)
 
     return {
@@ -117,45 +120,20 @@ def aggregate_metric_payloads(per_file_metrics: dict[str, dict[str, Any]]) -> di
                 for doc_id in item.get("documents", [])
             }
         ),
-        "node_coverage_metrics": {
-            "precision": avg("node_coverage_metrics", "precision"),
-            "recall": avg("node_coverage_metrics", "recall"),
-            "f1": avg("node_coverage_metrics", "f1"),
-        },
-        "anchored_node_canonical_metrics": {
-            "precision": avg("anchored_node_canonical_metrics", "precision"),
-            "recall": avg("anchored_node_canonical_metrics", "recall"),
-            "f1": avg("anchored_node_canonical_metrics", "f1"),
-        },
-        "concept_metrics": {
-            "precision": avg("concept_metrics", "precision"),
-            "recall": avg("concept_metrics", "recall"),
-            "f1": avg("concept_metrics", "f1"),
-        },
-        "concept_label_metrics": {
-            "precision": avg("concept_label_metrics", "precision"),
-            "recall": avg("concept_label_metrics", "recall"),
-            "f1": avg("concept_label_metrics", "f1"),
-        },
         "anchor_metrics": {
-            "accuracy": avg("anchor_metrics", "accuracy"),
-            "macro_f1": avg("anchor_metrics", "macro_f1"),
-            "support": total("anchor_metrics", "support"),
-        },
-        "relation_metrics": {
-            "precision": avg("relation_metrics", "precision"),
-            "recall": avg("relation_metrics", "recall"),
-            "f1": avg("relation_metrics", "f1"),
+            "accuracy": avg("anchor_metrics.accuracy"),
+            "macro_f1": avg("anchor_metrics.macro_f1"),
+            "support": total("anchor_metrics.support"),
         },
         "workflow_step_metrics": {
-            "precision": avg("workflow_step_metrics", "precision"),
-            "recall": avg("workflow_step_metrics", "recall"),
-            "f1": avg("workflow_step_metrics", "f1"),
+            "precision": avg("workflow_step_metrics.precision"),
+            "recall": avg("workflow_step_metrics.recall"),
+            "f1": avg("workflow_step_metrics.f1"),
         },
         "workflow_sequence_metrics": {
-            "precision": avg("workflow_sequence_metrics", "precision"),
-            "recall": avg("workflow_sequence_metrics", "recall"),
-            "f1": avg("workflow_sequence_metrics", "f1"),
+            "precision": avg("workflow_sequence_metrics.precision"),
+            "recall": avg("workflow_sequence_metrics.recall"),
+            "f1": avg("workflow_sequence_metrics.f1"),
         },
         "workflow_grounding_metrics": {
             "available_doc_count": sum(
@@ -167,47 +145,93 @@ def aggregate_metric_payloads(per_file_metrics: dict[str, dict[str, Any]]) -> di
             "recall": avg_when_available("workflow_grounding_metrics", "recall"),
             "f1": avg_when_available("workflow_grounding_metrics", "f1"),
         },
-        "workflow_grounding_stats": {
-            "action_object_edge_count": total("workflow_grounding_stats", "action_object_edge_count"),
-            "grounded_step_count": total("workflow_grounding_stats", "grounded_step_count"),
-            "ungrounded_step_count": total("workflow_grounding_stats", "ungrounded_step_count"),
-            "avg_action_object_edges_per_grounded_step": avg(
-                "workflow_grounding_stats",
-                "avg_action_object_edges_per_grounded_step",
-            ),
+        "graph_stats": {
+            "predicted_concepts": total("graph_stats.predicted_concepts"),
+            "predicted_relations": total("graph_stats.predicted_relations"),
+            "gold_concepts": total("graph_stats.gold_concepts"),
+            "gold_relations": total("graph_stats.gold_relations"),
         },
-        "isolated_node_delta": {
-            "full_graph_isolated_count": total("isolated_node_delta", "full_graph_isolated_count"),
-            "semantic_only_isolated_count": total("isolated_node_delta", "semantic_only_isolated_count"),
-            "workflow_reduction_count": total("isolated_node_delta", "workflow_reduction_count"),
-        },
-        "diagnostic_metrics": {
-            "concept_relaxed_label_metrics": {
-                "precision": avg("diagnostic_metrics", "concept_relaxed_label_metrics.precision"),
-                "recall": avg("diagnostic_metrics", "concept_relaxed_label_metrics.recall"),
-                "f1": avg("diagnostic_metrics", "concept_relaxed_label_metrics.f1"),
+        "diagnostics": {
+            "legacy_strict_metrics": {
+                "node_coverage_metrics": {
+                    "precision": avg("diagnostics.legacy_strict_metrics.node_coverage_metrics.precision"),
+                    "recall": avg("diagnostics.legacy_strict_metrics.node_coverage_metrics.recall"),
+                    "f1": avg("diagnostics.legacy_strict_metrics.node_coverage_metrics.f1"),
+                },
+                "anchored_node_canonical_metrics": {
+                    "precision": avg("diagnostics.legacy_strict_metrics.anchored_node_canonical_metrics.precision"),
+                    "recall": avg("diagnostics.legacy_strict_metrics.anchored_node_canonical_metrics.recall"),
+                    "f1": avg("diagnostics.legacy_strict_metrics.anchored_node_canonical_metrics.f1"),
+                },
+                "concept_metrics": {
+                    "precision": avg("diagnostics.legacy_strict_metrics.concept_metrics.precision"),
+                    "recall": avg("diagnostics.legacy_strict_metrics.concept_metrics.recall"),
+                    "f1": avg("diagnostics.legacy_strict_metrics.concept_metrics.f1"),
+                },
+                "concept_label_metrics": {
+                    "precision": avg("diagnostics.legacy_strict_metrics.concept_label_metrics.precision"),
+                    "recall": avg("diagnostics.legacy_strict_metrics.concept_label_metrics.recall"),
+                    "f1": avg("diagnostics.legacy_strict_metrics.concept_label_metrics.f1"),
+                },
+                "relation_metrics": {
+                    "precision": avg("diagnostics.legacy_strict_metrics.relation_metrics.precision"),
+                    "recall": avg("diagnostics.legacy_strict_metrics.relation_metrics.recall"),
+                    "f1": avg("diagnostics.legacy_strict_metrics.relation_metrics.f1"),
+                },
             },
-            "relation_relaxed_metrics": {
-                "precision": avg("diagnostic_metrics", "relation_relaxed_metrics.precision"),
-                "recall": avg("diagnostic_metrics", "relation_relaxed_metrics.recall"),
-                "f1": avg("diagnostic_metrics", "relation_relaxed_metrics.f1"),
+            "workflow_diagnostics": {
+                "workflow_grounding_stats": {
+                    "action_object_edge_count": total(
+                        "diagnostics.workflow_diagnostics.workflow_grounding_stats.action_object_edge_count"
+                    ),
+                    "grounded_step_count": total(
+                        "diagnostics.workflow_diagnostics.workflow_grounding_stats.grounded_step_count"
+                    ),
+                    "ungrounded_step_count": total(
+                        "diagnostics.workflow_diagnostics.workflow_grounding_stats.ungrounded_step_count"
+                    ),
+                    "avg_action_object_edges_per_grounded_step": avg(
+                        "diagnostics.workflow_diagnostics.workflow_grounding_stats.avg_action_object_edges_per_grounded_step"
+                    ),
+                },
+                "isolated_node_delta": {
+                    "full_graph_isolated_count": total(
+                        "diagnostics.workflow_diagnostics.isolated_node_delta.full_graph_isolated_count"
+                    ),
+                    "semantic_only_isolated_count": total(
+                        "diagnostics.workflow_diagnostics.isolated_node_delta.semantic_only_isolated_count"
+                    ),
+                    "workflow_reduction_count": total(
+                        "diagnostics.workflow_diagnostics.isolated_node_delta.workflow_reduction_count"
+                    ),
+                },
             },
-            "relation_family_agnostic_metrics": {
-                "precision": avg("diagnostic_metrics", "relation_family_agnostic_metrics.precision"),
-                "recall": avg("diagnostic_metrics", "relation_family_agnostic_metrics.recall"),
-                "f1": avg("diagnostic_metrics", "relation_family_agnostic_metrics.f1"),
+            "relaxed": {
+                "diagnostic_metrics": {
+                    "concept_relaxed_label_metrics": {
+                        "precision": avg("diagnostics.relaxed.diagnostic_metrics.concept_relaxed_label_metrics.precision"),
+                        "recall": avg("diagnostics.relaxed.diagnostic_metrics.concept_relaxed_label_metrics.recall"),
+                        "f1": avg("diagnostics.relaxed.diagnostic_metrics.concept_relaxed_label_metrics.f1"),
+                    },
+                    "relation_relaxed_metrics": {
+                        "precision": avg("diagnostics.relaxed.diagnostic_metrics.relation_relaxed_metrics.precision"),
+                        "recall": avg("diagnostics.relaxed.diagnostic_metrics.relation_relaxed_metrics.recall"),
+                        "f1": avg("diagnostics.relaxed.diagnostic_metrics.relation_relaxed_metrics.f1"),
+                    },
+                    "relation_family_agnostic_metrics": {
+                        "precision": avg(
+                            "diagnostics.relaxed.diagnostic_metrics.relation_family_agnostic_metrics.precision"
+                        ),
+                        "recall": avg(
+                            "diagnostics.relaxed.diagnostic_metrics.relation_family_agnostic_metrics.recall"
+                        ),
+                        "f1": avg("diagnostics.relaxed.diagnostic_metrics.relation_family_agnostic_metrics.f1"),
+                    },
+                }
             },
-        },
-        "predicted_counts": {
-            "concepts": total("predicted_counts", "concepts"),
-            "relations": total("predicted_counts", "relations"),
-        },
-        "gold_counts": {
-            "concepts": total("gold_counts", "concepts"),
-            "relations": total("gold_counts", "relations"),
+            "error_summary": _aggregate_error_summary(per_file_metrics),
         },
         "per_gold_file": per_file_metrics,
-        "error_summary": _aggregate_error_summary(per_file_metrics),
     }
 
 
@@ -219,6 +243,8 @@ def _metric_lookup(payload: dict[str, Any], dotted_key: str) -> float:
         current = current.get(part)
     if current is None:
         return 0.0
+    if isinstance(current, bool):
+        return float(current)
     return float(current)
 
 
@@ -256,66 +282,70 @@ def evaluate_variant_run(
         )
 
     aggregate = aggregate_metric_payloads(per_gold)
+    primary_summary = {
+        "workflow_step_f1": aggregate["workflow_step_metrics"]["f1"],
+        "workflow_sequence_f1": aggregate["workflow_sequence_metrics"]["f1"],
+        "workflow_grounding_f1": aggregate["workflow_grounding_metrics"]["f1"],
+        "anchor_accuracy": aggregate["anchor_metrics"]["accuracy"],
+        "anchor_macro_f1": aggregate["anchor_metrics"]["macro_f1"],
+    }
+    diagnostic_summary = {
+        "relation_f1": aggregate["diagnostics"]["legacy_strict_metrics"]["relation_metrics"]["f1"],
+        "anchored_node_canonical_f1": aggregate["diagnostics"]["legacy_strict_metrics"]["anchored_node_canonical_metrics"]["f1"],
+        "concept_label_f1": aggregate["diagnostics"]["legacy_strict_metrics"]["concept_label_metrics"]["f1"],
+        "concept_relaxed_label_f1": _metric_lookup(
+            aggregate,
+            "diagnostics.relaxed.diagnostic_metrics.concept_relaxed_label_metrics.f1",
+        ),
+        "relation_relaxed_f1": _metric_lookup(
+            aggregate,
+            "diagnostics.relaxed.diagnostic_metrics.relation_relaxed_metrics.f1",
+        ),
+    }
 
     return {
         "variant_id": variant_id,
         "run_root": str(run_root.resolve()),
         **aggregate,
-        "macro_average": {
-            "node_coverage_relaxed_f1": aggregate["node_coverage_metrics"]["f1"],
-            "anchored_node_canonical_f1": aggregate["anchored_node_canonical_metrics"]["f1"],
-            "anchor_accuracy": aggregate["anchor_metrics"]["accuracy"],
-            "anchor_macro_f1": aggregate["anchor_metrics"]["macro_f1"],
-            "relation_f1": aggregate["relation_metrics"]["f1"],
-            "workflow_step_f1": aggregate["workflow_step_metrics"]["f1"],
-            "workflow_sequence_f1": aggregate["workflow_sequence_metrics"]["f1"],
-            "workflow_grounding_f1": aggregate["workflow_grounding_metrics"]["f1"],
-            "concept_f1": aggregate["concept_metrics"]["f1"],
-            "concept_label_f1": aggregate["concept_label_metrics"]["f1"],
-            "concept_relaxed_label_f1": _metric_lookup(
-                aggregate,
-                "diagnostic_metrics.concept_relaxed_label_metrics.f1",
-            ),
-            "relation_relaxed_f1": _metric_lookup(
-                aggregate,
-                "diagnostic_metrics.relation_relaxed_metrics.f1",
-            ),
-            "relation_family_agnostic_f1": _metric_lookup(
-                aggregate,
-                "diagnostic_metrics.relation_family_agnostic_metrics.f1",
-            ),
-        },
+        "primary_summary": primary_summary,
+        "macro_average": primary_summary,
+        "diagnostic_summary": diagnostic_summary,
     }
 
 
-def write_ablation_csv(path: str | Path, rows: list[dict[str, Any]]) -> None:
+def write_evaluation_csv(path: str | Path, rows: list[dict[str, Any]]) -> None:
     fieldnames = [
         "variant_id",
-        "component",
-        "mode",
-        "preprocessing_source",
-        "attachment_source",
-        "uses_llm_preprocessing",
-        "uses_llm_attachment",
-        "paper_table",
-        "alias_for",
-        "node_coverage_relaxed_f1",
-        "anchored_node_canonical_f1",
-        "anchor_accuracy",
-        "anchor_macro_f1",
-        "relation_f1",
         "workflow_step_f1",
         "workflow_sequence_f1",
         "workflow_grounding_f1",
-        "concept_f1",
-        "concept_label_f1",
-        "concept_relaxed_label_f1",
-        "relation_relaxed_f1",
-        "relation_family_agnostic_f1",
+        "workflow_grounding_precision",
+        "workflow_grounding_recall",
+        "anchor_accuracy",
+        "anchor_macro_f1",
+        "diagnostic_relation_f1",
+        "diagnostic_anchored_node_canonical_f1",
         "evaluated_gold_files",
     ]
     with Path(path).open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
         writer.writeheader()
         for row in rows:
-            writer.writerow(row)
+            writer.writerow(
+                {
+                    "variant_id": row.get("variant_id", ""),
+                    "workflow_step_f1": _metric_lookup(row, "primary_summary.workflow_step_f1"),
+                    "workflow_sequence_f1": _metric_lookup(row, "primary_summary.workflow_sequence_f1"),
+                    "workflow_grounding_f1": _metric_lookup(row, "primary_summary.workflow_grounding_f1"),
+                    "workflow_grounding_precision": _metric_lookup(row, "workflow_grounding_metrics.precision"),
+                    "workflow_grounding_recall": _metric_lookup(row, "workflow_grounding_metrics.recall"),
+                    "anchor_accuracy": _metric_lookup(row, "primary_summary.anchor_accuracy"),
+                    "anchor_macro_f1": _metric_lookup(row, "primary_summary.anchor_macro_f1"),
+                    "diagnostic_relation_f1": _metric_lookup(row, "diagnostic_summary.relation_f1"),
+                    "diagnostic_anchored_node_canonical_f1": _metric_lookup(
+                        row,
+                        "diagnostic_summary.anchored_node_canonical_f1",
+                    ),
+                    "evaluated_gold_files": "|".join(row.get("evaluated_gold_files", [])),
+                }
+            )

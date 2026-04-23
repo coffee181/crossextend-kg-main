@@ -25,7 +25,6 @@ Your job is to decide whether each candidate should:
 - `Signal`: observed evidence or inspection target such as wetting, residue, whitening, wear, corrosion, offset, level, depth, path, or condition-like inspection target.
 - `State`: concluded or verified condition/status such as `dry`, `fully latched`, or `naturally supported`.
 - `Fault`: defect, failure mode, damaged boundary, seepage mode, crack, incomplete insertion, or causal loading root cause.
-- `Incident`, `Process`, `MaintenanceAction`, `Actor`, and `Document` are exceptional anchors. Use them only when the label explicitly denotes an event, process/workflow, action, person/role, or document artifact. Never use `Incident` as a generic fallback.
 - A label containing words like `state`, `condition`, or `status` may still be a `Signal` if it names the inspection dimension rather than the final conclusion.
 - Hardware surfaces and interfaces such as `O-ring seat`, `tube bead`, `manifold block`, or `support bracket` remain `Component`, not `Signal` or `State`.
 

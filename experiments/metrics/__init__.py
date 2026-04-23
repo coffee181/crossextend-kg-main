@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Metrics package for strict evaluation plus relaxed diagnostics."""
+"""Metrics package for workflow-first evaluation plus nested diagnostics."""
 
 from experiments.metrics.core import (
     classification_metrics,
@@ -16,12 +16,16 @@ from experiments.metrics.core import (
     safe_div,
     set_metrics,
 )
-from experiments.metrics.evaluate import aggregate_metric_payloads, evaluate_variant_run, write_ablation_csv
+from experiments.metrics.evaluate import aggregate_metric_payloads, evaluate_variant_run, write_evaluation_csv
+from experiments.metrics.graph_quality import analyze_graph_payload, analyze_variant_graph_quality, diff_graph_quality
 
 __all__ = [
     "aggregate_metric_payloads",
+    "analyze_graph_payload",
+    "analyze_variant_graph_quality",
     "classification_metrics",
     "compute_metrics",
+    "diff_graph_quality",
     "evaluate_variant_run",
     "f1_score",
     "gold_concepts",
@@ -34,5 +38,5 @@ __all__ = [
     "resolve_gold_file",
     "safe_div",
     "set_metrics",
-    "write_ablation_csv",
+    "write_evaluation_csv",
 ]

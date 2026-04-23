@@ -73,15 +73,10 @@ class PreprocessingConfig(BaseModel):
         default_factory=lambda: [
             "Asset",
             "Component",
-            "Process",
             "Task",
             "Signal",
             "State",
             "Fault",
-            "MaintenanceAction",
-            "Incident",
-            "Actor",
-            "Document",
         ]
     )
 

@@ -1,113 +1,75 @@
-"""CrossExtend-KG: Backbone-Guided Adapter Schema Construction for Industrial Knowledge Graphs.
+"""CrossExtend-KG public package surface."""
 
-This package implements a framework for generalized industrial KG construction
-via backbone-guided adapter schema construction.
-
-Main components:
-- config: Configuration loading and validation
-- pipeline: Core pipeline implementation
-- backends: LLM and embedding backends
-- rules: Constraint-based filtering
-
-Quick start:
-    from crossextend_kg import load_pipeline_config, run_pipeline
-
-    config = load_pipeline_config("config/persistent/pipeline.deepseek.yaml")
-    result = run_pipeline("config/persistent/pipeline.deepseek.yaml")
-"""
-
-from .config import load_pipeline_config, PipelineConfig
-from .pipeline import run_pipeline
+from .config import PipelineConfig, load_pipeline_config
 from .exceptions import (
-    CrossExtendKGError,
-    ConfigValidationError,
-    EvidenceLoadError,
-    BackboneConstructionError,
-    AttachmentDecisionError,
-    GraphAssemblyError,
     ArtifactExportError,
-    LLMBackendError,
+    AttachmentDecisionError,
+    BackboneConstructionError,
+    ConfigValidationError,
+    CrossExtendKGError,
     EmbeddingBackendError,
+    EvidenceLoadError,
+    GraphAssemblyError,
+    LLMBackendError,
 )
+from .experiments import (
+    DownstreamBenchmark,
+    RepairSuffixRankingSample,
+    SuffixCandidate,
+    WorkflowRetrievalSample,
+    aggregate_metric_payloads,
+    compute_metrics,
+    evaluate_variant_run,
+    load_downstream_benchmark,
+    resolve_gold_file,
+    write_evaluation_csv,
+)
+from .logging_config import configure_logging, get_logger
+from .pipeline import run_pipeline, run_pipeline_for_domains
 from .validation import (
     validate_domain_id,
-    validate_variant_id,
     validate_label,
+    validate_positive_int,
     validate_relation_family,
     validate_route,
     validate_score_range,
-    validate_positive_int,
-)
-from .logging_config import configure_logging, get_logger
-from .experiments import (
-    aggregate_metric_payloads,
-    aggregate_repeated_evaluations,
-    build_default_ablation_variants,
-    build_rule_records_by_domain,
-    compare_variant_evaluations,
-    collect_variant_audit_summary,
-    compute_metrics,
-    evaluate_round_variant,
-    evaluate_variant_run,
-    materialize_ablation_config,
-    materialize_round_pipeline_config,
-    materialize_round_preprocessing_config,
-    prepare_round_workspace,
-    resolve_gold_file,
-    resolve_full_gold_alignment,
-    run_ablation_experiment,
-    run_baseline_suite,
-    rule_extract_document,
-    stage_aligned_input_corpus,
+    validate_variant_id,
 )
 
 __version__ = "0.1.0"
 
 __all__ = [
-    # Main API
-    "load_pipeline_config",
-    "run_pipeline",
-    "PipelineConfig",
-    # Exceptions
-    "CrossExtendKGError",
-    "ConfigValidationError",
-    "EvidenceLoadError",
-    "BackboneConstructionError",
-    "AttachmentDecisionError",
-    "GraphAssemblyError",
+    "__version__",
     "ArtifactExportError",
-    "LLMBackendError",
+    "AttachmentDecisionError",
+    "BackboneConstructionError",
+    "ConfigValidationError",
+    "CrossExtendKGError",
+    "DownstreamBenchmark",
     "EmbeddingBackendError",
-    # Validation
+    "EvidenceLoadError",
+    "GraphAssemblyError",
+    "LLMBackendError",
+    "PipelineConfig",
+    "RepairSuffixRankingSample",
+    "SuffixCandidate",
+    "WorkflowRetrievalSample",
+    "aggregate_metric_payloads",
+    "compute_metrics",
+    "configure_logging",
+    "evaluate_variant_run",
+    "get_logger",
+    "load_downstream_benchmark",
+    "load_pipeline_config",
+    "resolve_gold_file",
+    "run_pipeline",
+    "run_pipeline_for_domains",
     "validate_domain_id",
-    "validate_variant_id",
     "validate_label",
+    "validate_positive_int",
     "validate_relation_family",
     "validate_route",
     "validate_score_range",
-    "validate_positive_int",
-    # Logging
-    "configure_logging",
-    "get_logger",
-    "aggregate_metric_payloads",
-    "aggregate_repeated_evaluations",
-    "build_default_ablation_variants",
-    "build_rule_records_by_domain",
-    "compare_variant_evaluations",
-    "collect_variant_audit_summary",
-    "compute_metrics",
-    "evaluate_round_variant",
-    "evaluate_variant_run",
-    "materialize_ablation_config",
-    "materialize_round_pipeline_config",
-    "materialize_round_preprocessing_config",
-    "prepare_round_workspace",
-    "resolve_gold_file",
-    "resolve_full_gold_alignment",
-    "run_ablation_experiment",
-    "run_baseline_suite",
-    "rule_extract_document",
-    "stage_aligned_input_corpus",
-    # Version
-    "__version__",
+    "validate_variant_id",
+    "write_evaluation_csv",
 ]

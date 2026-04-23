@@ -3,13 +3,13 @@
   "description": "Semantic type constraints for relation families used by the active CrossExtend-KG runtime.",
   "propagation": {
     "description": "Causal or fault propagation edges where the head can lead to the tail.",
-    "allowed_head_types": ["Fault", "Signal", "State", "Process", "Component"],
+    "allowed_head_types": ["Fault", "Signal", "State", "Component"],
     "allowed_tail_types": ["Fault", "Signal", "State"],
     "examples": [
       "thermal runaway causes fire -> Fault -> Fault",
       "voltage drop triggers alarm -> Signal -> Fault",
       "high temperature accelerates degradation -> State -> Fault",
-      "fast charging induces lithium plating -> Process -> Fault"
+      "warped flange causes boundary leak -> Component -> Fault"
     ],
     "semantic_rules": [
       "The head must be able to act as a causal source.",
@@ -31,17 +31,17 @@
     "semantic_rules": [
       "Only physical entities participate in structural hierarchy.",
       "Asset is a top-level industrial asset and Component is a subassembly or part.",
-      "Process, State, and Document are not structural entities."
+      "Signal and State are not structural entities."
     ]
   },
   "task_dependency": {
     "description": "Execution or task-output dependencies where the head performs, triggers, measures, or confirms the tail.",
-    "allowed_head_types": ["Task", "Process", "Actor"],
-    "allowed_tail_types": ["Task", "Process", "Signal", "Document", "Fault", "State", "Asset", "Component"],
+    "allowed_head_types": ["Task"],
+    "allowed_tail_types": ["Task", "Signal", "Fault", "State", "Asset", "Component"],
     "examples": [
       "inspection confirms fault -> Task -> Fault",
-      "engineer performs diagnosis -> Actor -> Process",
-      "analysis produces report -> Process -> Document",
+      "inspection observes coolant odor -> Task -> Signal",
+      "inspection verifies dry condition -> Task -> State",
       "monitoring outputs signal -> Task -> Signal"
     ],
     "semantic_rules": [
@@ -52,35 +52,34 @@
   },
   "communication": {
     "description": "Diagnostic evidence or information-flow edges where an observable item indicates another concept.",
-    "allowed_head_types": ["Component", "Signal", "Process", "State"],
-    "allowed_tail_types": ["Signal", "State", "Component", "Asset", "Actor", "Task", "Fault"],
+    "allowed_head_types": ["Component", "Signal", "State"],
+    "allowed_tail_types": ["Signal", "State", "Component", "Asset", "Fault"],
     "examples": [
       "sensor detects temperature -> Component -> Signal",
-      "alarm notifies operator -> Signal -> Actor",
       "fresh wetting indicates connector leakage -> Signal -> Fault",
       "wet after shutdown indicates leak persistence -> State -> Fault"
     ],
     "semantic_rules": [
       "The head must be able to produce, carry, or embody diagnostic evidence.",
       "Signal and State heads are allowed when an observation or standing condition indicates another concept.",
-      "Document is not a valid communication head."
+      "Workflow steps and document artifacts are not valid communication heads."
     ]
   },
   "lifecycle": {
     "description": "State transition or experience edges where the head changes into or undergoes the tail.",
-    "allowed_head_types": ["Asset", "Component", "Fault", "State", "MaintenanceAction"],
-    "allowed_tail_types": ["State", "MaintenanceAction", "Incident", "Process"],
+    "allowed_head_types": ["Asset", "Component", "Fault", "State"],
+    "allowed_tail_types": ["State"],
     "examples": [
       "battery experiences degradation -> Asset -> State",
-      "fault triggers repair -> Fault -> MaintenanceAction",
       "normal transitions to warning -> State -> State",
-      "device undergoes maintenance -> Asset -> Process"
+      "connector changes from wet to dry -> Component -> State",
+      "fault persists as dry condition fails -> Fault -> State"
     ],
     "semantic_rules": [
       "The head must be able to undergo a state or lifecycle change.",
-      "The tail must be a resulting state, action, incident, or process.",
+      "The tail must be a resulting state.",
       "State -> State captures explicit state transitions.",
-      "Fault -> MaintenanceAction captures maintenance triggered by a fault."
+      "Component/Fault -> State captures a diagnosed or verified change in condition."
     ]
   },
   "_metadata": {

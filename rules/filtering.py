@@ -113,7 +113,7 @@ def _semantic_type_hint(candidate: SchemaCandidate) -> str | None:
 
 
 def preferred_parent_anchor(candidate: SchemaCandidate) -> str | None:
-    """Infer a lightweight default anchor for deterministic baselines."""
+    """Infer a lightweight default anchor for deterministic attachment paths."""
     hint = _semantic_type_hint(candidate)
     if hint is not None:
         return hint

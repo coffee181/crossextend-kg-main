@@ -56,10 +56,15 @@ def _add_graphml_keys(graphml: ET.Element) -> None:
 
     edge_keys = [
         ("label", "string"),
+        ("raw_label", "string"),
+        ("display_label", "string"),
         ("domain_id", "string"),
         ("family", "string"),
         ("edge_layer", "string"),
         ("workflow_kind", "string"),
+        ("edge_salience", "string"),
+        ("display_admitted", "boolean"),
+        ("display_reject_reason", "string"),
         ("head", "string"),
         ("tail", "string"),
         ("provenance_evidence_ids", "string"),
@@ -125,11 +130,16 @@ def _add_edge_element(graph: ET.Element, edge: GraphEdge, node_id_lookup: dict[s
     edge_elem.set("target", target)
 
     data_attrs = {
-        "label": edge.label,
+        "label": edge.display_label or edge.label,
+        "raw_label": edge.raw_label or edge.label,
+        "display_label": edge.display_label or edge.label,
         "domain_id": edge.domain_id,
         "family": edge.family,
         "edge_layer": edge.edge_layer,
         "workflow_kind": edge.workflow_kind or "",
+        "edge_salience": edge.edge_salience or "",
+        "display_admitted": "true" if edge.display_admitted else "false",
+        "display_reject_reason": edge.display_reject_reason or "",
         "head": edge.head,
         "tail": edge.tail,
         "provenance_evidence_ids": serialize_list_property(edge.provenance_evidence_ids),
@@ -157,10 +167,18 @@ def export_graphml(
     graph.set("id", "G")
     graph.set("edgedefault", "directed")
 
-    node_id_lookup = _build_node_id_lookup(nodes)
-    for node in nodes:
+    displayed_edges = [edge for edge in edges if edge.display_admitted]
+    displayed_labels = {edge.head for edge in displayed_edges} | {edge.tail for edge in displayed_edges}
+    displayed_nodes = [
+        node
+        for node in nodes
+        if node.label in displayed_labels
+    ]
+
+    node_id_lookup = _build_node_id_lookup(displayed_nodes)
+    for node in displayed_nodes:
         _add_node_element(graph, node)
-    for edge in edges:
+    for edge in displayed_edges:
         _add_edge_element(graph, edge, node_id_lookup)
 
     ensure_dir(path.parent)

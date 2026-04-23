@@ -8,12 +8,18 @@ import json
 import sys
 from pathlib import Path
 
-from .backends.llm import build_llm_backend
-from .config import load_pipeline_config
-from .logging_config import configure_logging
-from .pipeline.artifacts import load_snapshot_state, rollback_snapshot
-from .pipeline.runner import run_pipeline
-from .preprocessing import run_preprocessing, load_preprocessing_config
+try:
+    from .experiments.metrics import compute_metrics, evaluate_variant_run
+    from .logging_config import configure_logging
+    from .pipeline.artifacts import load_snapshot_state, rollback_snapshot
+    from .pipeline.runner import run_pipeline, run_pipeline_for_domains
+    from .preprocessing import run_preprocessing, load_preprocessing_config
+except ImportError:  # pragma: no cover - direct repo-root execution fallback
+    from experiments.metrics import compute_metrics, evaluate_variant_run
+    from logging_config import configure_logging
+    from pipeline.artifacts import load_snapshot_state, rollback_snapshot
+    from pipeline.runner import run_pipeline, run_pipeline_for_domains
+    from preprocessing import run_preprocessing, load_preprocessing_config
 
 
 DEFAULT_CONFIG_PATH = Path(__file__).resolve().parent / "config" / "persistent" / "pipeline.deepseek.yaml"
@@ -40,6 +46,7 @@ def _build_parser() -> argparse.ArgumentParser:
     run_parser.add_argument("--config", default=str(DEFAULT_CONFIG_PATH))
     run_parser.add_argument("--regenerate", action="store_true")
     run_parser.add_argument("--variants", nargs="*", default=None)
+    run_parser.add_argument("--domains", nargs="*", default=None)
     run_parser.add_argument("--no-export", action="store_true")
 
     replay_parser = subparsers.add_parser("replay", help="load one exported snapshot state")
@@ -58,6 +65,17 @@ def _build_parser() -> argparse.ArgumentParser:
     preprocess_parser.add_argument("--domain-ids", nargs="*", default=None, help="override domain IDs (e.g., battery cnc nev)")
     preprocess_parser.add_argument("--output-path", default=None, help="override output path")
     preprocess_parser.add_argument("--role", default="target", choices=["target"], help="Domain role (unified construction: all domains are target)")
+
+    evaluate_parser = subparsers.add_parser("evaluate", help="evaluate one graph or one run output against human gold")
+    target_group = evaluate_parser.add_mutually_exclusive_group(required=True)
+    target_group.add_argument("--graph", default=None, help="path to one final_graph.json")
+    target_group.add_argument("--run-root", default=None, help="path to one benchmark run root")
+    evaluate_parser.add_argument("--gold", default=None, help="path to one gold json when evaluating a single graph")
+    evaluate_parser.add_argument("--variant", default=None, help="variant id when evaluating a run root")
+    evaluate_parser.add_argument("--ground-truth-dir", default=None, help="gold directory for run-level evaluation")
+    evaluate_parser.add_argument("--domains", nargs="*", default=None, help="optional domain filter for run-level evaluation")
+    evaluate_parser.add_argument("--gold-files", nargs="*", default=None, help="optional gold file filter for run-level evaluation")
+    evaluate_parser.add_argument("--output", default=None, help="optional output json path")
     return parser
 
 
@@ -72,12 +90,21 @@ def main() -> int:
 
     try:
         if args.command == "run":
-            result = run_pipeline(
-                config_path=args.config,
-                regenerate=args.regenerate,
-                variant_ids=args.variants,
-                export_artifacts=not args.no_export,
-            )
+            if args.domains:
+                result = run_pipeline_for_domains(
+                    config_path=args.config,
+                    domain_ids=args.domains,
+                    regenerate=args.regenerate,
+                    variant_ids=args.variants,
+                    export_artifacts=not args.no_export,
+                )
+            else:
+                result = run_pipeline(
+                    config_path=args.config,
+                    regenerate=args.regenerate,
+                    variant_ids=args.variants,
+                    export_artifacts=not args.no_export,
+                )
             print(json.dumps(result.summary, ensure_ascii=False, indent=2))
             return 0
 
@@ -104,6 +131,27 @@ def main() -> int:
                 config.role = args.role
             result = run_preprocessing(config, config_path=args.config)
             print(json.dumps(result.model_dump(), ensure_ascii=False, indent=2))
+            return 0
+
+        if args.command == "evaluate":
+            if args.graph:
+                if not args.gold:
+                    raise ValueError("--gold is required when --graph is used")
+                payload = compute_metrics(args.gold, args.graph)
+            else:
+                if not args.variant:
+                    raise ValueError("--variant is required when --run-root is used")
+                payload = evaluate_variant_run(
+                    run_root=args.run_root,
+                    variant_id=args.variant,
+                    ground_truth_dir=args.ground_truth_dir,
+                    domain_ids=args.domains,
+                    gold_file_names=args.gold_files,
+                )
+            rendered = json.dumps(payload, ensure_ascii=False, indent=2)
+            if args.output:
+                Path(args.output).write_text(rendered + "\n", encoding="utf-8")
+            print(rendered)
             return 0
     except Exception as exc:
         _emit_error(command, config_path, exc)

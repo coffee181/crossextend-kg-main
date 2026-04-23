@@ -26,6 +26,7 @@ SemanticTypeHint = Literal["Asset", "Component", "Signal", "State", "Fault"]
 NodeLayer = Literal["semantic", "workflow"]
 EdgeLayer = Literal["semantic", "workflow"]
 WorkflowKind = Literal["sequence", "action_object"]
+EdgeSalience = Literal["high", "medium", "low"]
 
 
 def _normalize_semantic_type_hint(value: Any) -> SemanticTypeHint | None:
@@ -217,9 +218,14 @@ class GraphEdge(BaseModel):
     edge_id: str
     domain_id: str
     label: str
+    raw_label: str = ""
+    display_label: str = ""
     family: str
     edge_layer: EdgeLayer = "semantic"
     workflow_kind: WorkflowKind | None = None
+    edge_salience: EdgeSalience | None = None
+    display_admitted: bool = True
+    display_reject_reason: str | None = None
     head: str
     tail: str
     provenance_evidence_ids: list[str] = Field(default_factory=list)
@@ -232,10 +238,15 @@ class CandidateTriple(BaseModel):
     domain_id: str
     head: str
     relation: str
+    raw_relation: str = ""
+    display_relation: str | None = None
     tail: str
     relation_family: str
     graph_layer: EdgeLayer = "semantic"
     workflow_kind: WorkflowKind | None = None
+    edge_salience: EdgeSalience | None = None
+    display_admitted: bool = True
+    display_reject_reason: str | None = None
     evidence_ids: list[str] = Field(default_factory=list)
     attachment_refs: list[str] = Field(default_factory=list)
     confidence: float | None = None

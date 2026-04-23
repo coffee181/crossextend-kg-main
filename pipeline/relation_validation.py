@@ -6,10 +6,10 @@ defined in relation_constraints.json. Invalid edges are filtered out
 during graph assembly.
 
 Semantic constraints ensure:
-- propagation: Only Fault/Signal/State/Process/Component can cause Fault/Signal/State
+- propagation: Only Fault/Signal/State/Component can cause Fault/Signal/State
 - structural: Only Asset/Component can have hierarchical relationships
-- task_dependency: Only Task/Process/Actor can execute and produce results
-- communication: Only Component/Signal/Process can send/monitor signals
+- task_dependency: Only Task can execute and produce results in the legacy strict projection
+- communication: Only Component/Signal/State can provide diagnostic evidence
 - lifecycle: Only Asset/Component/Fault/State can experience state changes
 """
 

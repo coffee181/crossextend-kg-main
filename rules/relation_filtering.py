@@ -7,11 +7,11 @@ import re
 
 
 _STRUCTURAL_CONTEXTUAL_HEAD_PATTERN = re.compile(
-    r"\b(branch|path|condition|state|section|geometry|position|circuit|loop)\b",
+    r"\b(branch|path|condition|state|section|geometry|position|circuit|loop|face|surface|interface|cavity|pocket|edge)\b",
     re.IGNORECASE,
 )
 _LOW_VALUE_STRUCTURAL_TAIL_PATTERN = re.compile(
-    r"\b(access panels?|shield|cover|window|path|angle|offset|clearance)\b",
+    r"\b(access panels?|shield|path|angle|offset|clearance|face|surface|interface|cavity|pocket|edge)\b",
     re.IGNORECASE,
 )
 _GENERIC_COMMUNICATION_TARGET_PATTERN = re.compile(

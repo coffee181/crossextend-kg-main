@@ -16,12 +16,7 @@ relation_families:
 backbone_concepts:
   - Asset
   - Component
-  - Process
   - Task
   - Signal
   - State
   - Fault
-  - MaintenanceAction
-  - Incident
-  - Actor
-  - Document

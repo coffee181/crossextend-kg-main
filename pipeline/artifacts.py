@@ -94,6 +94,9 @@ def _build_final_graph_payload(result: VariantRunResult, domain_id: str) -> dict
     semantic_nodes = [node for node in graph_root.nodes if node.node_layer == "semantic"]
     workflow_edges = [edge for edge in graph_root.edges if edge.edge_layer == "workflow"]
     semantic_edges = [edge for edge in graph_root.edges if edge.edge_layer == "semantic"]
+    readable_edges = [edge for edge in graph_root.edges if edge.display_admitted]
+    readable_labels = {edge.head for edge in readable_edges} | {edge.tail for edge in readable_edges}
+    readable_nodes = [node for node in graph_root.nodes if node.label in readable_labels]
 
     total_triples = len(graph_root.triples)
     type_rejected_count = len(rejected_type_triples)
@@ -107,6 +110,8 @@ def _build_final_graph_payload(result: VariantRunResult, domain_id: str) -> dict
             "semantic_node_count": len(semantic_nodes),
             "workflow_edge_count": len(workflow_edges),
             "semantic_edge_count": len(semantic_edges),
+            "readable_node_count": len(readable_nodes),
+            "readable_edge_count": len(readable_edges),
             "candidate_triple_count": len(graph_root.triples),
             "accepted_triple_count": len(accepted_triples),
             "rejected_triple_count": len(rejected_triples),
@@ -141,6 +146,9 @@ def _build_relation_audit_payload(result: VariantRunResult, domain_id: str) -> d
     graph_layer_counts: dict[str, int] = {}
     workflow_kind_counts: dict[str, int] = {}
     reject_reason_counts: dict[str, int] = {}
+    display_action_counts: dict[str, int] = {}
+    edge_salience_counts: dict[str, int] = {}
+    hidden_display_counts: dict[str, int] = {}
 
     for triple in triples:
         status_counts[triple.status] = status_counts.get(triple.status, 0) + 1
@@ -150,16 +158,28 @@ def _build_relation_audit_payload(result: VariantRunResult, domain_id: str) -> d
             workflow_kind_counts[triple.workflow_kind] = workflow_kind_counts.get(triple.workflow_kind, 0) + 1
         if triple.reject_reason:
             reject_reason_counts[triple.reject_reason] = reject_reason_counts.get(triple.reject_reason, 0) + 1
+        if triple.display_relation:
+            display_action_counts[triple.display_relation] = display_action_counts.get(triple.display_relation, 0) + 1
+        if triple.edge_salience:
+            edge_salience_counts[triple.edge_salience] = edge_salience_counts.get(triple.edge_salience, 0) + 1
+        if not triple.display_admitted:
+            reason = str(triple.display_reject_reason or "not_displayed")
+            hidden_display_counts[reason] = hidden_display_counts.get(reason, 0) + 1
 
     items = [
         {
             "triple_id": triple.triple_id,
             "head": triple.head,
             "relation": triple.relation,
+            "raw_relation": triple.raw_relation or triple.relation,
+            "display_relation": triple.display_relation,
             "tail": triple.tail,
             "family": triple.relation_family,
             "graph_layer": triple.graph_layer,
             "workflow_kind": triple.workflow_kind,
+            "edge_salience": triple.edge_salience,
+            "display_admitted": triple.display_admitted,
+            "display_reject_reason": triple.display_reject_reason,
             "status": triple.status,
             "reject_reason": triple.reject_reason,
             "confidence": triple.confidence,
@@ -181,6 +201,9 @@ def _build_relation_audit_payload(result: VariantRunResult, domain_id: str) -> d
             "graph_layer_counts": graph_layer_counts,
             "workflow_kind_counts": workflow_kind_counts,
             "reject_reason_counts": reject_reason_counts,
+            "display_action_counts": display_action_counts,
+            "edge_salience_counts": edge_salience_counts,
+            "hidden_display_counts": hidden_display_counts,
         },
         "items": items,
     }
@@ -394,9 +417,14 @@ def export_variant_run(
                         "edge_id",
                         "domain_id",
                         "label",
+                        "raw_label",
+                        "display_label",
                         "family",
                         "edge_layer",
                         "workflow_kind",
+                        "edge_salience",
+                        "display_admitted",
+                        "display_reject_reason",
                         "head",
                         "tail",
                         "provenance_evidence_ids",

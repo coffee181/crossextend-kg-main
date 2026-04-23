@@ -3,3 +3,8 @@ __pycache__/
 .pytest_cache/
 .claude/
 artifacts/
+graphml/
+data/faiss-data/
+data/evidence_records/docset_*/
+data/evidence_records/full_human_gold_9doc/*_evidence_records_llm.json
+*.egg-info/
