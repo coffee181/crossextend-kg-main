@@ -20,6 +20,19 @@
 - workflow / semantic 双层图组装
 - `final_graph.json` 与 GraphML 导出
 
+### 1.1 明确保留但仍属于主线的目录
+
+以下目录不会被删除，因为它们仍然属于当前有效实现，而不是历史残留：
+
+- `backends/`
+  当前预处理、attachment 与 embedding 路由依然依赖
+- `data/`
+  当前源文档、human gold 与冻结 evidence records 依然依赖
+- `temporal/`
+  当前图组装中的可选 lifecycle / temporal 能力依然依赖
+- `figures/`
+  当前仓库架构图与执行流说明依然保留
+
 ### 2. 当前有效实验面
 
 - `experiments/metrics/`

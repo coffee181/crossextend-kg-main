@@ -1,7 +1,7 @@
-"""Temporal knowledge management for CrossExtend-KG.
+"""Optional temporal support for the current CrossExtend-KG mainline.
 
-Provides bi-temporal graph storage, device lifecycle tracking,
-and temporal consistency validation.
+Provides graph versioning, lifecycle-event detection, and temporal
+consistency helpers when snapshot-aware execution is enabled.
 """
 
 from temporal.versioning import TemporalDiff, TemporalGraphStore
