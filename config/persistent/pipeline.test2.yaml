@@ -1,0 +1,48 @@
+extends: ./pipeline.base.yaml
+
+benchmark_name: test2_three_domain
+llm_backend_id: deepseek
+embedding_backend_id: dashscope_text_embedding_v4
+
+runtime:
+  run_prefix: test2
+  artifact_root: ../../results/test2
+  write_graphml: true
+
+domains:
+  - domain_id: battery
+    domain_name: Battery System
+    role: target
+    data_path: ../../data/evidence_records/battery_test2_three_domain.json
+    ontology_seed_path: null
+    source_types:
+      - om_manual
+    domain_keywords:
+      - battery
+      - pack
+      - busbar
+      - shield
+  - domain_id: cnc
+    domain_name: CNC Machine
+    role: target
+    data_path: ../../data/evidence_records/cnc_test2_three_domain.json
+    ontology_seed_path: null
+    source_types:
+      - om_manual
+    domain_keywords:
+      - cnc
+      - spindle
+      - chiller
+      - hose
+  - domain_id: nev
+    domain_name: New Energy Vehicle
+    role: target
+    data_path: ../../data/evidence_records/nev_test2_three_domain.json
+    ontology_seed_path: null
+    source_types:
+      - om_manual
+    domain_keywords:
+      - nev
+      - vehicle
+      - coolant
+      - connector

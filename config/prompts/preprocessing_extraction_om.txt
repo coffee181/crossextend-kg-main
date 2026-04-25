@@ -24,7 +24,8 @@ Return JSON only.
       "label": "coolant level",
       "description": "measured coolant level",
       "node_worthy": true,
-      "semantic_type_hint": "Signal"
+      "semantic_type_hint": "Signal",
+      "shared_hypernym": "Coolant"
     }
   ],
   "relations": [
@@ -33,6 +34,21 @@ Return JSON only.
       "family": "task_dependency",
       "head": "T1",
       "tail": "coolant level"
+    }
+  ],
+  "state_transitions": [
+    {
+      "from_state": "wet",
+      "to_state": "dry",
+      "trigger_step": "T3",
+      "evidence_label": "dry condition"
+    }
+  ],
+  "diagnostic_edges": [
+    {
+      "evidence_label": "seepage",
+      "indicated_label": "O-ring degradation",
+      "mechanism": "communication"
     }
   ],
   "extraction_quality": "high"
@@ -59,6 +75,7 @@ Return JSON only.
 14. Set `node_worthy=true` for stable `Asset`, `Component`, `Signal`, `State`, and `Fault` nodes. Otherwise prefer skipping the concept; use `node_worthy=false` only for clearly low-value residual items that must still be surfaced.
 15. For physical parts, prefer the part itself over a temporary inspection view. Good: `EPDM O-ring`, `connector shell`, `seal land`. Usually avoid turning the part into a view-only label such as `EPDM O-ring cross-section` or `connector profile` unless the view or measurement itself is the reusable node.
 16. When the text names a stable local assembly, boundary, or interface and then lists its visible parts or features, keep that local assembly/boundary as a concept too. Cross-domain examples include a connector boundary with retainer and seal parts, a manifold face with bolts and seal channel, or a spindle nose with clamp parts.
+17. Each concept may optionally include `shared_hypernym`, which classifies the concept into a cross-domain hypernym tier. If present it must be one of: `Seal`, `Connector`, `Sensor`, `Controller`, `Coolant`, `Actuator`, `Power`, `Housing`, `Fastener`, `Media`. Use it when the concept clearly fits one of these categories regardless of domain.
 
 ## Step Handling
 The document usually contains markdown table rows such as `T1`, `T2`, `T3`, ...
@@ -68,6 +85,30 @@ The document usually contains markdown table rows such as `T1`, `T2`, `T3`, ...
 - Do not paraphrase a step into a long task title like `T1 Record Coolant Condition`; use `T1`.
 - Do not output neighboring `T1 triggers T2` sequence edges unless the document explicitly states a non-local dependency. The pipeline already reconstructs the normal linear step chain.
 - A concept mentioned inside a step is not automatically a `Task`. Classify it by its own semantics.
+- Steps typically follow a phase pattern: observe (record/inspect/measure) -> diagnose (compare/analyze) -> repair (repair/replace/reseat) -> verify (verify/confirm/test). If a step's action clearly falls in one phase, note it.
+
+## Hypernym Classification
+When a concept clearly maps to a cross-domain category, include `shared_hypernym` in the concept output.
+
+| Hypernym | Examples (battery) | Examples (CNC) | Examples (EV) |
+|----------|--------------------|-----------------|----------------|
+| Seal | O-ring, gasket, membrane | shaft seal, way cover wiper | O-ring, door seal, enclosure gasket |
+| Connector | header connector, splice pack | encoder coupling, drive dog | charge inlet, HV junction box |
+| Sensor | NTC thermistor, Hall sensor | proximity sensor, resolver | temperature sensor, current sensor |
+| Controller | BMS main controller | spindle drive, servo drive | motor controller, VCU |
+| Coolant | coolant hose, chiller | coolant pump, mist collector | chiller branch, thermal loop |
+| Actuator | contactor, precharge relay | solenoid, brake cylinder | contactor, compressor |
+| Power | MSD, DC-DC converter | transformer, 24V supply | OBC, DC-DC, charging cable |
+| Housing | pack case, lower tray | cabinet, spindle nose | battery enclosure, inverter housing |
+| Fastener | M6 bolt, retainer clip | setscrew, thrust bearing nut | terminal nut, bracket bolt |
+| Media | dielectric fluid | cutting fluid, way oil | refrigerant, compressor oil |
+
+## State Transitions and Diagnostic Edges
+When the text explicitly describes a state change or diagnostic inference:
+
+- Extract `state_transitions` when a step drives a change from one state to another. `trigger_step` is the step that causes the transition. `evidence_label` is the signal or observation confirming the new state.
+- Extract `diagnostic_edges` when a signal or observation indicates a fault or condition. `mechanism` should be `communication` for evidential links or `propagation` for causal chains.
+- Both are optional. Only include them when the text explicitly grounds them.
 
 ## Semantic Hints
 - `Asset`: named vehicle, pack, machine, line, cabinet, or platform.

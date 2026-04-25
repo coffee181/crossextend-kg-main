@@ -1,0 +1,8 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Novaris FlowControl-659 AWD, record the complaint as refrigerant-pressure plausibility loss, intermittent sensor dropout, or unstable high-side pressure reading, and capture the actual pressure response together with the DTC set before the pressure-sensor branch is opened. |
+| T2 | Make the thermal module safe and expose the pressure sensor, its three-pin connector, the sensor port on the refrigerant line, the line clamp, and the first harness clip without changing the natural bend of the sensor branch. |
+| T3 | Inspect the connector face, rear seal, line clamp, and sensor body for oil film, UV dye, pin recession, cracked locking tab, or support preload that could either bias the signal electrically or create vibration at the port. |
+| T4 | Compare sensor live data with a service reference value while the branch is static and again while the connector and first clip point are gently moved, because a drifting pressure channel often comes from one unstable terminal or one unsupported bend behind the connector. |
+| T5 | If the electrical side remains healthy, inspect the sensor-port sealing surface and nearby refrigerant line support to separate a true sensor fault from port leakage, line vibration, or pressure pulsation caused by a loose support bracket. |
+| T6 | Close the investigation only after the fault is named as pressure-sensor connector terminal, rear-seal intrusion, sensor element drift, line-clamp support issue, or port-side sealing problem, and tie that conclusion to both the measured pressure behavior and the physical evidence at the sensor branch. |

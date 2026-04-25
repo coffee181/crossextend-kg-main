@@ -1,0 +1,11 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Arcline SafeLoop-499 Plus, record the complaint as insulation-monitor warning after rain, blocked ready-up after underbody wash, or an intermittent safety fault that clears when the left rear pack corner dries, and note the exact ambient condition and whether the pack was recently opened. |
+| T2 | Make the high-voltage system safe and expose the IMD-200 monitor connector X402, ground eyelet G-HV27, module bracket, rear pack cover seam, and the nearby harness clip without changing the natural bend of the sense-lead branch. |
+| T3 | Inspect the X402 connector face, rear seal, cavity vents, and the G-HV27 eyelet for water track, green oxide, loose bracket bond, or witness marks that show the harness has been pulling the connector downward toward the pack-cover seam. |
+| T4 | Check module supply voltage, ground drop at G-HV27, and the stability of the monitor reading during a wake cycle so a weak module ground is separated from a true insulation loss elsewhere on the high-voltage system. |
+| T5 | If moisture is suspected, open X402 and inspect terminal drag, seal compression, and cavity fill, comparing the suspect pins with the unused reference cavities so small terminal recession or a rolled seal lip is not missed. |
+| T6 | Reproduce the fault carefully by moving the harness at the first clip and by observing the module during a short humid-air or cooled-surface condition, confirming whether the warning follows connector moisture, bracket bond loss, or a change in the actual insulation reading. |
+| T7 | After any connector repair or ground correction, restore the harness path from X402 to the bracket so the connector is held above the seam line and the ground eyelet sits flat against clean metal with full washer bite. |
+| T8 | Repeat the ready-up cycle and verify that the IMD reading remains stable with the same wake sequence and ambient condition that previously set the warning rather than accepting one dry workshop reading as final proof. |
+| T9 | Close the record only after the boundary is named as X402 connector moisture path, G-HV27 ground bond, module bracket corrosion, IMD-200 internal fault, or an external insulation issue ruled outside the module, and the release condition documents a stable monitor result. |

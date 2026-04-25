@@ -1,0 +1,8 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Kestrel DrainPack-446, record whether standing water, mud, or ice was found in the pack drain area and whether the complaint is odor, corrosion, or repeat moisture accumulation after cleaning, then identify the exact channel and outlet slot involved. Save the blockage pattern before it is cleared. |
+| T2 | Expose the drain channel, outlet slot, nearby shield flange, seam-sealer ridge, foam barrier, and any guide tab while leaving the blockage material intact long enough to determine what actually closed the path. The drain route has to be read from the highest trapped point to the outlet. |
+| T3 | Trace the channel and identify whether the restriction comes from compacted road debris, displaced seam sealer, collapsed foam, or bent shield metal narrowing the outlet. Record which feature created the first hydraulic bottleneck. |
+| T4 | Clear the blockage and run test fluid through the full channel, confirming that flow reaches the outlet without pooling at intermediate pockets or backing up under the shield lip. Measure or note the point where free flow resumes after the correction. |
+| T5 | Inspect the cleaned channel geometry, guide tab position, outlet lip, and nearby flange so the drain does not remain vulnerable to the same blockage because of a missing guide feature or deformed outlet shape. A reopened channel still needs a stable geometry. |
+| T6 | Close the drain diagnosis only when the report names the exact blocked element, such as outlet slot, seam-sealer ridge, foam barrier, or shield lip, and ties it to the before and after flow behavior. The release boundary is a channel that drains continuously through its full path with no remaining pocket at the repaired restriction point. |

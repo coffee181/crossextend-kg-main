@@ -1,0 +1,10 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Trion DriveUnit-508 Plus, record the post-service complaint as phase-current mismatch, no-drive after rear motor reassembly, or inverter phase-order DTC, and note whether the phase cables or motor terminal labels were disturbed during the last repair. |
+| T2 | Make the traction system safe and expose the U, V, and W phase-cable lugs at the motor terminal studs, the heat-shrink phase markers, the first cable clamp, and the nearby coolant hose so the as-installed cable order can be checked without moving the branches. |
+| T3 | Inspect the phase markers, lug order, stud witness marks, and clamp spacing to confirm whether each labeled cable actually lands on the intended terminal stud and whether any cable was crossed or rotated during service. |
+| T4 | Compare the cable order at the terminal studs with the inverter-side phase order or the recorded pre-service photo, because a correct torque value does not prevent a no-drive condition if the U, V, and W cables were restored to the wrong studs. |
+| T5 | If the labels and order still look uncertain, trace each cable from the stud to the first clamp and downstream branch path so the true phase identity is confirmed by routing and marker position rather than by one sleeve label alone. |
+| T6 | Restore the clamps and phase markers so each cable leaves its stud in a neutral bend with clear separation from the coolant hose and the adjacent cable backshell, and confirm that no lug is carrying twist from the first clamp. |
+| T7 | Repeat the ready or inverter self-check event and verify that phase-order faults do not return with the cable markers, stud order, and clamp positions all in final service position. |
+| T8 | Close the task only after the note names the exact boundary as crossed U/V/W cable order, wrong phase marker, lug rotation at the stud, first-clamp induced twist, or correct phase labeling with the fault pushed elsewhere, and the release condition records the verified phase path from terminal stud to first clamp. |

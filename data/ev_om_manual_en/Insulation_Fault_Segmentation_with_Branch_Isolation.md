@@ -1,0 +1,11 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Arcline Isolink-657 LR, define the complaint as low insulation at key-on after rain, repeated IMD warning during charge, or insulation value that improves after several minutes of operation, and log the baseline insulation reading before any branch is separated. |
+| T2 | Make the system safe and expose the BDU branch access points for inverter feed, OBC feed, compressor feed, PTC heater feed, and the IMD sense leads, identifying each connector and pyrofuse path before any segment is opened. |
+| T3 | Record the baseline insulation value and then isolate the inverter branch first, noting whether the reading improves immediately or remains unchanged so the first branch split already contributes evidence instead of just opening more hardware. |
+| T4 | Restore the inverter feed and isolate the OBC branch, repeating the insulation measurement with the same meter setup and ambient condition so branch-to-branch changes can be compared directly rather than from memory. |
+| T5 | If the fault remains, isolate the compressor and PTC heater feeds one at a time, documenting which branch changes the insulation value and which branches remain neutral while the pyrofuse, service disconnect, and IMD sense path stay constant. |
+| T6 | Once a branch shift is found, inspect that branch connector, seal, and routed cable segment for coolant contamination, abrasion, moisture ingress, or terminal damage that would explain why the insulation value moved when the branch was separated. |
+| T7 | Restore all unaffected branches in service order and confirm that the suspect branch alone reproduces the poor insulation value when reconnected, so the result is tied to a single hardware path rather than to cumulative disturbance from repeated opening. |
+| T8 | Mark the exact failed boundary as inverter feed connector, OBC internal branch, compressor cable, PTC heater feed, or IMD sense-path issue, and list the unaffected branches that were isolated and ruled out during the segmentation sequence. |
+| T9 | Close the record only after the vehicle is left with all healthy branches resecured, the faulted branch clearly identified, and the insulation test evidence linked to the exact connectors and pyrofuse paths used during isolation. |

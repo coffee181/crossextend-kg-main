@@ -1,0 +1,12 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Kestrel InterSafe-194 EV, log the complaint as recurring monitor-module supply fault, isolation warning that appears during wash-down, or IMD communication loss after cowl-area service, and capture the exact warning sequence together with the battery state and charger state at the time of failure. |
+| T2 | Make the high-voltage system safe and expose the safety monitor module SJM-12, connector X721, ground strap G-SM4, module bracket, drain path at the cowl-side shield, and the sense-lead harness clip without changing the module mounting load. |
+| T3 | Inspect the as-found area for water trail from the cowl shield, bracket rust bloom, cracked potting around the module case, loose ground strap seating, or harness rub at the clip that could pull X721 off center. |
+| T4 | Verify module supply voltage, ground drop at G-SM4, and communication status during a wake cycle so a feed or bracket-bond issue is separated from an internal module fault before the module is removed. |
+| T5 | Open X721 only if the connector path is suspect and inspect terminal drag, rear-seal compression, pin corrosion, and cavity moisture, comparing the affected pins with the dry reference cavities on the same connector body. |
+| T6 | If the electrical feed stays correct, inspect the sense-lead path from the module toward the pack reference points, making sure the fault does not actually belong to a damaged sense lead or rubbed connector downstream of a healthy SJM-12 unit. |
+| T7 | Remove or reposition the module only after the bracket, ground strap, and sense-lead path have been documented, then compare the serviced module and mounting lands side by side for missing isolators, bracket distortion, or a drain-path obstruction that would recreate the same failure. |
+| T8 | Restore X721, G-SM4, and the module bracket so the connector is supported by the clip line, the ground strap sits flat on clean metal, and the cowl drain path no longer directs water toward the module body. |
+| T9 | Repeat the wake and self-test sequence, and if needed repeat the same humid or water-exposure condition that previously triggered the fault so the accepted state proves the module remains stable beyond the first dry power-up. |
+| T10 | Close the case only after the boundary is named as SJM-12 internal fault, X721 connector corrosion, G-SM4 ground loss, bracket distortion, cowl drain-path water intrusion, or downstream sense-lead issue, and the release condition documents a stable monitor result with no repeat warning. |

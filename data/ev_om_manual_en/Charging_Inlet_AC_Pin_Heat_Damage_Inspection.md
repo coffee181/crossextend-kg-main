@@ -1,0 +1,10 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Helion ChargePort-721 EV, record whether the complaint was reduced AC current, hot smell after home charging, or visible browning on one Type 2 pin, and note which phase pin or neutral pin was implicated by thermal image, charge log, or customer observation. |
+| T2 | De-energize vehicle low-voltage inlet circuits, remove rear port trim, expose the Type 2 rear housing, silver-plated AC pin barrels, crimped cable lugs, thermistor lead if present, and inlet seal while keeping the original cable clocking intact. |
+| T3 | Inspect front and rear of the suspect AC pin together, looking for blue temper color, pitted pin nose, relaxed tulip spring fingers, browned PA66 insulator, or heat migration into the crimp barrel and adjacent phase cable insulation. |
+| T4 | Compare the damaged position with neighboring pins L1, L2, L3, N, and PE, noting pin projection, spring force feel, rear nut witness, conductor strand color, and any asymmetry that suggests high contact resistance at one exact terminal rather than an overloaded charger. |
+| T5 | Check rear cable support and strain relief so side load from the harness is not twisting the pin barrel inside the housing, because a pin that is electrically sound but mechanically side-loaded will often overheat at the mating face during long AC sessions. |
+| T6 | If the pin condition is borderline, reassemble enough for a limited monitored charge at reduced current and watch the exact pin temperature rise with an infrared probe or thermocouple, stopping once the suspect pin separates thermally from the reference pins. |
+| T7 | Inspect the surrounding housing for collateral damage, including seal shrinkage, connector cavity distortion, and loss of latch retention, because terminal heat severe enough to anneal the pin often damages the rear plastic that controls terminal position. |
+| T8 | Finish the inspection only after the report names the precise damaged hardware as AC L2 pin nose, neutral pin spring cage, rear crimp barrel, pin-retention cavity, or harness side-load at the inlet rear cover, with the heat evidence tied to that named part. |

@@ -1,0 +1,12 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Velorian JunctionCore-266 Plus, record the harness-identification check as part of battery junction box replacement, post-collision repair, or a mismatch warning after reconnection, and capture which branch labels are suspected before the box cover is opened. |
+| T2 | Make the system safe and expose the battery junction box cover, branch labels, inverter feed, OBC feed, heater feed, compressor feed, associated connector tags, and the first retainer clips without disturbing the installed routing order. |
+| T3 | Inspect the printed labels, connector keying, and branch exit directions so any label-to-connector mismatch is identified before a harness is removed and the original evidence disappears. |
+| T4 | Compare each labeled branch with the physical destination and connector style, checking whether the inverter feed really routes to the inverter bulkhead, whether the heater branch reaches the PTC connector, and whether any tag has been transferred from a previous service event. |
+| T5 | If the label identity is still uncertain, trace the branch to the first downstream connector or clamp point and confirm the path using harness color, backshell type, and bracket position rather than depending on the paper label alone. |
+| T6 | Inspect the local routing for crossed branches, twisted exits, clamp preload, or retainer misposition that could make a correctly labeled harness appear to belong to the wrong destination after the cover is reinstalled. |
+| T7 | After any label correction or branch swap, restore each harness to its correct clamp and retainer position so the connector-to-device path is clear from the junction box to the first downstream support. |
+| T8 | Recheck each branch identity at the box and at the first downstream connector so the accepted condition is tied to two physical points instead of to one handwritten note. |
+| T9 | Reassemble the junction-box cover and confirm that the labels, branch exits, retainer positions, and clamp loads remain readable and stable after the cover is back in service position. |
+| T10 | Finish the record only after the connection identity is tied to one named branch path such as inverter feed, OBC feed, heater feed, or compressor feed, and the release note states whether the issue was label mismatch, branch crossover, wrong clamp position, or no identity fault found. |

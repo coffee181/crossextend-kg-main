@@ -1,0 +1,24 @@
+extends: ./pipeline.base.yaml
+
+benchmark_name: test1_battery_single
+llm_backend_id: deepseek
+embedding_backend_id: dashscope_text_embedding_v4
+
+runtime:
+  run_prefix: test1
+  artifact_root: ../../results/test1
+  write_graphml: true
+
+domains:
+  - domain_id: battery
+    domain_name: Battery System
+    role: target
+    data_path: ../../data/evidence_records/test1_battery.json
+    ontology_seed_path: null
+    source_types:
+      - om_manual
+    domain_keywords:
+      - battery
+      - pack
+      - busbar
+      - shield

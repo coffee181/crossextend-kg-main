@@ -16,7 +16,16 @@ relation_families:
 backbone_concepts:
   - Asset
   - Component
-  - Task
   - Signal
   - State
   - Fault
+  - Seal
+  - Connector
+  - Sensor
+  - Controller
+  - Coolant
+  - Actuator
+  - Power
+  - Housing
+  - Fastener
+  - Media

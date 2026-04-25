@@ -1,0 +1,8 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Kestrel InletSense-552, record whether the complaint is wrong cable-current recognition, charge refusal with a specific portable EVSE, or inconsistent latch detection, and note the advertised cable rating shown in scan data before the PP circuit is disconnected. |
+| T2 | Expose the rear of the inlet and locate the PP terminal, PP sense lead, resistor capsule, and PE reference point, making sure the resistor branch and any splice cover are photographed before the harness is moved. |
+| T3 | Measure resistance between PP and PE at the inlet side with the cable unplugged and again with the approved reference plug inserted, comparing the result with the expected value for this inlet design so the fault is tied to the resistor path and not to the external cable alone. |
+| T4 | Inspect the resistor capsule, splice crimp, PP terminal drag, and PE eyelet for heat, corrosion, cracked potting, or moisture ingress that could shift the effective resistance and misreport cable capability. |
+| T5 | If the value changes during movement, hold the branch in the failing position and identify whether the instability comes from the resistor capsule leads, the PP terminal crimp, or the PE reference connection instead of replacing the full inlet unnecessarily. |
+| T6 | Sign off only after the note names the verified hardware as PP resistor capsule, PP terminal, PE eyelet, splice sleeve, or no internal fault found, with the measured resistance values written beside the named component, and after the same reference plug or portable EVSE is rechecked with stable cable-current recognition and no renewed latch or charge-capability mismatch. |

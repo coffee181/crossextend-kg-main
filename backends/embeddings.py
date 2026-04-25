@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import urllib.error
 import urllib.request
 from typing import Protocol
 
@@ -11,8 +12,10 @@ import numpy as np
 
 try:
     from crossextend_kg.config import EmbeddingBackendConfig
+    from crossextend_kg.exceptions import EmbeddingBackendError
 except ImportError:  # pragma: no cover - direct script execution fallback
     from config import EmbeddingBackendConfig
+    from exceptions import EmbeddingBackendError
 
 
 class EmbeddingBackend(Protocol):
@@ -76,10 +79,29 @@ class OpenAICompatibleEmbeddingBackend:
             headers=headers,
             method="POST",
         )
-        with urllib.request.urlopen(req, timeout=self.timeout_sec) as resp:
-            return json.loads(resp.read().decode("utf-8"))
+        try:
+            with urllib.request.urlopen(req, timeout=self.timeout_sec) as resp:
+                return json.loads(resp.read().decode("utf-8"))
+        except urllib.error.HTTPError as e:
+            body = e.read().decode("utf-8", errors="replace") if e.fp else ""
+            raise EmbeddingBackendError(
+                f"embedding API returned HTTP {e.code}: {body[:500]}"
+            ) from e
+
+    _EMBED_BATCH_SIZE = 10
 
     def embed_texts(self, texts: list[str]) -> list[list[float]]:
+        if not texts:
+            return []
+        if len(texts) <= self._EMBED_BATCH_SIZE:
+            return self._embed_batch(texts)
+        vectors: list[list[float]] = []
+        for offset in range(0, len(texts), self._EMBED_BATCH_SIZE):
+            batch = texts[offset : offset + self._EMBED_BATCH_SIZE]
+            vectors.extend(self._embed_batch(batch))
+        return vectors
+
+    def _embed_batch(self, texts: list[str]) -> list[list[float]]:
         payload: dict[str, object] = {
             "model": self.model,
             "input": texts,

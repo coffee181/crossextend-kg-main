@@ -1,0 +1,8 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Novaris DCDC-2K5, note whether coolant loss is active hot, active cold, or only visible after overnight soak, and document the as-found stain field around the converter cooling plate, hose nipples, quick connectors, and lower mounting tray before the residue is disturbed. |
+| T2 | Expose the converter and clean only loose dirt from the leak zone, keeping the dried edge of any pink or white deposit intact so the first visible origin at the cooling-plate seam, hose neck, or bleed plug is not erased by over-cleaning. |
+| T3 | Pressure-test the low-temperature branch with the converter static and watch the hose nipples, brazed plate seam, bleed plug washer, and quick-connector O-ring lands for the first bead of fresh coolant instead of judging the source from the largest stained area. |
+| T4 | Use a mirror and lamp to inspect the underside of the cooling plate and the bracket pocket below it, because coolant from an upper nipple can track down and mimic a seam leak unless the underside path is followed back to the highest wet point. |
+| T5 | Compare the leak pattern before and after pressure hold, and check whether the quick connector latch is fully indexed, the hose is bottomed to the bead, and the plate seam shows a linear wet line consistent with brazed-joint leakage rather than splash. |
+| T6 | Release the inspection only after the report identifies the exact leaking interface as upper hose nipple O-ring, lower quick connector latch seat, bleed plug washer, or cooling-plate seam, with the pressure-test result and residue path tied to that component name. |

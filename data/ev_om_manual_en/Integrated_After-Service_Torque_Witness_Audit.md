@@ -1,0 +1,10 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Lynxar E-Platform-325 EV, identify the joint being checked after service on the rear drive inverter, such as the DC-link busbar studs, the phase-output terminals, or the SiC module cover fasteners, and record what repair was performed before the torque-witness review began. |
+| T2 | Safe the high-voltage system, open the rear inverter upper access panel, and expose the DC-link capacitor cover, the three M8 copper busbar studs, the Nord-Lock washer stacks, the orange phase-output lugs, and the paint witness marks applied during the original repair. |
+| T3 | Inspect each witness stripe before touching the hardware, checking whether the paint line bridges the nut and stud cleanly, whether the washer pair stayed in the correct opposing-cam orientation, and whether any copper lug has rotated or lifted against the insulating spacer. |
+| T4 | Compare the hardware stack at each joint with the service drawing, confirming stud projection, lug order, washer orientation, insulator position, and the presence of every support clip that keeps the cable from twisting the terminal during vehicle motion. |
+| T5 | If a witness mark is broken or offset, verify the joint with the approved torque-check method and inspect the mating copper surfaces for fretting dust, dark heat tint, or reduced contact imprint that would show the joint moved under load instead of during harmless handling. |
+| T6 | Extend the check to the adjacent cable path and bracket support, because a correctly torqued nut can still lose alignment if the phase cable or busbar is left under side load after the inverter cover was refitted. |
+| T7 | Restore any disturbed insulation cover and confirm the witness-mark status, hardware order, and accepted torque condition are all documented at joint level for each stud or terminal that was checked. |
+| T8 | Close the task only after the fastener boundary is named explicitly as acceptable witness condition, loose busbar nut, wrong washer stack, rotated lug, missing insulator, or cable-induced side load, and tie that result to the exact joint location on the rear inverter. |

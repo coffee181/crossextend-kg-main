@@ -1,0 +1,12 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Aurex Isolink-744 AWD, record the complaint as rear pack-lid interlock fault after battery service, intermittent ready inhibit after body twist, or a warning that clears when the rear floor is pressed near the pack cover, and keep the exact event history with the DTC capture. |
+| T2 | Make the high-voltage system safe and expose the rear pack-lid interlock connector, CPA secondary lock, connector housing, lid flange bracket, strain-relief clip, and the adjacent pack-cover gasket edge without disturbing the original harness pull direction. |
+| T3 | Inspect the as-found lid-to-connector geometry for incomplete CPA travel, housing skew, latch-tab wear, or clip position that pulls the connector toward the lid flange every time the rear structure moves. |
+| T4 | Open the connector and check terminal height, female drag, seal compression, and any cavity-side witness mark that shows a terminal has been forced rearward while the latch still appeared closed from the outside. |
+| T5 | Inspect the connector housing and the surrounding gasket path for moisture entry, dust trail, or compression set so a pack-lid water path is not confused with a pure retention problem at the latch itself. |
+| T6 | Compare CPA travel, latch engagement force, and terminal drag with the matching interlock connector on the same pack so subtle assembly variation is not accepted as normal when one connector is already near the edge of disengagement. |
+| T7 | Repeat continuity and ready-enable checks while applying light movement at the strain-relief clip and the lid flange, confirming whether the fault follows connector retention, terminal grip, or harness preload instead of the lid switch logic. |
+| T8 | After any terminal repair or connector replacement, restore the clip sequence and harness bend so the interlock connector approaches the lid in a straight line and the CPA lock reaches full travel without the housing being levered by the bracket. |
+| T9 | Run the same ready-enable sequence and body-movement check that originally triggered the complaint, and verify that continuity stays stable through repeated wake cycles rather than only after a static bench latch. |
+| T10 | Close the case only after the boundary is named as latch-tab wear, CPA undertravel, terminal recession, gasket-side moisture path, strain-relief clip preload, or normal connector operation with the fault moved elsewhere, and the release state confirms a stable rear pack-lid interlock. |

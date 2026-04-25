@@ -1,0 +1,9 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Novaris FlowControl-742 LR, record the front-condenser-fan complaint as no fan command, low-speed only, high-speed only, delayed start, or noisy operation, and capture A/C request, high-side pressure, low-side pressure, coolant temperature, and battery-cooling demand before the fan circuit is opened. |
+| T2 | Expose the front fan module, fan motor connector, power feed, ground path, shroud mounting points, and the nearby pressure-sensor or fan-control branch while preserving the original harness routing and connector support. |
+| T3 | Command the fan through the approved diagnostic routine at low and high stages, and compare the requested state with actual fan motion, supply voltage, ground drop, and control signal so the fault is placed on command path, power path, or motor hardware rather than on fan behavior alone. |
+| T4 | Inspect the motor connector, terminal tension, fuse or relay output if applicable, and the shroud-side harness clip points for heat tint, moisture ingress, loose CPA lock, or conductor damage at the first fixed bend behind the connector. |
+| T5 | Check the fan blades, shroud clearance, and foreign-object path so a mechanically blocked or cracked fan is not misclassified as an electrical no-command event when the motor is actually being driven. |
+| T6 | Compare refrigerant-pressure response and condenser-face airflow with the commanded fan stage, because a fan that spins slowly, backward, or intermittently may satisfy a simple motion check while still failing the thermal function expected by the controller. |
+| T7 | Close the command check only after the note names the fault boundary as fan motor, motor connector, fuse or relay output, PWM or LIN command path, shroud interference, or normal fan response with pressure-sensor logic fault ruled separately. |

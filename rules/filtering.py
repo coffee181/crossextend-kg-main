@@ -51,6 +51,11 @@ _GENERIC_PLACEHOLDER_PATTERN = re.compile(
     re.IGNORECASE,
 )
 _SEMANTIC_TYPE_HINTS = {"Asset", "Component", "Signal", "State", "Fault"}
+_TIER1_HYPONYMS = {
+    "Seal", "Connector", "Sensor", "Controller",
+    "Coolant", "Actuator", "Power", "Housing",
+    "Fastener", "Media",
+}
 
 
 def _reject(decision: AttachmentDecision, justification: str, reject_reason: str) -> AttachmentDecision:
@@ -117,6 +122,15 @@ def preferred_parent_anchor(candidate: SchemaCandidate) -> str | None:
     hint = _semantic_type_hint(candidate)
     if hint is not None:
         return hint
+
+    # v2: use shared_hypernym from routing_features as fallback
+    hypernym = candidate.routing_features.get("shared_hypernym")
+    if isinstance(hypernym, str) and hypernym in _SEMANTIC_TYPE_HINTS | {
+        "Seal", "Connector", "Sensor", "Controller",
+        "Coolant", "Actuator", "Power", "Housing",
+        "Fastener", "Media",
+    }:
+        return hypernym
 
     text = f"{candidate.label} {candidate.description}"
     if _FAULT_PATTERN.search(text):
@@ -185,7 +199,7 @@ def filter_attachment_decision(
                 "vertical specialization requires a valid backbone parent when free-form growth is disabled",
                 "invalid_backbone_parent",
             )
-        if parent_anchor not in backbone_concepts:
+        if parent_anchor not in backbone_concepts and parent_anchor not in _TIER1_HYPONYMS:
             return _reject(
                 decision,
                 "vertical specialization parent is not part of the frozen backbone",

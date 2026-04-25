@@ -1,0 +1,8 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Trion SafeLoop-326 LR, define the complaint as HVIL open circuit during hood slam, blocked ready-up after front-end service, or intermittent interlock fault while driving over rough pavement, and keep the as-received DTC set together with the last ignition state that triggered the warning. |
+| T2 | Make the high-voltage system safe and expose the charge-inlet HVIL path from front bulkhead connector XH12 to the charge-port interlock connector, including the radiator-support clip, corrugated conduit, latch tab, and the first bend-controlled section behind the inlet housing. |
+| T3 | Inspect XH12, the charge-port interlock connector, and the routed harness for partial seating, latch wear, conduit split, clip loss, or witness rub where the branch crosses the radiator support and can open only when the front harness is pulled. |
+| T4 | Measure continuity through the HVIL loop section by section while flexing the harness at XH12, the radiator-support clip, and the inlet backshell, comparing the reading with the untouched rear-loop section so the fault is localized to one front-harness segment. |
+| T5 | If continuity drops only during movement, open the suspect connector and check terminal drag, secondary-lock engagement, and cavity recession so a weak female grip is separated from a broken conductor inside the conduit. |
+| T6 | Close the diagnosis only after the boundary is written as XH12 seat, charge-port interlock terminal, harness break behind the radiator-support clip, or latch-tab damage at the inlet housing, and the release condition confirms stable continuity through repeated hood and wake cycles. |

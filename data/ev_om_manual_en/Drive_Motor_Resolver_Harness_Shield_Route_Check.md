@@ -1,0 +1,11 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Trion TorqueLine-688 LR, record the complaint as resolver signal dropout, intermittent motor-speed plausibility fault, or repeated drive-unit warning after harness work, and note whether the shield drain or resolver branch was recently unclipped. |
+| T2 | Make the motor-side high-voltage path safe and expose the resolver connector, shield-drain eyelet, terminal cavities, the first harness retainer, and the nearby inverter bracket without changing the installed bend of the resolver branch. |
+| T3 | Inspect the resolver connector face, secondary lock, shield-drain eyelet, and retainer path for terminal recession, loose bond hardware, rubbed conduit, or harness pull that could disturb the shielded branch once the bracket and guards are reinstalled. |
+| T4 | Measure resolver supply, return, and shield continuity at the connector while flexing the branch at the first retainer and the bracket-side bend so a weak shield bond is separated from a damaged terminal or conductor. |
+| T5 | If the signal changes with movement, open the connector and inspect terminal drag, cavity moisture, rear-seal compression, and shield-drain hardware order, comparing the suspect cavities with the stable reference cavities on the same shell. |
+| T6 | Follow the full shield route from the resolver connector to the eyelet and confirm that the branch keeps correct clip engagement, bend radius, and clearance to the inverter bracket and cooling hose through the entire service run. |
+| T7 | After any connector, bond, or retainer correction, restore the resolver branch so the shield drain sits flat on its eyelet, the retainer holds the free span correctly, and the connector leaves the housing in a neutral line. |
+| T8 | Repeat the drive-unit self-check or ready sequence and verify that resolver signal quality, shield continuity, and the original DTC condition remain stable with the guards and retainers fully restored. |
+| T9 | Close the diagnosis only after the fault is named as resolver terminal fit, secondary-lock issue, shield-drain eyelet, retainer-induced harness pull, bracket-edge abrasion, or normal resolver route with the fault pushed elsewhere, and the release condition documents the verified shield path from connector to bond point. |

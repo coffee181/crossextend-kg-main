@@ -1,0 +1,8 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Velorian HVACLine-241 AWD, record the temperature-sensor complaint as implausible outlet reading, heater control oscillation, or sensor DTC after thermal-module service, and note the actual hose temperature beside the reported sensor value before the branch is disturbed. |
+| T2 | Cool the loop and expose the temperature sensor body, the two-pin connector, the seal ring, the hose branch, and the nearest support clip so the sensor seat and the connector can be inspected in one stable view. |
+| T3 | Inspect the connector latch, pin drag, rear seal, sensor O-ring, and sensor-seat threads or clip feature for moisture trace, cracked plastic, side load from the harness, or witness marks showing the sensor was not seated squarely in the branch. |
+| T4 | Compare the live sensor value with direct hose or fitting temperature and then repeat the comparison while moving the connector at the first clip point, separating a biased sensor element from a terminal or harness fault that only appears under branch movement. |
+| T5 | If the reading remains wrong, remove the sensor far enough to inspect the seal ring, sensing tip, and seat condition, checking for trapped debris, dry-running marks, coolant ingress at the connector side, or a missing clip that allowed the body to vibrate in service. |
+| T6 | Close the diagnosis only after the fault is named as sensor element bias, connector terminal loss, rear-seal moisture path, damaged sensor-seat O-ring, or harness strain at the first clip, with the actual measured hose temperature tied to the named hardware. |

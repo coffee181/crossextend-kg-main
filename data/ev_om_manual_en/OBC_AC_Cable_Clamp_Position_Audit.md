@@ -1,0 +1,12 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Aurex ChargeFlow-393 Plus, record the complaint as AC input cable movement at the OBC, charging interruption after front-end vibration, or witness rub at the charger-side cable clamp, and note whether the cable path was changed during prior service. |
+| T2 | Make the charger safe and expose the AC input terminals, the first cable clamp, the second downstream clamp, the anti-rub sleeve, the low-voltage connector, and the nearby coolant fitting so the full support path can be judged from inlet to charger body. |
+| T3 | Inspect both clamp positions, sleeve location, cable bend radius, and terminal backshell angle, checking for reversed clamp clocking, missing rubber isolator, sleeve migration, or cable-side load that could transmit movement into the AC terminals. |
+| T4 | Compare the installed route with the service reference, paying attention to clamp-to-terminal distance, cable twist, and clearance to the coolant fitting and cover edge so the support path is tied to a real geometry standard. |
+| T5 | If terminal heat or charging interruption was reported, inspect the AC terminal faces and lug hardware for heat tint, lug rotation, or fretting that would show the cable-support fault has already reached the electrical joint. |
+| T6 | Restore the clamps and sleeve in the specified order, confirming that the cable rests naturally on the clamps, clears the coolant fitting, and leaves the charger body without pushing the AC terminal studs sideways. |
+| T7 | Recheck the route with the charger cover and protection shield loosely staged in place, because several clamp-position faults reappear only when the cover restores the normal cable load. |
+| T8 | Repeat the charging event or vibration condition that produced the complaint and verify that cable movement, clamp retention, terminal temperature, and charging continuity now remain stable together. |
+| T9 | Finalize the cable-support audit only after the work order records the exact clamp positions, sleeve location, bend radius, and any corrected interference point from inlet side to charger body. |
+| T10 | Close the case only after the boundary is named as wrong first-clamp clocking, missing clamp isolator, anti-rub sleeve migration, excessive free span, AC terminal witness from cable load, or normal support path, and the release condition documents a stable AC cable route under repeat charging. |

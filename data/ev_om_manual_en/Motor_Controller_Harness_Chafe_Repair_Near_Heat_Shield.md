@@ -1,0 +1,9 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Velorian ControlDrive-508, note which symptoms change when the harness is touched, such as inverter shutdown, lost coolant pump command, or intermittent resolver signal, and capture the DTC set before opening the loom near the stamped aluminum heat shield. |
+| T2 | Make the controller safe, remove the side shield and the two M6 heat-shield fasteners, and expose the low-voltage harness section, edge clip, PET sleeve, and shield flange exactly as found so the rub direction and contact point can still be read. |
+| T3 | Inspect the harness outer wrap, the heat-shield edge, and the clip stand-off together. Missing edge trim, a bent shield lip, or a broken clip usually leaves a polished wear lane on the shield and a matching flattened zone on the loom before copper damage becomes visible. |
+| T4 | Open only the damaged loom span and identify each affected conductor by circuit color and pin destination, checking whether the fault is limited to outer insulation abrasion or has progressed to broken strands, green corrosion, or shield drain exposure inside the wrap. |
+| T5 | Repair the damaged section with staggered sealed splices or a service pigtail as appropriate, then add a fresh abrasion sleeve, restore the correct clip offset from the shield, and fit edge protection on the flange so the harness cannot repeat the same contact path. |
+| T6 | Before reclosing, move the powertrain or harness by hand through its normal travel and confirm the repaired branch keeps clearance to the heat shield, bracket fasteners, and coolant pipe support in both relaxed and loaded positions instead of only at one static point. |
+| T7 | Finish the repair note by naming the exact chafed hardware pair, for example LV harness branch to coolant-pump command rubbed through on heat-shield flange, because that component-to-component wording is much more useful for later extraction than a vague harness damage label. |

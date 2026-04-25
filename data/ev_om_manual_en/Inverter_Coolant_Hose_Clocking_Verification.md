@@ -1,0 +1,10 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Kestrel Inverta-264 AWD, record the cooling complaint as seepage at the rear inverter loop, coolant odor after service, or repeat hose-joint wetting near the inverter cold plate, and note whether the hose was disturbed during inverter replacement or pump service. |
+| T2 | Cool the loop and expose the cold-plate inlet hose, the constant-tension clamp, the aluminum outlet neck, the adjacent low-voltage connector, and the first hose support clip so the hose clocking can be judged in the exact as-found routed condition. |
+| T3 | Inspect the clamp clocking, hose-end witness line, neck-bead coverage, and support-clip position, checking whether the clamp ear points into the connector body, the hose is twisted at the cold-plate neck, or the support clip is forcing the hose to approach the neck on an angle. |
+| T4 | Pressure-test the loop and observe the underside of the hose bead and clamp gap with the branch static, then repeat with the pump running so seepage that appears only under flow and hose movement is not missed. |
+| T5 | If moisture appears, release the clamp enough to inspect the band imprint and the hose inner surface for double clamping marks, debris under the hose, hardened rubber, or corrosion on the aluminum bead that would prevent an even seal. |
+| T6 | Compare the wetting path with the adjacent connector body and support bracket so runoff from above is not mistaken for a failed cold-plate neck seal. |
+| T7 | Restore the hose in the specified clock position and confirm that the clamp ear, support clip, and nearby connector all clear one another without twisting the hose off its natural seat. |
+| T8 | Close the task only after the leak boundary is identified as clamp position, hose-set distortion, corroded neck bead, support-induced side load, migrated runoff, or no defect reproduced during the defined pressure and pump checks, and after the final repeated check confirms a dry cold-plate neck and clamp gap with the hose support and connector restored in service position. |

@@ -1,0 +1,12 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Velorian ChargeFlow-556 LR, record the complaint as AC charge abort after inlet service, charge session dropping within seconds, or charging unavailable after rain, and save the original CP, PP, and inlet-temperature status before the charge-port area is reopened. |
+| T2 | Make the vehicle safe and expose the charge-port control connector, CP and PP terminals, inlet-temperature sensor plug, lock-actuator connector, drain path, first harness retainer, and the local anti-rub sleeve behind the charge inlet housing. |
+| T3 | Inspect the inlet connectors and drain path for water trail, terminal spread, seal damage, retainer loss, or actuator-cable preload that could disturb the CP or PP circuits once the charge door and trim are reinstalled. |
+| T4 | Measure CP voltage, PP resistance, inlet-temperature signal, and lock-actuator command during a controlled AC plug-in event so the charge abort is tied to one branch condition instead of to the full charge port generally. |
+| T5 | If the electrical values are unstable, open only the suspect connector and inspect terminal drag, rear-seal compression, and cavity moisture, comparing the affected terminals with the dry reference cavities on the same connector body. |
+| T6 | If the electrical values stay normal, inspect whether the actuator cable, drain-path routing, or anti-rub sleeve position is loading the harness and shifting the charge-port connector after the lock mechanism travels. |
+| T7 | After any terminal repair, connector reseat, or drain-path correction, restore the retainer order and actuator cable path so CP, PP, and the temperature-sensor branch remain isolated from the moving lock hardware. |
+| T8 | Repeat the same AC plug-in sequence and, if required, the same controlled water-path condition that reproduced the complaint, verifying that CP, PP, inlet-temperature plausibility, and lock status now remain stable together. |
+| T9 | Reassemble the inlet housing and trim only after the electrical behavior stays correct with the harness fully installed, the anti-rub sleeve and retainer in place, the lock actuator cycled, and the drain path running away from the connector faces. |
+| T10 | Close the diagnosis only after the boundary is named as CP terminal spread, PP circuit issue, inlet-temperature connector, lock-actuator harness preload, drain-path moisture intrusion, or charge-port control connector fault, and the release condition documents a stable AC charge session. |

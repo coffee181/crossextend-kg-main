@@ -29,6 +29,8 @@ class ExtractionResult(BaseModel):
     doc_id: str
     concepts: list[dict[str, Any]]
     relations: list[dict[str, Any]]
+    state_transitions: list[dict[str, Any]] = Field(default_factory=list)
+    diagnostic_edges: list[dict[str, Any]] = Field(default_factory=list)
     extraction_quality: str = "unknown"
     llm_model: str = ""
     processing_time_ms: int = 0

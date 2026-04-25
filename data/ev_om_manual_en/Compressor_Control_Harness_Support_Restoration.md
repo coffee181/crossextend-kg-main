@@ -1,0 +1,12 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Helion Comprex-557 Plus, record the complaint as compressor communication fault, intermittent compressor disable, or chafe risk at the control harness near the compressor mount, and note whether the harness support was moved during prior service. |
+| T2 | Make the compressor branch safe and expose the compressor connector, control harness support bracket, first retainer clip, refrigerant line clamp, mount bushing, and the nearby anti-rub sleeve without disturbing the installed branch angles. |
+| T3 | Inspect the support bracket for bent ears, missing isolator, loose fasteners, or retainer loss that would let the harness rest on the refrigerant line or the compressor housing. |
+| T4 | Inspect the compressor connector and harness backshell for terminal strain, rear-seal distortion, and witness polish at the first clip point so a harness-support problem is separated from a connector-internal fault. |
+| T5 | Compare the installed harness route with the intended path from compressor connector to first retainer, checking bend radius, free span, line-to-harness clearance, support relationship to the mount bushing and line clamp, and the exact position of the anti-rub sleeve. |
+| T6 | If the complaint appears only under vibration, perform a controlled movement check at the support bracket and retainer clip while monitoring compressor communication or command status so the fault follows one physical support point. |
+| T7 | After any bracket, retainer, or sleeve correction, restore the branch so the harness leaves the connector in a neutral bend and is held clear of the refrigerant line, mount hardware, and compressor shell through the full movement envelope. |
+| T8 | Recheck the route with the guards loosely staged in place, because several support faults return only when the normal cover load and clip pressure are restored. |
+| T9 | Repeat the operating condition that originally disabled the compressor and confirm that communication, command state, and harness stability remain normal with the support hardware fully installed. |
+| T10 | Close the diagnosis only after the boundary is named as bent support bracket, missing retainer, anti-rub sleeve loss, connector strain at the first clip, line-clamp interference, or normal harness support condition, and the release state documents a stable compressor control path with no renewed chafe or command dropout during the repeated operating check. |

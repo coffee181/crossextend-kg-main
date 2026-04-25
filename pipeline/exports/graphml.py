@@ -46,6 +46,8 @@ def _add_graphml_keys(graphml: ET.Element) -> None:
         ("valid_from", "string"),
         ("valid_to", "string"),
         ("lifecycle_stage", "string"),
+        ("shared_hypernym", "string"),
+        ("step_phase", "string"),
     ]
     for attr_name, attr_type in node_keys:
         key = ET.SubElement(graphml, "key")
@@ -97,6 +99,8 @@ def _add_node_element(graph: ET.Element, node: GraphNode) -> None:
         "valid_from": node.valid_from or "",
         "valid_to": node.valid_to or "",
         "lifecycle_stage": node.lifecycle_stage or "",
+        "shared_hypernym": node.shared_hypernym or "",
+        "step_phase": node.step_phase or "",
     }
     for attr_name, attr_value in data_attrs.items():
         if attr_value:

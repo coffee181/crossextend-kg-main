@@ -1,0 +1,12 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Lynxar DriveCore-618 AWD, record the complaint as start-up abort after rear e-axle service, drive unit unavailable on the second key cycle, or repeated inverter-ready failure after coolant refill, and keep the complete DTC stack before reopening the rear drive area. |
+| T2 | Make the vehicle safe and expose the resolver connector, inverter-enable connector, phase-cable clamp, coolant bleed point, rear drive-unit ground point, and the adjacent anti-rub sleeve while preserving the installed harness and hose paths around the e-axle. |
+| T3 | Inspect the resolver connector latch, inverter-enable plug, ground eyelet, phase-cable clamp, and bleed point for partial seating, trapped air evidence, harness pull, or ground-stack disturbance that could block the ready transition after service. |
+| T4 | Check resolver supply and signal continuity, inverter-enable command, and ground drop during a ready request so the first electrical break in the rear e-axle start-up chain is identified before the drive unit itself is blamed. |
+| T5 | Compare the electrical result with coolant-pump response and bleed behavior, because a correctly commanded inverter that still blocks on thermal plausibility belongs to a different boundary from a missing resolver or enable signal. |
+| T6 | If the fault follows movement, inspect the phase-cable clamp, adjacent clips, and the anti-rub sleeve position to determine whether service reassembly is pulling the resolver or inverter-enable connectors out of their neutral line during chassis motion. |
+| T7 | After any connector correction, bleed action, or ground repair, restore the resolver branch, phase-cable clamp, and hose support order so the e-axle harness and coolant line no longer preload one another. |
+| T8 | Repeat the start-up sequence and the second key cycle that originally triggered the failure, verifying that resolver signal, inverter-enable state, coolant plausibility, and drive-unit ready status now stay aligned through both attempts. |
+| T9 | Refit the shields and support clips only after the repaired branch remains stable with the harness, anti-rub sleeve, and hose fully installed in their production positions around the rear e-axle. |
+| T10 | Close the case only after the fault is named as resolver connector, inverter-enable plug, rear ground point, phase-cable clamp preload, trapped air at the bleed point, or downstream drive-unit issue, and the release condition documents a stable rear e-axle start-up chain. |

@@ -1,0 +1,12 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Kestrel JunctionCore-608 AWD, record the busbar-insulator inspection as part of junction-box service, post-short check, or cover refit after internal repair, and identify which positive and negative bus sections were disturbed. |
+| T2 | Make the traction circuit safe and expose the junction-box busbars, insulator plates, stand-offs, cover alignment pins, and the nearby sense-lead retainers without moving the insulators out of their seated position. |
+| T3 | Inspect the insulator plates for cracks, wrong overlap, trapped debris, standoff distortion, or witness polish where a busbar edge has been contacting the insulator or cover. |
+| T4 | Compare each insulator plate with the busbar contour and standoff height, checking whether the plate sits flat, fully covers the live edge, clears the sense-lead route, and still leaves visible margin at the positive and negative busbar corners. |
+| T5 | If any insulator alignment is uncertain, trace the plate from upstream busbar bend to downstream stand-off so a local overlap error is not confused with a problem on the whole bus stack, the adjacent sense lead, or the neighboring retainer clip. |
+| T6 | Inspect the sense-lead retainers and cover alignment pins together with the insulator stack to determine whether the true problem is insulator placement or an adjacent part that shifts the plate during cover installation. |
+| T7 | After any insulator or standoff correction, restore the full busbar stack and confirm that each plate remains centered with the retainers and alignment pins in final position. |
+| T8 | Lower the cover carefully and recheck plate overlap, stand-off contact, retainer clearance, and sense-lead position before the fasteners are tightened, because several insulator faults appear only when the cover load is reapplied to the full busbar stack. |
+| T9 | Verify the final cover seating and confirm that no busbar edge, sense lead, or retainer is pinched, displaced, or left outside its protected insulator path. |
+| T10 | Close the operation only after the note names the boundary as cracked insulator plate, wrong overlap, distorted standoff, trapped debris, retainer interference, or normal busbar insulation condition, and the release state documents a correctly protected junction box with the cover lowered, the retainers in place, and every live edge still fully screened. |

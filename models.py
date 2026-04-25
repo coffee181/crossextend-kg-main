@@ -23,6 +23,12 @@ RejectReason = Literal[
 ]
 
 SemanticTypeHint = Literal["Asset", "Component", "Signal", "State", "Fault"]
+SharedHypernym = Literal[
+    "Seal", "Connector", "Sensor", "Controller",
+    "Coolant", "Actuator", "Power", "Housing",
+    "Fastener", "Media",
+]
+StepPhase = Literal["observe", "diagnose", "repair", "verify"]
 NodeLayer = Literal["semantic", "workflow"]
 EdgeLayer = Literal["semantic", "workflow"]
 WorkflowKind = Literal["sequence", "action_object"]
@@ -50,6 +56,7 @@ class ConceptMention(BaseModel):
     node_worthy: bool = True
     surface_form: str = ""
     semantic_type_hint: SemanticTypeHint | None = None
+    shared_hypernym: SharedHypernym | None = None
 
     @model_validator(mode="before")
     @classmethod
@@ -81,11 +88,60 @@ class RelationMention(BaseModel):
     tail: str
 
 
+class StepAction(BaseModel):
+    action_type: str
+    target_label: str
+
+
+class StructuralEdge(BaseModel):
+    label: str
+    family: str
+    head: str
+    tail: str
+
+
+class StateTransition(BaseModel):
+    from_state: str
+    to_state: str
+    trigger_step: str | None = None
+    evidence_label: str | None = None
+
+
+class DiagnosticEdge(BaseModel):
+    evidence_label: str
+    indicated_label: str
+    mechanism: str | None = None
+
+
+class ProcedureMeta(BaseModel):
+    asset_name: str | None = None
+    procedure_type: str | None = None
+    primary_fault_type: str | None = None
+
+
+class CrossStepRelation(BaseModel):
+    label: str
+    family: str
+    head: str
+    tail: str
+    head_step: str | None = None
+    tail_step: str | None = None
+
+
 class StepEvidenceRecord(BaseModel):
     step_id: str
     task: StepConceptMention
     concept_mentions: list[ConceptMention] = Field(default_factory=list)
     relation_mentions: list[RelationMention] = Field(default_factory=list)
+    # v2 fields (all optional with defaults for backward compatibility)
+    step_phase: StepPhase | None = None
+    step_summary: str = ""
+    surface_form: str = ""
+    step_actions: list[StepAction] = Field(default_factory=list)
+    structural_edges: list[StructuralEdge] = Field(default_factory=list)
+    state_transitions: list[StateTransition] = Field(default_factory=list)
+    diagnostic_edges: list[DiagnosticEdge] = Field(default_factory=list)
+    sequence_next: str | None = None
 
 
 StepRecord = StepEvidenceRecord
@@ -101,6 +157,9 @@ class EvidenceRecord(BaseModel):
     step_records: list[StepEvidenceRecord] = Field(default_factory=list)
     document_concept_mentions: list[ConceptMention] = Field(default_factory=list)
     document_relation_mentions: list[RelationMention] = Field(default_factory=list)
+    # v2 fields (all optional with defaults for backward compatibility)
+    procedure_meta: ProcedureMeta | None = None
+    cross_step_relations: list[CrossStepRelation] = Field(default_factory=list)
 
     @model_validator(mode="before")
     @classmethod
@@ -212,6 +271,8 @@ class GraphNode(BaseModel):
     valid_from: str | None = None
     valid_to: str | None = None
     lifecycle_stage: str | None = None
+    shared_hypernym: str | None = None
+    step_phase: str | None = None
 
 
 class GraphEdge(BaseModel):

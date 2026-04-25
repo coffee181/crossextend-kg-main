@@ -1,0 +1,9 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Velorian ThermoAir-768 LR, record whether the compressor-bracket fastener retorque follows noise, vibration, recent compressor replacement, or a scheduled post-service check, and identify the exact bracket positions before the witness marks are disturbed. |
+| T2 | Power the vehicle down and expose the compressor bracket, mount bushings, through-bolt sleeves, bracket ears, refrigerant line clamp, and adjacent LV connector support so the full load path can be inspected before torque is checked. |
+| T3 | Read the existing witness marks and inspect washer seating, bushing compression, bolt-head position, and bracket-to-shelf contact, because apparent torque drift often accompanies sleeve seizure, bracket shift, or line side-load rather than a simple loose fastener. |
+| T4 | Retorque the specified fasteners in the documented sequence, recording any bolt that moves significantly before reaching the check value and any position where the bracket settles, the bushing rotates, or the refrigerant line attitude changes while clamp load is restored. |
+| T5 | Compare final fastener witness, bracket alignment, and compressor attitude with the pre-check condition so the retorque result proves not only clamp load but also that the compressor now sits squarely relative to its line supports and rubber isolators. |
+| T6 | Reinspect nearby refrigerant lines, hose stand-offs, and the connector support after retorque, because bracket preload changes can create a new rub path or move existing witness marks even when the compressor hardware itself is secure. |
+| T7 | Close the retorque only after the work order names the exact fasteners checked, the movement observed at each position, the final bracket condition, and whether any bushing, sleeve, or bracket-ear abnormality remained after torque verification. |

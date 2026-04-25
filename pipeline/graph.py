@@ -253,7 +253,70 @@ def _step_order_index(step_id: str, fallback_index: int) -> int:
     return int(extracted[1:])
 
 
+def _step_sequence_edges(step_record) -> list[tuple[str, str]]:
+    """Return (head_step, tail_step) pairs for sequence edges.
+
+    Prefers v2 ``sequence_next`` when set; falls back to synthetic
+    ``triggers`` edges from ``relation_mentions``.
+    """
+    step_id = step_record.step_id
+    if step_record.sequence_next:
+        return [(step_id, step_record.sequence_next)]
+    edges: list[tuple[str, str]] = []
+    for relation in step_record.relation_mentions:
+        if relation.label != "triggers":
+            continue
+        head_step = _extract_step_id(relation.head)
+        tail_step = _extract_step_id(relation.tail)
+        if head_step == step_id and tail_step:
+            edges.append((head_step, tail_step))
+    return edges
+
+
+def _step_action_edges(step_record) -> list[tuple[str, str, str]]:
+    """Return (action_type, target_label, raw_relation_label) tuples for action edges.
+
+    Prefers v2 ``step_actions`` when populated; falls back to
+    ``task_dependency`` relations where head is this step.
+    """
+    step_id = step_record.step_id
+    if step_record.step_actions:
+        return [(sa.action_type, sa.target_label, sa.action_type) for sa in step_record.step_actions]
+    edges: list[tuple[str, str, str]] = []
+    for relation in step_record.relation_mentions:
+        if relation.family != "task_dependency":
+            continue
+        if _extract_step_id(relation.head) != _extract_step_id(step_id):
+            continue
+        if _extract_step_id(relation.tail):
+            continue
+        edges.append((relation.label, relation.tail, relation.label))
+    return edges
+
+
+def _step_structural_edges(step_record) -> list[tuple[str, str, str]]:
+    """Return (label, head, tail) tuples for structural edges.
+
+    Prefers v2 ``structural_edges`` when populated; falls back to
+    ``structural`` relations in ``relation_mentions``.
+    """
+    if step_record.structural_edges:
+        return [(se.label, se.head, se.tail) for se in step_record.structural_edges]
+    edges: list[tuple[str, str, str]] = []
+    for relation in step_record.relation_mentions:
+        if relation.family == "structural":
+            edges.append((relation.label, relation.head, relation.tail))
+    return edges
+
+
 def _step_summary_source(step_record) -> str:
+    # v2: prefer independent surface_form or step_summary
+    v2_surface = _normalize_space(getattr(step_record, "surface_form", ""))
+    if v2_surface and v2_surface.lower() != step_record.step_id.lower():
+        return v2_surface
+    v2_summary = _normalize_space(getattr(step_record, "step_summary", ""))
+    if v2_summary and v2_summary.lower() != step_record.step_id.lower():
+        return v2_summary
     description = _normalize_space(step_record.task.description)
     if description and description.lower() != step_record.step_id.lower():
         return description
@@ -303,6 +366,32 @@ def _step_summary_text(step_record) -> str:
 
 
 def _canonical_step_action(step_record) -> str | None:
+    # v2: if step_phase is set, derive action from it
+    step_phase = getattr(step_record, "step_phase", None)
+    if step_phase == "observe":
+        summary = _normalize_relation_phrase(_step_summary_text(step_record))
+        if summary:
+            action = _canonical_action_from_phrase(summary)
+            if action in ("record", "inspect", "measure", "expose", "compare"):
+                return action
+        return "inspect"
+    if step_phase == "diagnose":
+        summary = _normalize_relation_phrase(_step_summary_text(step_record))
+        if summary:
+            action = _canonical_action_from_phrase(summary)
+            if action:
+                return action
+        return "compare"
+    if step_phase == "repair":
+        summary = _normalize_relation_phrase(_step_summary_text(step_record))
+        if summary:
+            action = _canonical_action_from_phrase(summary)
+            if action in ("repair", "remove", "expose"):
+                return action
+        return "repair"
+    if step_phase == "verify":
+        return "verify"
+
     summary = _normalize_relation_phrase(_step_summary_text(step_record))
     if not summary:
         return None
@@ -673,6 +762,7 @@ def assemble_domain_graphs(
                         order_index=_step_order_index(step_record.step_id, step_position),
                         provenance_evidence_ids=[record.evidence_id],
                         valid_from=record.timestamp if write_temporal_metadata else None,
+                        step_phase=getattr(step_record, "step_phase", None),
                     )
                     new_node_ids.append(node_id)
                     first_observation_time[node_id] = record.timestamp
@@ -698,6 +788,7 @@ def assemble_domain_graphs(
                         surface_form=mention.surface_form or mention.label,
                         provenance_evidence_ids=[record.evidence_id],
                         valid_from=record.timestamp if write_temporal_metadata else None,
+                        shared_hypernym=getattr(mention, "shared_hypernym", None),
                     )
                     new_node_ids.append(node_id)
                     first_observation_time[node_id] = record.timestamp
@@ -724,6 +815,7 @@ def assemble_domain_graphs(
                             surface_form=mention.surface_form or mention.label,
                             provenance_evidence_ids=[record.evidence_id],
                             valid_from=record.timestamp if write_temporal_metadata else None,
+                            shared_hypernym=getattr(mention, "shared_hypernym", None),
                         )
                         new_node_ids.append(node_id)
                         first_observation_time[node_id] = record.timestamp

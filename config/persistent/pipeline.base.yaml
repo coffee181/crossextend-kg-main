@@ -8,17 +8,35 @@ backbone:
   seed_concepts:
     - Asset
     - Component
-    - Task
     - Signal
     - State
     - Fault
+    - Seal
+    - Connector
+    - Sensor
+    - Controller
+    - Coolant
+    - Actuator
+    - Power
+    - Housing
+    - Fastener
+    - Media
   seed_descriptions:
     Asset: industrial asset, machine, line, robot, battery pack, assembly, cabinet, robotic arm, control system, main equipment
     Component: part, module, bearing, reducer, lock, cooling module, hardware component, subassembly part, harness, sensor, motor, controller
-    Task: legacy workflow projection anchor for O&M step nodes
     Signal: alarm, warning, telemetry, sensor reading, sensor signal, vibration signal, torque signal, temperature signal
     State: operating state, normal state, abnormal state, status condition, overload state, shortage status, shutdown state
     Fault: fault, failure, defect, damage, deviation, drift, anomaly root issue, isolation fault, temperature fault
+    Seal: O-ring, gasket, membrane, diaphragm, seal land, lip seal, shaft seal, environmental seal, compression seal
+    Connector: electrical connector, coupler, terminal block, header, splice pack, junction box, quick connector, interlock connector
+    Sensor: temperature sensor, pressure sensor, position sensor, current sensor, voltage sensor, Hall sensor, NTC thermistor, resolver
+    Controller: BMS main controller, motor controller, inverter, VFD, PLC, ECU, thermal management module, gateway module
+    Coolant: coolant fluid, refrigerant, thermal loop, chiller branch, coolant hose, coolant pump, heat exchanger, bleed screw
+    Actuator: contactor, relay, solenoid, valve, motor, pump, brake, servo drive, hydraulic cylinder
+    Power: high-voltage bus, DC-DC converter, fuse, MSD, precharge circuit, OBC, charging inlet, power cable
+    Housing: enclosure, case, cover, tray, shield, bracket, mount, bushing, manifold, carrier
+    Fastener: bolt, nut, washer, stud, clip, retainer, screw, rivet, torque specification, thread
+    Media: refrigerant gas, oil, grease, lubricant, dielectric fluid, air, nitrogen, desiccant
 
 relations:
   relation_families:

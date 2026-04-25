@@ -1,0 +1,12 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Kestrel CoolNet-759 AWD, define the level-sensor complaint as false low-level warning, warning only after hot soak, or mismatch between live coolant level and visible reservoir content, and record reservoir fill state, return-flow behavior, and the sensor status before the branch is opened. |
+| T2 | Cool the loop and expose the reservoir cap, level sensor, sensor connector, outlet hose, and the local support bracket while preserving the original harness bend and hose height around the reservoir body. |
+| T3 | Inspect the sensor connector, rear seal, latch, reservoir sensor seat, and nearby hose route for dried coolant, moisture trace, swollen seal lips, clip loss, or harness tension that may pull the sensor body out of square during vehicle movement. |
+| T4 | Compare the live level-sensor signal with the actual fluid height in the reservoir and then repeat the observation during a controlled pump command, because some false low-level warnings appear only when return flow or slosh uncovers a marginal sensor seat or unstable terminal. |
+| T5 | Disconnect the sensor and check terminal drag, circuit continuity, and sensor-body sealing condition, separating an electrical connector issue from a reservoir-side sealing or float issue before the sensor is condemned. |
+| T6 | If the connector is stable, inspect the reservoir cap vent path, the outlet hose position, and the nearby return stream to determine whether foam, aeration, or a misrouted return hose is disturbing the sensor reading instead of a failed sensor element. |
+| T7 | Reconnect the branch and repeat the low-level reproduction condition after any correction, confirming that the warning no longer returns when the reservoir is at the same actual fill state that originally triggered it. |
+| T8 | Recheck the repaired or confirmed hardware after a short hot-soak or second pump cycle so the accepted state reflects more than the first stabilized reading in the bay. |
+| T9 | Record the exact boundary as level-sensor connector, sensor seat O-ring, reservoir return-flow aeration, cap vent issue, or sensor element drift, and link the conclusion to the measured signal behavior and the actual visible coolant state. |
+| T10 | Close the diagnosis only after the work order ties the named hardware, the reproduced warning condition, the validated reservoir level, and the repeat operating result together in one traceable low-level record. |

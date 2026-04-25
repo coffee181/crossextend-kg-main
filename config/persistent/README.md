@@ -1,22 +1,27 @@
 # Persistent Configs
 
-`config/persistent/` now keeps only the live presets required by the current
-mainline.
+`config/persistent/` keeps the live presets required by the current mainline.
 
 ## Files To Keep
 
-- `pipeline.base.yaml`
-- `pipeline.deepseek.yaml`
-- `preprocessing.base.yaml`
-- `preprocessing.deepseek.yaml`
-- `llm_backends.yaml`
-- `embedding_backends.yaml`
-- `relation_constraints.json`
+- `pipeline.base.yaml` -- v2: 15-concept backbone (5 base + 10 Tier-1 hypernyms)
+- `pipeline.deepseek.yaml` -- deepseek runtime preset
+- `preprocessing.base.yaml` -- stable preprocessing skeleton
+- `preprocessing.deepseek.yaml` -- deepseek preprocessing preset
+- `llm_backends.yaml` -- LLM backend registry
+- `embedding_backends.yaml` -- embedding backend registry
+- `relation_constraints.json` -- v2: includes Tier-1 hypernyms in allowed types
 
 ## Current Defaults
 
-- `deepseek` resolves to `deepseek-reasoner`
+- `deepseek` resolves to `deepseek-chat`
 - `dashscope_text_embedding_v4` is the default embedding backend
+
+## v2 Config Changes
+
+- `pipeline.base.yaml`: backbone `seed_concepts` expanded from 6 to 15; `Task` removed; 10 Tier-1 hypernyms added with descriptions
+- `relation_constraints.json`: all 10 Tier-1 hypernyms added to `task_dependency.allowed_head_types` and `allowed_tail_types`
+- `preprocessing_extraction_om.txt`: added hypernym classification table, step phase guidance, state_transition and diagnostic_edge extraction rules
 
 ## Usage Pattern
 

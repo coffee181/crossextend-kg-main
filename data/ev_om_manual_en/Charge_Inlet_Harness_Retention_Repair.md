@@ -1,0 +1,9 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Aurex DockHarness-775, record whether the complaint is intermittent charge interruption on rough roads, visible loose harness behind the inlet, or repeated rub marks on the rear connector branch, and note which retention point has failed or gone missing. |
+| T2 | Open the rear pocket area and expose the inlet harness, fir-tree clip, P-clip bracket, corrugated conduit, PET abrasion sleeve, and connector backshell before cutting any tape or moving the loose branch. |
+| T3 | Trace the harness from the inlet rear connector to the first fixed body point, identifying broken clips, cracked bracket tabs, missing edge clips, or conduit wear marks that show exactly where the branch has been moving. |
+| T4 | If the conduit or outer wrap is damaged, open only that span and confirm the conductors, cavity seals, and splice transitions are intact before installing new retention, because a clip repair that leaves hidden strand damage or seal cuts in place will return as an intermittent charging fault under vibration. |
+| T5 | Fit the correct replacement retention hardware, restore the harness to its intended drip loop and bend radius, and add abrasion sleeve or edge trim where the original movement created a rub witness on sheet metal or bracket edge. |
+| T6 | Pull and shake the harness lightly through the expected range of door and charge-handle movement, verifying that the rear connector, CP and PP leads, and lock-actuator branch all remain free of tension and do not contact the pocket flange. |
+| T7 | Close the repair only after the work order names the replaced retention parts and the corrected harness path, such as fir-tree clip at upper pocket panel or P-clip at inlet bracket, and after a final movement check confirms the harness stays clear of the pocket flange, keeps the intended drip loop, and no longer transfers load into the rear connector branch during charge-handle motion. |

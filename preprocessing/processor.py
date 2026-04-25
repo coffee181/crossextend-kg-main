@@ -22,20 +22,36 @@ except ImportError:  # pragma: no cover - direct script execution fallback
 try:
     from crossextend_kg.models import (
         ConceptMention,
+        CrossStepRelation,
+        DiagnosticEdge,
         EvidenceRecord,
+        ProcedureMeta,
         RelationMention,
         SemanticTypeHint,
+        SharedHypernym,
+        StepAction,
         StepConceptMention,
+        StepPhase,
         StepRecord,
+        StateTransition,
+        StructuralEdge,
     )
 except ImportError:  # pragma: no cover - direct script execution fallback
     from models import (
         ConceptMention,
+        CrossStepRelation,
+        DiagnosticEdge,
         EvidenceRecord,
+        ProcedureMeta,
         RelationMention,
         SemanticTypeHint,
+        SharedHypernym,
+        StepAction,
         StepConceptMention,
+        StepPhase,
         StepRecord,
+        StateTransition,
+        StructuralEdge,
     )
 from preprocessing.extractor import build_extractor
 from preprocessing.models import DocumentInput, ExtractionResult, PreprocessingConfig, PreprocessingResult
@@ -101,6 +117,24 @@ _SEMANTIC_TYPE_HINT_MAP: dict[str, SemanticTypeHint] = {
     "state": "State",
     "fault": "Fault",
 }
+_SHARED_HYPONYM_MAP: dict[str, SharedHypernym] = {
+    "seal": "Seal",
+    "connector": "Connector",
+    "sensor": "Sensor",
+    "controller": "Controller",
+    "coolant": "Coolant",
+    "actuator": "Actuator",
+    "power": "Power",
+    "housing": "Housing",
+    "fastener": "Fastener",
+    "media": "Media",
+}
+_STEP_PHASE_PATTERNS: list[tuple[re.Pattern[str], StepPhase]] = [
+    (re.compile(r"\b(verify|verifies|verified|verifying|confirm|confirms|confirmed|confirming|validate|validates|validated|validating|test|tests|tested|testing|prove|proves|proved|proving|monitor|monitors|monitored|monitoring|circulate|circulates|circulated|circulating|pressurize|pressurizes|pressurized|pressurizing)\b", re.IGNORECASE), "verify"),
+    (re.compile(r"\b(record|records|observe|observes|inspect|inspects|inspection|measure|measures|capture|captures|note|notes|check|checks|review|reviews|examine|examines|identify|identifies|trace|traces)\b", re.IGNORECASE), "observe"),
+    (re.compile(r"\b(diagnose|diagnoses|diagnosed|diagnosing|analyze|analyzes|analyzed|analyzing|compare|compares|compared|comparing|evaluate|evaluates|evaluated|evaluating|assess|assesses|assessed|assessing|determine|determines|determined|determining)\b", re.IGNORECASE), "diagnose"),
+    (re.compile(r"\b(repair|repairs|replace|replaces|replacement|reseat|reseats|reset|resets|correct|corrects|refit|refits|install|installs|renew|renews|restore|restores|torque|torques|tighten|tightens|lubricate|lubricates|adjust|adjusts)\b", re.IGNORECASE), "repair"),
+]
 _ALIAS_TOKEN_EQUIVALENTS: dict[str, str] = {
     "inner": "internal",
 }
@@ -246,6 +280,7 @@ def _build_concept_mention(concept_data: dict[str, Any], *, fallback_label: str 
         node_worthy=bool(concept_data.get("node_worthy", True)),
         surface_form=surface_form,
         semantic_type_hint=_extract_semantic_type_hint(concept_data),
+        shared_hypernym=_extract_shared_hypernym(concept_data),
     )
 
 
@@ -258,6 +293,13 @@ def _extract_semantic_type_hint(concept_data: dict[str, Any]) -> SemanticTypeHin
         if normalized is not None:
             return normalized
     return None
+
+
+def _extract_shared_hypernym(concept_data: dict[str, Any]) -> SharedHypernym | None:
+    value = concept_data.get("shared_hypernym")
+    if not isinstance(value, str):
+        return None
+    return _SHARED_HYPONYM_MAP.get(value.strip().lower())
 
 
 def _merge_concept_mention(store: dict[str, ConceptMention], mention: ConceptMention) -> None:
@@ -287,6 +329,52 @@ def _infer_step_ids_from_surface(label: str, step_rows: dict[str, str]) -> list[
         if pattern.search(normalized_row):
             matches.append(step_id)
     return matches if len(matches) == 1 else []
+
+
+def _infer_step_phase(surface_form: str) -> StepPhase | None:
+    text = surface_form.strip()
+    if not text:
+        return None
+    for pattern, phase in _STEP_PHASE_PATTERNS:
+        if pattern.search(text):
+            return phase
+    return None
+
+
+def _infer_procedure_meta(raw_text: str, evidence_id: str) -> ProcedureMeta | None:
+    lines = raw_text.strip().splitlines()
+    title = lines[0].strip().lstrip("#").strip() if lines else ""
+    asset_name = None
+    procedure_type = None
+    primary_fault_type = None
+    for line in lines[:5]:
+        lower = line.lower()
+        if not asset_name:
+            asset_match = re.search(r"(?:pack|vehicle|machine|cabinet|controller|motor|compressor|spindle|axis|drive|battery|chiller|pump)", lower)
+            if asset_match:
+                asset_name = asset_match.group(0).title()
+        if not procedure_type:
+            if any(kw in lower for kw in ("diagnosis", "diagnostic")):
+                procedure_type = "diagnosis"
+            elif any(kw in lower for kw in ("inspection", "inspect", "review")):
+                procedure_type = "inspection"
+            elif any(kw in lower for kw in ("replacement", "replace", "install")):
+                procedure_type = "replacement"
+            elif any(kw in lower for kw in ("repair", "reseat", "correct")):
+                procedure_type = "repair"
+            elif any(kw in lower for kw in ("verification", "verify", "validate")):
+                procedure_type = "verification"
+        if not primary_fault_type:
+            fault_match = re.search(r"\b(leak|seepage|corrosion|crack|overheat|misalignment|contamination|drift|drop|offset|noise|vibration|fault|failure)\b", lower)
+            if fault_match:
+                primary_fault_type = fault_match.group(0)
+    if not asset_name and not procedure_type and not primary_fault_type:
+        return None
+    return ProcedureMeta(
+        asset_name=asset_name,
+        procedure_type=procedure_type,
+        primary_fault_type=primary_fault_type,
+    )
 
 
 def _alias_tokens(label: str) -> list[str]:
@@ -657,6 +745,7 @@ def extraction_to_evidence_record(doc: DocumentInput, extraction: ExtractionResu
             step_records=[],
             document_concept_mentions=concept_mentions,
             document_relation_mentions=_dedupe_relations(relation_mentions),
+            procedure_meta=_infer_procedure_meta(doc.content, doc.doc_id),
         )
 
     concept_catalog: dict[str, ConceptMention] = {}
@@ -736,7 +825,45 @@ def extraction_to_evidence_record(doc: DocumentInput, extraction: ExtractionResu
         step_relations[step_id].append(trigger_relation)
 
     step_records: list[StepRecord] = []
-    for step_id in step_ids:
+    step_ids_list = list(step_rows)
+    for index, step_id in enumerate(step_ids_list):
+        surface_form_text = step_rows[step_id]
+        step_phase = _infer_step_phase(surface_form_text)
+        step_summary = surface_form_text.split(".")[0].strip()[:72] if surface_form_text else ""
+        sequence_next = step_ids_list[index + 1] if index + 1 < len(step_ids_list) else None
+
+        # Extract step_actions from task_dependency relations where head=this step, tail=concept
+        step_actions: list[StepAction] = []
+        for rel in step_relations.get(step_id, []):
+            if rel.family == "task_dependency" and _extract_step_id(rel.head) == step_id and not _extract_step_id(rel.tail):
+                step_actions.append(StepAction(action_type=rel.label, target_label=rel.tail))
+
+        # Separate structural edges from relation_mentions
+        structural_edges: list[StructuralEdge] = []
+        for rel in step_relations.get(step_id, []):
+            if rel.family == "structural":
+                structural_edges.append(StructuralEdge(label=rel.label, family=rel.family, head=rel.head, tail=rel.tail))
+
+        # Separate diagnostic edges (communication/propagation)
+        diag_edges: list[DiagnosticEdge] = []
+        for rel in step_relations.get(step_id, []):
+            if rel.family in ("communication", "propagation"):
+                diag_edges.append(DiagnosticEdge(
+                    evidence_label=rel.head,
+                    indicated_label=rel.tail,
+                    mechanism=rel.family,
+                ))
+
+        # Extract state transitions from lifecycle relations
+        state_transitions: list[StateTransition] = []
+        for rel in step_relations.get(step_id, []):
+            if rel.family == "lifecycle" and rel.label in ("transitionsTo", "hasState"):
+                state_transitions.append(StateTransition(
+                    from_state=rel.head,
+                    to_state=rel.tail,
+                    trigger_step=step_id,
+                ))
+
         step_records.append(
             StepRecord(
                 step_id=step_id,
@@ -744,12 +871,65 @@ def extraction_to_evidence_record(doc: DocumentInput, extraction: ExtractionResu
                     label=step_id,
                     description="",
                     node_worthy=True,
-                    surface_form=step_rows[step_id],
+                    surface_form=surface_form_text,
                 ),
                 concept_mentions=sorted(step_concepts[step_id].values(), key=lambda item: item.label.lower()),
                 relation_mentions=_dedupe_relations(step_relations[step_id]),
+                step_phase=step_phase,
+                step_summary=step_summary,
+                surface_form=surface_form_text,
+                step_actions=step_actions,
+                structural_edges=structural_edges,
+                state_transitions=state_transitions,
+                diagnostic_edges=diag_edges,
+                sequence_next=sequence_next,
             )
         )
+
+    # Extract state_transitions and diagnostic_edges from LLM output
+    llm_state_transitions: list[StateTransition] = []
+    for st_data in getattr(extraction, "state_transitions", []) or []:
+        if not isinstance(st_data, dict):
+            continue
+        llm_state_transitions.append(StateTransition(
+            from_state=str(st_data.get("from_state", "")).strip(),
+            to_state=str(st_data.get("to_state", "")).strip(),
+            trigger_step=str(st_data.get("trigger_step", "")).strip() or None,
+            evidence_label=str(st_data.get("evidence_label", "")).strip() or None,
+        ))
+
+    llm_diagnostic_edges: list[DiagnosticEdge] = []
+    for de_data in getattr(extraction, "diagnostic_edges", []) or []:
+        if not isinstance(de_data, dict):
+            continue
+        llm_diagnostic_edges.append(DiagnosticEdge(
+            evidence_label=str(de_data.get("evidence_label", "")).strip(),
+            indicated_label=str(de_data.get("indicated_label", "")).strip(),
+            mechanism=str(de_data.get("mechanism", "")).strip() or None,
+        ))
+
+    # Build cross_step_relations from document-level communication/propagation relations
+    cross_step_relations: list[CrossStepRelation] = []
+    for rel in document_relations:
+        if rel.family in ("communication", "propagation"):
+            head_step = None
+            tail_step = None
+            for sid, concepts in step_concepts.items():
+                if rel.head in concepts:
+                    head_step = sid
+                if rel.tail in concepts:
+                    tail_step = sid
+            if head_step or tail_step:
+                cross_step_relations.append(CrossStepRelation(
+                    label=rel.label,
+                    family=rel.family,
+                    head=rel.head,
+                    tail=rel.tail,
+                    head_step=head_step,
+                    tail_step=tail_step,
+                ))
+
+    procedure_meta = _infer_procedure_meta(doc.content, doc.doc_id)
 
     return EvidenceRecord(
         evidence_id=doc.doc_id,
@@ -761,6 +941,8 @@ def extraction_to_evidence_record(doc: DocumentInput, extraction: ExtractionResu
         step_records=step_records,
         document_concept_mentions=sorted(document_concepts.values(), key=lambda item: item.label.lower()),
         document_relation_mentions=_dedupe_relations(document_relations),
+        procedure_meta=procedure_meta,
+        cross_step_relations=cross_step_relations,
     )
 
 

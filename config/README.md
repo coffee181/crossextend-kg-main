@@ -6,9 +6,9 @@ workflow-first O&M pipeline.
 ## Active Layout
 
 - `prompts/`
-  prompt templates used by preprocessing and attachment
+  prompt templates used by preprocessing and attachment (v2: hypernym + phase + diagnostic extraction)
 - `persistent/pipeline.base.yaml`
-  stable pipeline skeleton
+  stable pipeline skeleton (v2: 15-concept backbone)
 - `persistent/pipeline.deepseek.yaml`
   recommended runtime preset
 - `persistent/preprocessing.base.yaml`
@@ -20,7 +20,7 @@ workflow-first O&M pipeline.
 - `persistent/embedding_backends.yaml`
   embedding backend registry
 - `persistent/relation_constraints.json`
-  semantic type constraints used by relation validation
+  semantic type constraints used by relation validation (v2: Tier-1 hypernyms included)
 
 ## Design Rules
 
@@ -32,7 +32,7 @@ workflow-first O&M pipeline.
 ## Commands
 
 ```bash
-python -m crossextend_kg.cli preprocess --config D:\crossextend_kg\config\persistent\preprocessing.deepseek.yaml
-python -m crossextend_kg.cli run --config D:\crossextend_kg\config\persistent\pipeline.deepseek.yaml
-python -m crossextend_kg.cli run --config D:\crossextend_kg\config\persistent\pipeline.deepseek.yaml --domains battery
+python -m crossextend_kg.cli preprocess --config config/persistent/preprocessing.deepseek.yaml
+python -m crossextend_kg.cli run --config config/persistent/pipeline.deepseek.yaml
+python -m crossextend_kg.cli run --config config/persistent/pipeline.deepseek.yaml --domains battery
 ```

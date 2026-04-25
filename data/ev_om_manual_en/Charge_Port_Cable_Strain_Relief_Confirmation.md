@@ -1,0 +1,12 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Novaris ChargePort-622 EV, record the complaint as intermittent AC charging after inlet service, moisture warning at the charge port, or control pilot fault from the rear cavity, and capture the original CP, PP, and lock status before opening the inlet rear side. |
+| T2 | Make the vehicle safe and expose the charge-port rear cavity, CP terminal, PP resistor branch, lock-actuator connector, temperature-sensor connector, rear boot, cavity drain path, and the local anti-rub sleeve without changing the installed harness angle. |
+| T3 | Inspect the rear boot and cavity for water trail, boot-seat displacement, terminal spread, PP resistor damage, or actuator-cable pull that could disturb the pilot circuits after the inlet is reassembled. |
+| T4 | Measure CP voltage, PP resistance, lock-actuator response, and temperature-sensor value during a controlled plug-in event so the rear-cavity complaint is tied to one physical branch instead of to the full inlet assembly. |
+| T5 | If the pilot values are unstable, open only the suspect rear-cavity connector and inspect terminal drag, seal compression, and cavity moisture, comparing the affected branch with the dry reference branch beside it. |
+| T6 | If the pilot values stay correct, inspect whether the boot, drain path, anti-rub sleeve, or actuator cable is redirecting water or tension toward the CP and PP terminals after the charge door closes. |
+| T7 | Restore the rear-cavity harness and boot so CP, PP, lock actuator, and temperature-sensor branches leave the inlet in separate neutral paths and remain clear of the drain path and latch mechanism. |
+| T8 | Repeat the original plug-in sequence and, if required, the same controlled moisture exposure that triggered the complaint, confirming that CP, PP, lock status, and cavity dryness remain stable together. |
+| T9 | Reassemble only the interfaces disturbed during diagnosis, keeping the confirmed fault point, the corrected boot path, and the anti-rub sleeve position visible in the work order so the next service event starts from a named rear-cavity boundary. |
+| T10 | Close the diagnosis only after the boundary is written as CP terminal spread, PP resistor branch, rear-boot seal displacement, drain-path moisture route, lock-actuator harness preload, or temperature-sensor connector issue, and the release condition documents a stable charge-port rear cavity under repeat testing. |

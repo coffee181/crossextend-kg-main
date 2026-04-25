@@ -16,9 +16,9 @@ try:
 except ImportError:  # pragma: no cover - direct script execution fallback
     from file_io import load_evidence_records
 try:
-    from crossextend_kg.models import EvidenceRecord, EvidenceUnit, SchemaCandidate, SemanticTypeHint
+    from crossextend_kg.models import EvidenceRecord, EvidenceUnit, SchemaCandidate, SemanticTypeHint, SharedHypernym
 except ImportError:  # pragma: no cover - direct script execution fallback
-    from models import EvidenceRecord, EvidenceUnit, SchemaCandidate, SemanticTypeHint
+    from models import EvidenceRecord, EvidenceUnit, SchemaCandidate, SemanticTypeHint, SharedHypernym
 from pipeline.utils import normalize_text
 
 
@@ -38,6 +38,18 @@ _TRAILING_STABLE_PATTERN = re.compile(r"^(?P<base>.+?)\s+stable$", re.IGNORECASE
 _HANDLE_PROUD_PATTERN = re.compile(r"^(?:orange\s+)?handle\s+sits\s+proud$", re.IGNORECASE)
 _HANDLE_FLUSH_PATTERN = re.compile(r"^handle\s+flush(?:ness)?(?:\s+with\b.*)?$", re.IGNORECASE)
 _SEMANTIC_TYPE_HINTS: frozenset[str] = frozenset({"Asset", "Component", "Signal", "State", "Fault"})
+_SHARED_HYPONYM_MAP: dict[str, SharedHypernym] = {
+    "seal": "Seal",
+    "connector": "Connector",
+    "sensor": "Sensor",
+    "controller": "Controller",
+    "coolant": "Coolant",
+    "actuator": "Actuator",
+    "power": "Power",
+    "housing": "Housing",
+    "fastener": "Fastener",
+    "media": "Media",
+}
 
 
 def load_records_by_domain(config: PipelineConfig) -> dict[str, list[EvidenceRecord]]:
@@ -144,6 +156,24 @@ def _normalize_record_labels(record: EvidenceRecord) -> EvidenceRecord:
         for relation in step_record.relation_mentions:
             relation.head = _canonicalize_runtime_label(relation.head)
             relation.tail = _canonicalize_runtime_label(relation.tail)
+        # Normalize v2 fields
+        for action in step_record.step_actions:
+            action.target_label = _canonicalize_runtime_label(action.target_label)
+        for s_edge in step_record.structural_edges:
+            s_edge.head = _canonicalize_runtime_label(s_edge.head)
+            s_edge.tail = _canonicalize_runtime_label(s_edge.tail)
+        for d_edge in step_record.diagnostic_edges:
+            d_edge.evidence_label = _canonicalize_runtime_label(d_edge.evidence_label)
+            d_edge.indicated_label = _canonicalize_runtime_label(d_edge.indicated_label)
+        for st in step_record.state_transitions:
+            st.from_state = _canonicalize_runtime_label(st.from_state)
+            st.to_state = _canonicalize_runtime_label(st.to_state)
+            if st.evidence_label:
+                st.evidence_label = _canonicalize_runtime_label(st.evidence_label)
+    # Normalize cross_step_relations
+    for csr in record.cross_step_relations:
+        csr.head = _canonicalize_runtime_label(csr.head)
+        csr.tail = _canonicalize_runtime_label(csr.tail)
     return record
 
 
@@ -179,6 +209,14 @@ def _fallback_semantic_type_hint_candidates(label: str, description: str) -> lis
     return hints
 
 
+def _dominant_hypernym(counts: Counter[str]) -> str | None:
+    if not counts:
+        return None
+    top_count = max(counts.values())
+    top_items = sorted([item for item, count in counts.items() if count == top_count])
+    return top_items[0] if len(top_items) == 1 else None
+
+
 def aggregate_schema_candidates(
     records_by_domain: dict[str, list[EvidenceRecord]],
     *,
@@ -192,6 +230,7 @@ def aggregate_schema_candidates(
     relation_families: dict[tuple[str, ...], set[str]] = defaultdict(set)
     step_ids_by_candidate: dict[tuple[str, ...], set[str]] = defaultdict(set)
     semantic_hint_counts: dict[tuple[str, ...], Counter[str]] = defaultdict(Counter)
+    hypernym_counts: dict[tuple[str, ...], Counter[str]] = defaultdict(Counter)
 
     for domain_id, records in records_by_domain.items():
         for record in records:
@@ -236,6 +275,8 @@ def aggregate_schema_candidates(
                     else:
                         for hint in _fallback_semantic_type_hint_candidates(mention.label, mention.description):
                             semantic_hint_counts[concept_key][hint] += 1
+                    if mention.shared_hypernym:
+                        hypernym_counts[concept_key][mention.shared_hypernym] += 1
 
             for mention in record.document_concept_mentions:
                 if not mention.node_worthy:
@@ -264,6 +305,8 @@ def aggregate_schema_candidates(
                 else:
                     for hint in _fallback_semantic_type_hint_candidates(mention.label, mention.description):
                         semantic_hint_counts[key][hint] += 1
+                if mention.shared_hypernym:
+                    hypernym_counts[key][mention.shared_hypernym] += 1
 
     results: dict[str, list[SchemaCandidate]] = {domain_id: [] for domain_id in records_by_domain}
     for key, item in grouped.items():
@@ -288,6 +331,7 @@ def aggregate_schema_candidates(
             "semantic_type_hint": dominant_hint,
             "semantic_type_hint_candidates": hint_candidates,
             "support_count": len(item["evidence_ids"]),
+            "shared_hypernym": _dominant_hypernym(hypernym_counts[key]),
         }
         item["routing_features"] = routing_features
         results[item["domain_id"]].append(SchemaCandidate.model_validate(item))

@@ -1,0 +1,9 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Kestrel 12V Rail-282 Plus, record the complaint as incorrect battery state-of-charge display, sleep-current miscalculation, or battery current-sensor DTC, and save the as-received 12 V voltage, wake state, and current value reported by the body controller before disconnecting anything. |
+| T2 | Allow the network to sleep and expose the IBS sensor connector at the negative post, the sensor housing, battery terminal clamp, hold-down bracket, and the first harness clip so the connector path can be inspected with the battery still in its installed position. |
+| T3 | Inspect the IBS connector for water trace, seal roll, latch weakness, terminal recession, or harness rub against the hold-down bracket, and check whether the connector is being pulled off axis by the first clip or by an over-tight battery cover. |
+| T4 | Measure the 5 V reference, sensor ground, and output signal at the IBS connector during sleep and wake transitions, comparing the signal with actual current draw so a wiring fault is separated from a sensor element that no longer tracks load correctly. |
+| T5 | If the signal is unstable, disconnect the connector and inspect terminal drag and seal compression, then compare the readings again with the harness supported in a neutral line rather than pulled by the bracket or battery cover edge. |
+| T6 | After any connector repair or sensor replacement, restore the clip order and battery-cover clearance and repeat the same sleep-to-wake event that produced the complaint, confirming that the reported current and state-of-charge logic now follow the real battery behavior. |
+| T7 | Close the case only after the boundary is named as IBS connector terminal, seal-side moisture path, harness rub at the hold-down bracket, sensor element drift, or normal sensor operation with the fault moved elsewhere, and the release condition documents stable low-voltage reporting. |

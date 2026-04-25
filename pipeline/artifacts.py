@@ -101,6 +101,19 @@ def _build_final_graph_payload(result: VariantRunResult, domain_id: str) -> dict
     total_triples = len(graph_root.triples)
     type_rejected_count = len(rejected_type_triples)
 
+    hypernym_nodes = [n for n in semantic_nodes if getattr(n, "shared_hypernym", None)]
+    hypernym_coverage = len(hypernym_nodes) / len(semantic_nodes) if semantic_nodes else 0.0
+    hypernym_distribution: dict[str, int] = {}
+    for node in hypernym_nodes:
+        h = node.shared_hypernym
+        hypernym_distribution[h] = hypernym_distribution.get(h, 0) + 1
+
+    phase_nodes = [n for n in workflow_nodes if getattr(n, "step_phase", None)]
+    phase_distribution: dict[str, int] = {}
+    for node in phase_nodes:
+        p = node.step_phase
+        phase_distribution[p] = phase_distribution.get(p, 0) + 1
+
     return {
         "domain_id": domain_id,
         "summary": {
@@ -117,6 +130,9 @@ def _build_final_graph_payload(result: VariantRunResult, domain_id: str) -> dict
             "rejected_triple_count": len(rejected_triples),
             "type_rejected_triple_count": type_rejected_count,
             "snapshot_count": len(graph_root.snapshots),
+            "hypernym_coverage": round(hypernym_coverage, 4),
+            "hypernym_distribution": hypernym_distribution,
+            "phase_distribution": phase_distribution,
         },
         "relation_validation": {
             "total_candidates": total_triples,

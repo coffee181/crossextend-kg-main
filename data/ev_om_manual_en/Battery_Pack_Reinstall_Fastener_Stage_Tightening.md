@@ -1,0 +1,10 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Lynxar PackMount-511 LR, record the pack-installation stage that needs torque confirmation, such as front cradle bolts, rear support studs, or side-rail fixings, and note whether the check follows pack removal, subframe work, or a reported knock after installation. |
+| T2 | Make the high-voltage system safe and expose the relevant pack fasteners, locator sleeves, side rails, and nearby harness or coolant supports without disturbing the seated position of the pack before the first torque check. |
+| T3 | Read the existing torque stripes and inspect washer stack, sleeve seating, rail-to-body contact, and any pack-to-body gap so a loose fastener is separated from a locator that never seated correctly during installation. |
+| T4 | Verify fastener movement against the specified check torque and record any bolt or nut that turns significantly before reaching the target, noting whether the pack settles, the rail shifts, or a locator sleeve rotates as clamp load is restored. |
+| T5 | Compare the checked position with the adjacent fasteners on the same rail so the diagnosis can name one loose fastener, one distorted rail foot, or one trapped sleeve rather than blaming the full pack installation. |
+| T6 | If a gap or movement remains, inspect the locator sleeve, washer stack, and body land for burr, paint build, trapped harness, or coolant line preload that prevents full seating even when torque is correct. |
+| T7 | After any correction, confirm that the pack sits square on its locators and that the nearby harness and coolant supports remain routed clear of the rail and fastener heads through the full installed path. |
+| T8 | Close the operation only after the record names the final boundary as loose fastener, wrong washer stack, rotated locator sleeve, rail-foot interference, trapped support line, or normal seated condition, and ties that result to the verified torque and final gap state, with the accepted condition recorded as a square pack seat on the locator hardware and no remaining rail-to-body mismatch at the checked position. |

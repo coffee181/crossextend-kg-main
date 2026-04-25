@@ -1,0 +1,9 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Aurex ThermLoop-755 EV, record the inlet-restriction complaint with reservoir level, pump command, branch temperature spread, cavitation noise, and any low-flow or pump-current DTC before the inlet branch is opened. |
+| T2 | Expose the pump inlet hose, reservoir outlet, inlet clamp, upstream strainer or filter element if fitted, nearby level-sensor branch, and the first support clips while keeping the hose in its original shape for collapse and twist inspection. |
+| T3 | Confirm whether the restriction is visible in static condition by checking hose firmness, reservoir outlet flow, return movement, and any local vacuum collapse mark on the inlet hose outer wall, because the branch can fail before the pump head itself shows any electrical abnormality. |
+| T4 | Inspect the reservoir outlet, inlet nipple, hose liner, and clamp position for sealant scrap, gelled coolant, swollen hose inner wall, displaced rubber fragment, or foreign material that could reduce effective inlet area without being obvious from outside the branch. |
+| T5 | Command the pump and compare inlet-hose behavior, pump current, and outlet response before and after relieving the suspect inlet point, so a true inlet restriction is separated from air lock, downstream blockage, or weak pump motor. |
+| T6 | If the branch includes a strainer or molded reservoir outlet screen, remove and inspect it under direct light, recording debris type, coverage pattern, and whether contamination belongs to coolant degradation, assembly scrap, or a failing internal component elsewhere in the loop. |
+| T7 | Close the inspection only after the record names the restriction boundary as inlet hose collapse, reservoir outlet blockage, strainer contamination, clamp-induced hose pinch, or no inlet restriction found with the complaint pushed downstream of the pump. |

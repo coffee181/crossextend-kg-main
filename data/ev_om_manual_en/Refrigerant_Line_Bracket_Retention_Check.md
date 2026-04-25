@@ -1,0 +1,9 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Velorian FlowControl-555 Plus, record whether the refrigerant-line bracket check follows rattle, line rub, leak trace, pressure-sensor fault, or recent front-end service, and identify the exact bracket location on the liquid line or suction line before the first fastener is touched. |
+| T2 | Make the vehicle safe for thermal service and expose the refrigerant line, bracket ear, rubber isolator insert, line clamp, pressure-sensor branch if fitted, and the adjacent fan-shroud or body panel clearance in one as-found view. |
+| T3 | Inspect the bracket and line together for broken rubber insert, missing clip retainer, witness polish, paint loss, line flattening, or fretting at the clamp saddle, because a loose bracket often leaves secondary rub marks before it creates a measurable refrigerant leak. |
+| T4 | Check the bracket fasteners for witness-mark shift, reduced clamp load, pulled threads, or distorted stand-off height, and compare the line attitude with the neighboring support point so line misposition is tied to one bracket rather than to the full pipe run. |
+| T5 | Follow the refrigerant line forward and rearward from the suspect bracket, confirming that the retained line keeps clearance to fan shroud, condenser frame, subframe edge, and pressure-sensor harness throughout the natural engine-bay movement envelope. |
+| T6 | If a leak complaint exists, separate bracket-retention damage from true line leakage by checking for oil-dirt accumulation, fluorescent dye, or fresh residue exactly at the tube, brazed joint, and sensor port instead of assuming every rubbed line is already leaking. |
+| T7 | Restore or retorque the bracket only after the record names the actual issue as loose bracket fastener, failed rubber insert, shifted clamp saddle, line-to-panel contact, or line intact with no leak evidence, and links that finding to the observed witness pattern. |

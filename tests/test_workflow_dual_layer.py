@@ -14,13 +14,20 @@ from models import (
     AdapterConcept,
     AttachmentDecision,
     ConceptMention,
+    CrossStepRelation,
+    DiagnosticEdge,
     DomainSchema,
     EvidenceRecord,
     GraphEdge,
     GraphNode,
+    ProcedureMeta,
     RelationMention,
+    SchemaCandidate,
+    StepAction,
     StepConceptMention,
     StepEvidenceRecord,
+    StateTransition,
+    StructuralEdge,
 )
 from pipeline.exports.graphml import export_graphml
 from pipeline.graph import assemble_domain_graphs
@@ -939,6 +946,252 @@ class WorkflowDualLayerTests(unittest.TestCase):
             self.assertIn("legacy_strict_metrics", metrics["diagnostics"])
             self.assertIn("relation_metrics", metrics["diagnostics"]["legacy_strict_metrics"])
             self.assertNotIn("relation_metrics", metrics)
+
+    def test_v2_step_evidence_record_with_new_fields(self) -> None:
+        """Test that StepEvidenceRecord v2 fields are optional and backward compatible."""
+        # Old-style construction still works
+        old_record = StepEvidenceRecord(
+            step_id="T1",
+            task=StepConceptMention(label="T1", surface_form="Inspect seal"),
+            concept_mentions=[
+                ConceptMention(label="O-ring", shared_hypernym="Seal", semantic_type_hint="Component"),
+            ],
+            relation_mentions=[
+                RelationMention(label="observes", family="task_dependency", head="T1", tail="O-ring"),
+            ],
+        )
+        self.assertIsNone(old_record.step_phase)
+        self.assertEqual(old_record.step_actions, [])
+        self.assertIsNone(old_record.sequence_next)
+
+        # v2 construction with new fields
+        v2_record = StepEvidenceRecord(
+            step_id="T1",
+            task=StepConceptMention(label="T1", surface_form="Inspect seal for damage"),
+            concept_mentions=[
+                ConceptMention(label="O-ring", shared_hypernym="Seal", semantic_type_hint="Component"),
+                ConceptMention(label="seepage", shared_hypernym=None, semantic_type_hint="Signal"),
+            ],
+            relation_mentions=[
+                RelationMention(label="observes", family="task_dependency", head="T1", tail="O-ring"),
+            ],
+            step_phase="observe",
+            step_summary="Inspect seal for damage",
+            surface_form="Inspect seal for damage",
+            step_actions=[StepAction(action_type="observes", target_label="O-ring")],
+            structural_edges=[],
+            state_transitions=[],
+            diagnostic_edges=[],
+            sequence_next="T2",
+        )
+        self.assertEqual(v2_record.step_phase, "observe")
+        self.assertEqual(v2_record.step_summary, "Inspect seal for damage")
+        self.assertEqual(len(v2_record.step_actions), 1)
+        self.assertEqual(v2_record.step_actions[0].action_type, "observes")
+        self.assertEqual(v2_record.step_actions[0].target_label, "O-ring")
+        self.assertEqual(v2_record.sequence_next, "T2")
+
+    def test_v2_evidence_record_with_procedure_meta_and_cross_step(self) -> None:
+        """Test EvidenceRecord with procedure_meta and cross_step_relations."""
+        record = EvidenceRecord(
+            evidence_id="BATOM_002",
+            domain_id="battery",
+            source_type="om_manual",
+            timestamp="2026-04-26T00:00:00Z",
+            raw_text="",
+            step_records=[
+                StepEvidenceRecord(step_id="T1", task=StepConceptMention(label="T1", surface_form="Observe")),
+                StepEvidenceRecord(step_id="T2", task=StepConceptMention(label="T2", surface_form="Diagnose")),
+            ],
+            document_concept_mentions=[
+                ConceptMention(label="seepage", shared_hypernym="Media", semantic_type_hint="Signal"),
+                ConceptMention(label="corrosion", semantic_type_hint="Fault"),
+            ],
+            procedure_meta=ProcedureMeta(
+                asset_name="pack",
+                procedure_type="diagnosis",
+                primary_fault_type="seepage",
+            ),
+            cross_step_relations=[
+                CrossStepRelation(
+                    label="indicates",
+                    family="communication",
+                    head="seepage",
+                    tail="corrosion",
+                    head_step="T1",
+                    tail_step="T2",
+                ),
+            ],
+        )
+        self.assertIsNotNone(record.procedure_meta)
+        self.assertEqual(record.procedure_meta.procedure_type, "diagnosis")
+        self.assertEqual(len(record.cross_step_relations), 1)
+        self.assertEqual(record.cross_step_relations[0].head_step, "T1")
+
+    def test_v2_graph_assembly_uses_step_phase_and_hypernym(self) -> None:
+        """Test that graph assembly propagates step_phase and shared_hypernym to GraphNode."""
+        config = SimpleNamespace(
+            relations=SimpleNamespace(
+                relation_families=["task_dependency", "communication", "propagation", "lifecycle", "structural"]
+            ),
+            runtime=SimpleNamespace(enable_relation_validation=False, relation_constraints_path=None),
+            domains=[SimpleNamespace(domain_id="battery")],
+        )
+        variant = SimpleNamespace(
+            write_temporal_metadata=False,
+            enable_snapshots=False,
+            detect_lifecycle_events=False,
+            variant_id="test_variant",
+        )
+        record = EvidenceRecord(
+            evidence_id="BATOM_002",
+            domain_id="battery",
+            source_type="om_manual",
+            timestamp="2026-04-26T00:00:00Z",
+            raw_text="T1 Inspect O-ring for seepage.",
+            step_records=[
+                StepEvidenceRecord(
+                    step_id="T1",
+                    task=StepConceptMention(label="T1", surface_form="Inspect O-ring for seepage"),
+                    concept_mentions=[
+                        ConceptMention(label="O-ring", shared_hypernym="Seal", semantic_type_hint="Component"),
+                        ConceptMention(label="seepage", shared_hypernym="Media", semantic_type_hint="Signal"),
+                    ],
+                    relation_mentions=[
+                        RelationMention(label="observes", family="task_dependency", head="T1", tail="O-ring"),
+                        RelationMention(label="records", family="task_dependency", head="T1", tail="seepage"),
+                    ],
+                    step_phase="observe",
+                    step_summary="Inspect O-ring for seepage",
+                    sequence_next=None,
+                ),
+            ],
+        )
+        schema = DomainSchema(
+            domain_id="battery",
+            backbone_concepts=["Asset", "Component", "Signal", "State", "Fault", "Seal", "Connector", "Sensor", "Controller", "Coolant", "Actuator", "Power", "Housing", "Fastener", "Media"],
+            adapter_concepts=[],
+        )
+        decisions = {
+            "battery::O-ring": AttachmentDecision(
+                candidate_id="battery::O-ring",
+                label="O-ring",
+                route="reuse_backbone",
+                accept=True,
+                admit_as_node=True,
+                confidence=1.0,
+                justification="backbone label",
+                evidence_ids=["BATOM_002"],
+            ),
+            "battery::seepage": AttachmentDecision(
+                candidate_id="battery::seepage",
+                label="seepage",
+                route="vertical_specialize",
+                parent_anchor="Signal",
+                accept=True,
+                admit_as_node=True,
+                confidence=0.9,
+                justification="signal hint",
+                evidence_ids=["BATOM_002"],
+            ),
+        }
+
+        graph = assemble_domain_graphs(
+            config=config,
+            variant=variant,
+            records_by_domain={"battery": [record]},
+            schemas={"battery": schema},
+            decisions_by_domain={"battery": decisions},
+            backbone_concepts=schema.backbone_concepts,
+        )["battery"]
+
+        workflow_nodes = [node for node in graph.nodes if node.node_type == "workflow_step"]
+        self.assertEqual(len(workflow_nodes), 1)
+        self.assertEqual(workflow_nodes[0].step_phase, "observe")
+
+        semantic_nodes = {node.label: node for node in graph.nodes if node.node_layer == "semantic"}
+        o_ring_node = semantic_nodes.get("O-ring")
+        self.assertIsNotNone(o_ring_node)
+        self.assertEqual(o_ring_node.shared_hypernym, "Seal")
+
+    def test_v2_concept_mention_shared_hypernym_roundtrip(self) -> None:
+        """Test that shared_hypernym survives JSON round-trip."""
+        mention = ConceptMention(
+            label="coolant hose",
+            description="coolant delivery hose",
+            semantic_type_hint="Component",
+            shared_hypernym="Coolant",
+        )
+        data = mention.model_dump(mode="json")
+        restored = ConceptMention.model_validate(data)
+        self.assertEqual(restored.shared_hypernym, "Coolant")
+
+    def test_v2_filtering_uses_hypernym_as_anchor_fallback(self) -> None:
+        """Test that filtering uses shared_hypernym as anchor fallback."""
+        candidate = SimpleNamespace(
+            label="O-ring",
+            description="EPDM O-ring seal",
+            evidence_ids=["BATOM_002"],
+            routing_features={"semantic_type_hint": None, "shared_hypernym": "Seal"},
+        )
+        from rules.filtering import preferred_parent_anchor
+        anchor = preferred_parent_anchor(candidate)
+        self.assertEqual(anchor, "Seal")
+
+    def test_v2_step_action_edges_from_v2_fields(self) -> None:
+        """Test that _step_action_edges uses v2 step_actions when available."""
+        from pipeline.graph import _step_action_edges
+        step = StepEvidenceRecord(
+            step_id="T1",
+            task=StepConceptMention(label="T1", surface_form="Inspect seal"),
+            concept_mentions=[ConceptMention(label="O-ring")],
+            relation_mentions=[
+                RelationMention(label="observes", family="task_dependency", head="T1", tail="O-ring"),
+            ],
+            step_actions=[StepAction(action_type="inspects", target_label="O-ring")],
+        )
+        edges = _step_action_edges(step)
+        self.assertEqual(len(edges), 1)
+        self.assertEqual(edges[0][0], "inspects")
+        self.assertEqual(edges[0][1], "O-ring")
+
+        # Fallback: without step_actions, uses relation_mentions
+        step_no_v2 = StepEvidenceRecord(
+            step_id="T1",
+            task=StepConceptMention(label="T1", surface_form="Inspect seal"),
+            concept_mentions=[ConceptMention(label="O-ring")],
+            relation_mentions=[
+                RelationMention(label="observes", family="task_dependency", head="T1", tail="O-ring"),
+            ],
+        )
+        edges_fallback = _step_action_edges(step_no_v2)
+        self.assertEqual(len(edges_fallback), 1)
+        self.assertEqual(edges_fallback[0][0], "observes")
+
+    def test_v2_sequence_edges_from_sequence_next(self) -> None:
+        """Test that _step_sequence_edges uses v2 sequence_next when available."""
+        from pipeline.graph import _step_sequence_edges
+        step = StepEvidenceRecord(
+            step_id="T1",
+            task=StepConceptMention(label="T1", surface_form="Observe"),
+            relation_mentions=[
+                RelationMention(label="triggers", family="task_dependency", head="T1", tail="T2"),
+            ],
+            sequence_next="T2",
+        )
+        edges = _step_sequence_edges(step)
+        self.assertEqual(edges, [("T1", "T2")])
+
+        # Without sequence_next, falls back to triggers relation
+        step_no_v2 = StepEvidenceRecord(
+            step_id="T1",
+            task=StepConceptMention(label="T1", surface_form="Observe"),
+            relation_mentions=[
+                RelationMention(label="triggers", family="task_dependency", head="T1", tail="T2"),
+            ],
+        )
+        edges_fallback = _step_sequence_edges(step_no_v2)
+        self.assertEqual(edges_fallback, [("T1", "T2")])
 
 
 if __name__ == "__main__":

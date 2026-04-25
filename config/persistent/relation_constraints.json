@@ -36,8 +36,8 @@
   },
   "task_dependency": {
     "description": "Execution or task-output dependencies where the head performs, triggers, measures, or confirms the tail.",
-    "allowed_head_types": ["Task"],
-    "allowed_tail_types": ["Task", "Signal", "Fault", "State", "Asset", "Component"],
+    "allowed_head_types": ["Task", "Seal", "Connector", "Sensor", "Controller", "Coolant", "Actuator", "Power", "Housing", "Fastener", "Media"],
+    "allowed_tail_types": ["Task", "Signal", "Fault", "State", "Asset", "Component", "Seal", "Connector", "Sensor", "Controller", "Coolant", "Actuator", "Power", "Housing", "Fastener", "Media"],
     "examples": [
       "inspection confirms fault -> Task -> Fault",
       "inspection observes coolant odor -> Task -> Signal",

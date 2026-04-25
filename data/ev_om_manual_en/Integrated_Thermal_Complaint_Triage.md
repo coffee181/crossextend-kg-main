@@ -1,0 +1,12 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Trion FusionDrive-602 EV, record the complaint as no-ready after battery-pack service, contactor drop during wake, or repeated BDU safety DTC with the pack recently reinstalled, and preserve the complete ready-sequence DTC stack before disturbing the chain. |
+| T2 | Make the high-voltage system safe and expose the service disconnect receptacle, pack-lid interlock connector, BDU contactor-feedback connector XBDU-6, and the first harness clips linking those points across the pack top. |
+| T3 | Inspect the service disconnect lever position, lid-interlock CPA, XBDU-6 latch, and the clip-to-harness geometry for incomplete seating, bent latch ears, terminal recession, or harness pull introduced during pack installation. |
+| T4 | Check continuity through the service disconnect interlock first, then through the pack-lid interlock, and then confirm contactor-feedback power and return at XBDU-6 so the first broken link in the ready chain is isolated in order. |
+| T5 | Compare the feedback result with the actual contactor state reported by the BDU, because a healthy interlock chain with missing feedback belongs to a different boundary from a chain that never closes at the service disconnect. |
+| T6 | Open only the suspect connector and inspect terminal drag, seal compression, and secondary-lock engagement while the other chain segments remain untouched as reference points. |
+| T7 | If the chain fault follows harness movement, inspect the pack-top clip sequence and bracket edges to determine whether the failure is caused by connector hardware or by an installation load that twists the branch after the pack bolts are tightened. |
+| T8 | After any terminal repair, connector replacement, or clip correction, restore the chain from service disconnect to XBDU-6 in service order and confirm each branch leaves its connector in a neutral path with no pack-top bracket interference. |
+| T9 | Repeat the full ready sequence and verify that service disconnect state, pack-lid interlock, and contactor feedback now transition in the correct order through multiple wake attempts rather than only on the first cycle. |
+| T10 | Close the case only after the root boundary is named as service disconnect latch undertravel, pack-lid interlock connector, XBDU-6 feedback connector, pack-top clip preload, or downstream BDU response issue, and the release condition documents a stable ready chain after pack service. |

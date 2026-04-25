@@ -1,0 +1,9 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Novaris PortLock-318 EV, record whether the fault is no lock, no release, grinding noise, or DTC for actuator overcurrent, and note whether the latch pin remains mechanically free when commanded by scan tool or manual emergency release. |
+| T2 | Disable inlet low-voltage supply, remove the rear pocket trim, and expose the lock actuator, plunger pin, bracket, two-wire connector, emergency-release cable, and guide sleeve without moving the lock pawl from its as-found position. |
+| T3 | Command the actuator once before removal if safe to do so, watching plunger travel, return spring action, and bracket flex, because a seized guide sleeve or bent pawl bracket can mimic a failed motor and should be captured before parts are swapped. |
+| T4 | Disconnect the actuator connector, unhook the emergency-release cable or link, and remove the actuator from the bracket while keeping spacer order and plunger orientation intact for traceable reassembly. |
+| T5 | Compare the replacement actuator with the removed unit for plunger length, connector keying, mounting ear offset, and end-stop position, then inspect the guide sleeve and pawl lever for burrs or wear that would overload the new actuator on first operation. |
+| T6 | Install the new actuator, route the connector and release cable exactly as intended, and confirm the plunger enters the pawl squarely without side load, then perform two or three lock-unlock cycles with the trim still open to verify full travel, stable current draw, and full pawl return without manual assist from the emergency cable. |
+| T7 | Close the replacement only after the note states whether the fault boundary remained inside the actuator body or in the guide sleeve or pawl linkage, and after repeated command cycles show normal lock engagement, clean release, and no renewed grinding or overcurrent with the pocket trim reinstalled. |

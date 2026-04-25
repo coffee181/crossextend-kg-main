@@ -1,0 +1,8 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Novaris CANLink-245 LR, record the complaint as BMS master not waking after sleep, delayed pack-authorize signal, or an intermittent no-ready state after recent pack-lid service, and capture 12 V supply level, state of charge, and whether the wake failure is complete or only delayed by several seconds. |
+| T2 | Expose the low-voltage pack service bay and inspect fuse F83, splice pack S-BMS-1, connector XB1 at the BMS master, the pack-lid harness grommet, and the wake-line branch where it leaves the main loom for pinch marks, partial seating, or disturbed tape wrap. |
+| T3 | Measure the wake-line signal at F83, at splice pack S-BMS-1, and at connector XB1 while commanding repeated sleep-wake cycles, because the fault boundary is defined by the first point where the wake pulse disappears or becomes unstable. |
+| T4 | Disconnect the splice pack and XB1 only as far as needed to inspect terminal height, rear-seal compression, and any conductor stretch behind the terminals, paying particular attention to the grommet area that may have been loaded while the pack lid was removed or refitted. |
+| T5 | Repeat the wake command with gentle branch movement at the splice pack and grommet so an intermittent open in the wake-line crimp is separated from a stable module-side fault or a blown fuse feed. |
+| T6 | Close the diagnosis only after the missing wake signal is localized as fuse F83 feed loss, splice pack S-BMS-1 intermittency, XB1 terminal issue, pack-lid harness pinch, or a BMS master fault downstream of a healthy wake line, and after the same sleep-wake sequence confirms stable wake timing at F83, S-BMS-1, and XB1 with the harness restored in final installed position. |

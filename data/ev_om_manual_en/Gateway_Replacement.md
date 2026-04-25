@@ -1,0 +1,12 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Kestrel CANLink-477 Plus, record the complaint as gateway offline after heavy rain, intermittent telematics dropout during wake, or multiple body-network U-codes that clear after drying, and save the as-received gateway and telematics node status before access begins. |
+| T2 | Let the low-voltage system sleep and expose gateway connector C214, CAN splice S112, wake-line terminal, cowl drain outlet, upper bracket fasteners, and the adjacent anti-rub sleeve without disturbing the natural harness route under the cowl shield. |
+| T3 | Inspect the first-opened area for water trail from the cowl drain, seal compression at C214, corrosion at the wake-line pin, and bracket shift that might let the harness sag into a moisture pocket behind the connector. |
+| T4 | Measure CAN high, CAN low, and wake-line voltage at C214 during sleep and wake, comparing the values with splice S112 so a gateway-side fault is separated from a downstream branch that only reflects the network dropout. |
+| T5 | If the readings drift during wake, open C214 and inspect terminal drag, cavity moisture, rear-seal compression, and secondary-lock position, comparing the suspect cavities with the dry reference cavities on the same connector shell. |
+| T6 | Inspect the cowl drain path and bracket geometry together to determine whether the true boundary is connector sealing, drain overflow, or harness pull that keeps the connector unseated after the shield is reinstalled. |
+| T7 | After any terminal repair or connector replacement, restore the bracket and harness clip order so the wake line and CAN pair leave C214 in a neutral bend and remain above the drain path. |
+| T8 | Repeat the same wake sequence and, if required, the same controlled water-path check that reproduced the complaint, confirming that gateway communication, wake-line voltage, and telematics availability now remain stable together. |
+| T9 | Reassemble the cowl shield and related supports only after the repaired branch stays dry and electrically stable through the repeat check with the harness, anti-rub sleeve, and bracket all installed in their production route. |
+| T10 | Close the case only after the fault is named as C214 terminal corrosion, wake-line cavity moisture, cowl-drain overflow, secondary-lock undertravel, bracket-induced harness pull, or downstream branch issue ruled separately, and the release condition documents a stable gateway wake path. |

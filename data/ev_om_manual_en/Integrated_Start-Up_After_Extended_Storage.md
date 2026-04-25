@@ -1,0 +1,9 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Aurex DriveFlow-418 Plus, record the complaint as no-ready after rear drive inverter service, inverter unavailable message at key-on, or contactors closing without drive enable, and save the DTC set before the repaired inverter area is reopened. |
+| T2 | Make the vehicle safe and expose inverter low-voltage connector XINV-12, the DC-link cover interlock plug, ground point G-INV4, coolant-pump connector P-CWA1, and the first harness clip that ties these branches together after inverter installation. |
+| T3 | Inspect XINV-12, the DC-link cover plug, G-INV4, and the harness clip line for partial seating, CPA undertravel, ground-eyelet twist, or clip preload that could pull one branch open only after the inverter is bolted back into place. |
+| T4 | Measure inverter wake feed, ground drop at G-INV4, and interlock continuity through the DC-link cover while issuing a ready request, so the first missing condition in the ready chain is identified on data rather than on the last module that reports a fault. |
+| T5 | If the electrical chain stays correct, compare coolant-pump command and inverter temperature plausibility so a post-service thermal interlock is not misread as a connector fault at XINV-12. |
+| T6 | After any connector reseat, ground correction, or clip repositioning, restore the harness path so XINV-12, the interlock plug, and the pump connector each sit in a neutral bend with no side load from the shared clip bracket. |
+| T7 | Close the diagnosis only after the boundary is named as XINV-12 seat, DC-link cover interlock plug, G-INV4 ground, shared harness clip preload, coolant-pump command path, or normal inverter branch with the no-ready fault pushed elsewhere, and the release condition confirms repeated successful ready requests with stable wake feed, ground, and interlock state in the final installed harness position. |

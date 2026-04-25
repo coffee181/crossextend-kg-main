@@ -1,0 +1,9 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | For Velorian MountPack-612, save the original rear bracket part number, fastener positions, and spacer arrangement before removal, and note which shield or branch runs closest to the bracket. The replacement record has to preserve the original hardware stack. |
+| T2 | Support the pack as required and expose the rear mount bracket, spacer sleeves, fasteners, and adjacent shield, vent, or harness branches that could interfere with extraction or reinstallation. Keep the pack-side and chassis-side lands visible together. |
+| T3 | Remove the old bracket in sequence and inspect both lands for fretting, distortion, trapped coating, or pulled thread that could distort the new bracket as soon as it is loaded. A replacement bracket cannot correct a damaged land or sleeve by itself. |
+| T4 | Compare the new bracket for ear width, sleeve bore, bend geometry, and hole alignment, then install it with the correct sleeves and fastener order so it sits squarely without closing a visible gap by bolt force alone. Record any part or geometry mismatch before loading. |
+| T5 | Torque the bracket in sequence and recheck that it does not contact the shield, harness, or vent hose once the pack weight is restored to the mount. The corrected bracket should carry the load without creating a new secondary interference. |
+| T6 | Reinspect witness paint, sleeve seating, and local clearances after full loading because some bracket offsets appear only once the neighboring hardware settles around the new mount. This ties the repair to the actual installed geometry. |
+| T7 | Finish the bracket replacement only when the note lists the removed and installed bracket identities, sleeve order, final seated geometry, and any surrounding branch clearances that were verified. The release boundary is a rear mount path that sits flat, loads evenly, and leaves no unresolved interference at the repaired bracket ear or adjacent support. |

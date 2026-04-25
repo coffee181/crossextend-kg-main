@@ -1,0 +1,9 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Trion SafeLoop-651 Plus, record the complaint as intermittent HVIL fault after service-disconnect handling, no-ready condition after battery reconnect, or a warning that changes when the disconnect lever is touched, and keep the exact DTC history before the receptacle is opened. |
+| T2 | Make the pack safe and expose the service-disconnect receptacle, CPA lock, interlock blades, female HVIL terminals, lever bracket, and side seal while preserving the as-found lever position and harness bend behind the receptacle. |
+| T3 | Inspect the male blades, female terminal mouths, CPA lock, and seal line for wear polish, widened terminal entry, bent latch ears, or witness marks that show the disconnect lever has been closing against an off-center receptacle. |
+| T4 | Measure terminal drag and interlock continuity across both HVIL paths in the receptacle, comparing the left and right cavities so one weak terminal spring or partially backed-out terminal is separated from a general disconnect complaint. |
+| T5 | Compare lever closing force, final latch position, and terminal grip with a known-good disconnect state, and determine whether the boundary belongs to terminal retention, blade wear, CPA undertravel, lever bracket distortion, or seal interference. |
+| T6 | After any terminal replacement or receptacle correction, repeat the latch cycle and a controlled vibration check while the disconnect remains visible, confirming that continuity stays stable when the lever is fully home and the harness is held in its natural path. |
+| T7 | Close the inspection only after the work order names the fault at one hardware boundary such as left HVIL female terminal, disconnect blade wear, CPA lock undertravel, lever bracket distortion, or side-seal displacement, and the release state confirms stable disconnect engagement through repeat latch cycles. |

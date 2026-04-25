@@ -1,0 +1,9 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Trion ControlDrive-353 AWD, define the concern as DC cable movement, terminal heating, or cable-to-shield contact near the front inverter, and note whether the branch was disturbed during inverter replacement, front subframe work, or HV junction-box service. |
+| T2 | Safe the HV system and expose the front inverter DC input studs, the orange cable backshells, the stamped strain-relief bracket, the two rubber-lined P-clamps, and the adjacent upper shield panel so the cable support path is visible from the studs to the first fixed bracket. |
+| T3 | Inspect the strain-relief bracket for bent ears, missing spacers, loose fasteners, wrong clamp orientation, or witness marks showing the cables have been carrying weight at the terminal studs instead of through the bracket and P-clamps. |
+| T4 | Check the cable route and free span, confirming bend radius, clamp spacing, backshell angle, and clearance to the shield edge and coolant pipe, because a correct terminal torque does not protect the joint if the cable is restored under torsion or side load. |
+| T5 | Inspect the DC studs and lug faces for heat tint, lug rotation, fretting dust, or insulator witness marks that would indicate the strain-relief problem has already started to transmit movement into the electrical joint. |
+| T6 | Restore the bracket and clamps in the specified order, then verify that the cable rests naturally on the support hardware and no longer pushes, lifts, or twists the inverter terminal studs. |
+| T7 | Close the task only after the support boundary is named as bent strain-relief bracket, missing spacer, wrong P-clamp clocking, excessive free span, stud-side witness from cable load, or acceptable cable support condition after inspection, and after the final route check confirms the DC cable remains supported by the bracket and P-clamps without touching the shield edge or loading the inverter studs. |

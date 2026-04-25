@@ -69,12 +69,16 @@ class LLMExtractor:
         """Parse LLM response into ExtractionResult."""
         concepts = response.get("concepts", [])
         relations = response.get("relations", [])
+        state_transitions = response.get("state_transitions", [])
+        diagnostic_edges = response.get("diagnostic_edges", [])
         quality = response.get("extraction_quality", "unknown")
 
         return ExtractionResult(
             doc_id=doc_id,
             concepts=concepts,
             relations=relations,
+            state_transitions=state_transitions,
+            diagnostic_edges=diagnostic_edges,
             extraction_quality=quality
         )
 

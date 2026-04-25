@@ -1,104 +1,108 @@
-# 开源更新说明
+# 开源更新说明（v2）
 
-本文档用于说明当前这次覆盖 GitHub 主仓库的内容边界、主要更新点以及仓库裁剪原则。
+本文档说明 CrossExtend-KG v2 的更新内容、仓库边界和维护原则。
 
-## 这次提交的目标
+## v2 重构目标
 
-本次更新不是继续叠加临时实验脚本，而是把仓库收敛到当前真正可维护、可复现、可开源展示的主线版本：
+v2 对证据数据模型和管线进行了结构性重构，解决三个问题：
 
-- 保留 workflow-first 双层图主链路
-- 保留当前有效配置、提示词、评测与测试
-- 删除历史性、一次性、强实验草稿性质的代码和脚本
-- 明确区分开源源码与本地产物
+1. `StepEvidenceRecord.relation_mentions` 把序列/操作/语义关系混在一个数组里
+2. 无跨域泛化能力（缺少 `shared_hypernym`）
+3. 无时序回溯和复杂传播路径建模能力（缺少 `step_phase`、`state_transitions`、`diagnostic_edges`）
 
-## 当前保留的开源主线
+## v2 核心变更
 
-### 1. 核心构图链路
+### 数据模型扩展
 
-- 预处理生成按步骤切分的 `EvidenceRecord`
-- 固定 backbone 的语义路由与 attachment 决策
+| 新增模型 | 用途 |
+|---------|------|
+| `StepAction` | 清晰的步骤-对象操作记录 |
+| `StructuralEdge` | 独立的结构包含边 |
+| `StateTransition` | 生命周期状态变更 |
+| `DiagnosticEdge` | 通信/传播证据边 |
+| `ProcedureMeta` | 文档级过程元数据 |
+| `CrossStepRelation` | 跨步骤诊断推理关系 |
+
+| 扩展模型 | 新增字段 | 作用 |
+|---------|---------|------|
+| `ConceptMention` | `shared_hypernym` | 跨域上位词分类（10个Tier-1类别） |
+| `StepEvidenceRecord` | `step_phase`, `step_summary`, `step_actions[]`, `structural_edges[]`, `diagnostic_edges[]`, `state_transitions[]`, `sequence_next` | v2 步骤元数据 |
+| `EvidenceRecord` | `procedure_meta`, `cross_step_relations[]` | 文档级元数据与跨步关系 |
+| `GraphNode` | `shared_hypernym`, `step_phase` | v2 属性传播到图节点 |
+
+### Backbone 扩展
+
+从 6 个概念扩展到 15 个：
+
+- **Tier 0**（基础语义类型）：`Asset`, `Component`, `Signal`, `State`, `Fault`
+- **Tier 1**（跨域上位词锚点）：`Seal`, `Connector`, `Sensor`, `Controller`, `Coolant`, `Actuator`, `Power`, `Housing`, `Fastener`, `Media`
+
+`Task` 已从 backbone 中移除。Workflow step 节点在图中保持为 `workflow_step`，仅在评测时投影为 `Task` 以兼容现有 gold truth。
+
+### 管线更新
+
+- **预处理**：LLM 提取 prompt 增加上位词分类表、step_phase 分类指导、state_transition 和 diagnostic_edge 提取规则
+- **处理器**：`extraction_to_evidence_record` 填充所有 v2 字段，保留 v1 字段向后兼容
+- **证据加载**：`aggregate_schema_candidates` 传播 `shared_hypernym` 到 `routing_features`
+- **图组装**：优先消费 v2 字段，v2 为空时回退到 v1 字段
+- **导出**：GraphML 新增 `shared_hypernym` 和 `step_phase` 属性；`final_graph.json` 新增 `hypernym_coverage` 和 `phase_distribution`
+- **过滤**：`shared_hypernym` 作为 anchor fallback；Tier-1 hypernym 作为合法 parent anchor
+
+### 向后兼容
+
+所有 v2 字段都有默认值（None/空列表），v1 格式的 evidence records 可以无错加载，v2 字段自动为空。现有的 19 个单元测试（12 个 v1 + 7 个 v2）全部通过。
+
+## 保留的开源主线
+
+### 核心构图链路
+
+- 预处理生成按步骤切分的 `EvidenceRecord`（v2 扩展字段）
+- 15 概念固定 backbone 的语义路由与 attachment 决策
 - workflow / semantic 双层图组装
 - `final_graph.json` 与 GraphML 导出
 
-### 1.1 明确保留但仍属于主线的目录
+### 仍属于主线的目录
 
-以下目录不会被删除，因为它们仍然属于当前有效实现，而不是历史残留：
+- `backends/` -- 预处理、attachment 与 embedding 路由依然依赖
+- `data/` -- 源文档、human gold 与 evidence records 依然依赖
+- `temporal/` -- 可选 lifecycle / temporal 能力依然依赖
+- `preprocessing/` -- v2 提取逻辑与 prompt
 
-- `backends/`
-  当前预处理、attachment 与 embedding 路由依然依赖
-- `data/`
-  当前源文档、human gold 与冻结 evidence records 依然依赖
-- `temporal/`
-  当前图组装中的可选 lifecycle / temporal 能力依然依赖
-- `figures/`
-  当前仓库架构图与执行流说明依然保留
+### 有效实验面
 
-### 2. 当前有效实验面
+- `experiments/metrics/` -- 工作流优先评测主线
+- `experiments/downstream/` -- workflow_retrieval + repair_suffix_ranking
 
-- `experiments/metrics/`
-  保留工作流优先的评测主线，默认强调：
-  - `workflow_step_f1`
-  - `workflow_sequence_f1`
-  - `workflow_grounding_precision / recall / f1`
-  - `anchor_accuracy`
-  - `anchor_macro_f1`
-- `experiments/downstream/`
-  保留新的下游任务协议：
-  - `workflow_retrieval`
-  - `repair_suffix_ranking`
+### 开源必备文档
 
-### 3. 开源必备文档
-
-- 根目录 `README.md`
-- 根目录 `README_CN.md`
+- `README.md` / `README_CN.md`
+- `docs/SYSTEM_DESIGN.md`
 - `docs/PIPELINE_DATA_FLOW.md`
 - `docs/WORKFLOW_KG_DESIGN.md`
-- `docs/DOWNSTREAM_EVALUATION.md`
-- `docs/GRAPH_QUALITY_DIAGNOSIS.md`
+- `docs/OPEN_SOURCE_UPDATE_CN.md`
 
-### 4. 回归测试
+### 回归测试
 
-- `tests/test_workflow_dual_layer.py`
-- `tests/test_cli_and_downstream.py`
+- `tests/test_workflow_dual_layer.py`（19 个测试：12 个 v1 + 7 个 v2）
+- `scripts/regression_test1.py` / `test2.py` / `test3.py`
 
-## 这次删除或收缩的内容
+## 不推送到 GitHub 的内容
 
-为了让仓库更符合正式开源项目规范，本次移除了大量历史残留内容，包括但不限于：
-
-- 旧的 ablation / baselines / comparison 目录
-- 一次性 reporting 与 rounds 脚本
-- 已失效的 `scripts/` 辅助脚本
-- 旧配置分支与临时 YAML
-- `egg-info` 打包产物
-- 过时的项目总览与实验结果草稿文档
-
-这些删除不是功能回退，而是为了减少冗余、避免误导，并让当前主线更加清晰。
-
-## 本次不推送到 GitHub 的内容
-
-以下内容属于本地运行产物、缓存或中间文件，不应作为源码仓库的一部分：
-
-- `artifacts/`
-- `graphml/` 下的运行结果
+- `artifacts/`, `graphml/` 下的运行结果
 - `data/faiss-data/`
-- 临时 `data/evidence_records/docset_*`
-- 新生成的单文档 evidence record 中间文件
+- `results/` 下的回归测试结果
+- 临时 evidence record 中间文件
 
-其中，已经保留在仓库中的少量 `data/evidence_records/full_human_gold_9doc/` 文件继续作为复现实验输入资产保留，不再继续扩张。
-
-## 当前仓库的定位
-
-截至本次更新，仓库定位已经明确为：
+## 仓库定位
 
 - 一个以 workflow-first O&M KG 为核心的开源代码仓库
-- 一个保留最小必要评测与下游协议定义的研究工程仓库
-- 一个强调 `no fallback`、强调主线清晰、避免临时实验污染的可维护项目
+- 一个支持跨域泛化、时序回溯、复杂传播路径的知识图谱构建系统
+- 一个强调 `no fallback`、主线清晰、v1/v2 向后兼容的可维护项目
 
-## 建议的后续协作方式
-
-后续若继续演进，建议遵守以下原则：
+## 协作原则
 
 - 新功能优先进入主线代码，而不是新增一次性脚本
 - 新实验优先复用 `cli.py` 与 `experiments/` 现有入口
 - 新文档优先更新现有主文档，而不是再建历史性流水账
 - 运行产物和缓存继续留在本地，不进入 Git 仓库
+- v1 字段在验证全部通过后再清理，不在 v2 重构中删除

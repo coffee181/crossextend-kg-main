@@ -1,0 +1,11 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Trion ChargeSeal-408 AWD, record the charger-compartment check as a follow-up to onboard charger service, coolant seepage near the OBC lid, or repeated cover reseal work, and note whether the complaint is electrical, coolant-related, or both. |
+| T2 | Make the charger safe and expose the OBC cover fasteners, perimeter seal, coolant fittings, low-voltage connector, AC input terminal cover, and the nearby harness support without disturbing the current lid position. |
+| T3 | Inspect the cover edge, seal compression line, fastener witness marks, and coolant-fitting clearance so a true seal leak is separated from a lid that was pulled crooked by fastener order or cable preload. |
+| T4 | Verify fastener movement against the check torque and note any screw that turns significantly before seating, any corner where the lid relaxes, and any position where the seal line or coolant fitting alignment changes as clamp load is restored. |
+| T5 | If the seal line is uneven, compare the cover-to-case gap around the full perimeter and inspect for trapped harness, displaced seal bead, missing washer, or distorted cover flange that would reopen the same leak or moisture path after closure. |
+| T6 | Check the AC terminal cover and low-voltage connector support together with the OBC lid, making sure neither branch is pushing on the cover and changing the fastener load path after the compartment is reassembled. |
+| T7 | After any seal or fastener correction, restore the lid in the specified tightening order and confirm that the perimeter seal remains evenly compressed from inlet side to outlet side with the harness supports in final position. |
+| T8 | Repeat the pressure, moisture, or functional check that triggered the inspection, verifying that the cover stays dry, the coolant fittings remain undisturbed, and no new electrical warning appears with the lid fully installed. |
+| T9 | Close the case only after the record names the exact boundary as loose cover fastener, displaced perimeter seal, trapped harness, distorted cover flange, coolant-fitting interference, or normal charger cover condition, and ties that result to the verified compression line and repeat check. |

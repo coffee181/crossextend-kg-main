@@ -1,0 +1,10 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | On Novaris HVACLine-615 EV, identify the repaired thermal-management item before post-repair validation begins, such as coolant pump replacement, valve actuator repair, or hose-seat resealing, and keep the original symptom visible beside that note so the proof test follows the real complaint path. |
+| T2 | Inspect the branch in static condition first, confirming hose clocking, connector latch position, clip order, clamp orientation, and the absence of fresh residue around the repaired joint or component before power and pump command are restored. |
+| T3 | Refill and bleed the branch if it was opened, then command the repaired thermal function and monitor pump current, valve feedback, branch temperatures, and return flow so the first validation step includes both control and hydraulic response rather than one side only. |
+| T4 | Hold the system through the operating condition that originally exposed the fault, such as cabin-heat request, battery-cooling request, or heat-pump mode transition, and watch whether the repaired hardware stays dry, stable, and correctly supported once the branch is fully loaded. |
+| T5 | Compare the repaired branch with the adjacent healthy branch or prior baseline, checking whether the new thermal response, connector stability, and support geometry now match the expected system state instead of merely looking improved from the original fault. |
+| T6 | Reinspect the repaired area after the first functional cycle, looking for reopened seepage, harness walk-out, shifted clip engagement, or trapped air returning to the high point once the branch has warmed and moved. |
+| T7 | Repeat the proof cycle after a short cooldown or second command event so the accepted state is repeatable and not dependent on one fresh-assembly pass immediately after the repair was handled. |
+| T8 | Release the branch only after the closeout note names the repaired hardware, the validated operating condition, the measured before-and-after result, and the final accepted physical state of the hoses, connectors, clamps, and supports around that branch. |
