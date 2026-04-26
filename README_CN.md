@@ -97,6 +97,9 @@ crossextend_kg/
 人工维护配置统一放在 `config/persistent/`：
 
 - `pipeline.base.yaml` -- v2：15 概念 backbone
+- `pipeline.test1.yaml` -- 单文档测试
+- `pipeline.test2.yaml` -- 三文档测试（每域1个）
+- `pipeline.test3.yaml` -- 九文档测试（每域3个）
 - `pipeline.deepseek.yaml` -- deepseek 预设
 - `preprocessing.base.yaml`
 - `preprocessing.deepseek.yaml`
@@ -157,21 +160,60 @@ v2 诊断指标：
 - `hypernym_coverage` -- 语义节点中拥有 shared_hypernym 的比例
 - `phase_distribution` -- observe/diagnose/repair/verify 分布
 
-### v2 回归实验结果（2026-04-25）
+### 人工标注 Attachment Gold（2026-04-26）
 
-三次测试均使用真实 API 调用（DeepSeek + DashScope），无 fallback：
+9 个人工标注的 attachment gold 文件（共 359 个概念）：
 
-| 测试 | 文档数 | 领域 | 节点 | 边 | Hypernym 覆盖率 | 主要上位词 |
-|------|--------|------|------|-----|-----------------|-----------|
-| Test 1 | 1 | battery | 41 | 30 | 14.7% | Housing:3, Seal:1, Fastener:1 |
-| Test 2 | 3 | battery | 33 | 31 | 23.1% | Housing:4, Seal:1, Fastener:1 |
-| Test 2 | 3 | cnc | 54 | 44 | **71.7%** | Coolant:15, Fastener:9, Connector:4 |
-| Test 2 | 3 | nev | 56 | 62 | 29.8% | Seal:8, Connector:2, Coolant:2 |
-| Test 3 | 9 | battery | 114 | 103 | **49.5%** | Housing:13, Media:11, Power:9 |
-| Test 3 | 9 | cnc | 142 | 140 | 32.8% | Coolant:15, Fastener:9, Connector:4 |
-| Test 3 | 9 | nev | 153 | 164 | 28.1% | Seal:11, Connector:9, Coolant:5 |
+| 领域 | 文档 | 概念数 | 主要锚点 |
+|------|------|--------|----------|
+| battery | Busbar 绝缘护罩检查 | 30 | Housing:6, Component:8 |
+| battery | Busbar 表面污染检查 | 32 | Component:8, Media:4 |
+| battery | 压缩垫位置审计 | 24 | Component:9, Fault:9 |
+| cnc | 主轴冷却软管泄漏检查 | 42 | Component:14, Signal:7 |
+| cnc | 主轴拉杆夹紧力验证 | 40 | Signal:17, Component:9 |
+| cnc | 主轴热机振动确认 | 50 | Signal:17, Fault:11 |
+| nev | 冷却液快换接头更换 | 40 | Signal:11, Fault:5 |
+| nev | BMS 外壳密封更换 | 49 | Fault:12, Signal:10 |
+| nev | 驱动电机冷却软管泄漏确认 | 52 | Signal:19, Fault:10 |
 
-9 文档规模下，10 个 Tier-1 上位词中有 7 个在三个领域全部出现，证实了跨域泛化能力。详见 [docs/EXPERIMENT_REPORT.md](docs/EXPERIMENT_REPORT.md)。
+### v2 回归实验结果（2026-04-26）
+
+基于规则的 attachment（确定性，无需 LLM/Embedding），全部通过：
+
+| 测试 | 文档数 | 领域 | 节点 | 边 | 接受三元组 |
+|------|--------|------|------|-----|-----------|
+| Test 1 | 1 | battery | 59 | 69 | 32 |
+| Test 2 | 3 | battery | 48 | 57 | 31 |
+| Test 2 | 3 | cnc | 68 | 90 | 45 |
+| Test 2 | 3 | nev | 73 | 115 | 66 |
+| Test 3 | 9 | battery | 132 | 206 | 110 |
+| Test 3 | 9 | cnc | 160 | 275 | 156 |
+| Test 3 | 9 | nev | 173 | 314 | 181 |
+
+Test 3 汇总：**465 节点, 795 边, 447 接受三元组**。
+Attachment 接受率: 348/349 (99.7%)。跨域 Hypernym 一致性: 117/118 (99.2%)。
+
+### 9文档消融实验：Embedding + LLM 变体（2026-04-26）
+
+| 变体 | 节点 | 边 | 接受三元组 | 拒绝候选 |
+|------|------|-----|-----------|---------|
+| baseline_embedding_llm | 454 | 754 | 417 | 12 |
+| **contextual_rerank_embedding_llm** | **461** | **776** | **432** | **5** |
+| pure_llm | 459 | 772 | 430 | 7 |
+
+- Contextual rerank 表现最佳：432 三元组，拒绝最少(5)
+- NEV 域对路由策略最敏感：163 → 174 三元组 (+6.7%)
+- CNC 域在所有变体下稳定 (148–151)
+
+### 相比 v2 初始版本（2026-04-25）的改进
+
+- 完成 9 文档 attachment gold 标注（v2 schema，15 backbone 概念，359 概念）
+- 9 文档消融实验：baseline embedding vs contextual rerank vs pure LLM
+- Backbone 从 6 扩展到 15 概念，支持 Tier-1 上位词
+- Pipeline 改进：shared_hypernym 路由、step_phase 分类、workflow grounding 边修复
+- 新增 attachment gold 评估脚本 (`scripts/evaluate_attachment_gold.py`)
+- 回归测试脚本适配 v2 架构（test1/test2/test3）
+- 基于规则的 attachment 在 1/3/9 文档规模上均验证通过
 
 ## 文档入口
 

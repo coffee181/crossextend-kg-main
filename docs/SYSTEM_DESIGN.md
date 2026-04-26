@@ -84,16 +84,23 @@ With the expanded backbone, attachment routing now supports:
 
 The `shared_hypernym` field serves as a fallback anchor when `semantic_type_hint` is absent: a concept with `shared_hypernym="Seal"` routes to the backbone concept `Seal`.
 
-## Regression Experiment Summary (2026-04-25)
+## Regression Experiment Summary (2026-04-26)
 
-Three regression tests validated the v2 pipeline with real API calls:
+Rule-based regression tests validated the v2 pipeline:
 
 | Test | Docs | battery (nodes/edges) | cnc (nodes/edges) | nev (nodes/edges) |
 |------|------|----------------------|--------------------|-------------------|
-| 1 (single-doc) | 1 | 41/30 | — | — |
-| 2 (three-domain) | 3 | 33/31 | 54/44 | 56/62 |
-| 3 (nine-doc) | 9 | 114/103 | 142/140 | 153/164 |
+| 1 (single-doc) | 1 | 59/69 | — | — |
+| 2 (three-domain) | 3 | 48/57 | 68/90 | 73/115 |
+| 3 (nine-doc) | 9 | 132/206 | 160/275 | 173/314 |
 
-Hypernym coverage: 14.7% → 49.5% (battery, increasing with doc count).
-7/10 Tier-1 hypernyms appear in all 3 domains at 9-doc scale.
+9-doc ablation (Embedding + LLM variants):
+
+| Variant | Nodes | Edges | Acc Triples |
+|---------|-------|-------|-------------|
+| baseline_embedding_llm | 454 | 754 | 417 |
+| contextual_rerank_embedding_llm | 461 | 776 | 432 |
+| pure_llm | 459 | 772 | 430 |
+
+9 attachment gold files (359 concepts) completed.
 See `EXPERIMENT_REPORT.md` for full details.

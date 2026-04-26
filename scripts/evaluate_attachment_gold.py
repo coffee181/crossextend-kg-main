@@ -24,6 +24,10 @@ def normalize_label(value: str) -> str:
     return " ".join(tokens)
 
 
+def normalize_doc_id(value: str) -> str:
+    return normalize_label(value).replace(" ", "")
+
+
 def read_json(path: Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
 
@@ -53,7 +57,10 @@ def evaluate_variant(run_dir: Path, variant_id: str, gold_files: list[Path]) -> 
         "extra_predicted": 0,
     }
     per_domain: dict[str, dict[str, Any]] = {}
+    per_file: dict[str, dict[str, Any]] = {}
     wrong_examples: list[dict[str, str]] = []
+    predictions_by_domain: dict[str, dict[str, Any]] = {}
+    matched_prediction_keys_by_domain: dict[str, set[str]] = {}
 
     for gold_file in gold_files:
         gold_payload = read_json(gold_file)
@@ -61,12 +68,27 @@ def evaluate_variant(run_dir: Path, variant_id: str, gold_files: list[Path]) -> 
         gold_items = [item for item in gold_payload["gold_attachments"] if item.get("accept", True)]
         gold_by_label = {normalize_label(item["label"]): item for item in gold_items}
 
-        decisions = read_json(variant_dir / "working" / domain_id / "attachment_decisions.json")
-        predictions = {
-            normalize_label(item["label"]): item
-            for item in decisions.values()
-            if item.get("admit_as_node")
-        }
+        if domain_id not in predictions_by_domain:
+            decisions = read_json(variant_dir / "working" / domain_id / "attachment_decisions.json")
+            predictions_by_domain[domain_id] = {
+                normalize_label(item["label"]): item
+                for item in decisions.values()
+                if item.get("admit_as_node")
+            }
+            matched_prediction_keys_by_domain[domain_id] = set()
+        predictions = predictions_by_domain[domain_id]
+        per_domain.setdefault(
+            domain_id,
+            {
+                "gold": 0,
+                "predicted_accepted": len(predictions),
+                "matched": 0,
+                "correct_anchor": 0,
+                "wrong_anchor": 0,
+                "missing": 0,
+                "extra_predicted": 0,
+            },
+        )
 
         domain_stats = {
             "gold": len(gold_by_label),
@@ -82,6 +104,7 @@ def evaluate_variant(run_dir: Path, variant_id: str, gold_files: list[Path]) -> 
                 domain_stats["missing"] += 1
                 continue
             domain_stats["matched"] += 1
+            matched_prediction_keys_by_domain[domain_id].add(label_key)
             predicted_anchor = predictions[label_key].get("parent_anchor")
             if predicted_anchor == gold_item["parent_anchor"]:
                 domain_stats["correct_anchor"] += 1
@@ -95,10 +118,16 @@ def evaluate_variant(run_dir: Path, variant_id: str, gold_files: list[Path]) -> 
                         "gold_anchor": gold_item["parent_anchor"],
                     }
                 )
-        domain_stats["extra_predicted"] = len(set(predictions) - set(gold_by_label))
-        per_domain[domain_id] = domain_stats
-        for key in totals:
+        per_file[gold_file.name] = domain_stats
+        for key in ("gold", "matched", "correct_anchor", "wrong_anchor", "missing"):
+            per_domain[domain_id][key] += domain_stats[key]
             totals[key] += domain_stats[key]
+
+    for domain_id, predictions in predictions_by_domain.items():
+        extra_count = len(set(predictions) - matched_prediction_keys_by_domain[domain_id])
+        per_domain[domain_id]["extra_predicted"] = extra_count
+        totals["extra_predicted"] += extra_count
+        totals["predicted_accepted"] += len(predictions)
 
     totals["coverage"] = round(totals["matched"] / totals["gold"], 4) if totals["gold"] else 0.0
     totals["anchor_accuracy_on_gold"] = round(totals["correct_anchor"] / totals["gold"], 4) if totals["gold"] else 0.0
@@ -109,6 +138,7 @@ def evaluate_variant(run_dir: Path, variant_id: str, gold_files: list[Path]) -> 
         "variant_id": variant_id,
         "totals": totals,
         "per_domain": per_domain,
+        "per_file": per_file,
         "wrong_examples": wrong_examples[:50],
     }
 
@@ -124,10 +154,17 @@ def main() -> None:
     gold_files = sorted(Path(args.gold_dir).glob("attachment_gold_*.json"))
     if args.evidence_records:
         selected_docs = evidence_record_ids([Path(item) for item in args.evidence_records])
+        selected_norms = {normalize_doc_id(item) for item in selected_docs}
         gold_files = [
             path
             for path in gold_files
             if read_json(path).get("source_doc") in selected_docs
+            or normalize_doc_id(str(read_json(path).get("source_doc", ""))) in selected_norms
+            or any(
+                normalize_doc_id(str(read_json(path).get("source_doc", ""))) in selected_norm
+                or selected_norm in normalize_doc_id(str(read_json(path).get("source_doc", "")))
+                for selected_norm in selected_norms
+            )
         ]
     payload = {
         "run_dir": str(Path(args.run_dir)),

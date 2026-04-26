@@ -35,21 +35,39 @@ innovation points:
 The backbone was expanded from 6 to 15 concepts. All v1 data remains compatible
 through optional fields with defaults.
 
-## Regression Experiment Results (2026-04-25)
+## Regression Experiment Results (2026-04-26)
 
-Three regression tests were run with real API calls (DeepSeek LLM + DashScope Embedding):
+### Rule-based Regression (deterministic, no LLM)
 
-| Test | Docs | battery nodes/edges | cnc nodes/edges | nev nodes/edges | Avg hypernym_cov |
-|------|------|--------------------|-----------------|-----------------|-----------------|
-| Test 1 | 1 | 41/30 | — | — | 14.7% |
-| Test 2 | 3 | 33/31 | 54/44 | 56/62 | 41.5% |
-| Test 3 | 9 | 114/103 | 142/140 | 153/164 | 36.8% |
+| Test | Docs | battery nodes/edges | cnc nodes/edges | nev nodes/edges |
+|------|------|--------------------|-----------------|-----------------|
+| Test 1 | 1 | 59/69 | — | — |
+| Test 2 | 3 | 48/57 | 68/90 | 73/115 |
+| Test 3 | 9 | 132/206 | 160/275 | 173/314 |
+
+### 9-Doc Ablation: Embedding + LLM Variants
+
+Three attachment strategies compared on the 9-doc benchmark:
+
+| Variant | Nodes | Edges | Accepted Triples | Rejected Cands |
+|---------|-------|-------|-----------------|----------------|
+| baseline_embedding_llm | 454 | 754 | 417 | 12 |
+| **contextual_rerank_embedding_llm** | **461** | **776** | **432** | **5** |
+| pure_llm | 459 | 772 | 430 | 7 |
+
+Per-domain accepted triples:
+
+| Variant | battery | cnc | nev |
+|---------|---------|-----|-----|
+| baseline_embedding_llm | 106 | 148 | 163 |
+| contextual_rerank_embedding_llm | 107 | 151 | **174** |
+| pure_llm | 106 | 150 | **174** |
 
 Key findings:
-- 7/10 Tier-1 hypernyms appear in all 3 domains at 9-doc scale
-- Hypernym coverage increases with document count (14.7% → 49.5% for battery)
-- Pipeline scales linearly (~3x nodes/edges for 3x docs)
-- Triple acceptance rates stable at 78–92%
+- Contextual rerank variant achieves highest accepted triple count (432) and lowest rejection (5)
+- NEV domain shows largest variant sensitivity: 163 → 174 triples (+6.7%)
+- CNC domain is stable across all variants (148–151)
+- 9 attachment gold files (359 concepts) completed for evaluation
 
 See `EXPERIMENT_REPORT.md` for full details.
 
