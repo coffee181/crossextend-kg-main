@@ -16,6 +16,7 @@ from models import (
     ConceptMention,
     CrossStepRelation,
     DiagnosticEdge,
+    DomainGraphArtifacts,
     DomainSchema,
     EvidenceRecord,
     GraphEdge,
@@ -23,18 +24,96 @@ from models import (
     ProcedureMeta,
     RelationMention,
     SchemaCandidate,
+    SnapshotManifest,
+    SnapshotState,
     StepAction,
     StepConceptMention,
     StepEvidenceRecord,
     StateTransition,
     StructuralEdge,
+    VariantRunResult,
 )
+from pipeline.artifacts import export_variant_run, load_snapshot_state
 from pipeline.exports.graphml import export_graphml
 from pipeline.graph import assemble_domain_graphs
+from pipeline.router import retrieve_anchor_rankings
 from rules.filtering import filter_attachment_decision
 
 
 class WorkflowDualLayerTests(unittest.TestCase):
+    def test_baseline_embedding_router_keeps_cosine_ranking(self) -> None:
+        class FakeEmbeddingBackend:
+            vectors = {
+                "Asset: machine equipment": [1.0, 0.0, 0.0],
+                "Signal: alarm telemetry": [0.0, 1.0, 0.0],
+                "alarm candidate: warning code": [0.0, 1.0, 0.0],
+            }
+
+            def embed_texts(self, texts):
+                return [self.vectors[text] for text in texts]
+
+        candidate = SchemaCandidate(
+            candidate_id="battery::alarm candidate",
+            domain_id="battery",
+            label="alarm candidate",
+            description="warning code",
+        )
+
+        rankings = retrieve_anchor_rankings(
+            embedding_backend=FakeEmbeddingBackend(),
+            backbone_descriptions={"Asset": "machine equipment", "Signal": "alarm telemetry"},
+            candidates=[candidate],
+            top_k=2,
+            mode="baseline",
+        )
+
+        anchors = [item.anchor for item in rankings[candidate.candidate_id]]
+        self.assertEqual(anchors, ["Signal", "Asset"])
+
+    def test_contextual_rerank_can_promote_semantic_relation_match(self) -> None:
+        class FakeEmbeddingBackend:
+            def embed_texts(self, texts):
+                vectors = []
+                for text in texts:
+                    if text.startswith("Asset:"):
+                        vectors.append([1.0, 0.0, 0.0])
+                    elif text.startswith("Signal:"):
+                        vectors.append([0.75, 0.25, 0.0])
+                    elif "busbar temperature alarm" in text:
+                        vectors.append([1.0, 0.0, 0.0])
+                    else:
+                        vectors.append([0.0, 0.0, 1.0])
+                return vectors
+
+        candidate = SchemaCandidate(
+            candidate_id="battery::busbar temperature alarm",
+            domain_id="battery",
+            label="busbar temperature alarm",
+            description="alarm reported by the battery controller for busbar temperature",
+            routing_features={
+                "semantic_type_hint": "Signal",
+                "relation_families": ["communication"],
+            },
+        )
+
+        baseline = retrieve_anchor_rankings(
+            embedding_backend=FakeEmbeddingBackend(),
+            backbone_descriptions={"Asset": "machine equipment", "Signal": "alarm telemetry"},
+            candidates=[candidate],
+            top_k=1,
+            mode="baseline",
+        )
+        reranked = retrieve_anchor_rankings(
+            embedding_backend=FakeEmbeddingBackend(),
+            backbone_descriptions={"Asset": "machine equipment", "Signal": "alarm telemetry"},
+            candidates=[candidate],
+            top_k=1,
+            mode="contextual_rerank",
+        )
+
+        self.assertEqual(baseline[candidate.candidate_id][0].anchor, "Asset")
+        self.assertEqual(reranked[candidate.candidate_id][0].anchor, "Signal")
+
     def test_metrics_project_workflow_nodes_to_legacy_task(self) -> None:
         graph_payload = {
             "nodes": [
@@ -174,6 +253,7 @@ class WorkflowDualLayerTests(unittest.TestCase):
                             tail="coolant odor",
                         )
                     ],
+                    step_actions=[StepAction(action_type="observes", target_label="coolant odor")],
                 )
             ],
         )
@@ -256,6 +336,7 @@ class WorkflowDualLayerTests(unittest.TestCase):
                             tail="BatteryPack",
                         )
                     ],
+                    step_actions=[StepAction(action_type="performed_on", target_label="BatteryPack")],
                 )
             ],
             document_concept_mentions=[ConceptMention(label="BatteryPack", surface_form="BatteryPack")],
@@ -288,9 +369,10 @@ class WorkflowDualLayerTests(unittest.TestCase):
             backbone_concepts=schema.backbone_concepts,
         )["battery"]
 
-        self.assertEqual(len(graph.edges), 1)
-        self.assertFalse(graph.edges[0].display_admitted)
-        self.assertEqual(graph.edges[0].display_reject_reason, "workflow_asset_context")
+        workflow_edges = [edge for edge in graph.edges if edge.edge_layer == "workflow"]
+        self.assertEqual(len(workflow_edges), 1)
+        self.assertFalse(workflow_edges[0].display_admitted)
+        self.assertEqual(workflow_edges[0].display_reject_reason, "workflow_asset_context")
 
     def test_graph_assembly_preserves_stable_structural_containers(self) -> None:
         config = SimpleNamespace(
@@ -449,7 +531,8 @@ class WorkflowDualLayerTests(unittest.TestCase):
             backbone_concepts=schema.backbone_concepts,
         )["nev"]
 
-        self.assertEqual(len(graph.edges), 0)
+        domain_edges = [edge for edge in graph.edges if edge.family != "is_a"]
+        self.assertEqual(len(domain_edges), 0)
         rejected = [triple for triple in graph.triples if triple.reject_reason == "structural_contextual_head"]
         self.assertEqual(len(rejected), 1)
 
@@ -633,7 +716,8 @@ class WorkflowDualLayerTests(unittest.TestCase):
             backbone_concepts=schema.backbone_concepts,
         )["battery"]
 
-        self.assertEqual(len(graph.edges), 0)
+        domain_edges = [edge for edge in graph.edges if edge.family != "is_a"]
+        self.assertEqual(len(domain_edges), 0)
         rejected = [triple for triple in graph.triples if triple.reject_reason == "single_step_diagnostic_hypothesis"]
         self.assertEqual(len(rejected), 1)
 
@@ -698,7 +782,8 @@ class WorkflowDualLayerTests(unittest.TestCase):
             backbone_concepts=schema.backbone_concepts,
         )["battery"]
 
-        self.assertEqual(len(graph.edges), 0)
+        domain_edges = [edge for edge in graph.edges if edge.family != "is_a"]
+        self.assertEqual(len(domain_edges), 0)
         rejected = [triple for triple in graph.triples if triple.reject_reason == "structural_self_loop"]
         self.assertEqual(len(rejected), 1)
 
@@ -780,7 +865,8 @@ class WorkflowDualLayerTests(unittest.TestCase):
             backbone_concepts=schema.backbone_concepts,
         )["battery"]
 
-        self.assertEqual(len(graph.edges), 0)
+        domain_edges = [edge for edge in graph.edges if edge.family != "is_a"]
+        self.assertEqual(len(domain_edges), 0)
         rejected = [triple for triple in graph.triples if triple.reject_reason == "multi_target_diagnostic_hypothesis"]
         self.assertEqual(len(rejected), 2)
 
@@ -1155,7 +1241,7 @@ class WorkflowDualLayerTests(unittest.TestCase):
         self.assertEqual(edges[0][0], "inspects")
         self.assertEqual(edges[0][1], "O-ring")
 
-        # Fallback: without step_actions, uses relation_mentions
+        # No fallback: relation_mentions are not an action-object source.
         step_no_v2 = StepEvidenceRecord(
             step_id="T1",
             task=StepConceptMention(label="T1", surface_form="Inspect seal"),
@@ -1165,8 +1251,7 @@ class WorkflowDualLayerTests(unittest.TestCase):
             ],
         )
         edges_fallback = _step_action_edges(step_no_v2)
-        self.assertEqual(len(edges_fallback), 1)
-        self.assertEqual(edges_fallback[0][0], "observes")
+        self.assertEqual(edges_fallback, [])
 
     def test_v2_sequence_edges_from_sequence_next(self) -> None:
         """Test that _step_sequence_edges uses v2 sequence_next when available."""
@@ -1182,7 +1267,7 @@ class WorkflowDualLayerTests(unittest.TestCase):
         edges = _step_sequence_edges(step)
         self.assertEqual(edges, [("T1", "T2")])
 
-        # Without sequence_next, falls back to triggers relation
+        # No fallback: relation_mentions are not a sequence source.
         step_no_v2 = StepEvidenceRecord(
             step_id="T1",
             task=StepConceptMention(label="T1", surface_form="Observe"),
@@ -1191,7 +1276,257 @@ class WorkflowDualLayerTests(unittest.TestCase):
             ],
         )
         edges_fallback = _step_sequence_edges(step_no_v2)
-        self.assertEqual(edges_fallback, [("T1", "T2")])
+        self.assertEqual(edges_fallback, [])
+
+    def test_v2_only_authoritative_workflow_sources(self) -> None:
+        config = SimpleNamespace(
+            relations=SimpleNamespace(
+                relation_families=["task_dependency", "communication", "propagation", "lifecycle", "structural"]
+            ),
+            runtime=SimpleNamespace(enable_relation_validation=False, relation_constraints_path=None),
+            domains=[SimpleNamespace(domain_id="battery")],
+        )
+        variant = SimpleNamespace(
+            write_temporal_metadata=False,
+            enable_snapshots=False,
+            detect_lifecycle_events=False,
+            variant_id="test_variant",
+        )
+        record = EvidenceRecord(
+            evidence_id="DOC1",
+            domain_id="battery",
+            source_type="om_manual",
+            timestamp="2026-04-26T00:00:00Z",
+            raw_text="",
+            step_records=[
+                StepEvidenceRecord(
+                    step_id="T1",
+                    task=StepConceptMention(label="T1", surface_form="Inspect seal"),
+                    concept_mentions=[ConceptMention(label="seal leak", semantic_type_hint="Fault")],
+                    relation_mentions=[
+                        RelationMention(label="triggers", family="task_dependency", head="T1", tail="T9"),
+                        RelationMention(label="observes", family="task_dependency", head="T1", tail="legacy target"),
+                    ],
+                    step_actions=[StepAction(action_type="inspects", target_label="seal leak")],
+                    sequence_next="T2",
+                ),
+                StepEvidenceRecord(
+                    step_id="T2",
+                    task=StepConceptMention(label="T2", surface_form="Verify repair"),
+                ),
+            ],
+        )
+        schema = DomainSchema(
+            domain_id="battery",
+            backbone_concepts=["Asset", "Component", "Signal", "State", "Fault"],
+            adapter_concepts=[AdapterConcept(label="seal leak", parent_anchor="Fault", description="", evidence_ids=["DOC1"])],
+        )
+        decisions = {
+            "battery::seal leak": AttachmentDecision(
+                candidate_id="battery::seal leak",
+                label="seal leak",
+                route="vertical_specialize",
+                parent_anchor="Fault",
+                accept=True,
+                admit_as_node=True,
+                confidence=1.0,
+                justification="test",
+                evidence_ids=["DOC1"],
+            )
+        }
+
+        graph = assemble_domain_graphs(
+            config=config,
+            variant=variant,
+            records_by_domain={"battery": [record]},
+            schemas={"battery": schema},
+            decisions_by_domain={"battery": decisions},
+            backbone_concepts=schema.backbone_concepts,
+        )["battery"]
+
+        workflow_edges = [edge for edge in graph.edges if edge.edge_layer == "workflow"]
+        workflow_tuples = {(edge.head, edge.label, edge.tail, edge.workflow_kind, edge.source_field) for edge in workflow_edges}
+        self.assertIn(("DOC1:T1", "triggers", "DOC1:T2", "sequence", "sequence_next"), workflow_tuples)
+        self.assertIn(("DOC1:T1", "inspects", "seal leak", "action_object", "step_actions"), workflow_tuples)
+        self.assertNotIn(("DOC1:T1", "triggers", "DOC1:T9", "sequence", "relation_mentions"), workflow_tuples)
+        self.assertNotIn(("DOC1:T1", "observes", "legacy target", "action_object", "relation_mentions"), workflow_tuples)
+
+    def test_cross_step_relations_annotate_existing_semantic_edge(self) -> None:
+        config = SimpleNamespace(
+            relations=SimpleNamespace(
+                relation_families=["task_dependency", "communication", "propagation", "lifecycle", "structural"]
+            ),
+            runtime=SimpleNamespace(enable_relation_validation=False, relation_constraints_path=None),
+            domains=[SimpleNamespace(domain_id="battery")],
+        )
+        variant = SimpleNamespace(
+            write_temporal_metadata=False,
+            enable_snapshots=False,
+            detect_lifecycle_events=False,
+            variant_id="test_variant",
+        )
+        record = EvidenceRecord(
+            evidence_id="DOC2",
+            domain_id="battery",
+            source_type="om_manual",
+            timestamp="2026-04-26T00:00:00Z",
+            raw_text="",
+            step_records=[
+                StepEvidenceRecord(
+                    step_id="T1",
+                    task=StepConceptMention(label="T1", surface_form="Observe"),
+                    concept_mentions=[ConceptMention(label="seepage trace", semantic_type_hint="Signal")],
+                ),
+                StepEvidenceRecord(
+                    step_id="T2",
+                    task=StepConceptMention(label="T2", surface_form="Diagnose"),
+                    concept_mentions=[ConceptMention(label="seal failure", semantic_type_hint="Fault")],
+                ),
+            ],
+            document_relation_mentions=[
+                RelationMention(label="indicates", family="communication", head="seepage trace", tail="seal failure")
+            ],
+            cross_step_relations=[
+                CrossStepRelation(
+                    label="indicates",
+                    family="communication",
+                    head="seepage trace",
+                    tail="seal failure",
+                    head_step="T1",
+                    tail_step="T2",
+                )
+            ],
+        )
+        schema = DomainSchema(
+            domain_id="battery",
+            backbone_concepts=["Asset", "Component", "Signal", "State", "Fault"],
+            adapter_concepts=[
+                AdapterConcept(label="seepage trace", parent_anchor="Signal", description="", evidence_ids=["DOC2"]),
+                AdapterConcept(label="seal failure", parent_anchor="Fault", description="", evidence_ids=["DOC2"]),
+            ],
+        )
+        decisions = {
+            f"battery::{label}": AttachmentDecision(
+                candidate_id=f"battery::{label}",
+                label=label,
+                route="vertical_specialize",
+                parent_anchor=anchor,
+                accept=True,
+                admit_as_node=True,
+                confidence=1.0,
+                justification="test",
+                evidence_ids=["DOC2"],
+            )
+            for label, anchor in {"seepage trace": "Signal", "seal failure": "Fault"}.items()
+        }
+
+        graph = assemble_domain_graphs(
+            config=config,
+            variant=variant,
+            records_by_domain={"battery": [record]},
+            schemas={"battery": schema},
+            decisions_by_domain={"battery": decisions},
+            backbone_concepts=schema.backbone_concepts,
+        )["battery"]
+
+        communication_edges = [edge for edge in graph.edges if edge.family == "communication"]
+        self.assertEqual(len(communication_edges), 1)
+        self.assertEqual(communication_edges[0].head_step, "T1")
+        self.assertEqual(communication_edges[0].tail_step, "T2")
+        self.assertEqual(communication_edges[0].source_field, "cross_step_relations")
+
+    def test_backbone_nodes_and_adapter_is_a_edges_are_materialized(self) -> None:
+        config = SimpleNamespace(
+            relations=SimpleNamespace(relation_families=["task_dependency", "communication", "propagation", "lifecycle", "structural"]),
+            runtime=SimpleNamespace(enable_relation_validation=False, relation_constraints_path=None),
+            domains=[SimpleNamespace(domain_id="battery")],
+        )
+        variant = SimpleNamespace(write_temporal_metadata=False, enable_snapshots=False, detect_lifecycle_events=False, variant_id="test")
+        backbone = ["Asset", "Component", "Signal", "State", "Fault", "Seal", "Connector", "Sensor", "Controller", "Coolant", "Actuator", "Power", "Housing", "Fastener", "Media"]
+        record = EvidenceRecord(
+            evidence_id="DOC3",
+            domain_id="battery",
+            source_type="om_manual",
+            timestamp="2026-04-26T00:00:00Z",
+            raw_text="",
+            document_concept_mentions=[ConceptMention(label="coolant hose", semantic_type_hint="Component")],
+        )
+        schema = DomainSchema(
+            domain_id="battery",
+            backbone_concepts=backbone,
+            adapter_concepts=[AdapterConcept(label="coolant hose", parent_anchor="Coolant", description="", evidence_ids=["DOC3"])],
+        )
+        decisions = {
+            "battery::coolant hose": AttachmentDecision(
+                candidate_id="battery::coolant hose",
+                label="coolant hose",
+                route="vertical_specialize",
+                parent_anchor="Coolant",
+                accept=True,
+                admit_as_node=True,
+                confidence=1.0,
+                justification="test",
+                evidence_ids=["DOC3"],
+            )
+        }
+
+        graph = assemble_domain_graphs(config, variant, {"battery": [record]}, {"battery": schema}, {"battery": decisions}, backbone)["battery"]
+
+        backbone_nodes = [node for node in graph.nodes if node.node_type == "backbone_concept"]
+        self.assertEqual(len(backbone_nodes), 15)
+        self.assertIn(("coolant hose", "is_a", "Coolant"), {(edge.head, edge.label, edge.tail) for edge in graph.edges})
+
+    def test_snapshot_export_does_not_require_detailed_artifacts(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            node = GraphNode(
+                node_id="battery::node::Asset",
+                label="Asset",
+                display_label="Asset",
+                domain_id="battery",
+                node_type="backbone_concept",
+            )
+            graph = DomainGraphArtifacts(
+                domain_id="battery",
+                nodes=[node],
+                edges=[],
+                snapshots=[
+                    SnapshotManifest(
+                        snapshot_id="battery-snapshot-001",
+                        domain_id="battery",
+                        created_at="2026-04-26T00:00:00Z",
+                        node_count=1,
+                        edge_count=0,
+                    )
+                ],
+                snapshot_states=[SnapshotState(snapshot_id="battery-snapshot-001", nodes=[node], edges=[])],
+            )
+            result = VariantRunResult(
+                variant_id="full_llm",
+                variant_description="test",
+                seed_backbone_concepts=["Asset"],
+                seed_backbone_descriptions={"Asset": "asset"},
+                backbone_concepts=["Asset"],
+                backbone_descriptions={"Asset": "asset"},
+                evidence_units=[],
+                candidates_by_domain={"battery": []},
+                retrievals={"battery": {}},
+                attachment_decisions={"battery": {}},
+                schemas={"battery": DomainSchema(domain_id="battery", backbone_concepts=["Asset"])},
+                domain_graphs={"battery": graph},
+                construction_summary={},
+            )
+
+            export_variant_run(
+                Path(temp_dir) / "full_llm",
+                result,
+                write_detailed_working_artifacts=False,
+                write_jsonl_artifacts=False,
+                write_graphml=False,
+                write_property_graph_jsonl=False,
+                write_graph_db_csv=False,
+            )
+            state = load_snapshot_state(Path(temp_dir) / "full_llm", "battery", "battery-snapshot-001")
+            self.assertEqual(state["consistency"]["node_count"], 1)
 
 
 if __name__ == "__main__":

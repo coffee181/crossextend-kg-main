@@ -9,8 +9,10 @@ workflow-first O&M pipeline.
   prompt templates used by preprocessing and attachment (v2: hypernym + phase + diagnostic extraction)
 - `persistent/pipeline.base.yaml`
   stable pipeline skeleton (v2: 15-concept backbone)
+- `persistent/pipeline.test3.yaml`
+  default reproducible Test3 run using checked-in evidence records
 - `persistent/pipeline.deepseek.yaml`
-  recommended runtime preset
+  DeepSeek-oriented preset; requires generated evidence record files
 - `persistent/preprocessing.base.yaml`
   stable preprocessing skeleton
 - `persistent/preprocessing.deepseek.yaml`
@@ -33,6 +35,6 @@ workflow-first O&M pipeline.
 
 ```bash
 python -m crossextend_kg.cli preprocess --config config/persistent/preprocessing.deepseek.yaml
-python -m crossextend_kg.cli run --config config/persistent/pipeline.deepseek.yaml
-python -m crossextend_kg.cli run --config config/persistent/pipeline.deepseek.yaml --domains battery
+python -m crossextend_kg.cli run --config config/persistent/pipeline.test3.yaml
+python -m crossextend_kg.cli run --config config/persistent/pipeline.test3.yaml --domains battery
 ```

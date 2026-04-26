@@ -42,12 +42,12 @@ and human-gold evaluation.
 ```text
 O&M markdown
   -> preprocess (v2: hypernym + phase + diagnostic extraction)
-  -> step-scoped evidence records (v2 fields with v1 fallback)
+  -> step-scoped evidence records (v2 fields as authoritative workflow sources)
   -> semantic candidate aggregation (hypernym -> routing_features)
   -> 15-concept fixed backbone routing
   -> attachment decisions
-  -> rule filtering (hypernym as anchor fallback)
-  -> dual-layer graph assembly (v2 field consumption with fallback)
+  -> rule filtering (hypernym-assisted anchoring)
+  -> dual-layer graph assembly (v2 workflow fields + semantic relation fields)
   -> GraphML / JSON export (v2 attributes)
   -> human-gold evaluation
 ```
@@ -87,7 +87,6 @@ crossextend_kg/
     cnc_om_manual_en/        # CNC O&M source markdown
     ev_om_manual_en/         # NEV O&M source markdown
     evidence_records/        # Per-domain evidence record JSONs
-    ground_truth/            # Human gold annotations (9 files)
   config/
     persistent/              # Stable runtime configs
     prompts/                 # LLM extraction and attachment prompts
@@ -101,7 +100,8 @@ crossextend_kg/
 Human-maintained configs live under `config/persistent/`:
 
 - `pipeline.base.yaml` -- v2: 15-concept backbone
-- `pipeline.deepseek.yaml` -- deepseek preset
+- `pipeline.test3.yaml` -- default reproducible Test3 evidence-record run
+- `pipeline.deepseek.yaml` -- deepseek preset; requires generated evidence record files
 - `preprocessing.base.yaml`
 - `preprocessing.deepseek.yaml`
 - `llm_backends.yaml`
@@ -121,25 +121,25 @@ python -m crossextend_kg.cli preprocess --config config/persistent/preprocessing
 Run all active domains:
 
 ```bash
-python -m crossextend_kg.cli run --config config/persistent/pipeline.deepseek.yaml
+python -m crossextend_kg.cli run --config config/persistent/pipeline.test3.yaml
 ```
 
 Run only selected domains:
 
 ```bash
-python -m crossextend_kg.cli run --config config/persistent/pipeline.deepseek.yaml --domains battery
+python -m crossextend_kg.cli run --config config/persistent/pipeline.test3.yaml --domains battery
 ```
 
-Evaluate one graph:
+Replay latest exported snapshot from a variant directory:
 
 ```bash
-python -m crossextend_kg.cli evaluate --gold data/ground_truth/battery_BATOM_002.json --graph artifacts/some_run/full_llm/working/battery/final_graph.json
+python -m crossextend_kg.cli replay --run-dir results/test3/<run_id>/full_llm
 ```
 
-Evaluate one benchmark run:
+Gold evaluation is supported when a local gold directory is present:
 
 ```bash
-python -m crossextend_kg.cli evaluate --run-root artifacts/some_run --variant full_llm --ground-truth-dir data/ground_truth
+python -m crossextend_kg.cli evaluate --gold <gold.json> --graph <final_graph.json>
 ```
 
 ## Experiments
@@ -161,10 +161,31 @@ v2 diagnostic metrics:
 - `hypernym_coverage` -- fraction of semantic nodes with shared_hypernym
 - `phase_distribution` -- observe/diagnose/repair/verify distribution
 
+### v2 Regression Results (2026-04-25)
+
+Three tests with real API calls (DeepSeek + DashScope), no fallback:
+
+| Test | Docs | Domain | Nodes | Edges | Hypernym Cov | Top Hypernyms |
+|------|------|--------|-------|-------|-------------|---------------|
+| Test 1 | 1 | battery | 41 | 30 | 14.7% | Housing:3, Seal:1, Fastener:1 |
+| Test 2 | 3 | battery | 33 | 31 | 23.1% | Housing:4, Seal:1, Fastener:1 |
+| Test 2 | 3 | cnc | 54 | 44 | **71.7%** | Coolant:15, Fastener:9, Connector:4 |
+| Test 2 | 3 | nev | 56 | 62 | 29.8% | Seal:8, Connector:2, Coolant:2 |
+| Test 3 | 9 | battery | 114 | 103 | **49.5%** | Housing:13, Media:11, Power:9 |
+| Test 3 | 9 | cnc | 142 | 140 | 32.8% | Coolant:15, Fastener:9, Connector:4 |
+| Test 3 | 9 | nev | 153 | 164 | 28.1% | Seal:11, Connector:9, Coolant:5 |
+
+7/10 Tier-1 hypernyms appear in all 3 domains at 9-doc scale. See
+[docs/EXPERIMENT_REPORT.md](docs/EXPERIMENT_REPORT.md) for full details.
+
 ## Documentation
 
 - [docs/README.md](docs/README.md)
 - [docs/SYSTEM_DESIGN.md](docs/SYSTEM_DESIGN.md) -- Architecture rules and v2 model extensions
 - [docs/PIPELINE_DATA_FLOW.md](docs/PIPELINE_DATA_FLOW.md) -- End-to-end data flow
+- [docs/DATA_FLOW_DIAGRAM.md](docs/DATA_FLOW_DIAGRAM.md) -- Real single-doc data flow example with format changes at each stage
 - [docs/WORKFLOW_KG_DESIGN.md](docs/WORKFLOW_KG_DESIGN.md) -- Dual-layer design and v2 innovations
+- [docs/EXPERIMENT_REPORT.md](docs/EXPERIMENT_REPORT.md) -- v2 regression experiment report
 - [docs/OPEN_SOURCE_UPDATE_CN.md](docs/OPEN_SOURCE_UPDATE_CN.md) -- Chinese summary of v2 restructuring
+- [docs/DATA_FLOW_DIAGRAM_CN.md](docs/DATA_FLOW_DIAGRAM_CN.md) -- 数据流图中文版
+- [docs/EXPERIMENT_REPORT_CN.md](docs/EXPERIMENT_REPORT_CN.md) -- 回归实验报告中文版

@@ -268,6 +268,9 @@ def _build_data_flow_trace_payload(result: VariantRunResult) -> dict[str, object
                     "family": edge.family,
                     "edge_layer": edge.edge_layer,
                     "workflow_kind": edge.workflow_kind,
+                    "head_step": edge.head_step,
+                    "tail_step": edge.tail_step,
+                    "source_field": edge.source_field,
                 }
                 for edge in graph_root.edges
             ],
@@ -367,22 +370,7 @@ def export_variant_run(
                 domain_id=domain_id,
             )
 
-        if write_detailed_working_artifacts:
-            write_json(domain_root / "adapter_schema.json", schema.model_dump(mode="json"))
-            write_json(domain_root / "adapter_candidates.json", candidate_payloads)
-            write_json(domain_root / "adapter_candidates.accepted.json", accepted_adapter_candidates)
-            write_json(domain_root / "adapter_candidates.rejected.json", rejected_adapter_candidates)
-            write_json(domain_root / "adapter_candidates.rejected_by_reason.json", rejected_adapter_candidates_by_reason)
-            write_json(domain_root / "backbone_reuse_candidates.json", backbone_reuse_candidates)
-            write_json(
-                domain_root / "retrievals.json",
-                {key: [item.model_dump(mode="json") for item in values] for key, values in retrievals.items()},
-            )
-            write_json(
-                domain_root / "attachment_decisions.json",
-                {key: value.model_dump(mode="json") for key, value in decisions.items()},
-            )
-
+        if graph_root.snapshots or graph_root.snapshot_states:
             if len(graph_root.snapshots) != len(graph_root.snapshot_states):
                 raise ValueError(
                     f"snapshot manifest/state length mismatch for domain {domain_id}: "
@@ -402,6 +390,22 @@ def export_variant_run(
                         "accepted_evidence_ids": manifest.accepted_evidence_ids,
                     },
                 )
+
+        if write_detailed_working_artifacts:
+            write_json(domain_root / "adapter_schema.json", schema.model_dump(mode="json"))
+            write_json(domain_root / "adapter_candidates.json", candidate_payloads)
+            write_json(domain_root / "adapter_candidates.accepted.json", accepted_adapter_candidates)
+            write_json(domain_root / "adapter_candidates.rejected.json", rejected_adapter_candidates)
+            write_json(domain_root / "adapter_candidates.rejected_by_reason.json", rejected_adapter_candidates_by_reason)
+            write_json(domain_root / "backbone_reuse_candidates.json", backbone_reuse_candidates)
+            write_json(
+                domain_root / "retrievals.json",
+                {key: [item.model_dump(mode="json") for item in values] for key, values in retrievals.items()},
+            )
+            write_json(
+                domain_root / "attachment_decisions.json",
+                {key: value.model_dump(mode="json") for key, value in decisions.items()},
+            )
 
             exports_root = ensure_dir(domain_root / "exports")
             if write_property_graph_jsonl:
@@ -443,6 +447,11 @@ def export_variant_run(
                         "display_reject_reason",
                         "head",
                         "tail",
+                        "head_step",
+                        "tail_step",
+                        "source_field",
+                        "mechanism",
+                        "evidence_label",
                         "provenance_evidence_ids",
                     ],
                 )

@@ -6,6 +6,7 @@ from __future__ import annotations
 import logging
 import re
 from collections import OrderedDict
+from dataclasses import dataclass
 
 try:
     from crossextend_kg.config import PipelineConfig, VariantConfig
@@ -43,6 +44,19 @@ from pipeline.relation_validation import load_relation_constraints, validate_edg
 from rules.relation_filtering import filter_relation_mention
 
 logger = logging.getLogger(__name__)
+
+
+@dataclass(frozen=True)
+class GraphRelationInput:
+    label: str
+    family: str
+    head: str
+    tail: str
+    source_field: str | None = None
+    head_step: str | None = None
+    tail_step: str | None = None
+    mechanism: str | None = None
+    evidence_label: str | None = None
 
 _STRUCTURAL_CONTEXTUAL_HEAD_PATTERN = re.compile(
     r"\b(branch|path|condition|state|section|geometry|position|circuit|loop|face|surface|interface|cavity|pocket|edge)\b",
@@ -254,44 +268,16 @@ def _step_order_index(step_id: str, fallback_index: int) -> int:
 
 
 def _step_sequence_edges(step_record) -> list[tuple[str, str]]:
-    """Return (head_step, tail_step) pairs for sequence edges.
-
-    Prefers v2 ``sequence_next`` when set; falls back to synthetic
-    ``triggers`` edges from ``relation_mentions``.
-    """
+    """Return sequence edges from the authoritative v2 ``sequence_next`` field."""
     step_id = step_record.step_id
     if step_record.sequence_next:
         return [(step_id, step_record.sequence_next)]
-    edges: list[tuple[str, str]] = []
-    for relation in step_record.relation_mentions:
-        if relation.label != "triggers":
-            continue
-        head_step = _extract_step_id(relation.head)
-        tail_step = _extract_step_id(relation.tail)
-        if head_step == step_id and tail_step:
-            edges.append((head_step, tail_step))
-    return edges
+    return []
 
 
 def _step_action_edges(step_record) -> list[tuple[str, str, str]]:
-    """Return (action_type, target_label, raw_relation_label) tuples for action edges.
-
-    Prefers v2 ``step_actions`` when populated; falls back to
-    ``task_dependency`` relations where head is this step.
-    """
-    step_id = step_record.step_id
-    if step_record.step_actions:
-        return [(sa.action_type, sa.target_label, sa.action_type) for sa in step_record.step_actions]
-    edges: list[tuple[str, str, str]] = []
-    for relation in step_record.relation_mentions:
-        if relation.family != "task_dependency":
-            continue
-        if _extract_step_id(relation.head) != _extract_step_id(step_id):
-            continue
-        if _extract_step_id(relation.tail):
-            continue
-        edges.append((relation.label, relation.tail, relation.label))
-    return edges
+    """Return action-object edges from the authoritative v2 ``step_actions`` field."""
+    return [(sa.action_type, sa.target_label, sa.action_type) for sa in step_record.step_actions]
 
 
 def _step_structural_edges(step_record) -> list[tuple[str, str, str]]:
@@ -590,6 +576,91 @@ def _normalize_document_relations(
     return _dedupe_relation_mentions(relations)
 
 
+def _record_workflow_relation_inputs(record) -> list[GraphRelationInput]:
+    relation_inputs: list[GraphRelationInput] = []
+    for step_record in record.step_records:
+        for head_step, tail_step in _step_sequence_edges(step_record):
+            relation_inputs.append(
+                GraphRelationInput(
+                    label="triggers",
+                    family="task_dependency",
+                    head=head_step,
+                    tail=tail_step,
+                    source_field="sequence_next",
+                    head_step=head_step,
+                    tail_step=tail_step,
+                )
+            )
+        for action_type, target_label, raw_label in _step_action_edges(step_record):
+            relation_inputs.append(
+                GraphRelationInput(
+                    label=raw_label,
+                    family="task_dependency",
+                    head=step_record.step_id,
+                    tail=target_label,
+                    source_field="step_actions",
+                    head_step=step_record.step_id,
+                )
+            )
+    return relation_inputs
+
+
+def _relation_input_from_mention(relation, source_field: str) -> GraphRelationInput:
+    return GraphRelationInput(
+        label=relation.label,
+        family=relation.family,
+        head=relation.head,
+        tail=relation.tail,
+        source_field=source_field,
+    )
+
+
+def _cross_step_metadata(record) -> dict[tuple[str, str, str, str], object]:
+    metadata: dict[tuple[str, str, str, str], object] = {}
+    for relation in record.cross_step_relations:
+        key = (relation.head, relation.label, relation.family, relation.tail)
+        metadata[key] = relation
+    return metadata
+
+
+def _ensure_adapter_anchor_edge(
+    *,
+    edge_map: OrderedDict[str, GraphEdge],
+    domain_id: str,
+    label: str,
+    parent_anchor: str | None,
+    evidence_id: str,
+    timestamp: str,
+    write_temporal_metadata: bool,
+    new_edge_ids: list[str],
+    first_observation_time: dict[str, str],
+) -> None:
+    if not parent_anchor:
+        return
+    edge_id = f"{domain_id}::edge::{label}::is_a::{parent_anchor}"
+    if edge_id not in edge_map:
+        edge_map[edge_id] = GraphEdge(
+            edge_id=edge_id,
+            domain_id=domain_id,
+            label="is_a",
+            raw_label="is_a",
+            display_label="is_a",
+            family="is_a",
+            edge_layer="semantic",
+            edge_salience="medium",
+            display_admitted=True,
+            head=label,
+            tail=parent_anchor,
+            source_field="attachment_decision",
+            provenance_evidence_ids=[evidence_id],
+            valid_from=timestamp if write_temporal_metadata else None,
+        )
+        new_edge_ids.append(edge_id)
+        first_observation_time[edge_id] = timestamp
+    elif evidence_id not in edge_map[edge_id].provenance_evidence_ids:
+        edge_map[edge_id].provenance_evidence_ids.append(evidence_id)
+
+
 def _build_record_step_support(record) -> dict[str, set[str]]:
     support: dict[str, set[str]] = {}
     for step_record in record.step_records:
@@ -737,6 +808,22 @@ def assemble_domain_graphs(
         first_observation_time: dict[str, str] = {}
         previous_assertions_by_object: dict[str, TemporalAssertion] = {}
 
+        for backbone_label in backbone_concepts:
+            node_id = f"{domain.domain_id}::node::{backbone_label}"
+            node_map[node_id] = GraphNode(
+                node_id=node_id,
+                label=backbone_label,
+                display_label=backbone_label,
+                domain_id=domain.domain_id,
+                node_type="backbone_concept",
+                node_layer="semantic",
+                parent_anchor=None,
+                surface_form=backbone_label,
+                provenance_evidence_ids=[],
+                valid_from=None,
+            )
+            materialized_candidate_ids.add(f"{domain.domain_id}::{backbone_label}")
+
         for record_index, record in enumerate(records, start=1):
             accepted_evidence_ids.append(record.evidence_id)
             new_node_ids: list[str] = []
@@ -794,6 +881,18 @@ def assemble_domain_graphs(
                     first_observation_time[node_id] = record.timestamp
                 elif record.evidence_id not in node_map[node_id].provenance_evidence_ids:
                     node_map[node_id].provenance_evidence_ids.append(record.evidence_id)
+                if mention.label not in backbone_set:
+                    _ensure_adapter_anchor_edge(
+                        edge_map=edge_map,
+                        domain_id=domain.domain_id,
+                        label=mention.label,
+                        parent_anchor=decision.parent_anchor,
+                        evidence_id=record.evidence_id,
+                        timestamp=record.timestamp,
+                        write_temporal_metadata=write_temporal_metadata,
+                        new_edge_ids=new_edge_ids,
+                        first_observation_time=first_observation_time,
+                    )
 
             for step_record in record.step_records:
                 for mention in step_record.concept_mentions:
@@ -821,6 +920,18 @@ def assemble_domain_graphs(
                         first_observation_time[node_id] = record.timestamp
                     elif record.evidence_id not in node_map[node_id].provenance_evidence_ids:
                         node_map[node_id].provenance_evidence_ids.append(record.evidence_id)
+                    if mention.label not in backbone_set:
+                        _ensure_adapter_anchor_edge(
+                            edge_map=edge_map,
+                            domain_id=domain.domain_id,
+                            label=mention.label,
+                            parent_anchor=decision.parent_anchor,
+                            evidence_id=record.evidence_id,
+                            timestamp=record.timestamp,
+                            write_temporal_metadata=write_temporal_metadata,
+                            new_edge_ids=new_edge_ids,
+                            first_observation_time=first_observation_time,
+                        )
 
             materialized_labels = {node.label for node in node_map.values()}
             node_layer_map = {node.label: node.node_layer for node in node_map.values()}
@@ -844,14 +955,27 @@ def assemble_domain_graphs(
             for key, tails in document_relation_targets.items():
                 if len(tails) > 1:
                     multi_target_document_relation_keys.add(key)
-            relation_stream: list[tuple[object, str]] = [
-                (relation, "document")
-                for relation in normalized_document_relations
+            cross_step_metadata = _cross_step_metadata(record)
+            relation_stream: list[tuple[GraphRelationInput, str]] = [
+                (relation, "workflow")
+                for relation in _record_workflow_relation_inputs(record)
             ]
-            for step_record in record.step_records:
-                relation_stream.extend((relation, "step") for relation in step_record.relation_mentions)
+            relation_stream.extend(
+                (_relation_input_from_mention(relation, "document_relation_mentions"), "document")
+                for relation in normalized_document_relations
+            )
 
             for relation_index, (relation, relation_origin) in enumerate(relation_stream, start=1):
+                cross_metadata = cross_step_metadata.get((relation.head, relation.label, relation.family, relation.tail))
+                relation_source_field = relation.source_field
+                relation_head_step = relation.head_step
+                relation_tail_step = relation.tail_step
+                relation_mechanism = relation.mechanism
+                relation_evidence_label = relation.evidence_label
+                if cross_metadata is not None:
+                    relation_source_field = "cross_step_relations"
+                    relation_head_step = cross_metadata.head_step
+                    relation_tail_step = cross_metadata.tail_step
                 triple_id = f"{domain.domain_id}::triple::{record.evidence_id}::{relation_index}"
                 resolved_head = _resolve_record_task_label(record.evidence_id, relation.head)
                 resolved_tail = _resolve_record_task_label(record.evidence_id, relation.tail)
@@ -1072,6 +1196,11 @@ def assemble_domain_graphs(
                         display_reject_reason=display_reject_reason,
                         head=resolved_head,
                         tail=resolved_tail,
+                        head_step=relation_head_step,
+                        tail_step=relation_tail_step,
+                        source_field=relation_source_field,
+                        mechanism=relation_mechanism,
+                        evidence_label=relation_evidence_label,
                         provenance_evidence_ids=[record.evidence_id],
                         valid_from=record.timestamp if write_temporal_metadata else None,
                     )
@@ -1079,6 +1208,18 @@ def assemble_domain_graphs(
                     first_observation_time[edge_id] = record.timestamp
                 elif record.evidence_id not in edge_map[edge_id].provenance_evidence_ids:
                     edge_map[edge_id].provenance_evidence_ids.append(record.evidence_id)
+                if edge_id in edge_map:
+                    edge = edge_map[edge_id]
+                    if relation_head_step and edge.head_step is None:
+                        edge.head_step = relation_head_step
+                    if relation_tail_step and edge.tail_step is None:
+                        edge.tail_step = relation_tail_step
+                    if relation_source_field and edge.source_field is None:
+                        edge.source_field = relation_source_field
+                    if relation_mechanism and edge.mechanism is None:
+                        edge.mechanism = relation_mechanism
+                    if relation_evidence_label and edge.evidence_label is None:
+                        edge.evidence_label = relation_evidence_label
 
             if variant.enable_snapshots:
                 snapshot_id = f"{domain.domain_id}-snapshot-{record_index:03d}"
@@ -1151,6 +1292,10 @@ def assemble_domain_graphs(
                     list(edge_map.values()),
                     domain.domain_id,
                 )
+                lifecycle_events = [
+                    LifecycleEvent.model_validate(event.model_dump(mode="json") if hasattr(event, "model_dump") else event)
+                    for event in lifecycle_events
+                ]
             except ImportError:
                 pass
 

@@ -26,7 +26,6 @@ _FAMILY_COMPATIBLE_ANCHORS: dict[str, frozenset[str]] = {
     "structural": frozenset({"Asset", "Component"}),
     "lifecycle": frozenset({"Asset", "Component", "Fault", "State"}),
 }
-
 ALLOWED_REJECT_REASONS: tuple[RejectReason, ...] = (
     "person_name",
     "document_title",

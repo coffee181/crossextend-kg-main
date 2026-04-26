@@ -149,6 +149,7 @@ def run_pipeline(
                     candidates=candidates,
                     top_k=config.runtime.retrieval_top_k,
                     domain_id=domain.domain_id,
+                    mode=variant.embedding_routing_mode,
                 )
             else:
                 retrievals = empty_retrievals(candidates)

@@ -145,6 +145,7 @@ class VariantConfig(BaseModel):
     description: str
     attachment_strategy: Literal["llm", "embedding_top1", "deterministic"] = "llm"
     use_embedding_routing: bool = True
+    embedding_routing_mode: Literal["baseline", "contextual_rerank"] = "baseline"
     use_rule_filter: bool = True
     allow_free_form_growth: bool = False
     enable_snapshots: bool = True

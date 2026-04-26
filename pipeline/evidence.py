@@ -121,6 +121,63 @@ def _endpoint_candidate_key(domain_id: str, evidence_id: str, label: str) -> tup
     return _concept_candidate_key(domain_id, label)
 
 
+_IRREGULAR_PLURALS = {
+    "indices": "index",
+    "axes": "axis",
+    "vertices": "vertex",
+    "analyses": "analysis",
+    "diagnoses": "diagnosis",
+}
+
+# Words that look plural but are actually singular in O&M context
+_KEEP_AS_IS = frozenset({
+    "busbar edges", "busbar edge",  # compound — don't strip 'edge'
+})
+
+
+def _to_singular(label: str) -> str:
+    """Convert a label to singular form for canonical matching.
+
+    Rules follow the attachment_gold_annotation_spec.md:
+    - strip trailing 's' (but not 'ss' or 'us')
+    - strip trailing 'es'
+    - convert trailing 'ies' to 'y'
+    - irregular plurals
+    - named entities with IDs (e.g. HC-S1) are preserved
+    - step IDs (e.g. T1) are preserved
+    """
+    if not label:
+        return label
+    # Preserve step IDs and named entity IDs
+    if _extract_step_id(label):
+        return label
+    lower = label.lower()
+    # Named entities with alphanumeric IDs: keep as-is
+    if re.search(r"[A-Z]+-\d+", label):
+        return label
+    # Compound terms that should stay as-is
+    if lower in _KEEP_AS_IS:
+        return label
+    # Check irregular
+    words = lower.split()
+    last = words[-1] if words else ""
+    if last in _IRREGULAR_PLURALS:
+        words[-1] = _IRREGULAR_PLURALS[last]
+        return " ".join(words)
+    # Regular plurals — only apply to the last word
+    if len(last) > 2:
+        if last.endswith("ies") and len(last) > 4:
+            words[-1] = last[:-3] + "y"
+            return " ".join(words)
+        if last.endswith("es") and not last.endswith("ss") and not last.endswith("se"):
+            words[-1] = last[:-2]
+            return " ".join(words)
+        if last.endswith("s") and not last.endswith("ss") and not last.endswith("us") and not last.endswith("is"):
+            words[-1] = last[:-1]
+            return " ".join(words)
+    return label
+
+
 def _canonicalize_runtime_label(label: str) -> str:
     compact = " ".join(str(label).split())
     if not compact or _extract_step_id(compact):
@@ -138,8 +195,8 @@ def _canonicalize_runtime_label(label: str) -> str:
     if stable_match:
         base = stable_match.group("base").strip()
         if any(keyword in base.lower() for keyword in ("status", "path", "permissive")):
-            return base
-    return compact
+            return _to_singular(base)
+    return _to_singular(compact)
 
 
 def _normalize_record_labels(record: EvidenceRecord) -> EvidenceRecord:

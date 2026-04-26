@@ -1,0 +1,318 @@
+{
+  "schema_version": "attachment_gold.v2",
+  "annotation_policy": "See attachment_gold_annotation_spec.md for full rules. Singular form, lowercase, merged synonyms, no enumeration context.",
+  "domain": "cnc",
+  "source_doc": "CNC_Spindle_Chiller_Hose_Leak_Inspection",
+  "backbone_concepts": ["Asset", "Component", "Signal", "State", "Fault", "Seal", "Connector", "Sensor", "Controller", "Coolant", "Actuator", "Power", "Housing", "Fastener", "Media"],
+  "gold_attachments": [
+    {
+      "label": "Kestrel VMC-850",
+      "surface_form": "Kestrel VMC-850",
+      "parent_anchor": "Asset",
+      "accept": true,
+      "rationale": "Named CNC machine — top-level asset"
+    },
+    {
+      "label": "spindle-chiller supply hose HC-S1",
+      "surface_form": "spindle-chiller supply hose HC-S1",
+      "parent_anchor": "Coolant",
+      "accept": true,
+      "rationale": "Hose carrying coolant supply — coolant pathway"
+    },
+    {
+      "label": "return hose HC-R1",
+      "surface_form": "return hose HC-R1",
+      "parent_anchor": "Coolant",
+      "accept": true,
+      "rationale": "Hose returning coolant — coolant pathway"
+    },
+    {
+      "label": "worm-drive clamp CL-S1",
+      "surface_form": "worm-drive clamp CL-S1",
+      "parent_anchor": "Fastener",
+      "accept": true,
+      "rationale": "Clamp fastening supply hose — fastener"
+    },
+    {
+      "label": "worm-drive clamp CL-R1",
+      "surface_form": "worm-drive clamp CL-R1",
+      "parent_anchor": "Fastener",
+      "accept": true,
+      "rationale": "Clamp fastening return hose — fastener"
+    },
+    {
+      "label": "brass tube neck",
+      "surface_form": "brass tube necks",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Brass neck on manifold — component feature"
+    },
+    {
+      "label": "chiller manifold block",
+      "surface_form": "chiller manifold block",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Manifold distributing coolant — component"
+    },
+    {
+      "label": "P-clip PC-RC1",
+      "surface_form": "P-clip PC-RC1",
+      "parent_anchor": "Fastener",
+      "accept": true,
+      "rationale": "P-clip securing hose to column — fastener"
+    },
+    {
+      "label": "rear column",
+      "surface_form": "rear column",
+      "parent_anchor": "Housing",
+      "accept": true,
+      "rationale": "Column of CNC machine frame — structural housing"
+    },
+    {
+      "label": "lower drip tray",
+      "surface_form": "lower drip tray",
+      "parent_anchor": "Housing",
+      "accept": true,
+      "rationale": "Tray catching drips — housing/structural part"
+    },
+    {
+      "label": "upper outlet hose",
+      "surface_form": "upper outlet hose",
+      "parent_anchor": "Coolant",
+      "accept": true,
+      "rationale": "Outlet hose carrying coolant — coolant pathway"
+    },
+    {
+      "label": "lower return hose",
+      "surface_form": "lower return hose",
+      "parent_anchor": "Coolant",
+      "accept": true,
+      "rationale": "Return hose at lower level — coolant pathway"
+    },
+    {
+      "label": "lower cable tray",
+      "surface_form": "lower cable tray",
+      "parent_anchor": "Housing",
+      "accept": true,
+      "rationale": "Tray holding cables — housing/structural part"
+    },
+    {
+      "label": "coolant dripping",
+      "surface_form": "coolant dripping from the rear column",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Observable leak evidence — signal"
+    },
+    {
+      "label": "coolant loss",
+      "surface_form": "coolant loss",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Observable reduction in coolant — signal"
+    },
+    {
+      "label": "coolant level",
+      "surface_form": "as-received coolant level",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Measurable level reading — signal"
+    },
+    {
+      "label": "spindle speed window",
+      "surface_form": "8000 to 12000 rpm spindle hold",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Operating speed range relevant to complaint — signal"
+    },
+    {
+      "label": "drip path",
+      "surface_form": "first visible drip path",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Traced path of dripping — observable signal"
+    },
+    {
+      "label": "wet boundary",
+      "surface_form": "wet boundary",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Boundary of wetting traced — signal"
+    },
+    {
+      "label": "upper hose bead",
+      "surface_form": "upper hose bead",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Bead on hose end for retention — component"
+    },
+    {
+      "label": "clamp screw housing",
+      "surface_form": "clamp screw housing",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Housing of clamp screw — component"
+    },
+    {
+      "label": "molded hose bend",
+      "surface_form": "molded hose bend",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Pre-formed bend in hose — component feature"
+    },
+    {
+      "label": "manifold face",
+      "surface_form": "manifold face",
+      "parent_anchor": "Housing",
+      "accept": true,
+      "rationale": "Face of the manifold — housing feature"
+    },
+    {
+      "label": "dry reference hose",
+      "surface_form": "dry reference hose on the opposite side",
+      "parent_anchor": "Coolant",
+      "accept": true,
+      "rationale": "Reference hose for comparison — coolant pathway"
+    },
+    {
+      "label": "vibration load",
+      "surface_form": "vibration load",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Vibration acting on branch — measurable signal"
+    },
+    {
+      "label": "clamp position",
+      "surface_form": "clamp position",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Position of clamp relative to bead — measurable signal"
+    },
+    {
+      "label": "hose insertion depth",
+      "surface_form": "hose insertion depth",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "How far hose is inserted — measurable signal"
+    },
+    {
+      "label": "tube bead",
+      "surface_form": "tube bead",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Bead on tube for hose retention — component"
+    },
+    {
+      "label": "upper outlet neck",
+      "surface_form": "upper outlet neck",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Neck at upper outlet — component"
+    },
+    {
+      "label": "lower return neck",
+      "surface_form": "lower return neck",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Neck at lower return — component"
+    },
+    {
+      "label": "P-clip bracket",
+      "surface_form": "P-clip bracket",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Bracket holding P-clip — component"
+    },
+    {
+      "label": "clip-to-bracket side load",
+      "surface_form": "clip-to-bracket side load",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Side force from clip to bracket — measurable signal"
+    },
+    {
+      "label": "upper return-hose clamp",
+      "surface_form": "upper return-hose clamp",
+      "parent_anchor": "Fastener",
+      "accept": true,
+      "rationale": "Clamp on upper return hose — fastener"
+    },
+    {
+      "label": "manifold casting",
+      "surface_form": "manifold casting",
+      "parent_anchor": "Housing",
+      "accept": true,
+      "rationale": "Cast body of manifold — housing/structure"
+    },
+    {
+      "label": "lower drain path",
+      "surface_form": "lower drain path",
+      "parent_anchor": "Coolant",
+      "accept": true,
+      "rationale": "Drainage path for coolant — coolant pathway"
+    },
+    {
+      "label": "dry condition",
+      "surface_form": "dry",
+      "parent_anchor": "State",
+      "accept": true,
+      "rationale": "State of being leak-free — concluded acceptance state"
+    },
+    {
+      "label": "leak boundary at return-hose clamp CL-R1",
+      "surface_form": "leak boundary at return-hose clamp CL-R1",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Named fault: leak traced to return hose clamp"
+    },
+    {
+      "label": "leak boundary at support path PC-RC1",
+      "surface_form": "leak boundary at support path PC-RC1",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Named fault: leak traced to P-clip support path"
+    },
+    {
+      "label": "hose twist",
+      "surface_form": "hose twist",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Observable twist in hose — measurable signal"
+    },
+    {
+      "label": "side-loaded branch",
+      "surface_form": "side-loaded branch",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Branch under side load causing leak — fault condition"
+    },
+    {
+      "label": "pump pulsation",
+      "surface_form": "pump pulsation",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Pressure pulsation from pump — observable signal"
+    },
+    {
+      "label": "residue",
+      "surface_form": "residue collecting on the lower cable tray",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Coolant residue as observable evidence — signal"
+    }
+  ],
+  "_statistics": {
+    "total_concepts": 42,
+    "accepted": 42,
+    "rejected": 0,
+    "anchor_distribution": {
+      "Asset": 1,
+      "Component": 10,
+      "Housing": 5,
+      "Fastener": 4,
+      "Coolant": 6,
+      "Fault": 3,
+      "Signal": 12,
+      "State": 1
+    }
+  }
+}

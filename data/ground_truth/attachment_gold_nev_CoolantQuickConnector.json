@@ -1,0 +1,306 @@
+{
+  "schema_version": "attachment_gold.v2",
+  "annotation_policy": "See attachment_gold_annotation_spec.md for full rules. Singular form, lowercase, merged synonyms, no enumeration context.",
+  "domain": "nev",
+  "source_doc": "Battery_Pack_Coolant_Quick_Connector_Replacement",
+  "backbone_concepts": ["Asset", "Component", "Signal", "State", "Fault", "Seal", "Connector", "Sensor", "Controller", "Coolant", "Actuator", "Power", "Housing", "Fastener", "Media"],
+  "gold_attachments": [
+    {
+      "label": "Helion PackLine-327 EV",
+      "surface_form": "Helion PackLine-327 EV",
+      "parent_anchor": "Asset",
+      "accept": true,
+      "rationale": "Named EV vehicle — top-level asset"
+    },
+    {
+      "label": "battery coolant quick connector",
+      "surface_form": "battery coolant quick connector",
+      "parent_anchor": "Connector",
+      "accept": true,
+      "rationale": "Quick-disconnect coolant connector — this IS a connector"
+    },
+    {
+      "label": "coolant loss",
+      "surface_form": "coolant loss",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Observable loss of coolant — signal"
+    },
+    {
+      "label": "retaining clip",
+      "surface_form": "retaining clip",
+      "parent_anchor": "Fastener",
+      "accept": true,
+      "rationale": "Clip retaining the connector — fastener"
+    },
+    {
+      "label": "male tube",
+      "surface_form": "male tube",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Male tube inserted into connector — component"
+    },
+    {
+      "label": "O-ring land",
+      "surface_form": "O-ring land",
+      "parent_anchor": "Seal",
+      "accept": true,
+      "rationale": "Surface where O-ring seats — seal interface (Seal > Component)"
+    },
+    {
+      "label": "hose end",
+      "surface_form": "hose end",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "End of hose attaching to connector — component"
+    },
+    {
+      "label": "support bracket",
+      "surface_form": "support bracket",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Bracket supporting connector/hose — component"
+    },
+    {
+      "label": "latch window",
+      "surface_form": "latch windows",
+      "parent_anchor": "Connector",
+      "accept": true,
+      "rationale": "Windows in connector body where clip latches — connector feature"
+    },
+    {
+      "label": "inner O-ring seat",
+      "surface_form": "inner O-ring seat",
+      "parent_anchor": "Seal",
+      "accept": true,
+      "rationale": "Internal seat for O-ring — seal interface (Seal > Component)"
+    },
+    {
+      "label": "insertion stop",
+      "surface_form": "insertion stop",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Physical stop for full tube insertion — component feature"
+    },
+    {
+      "label": "hose-end condition",
+      "surface_form": "hose-end condition",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Condition of hose end assessed visually — observable signal"
+    },
+    {
+      "label": "scoring",
+      "surface_form": "scoring",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Scratch marks on tube surface — fault"
+    },
+    {
+      "label": "flattening",
+      "surface_form": "flattening",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Deformation of O-ring or seal — fault"
+    },
+    {
+      "label": "cracked plastic",
+      "surface_form": "cracked plastic",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Cracks in connector body plastic — fault"
+    },
+    {
+      "label": "old seal remnant",
+      "surface_form": "remnants of the old seal",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Leftover material from old seal — observable signal of past failure"
+    },
+    {
+      "label": "male tube surface",
+      "surface_form": "male tube surface",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Surface of male tube to be inspected/cleaned — component"
+    },
+    {
+      "label": "O-ring fragment",
+      "surface_form": "old O-ring fragment",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Fragment of old O-ring to check for — signal of contamination"
+    },
+    {
+      "label": "dried coolant crystal",
+      "surface_form": "dried coolant crystal",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Crystal residue from dried coolant — signal of contamination"
+    },
+    {
+      "label": "sealing land",
+      "surface_form": "sealing land",
+      "parent_anchor": "Seal",
+      "accept": true,
+      "rationale": "Surface where seal sits — seal interface (Seal > Component)"
+    },
+    {
+      "label": "O-ring track",
+      "surface_form": "O-ring track",
+      "parent_anchor": "Seal",
+      "accept": true,
+      "rationale": "Track/groove where O-ring runs — seal feature (Seal > Component)"
+    },
+    {
+      "label": "replacement quick connector",
+      "surface_form": "replacement quick connector",
+      "parent_anchor": "Connector",
+      "accept": true,
+      "rationale": "New connector being installed — connector"
+    },
+    {
+      "label": "O-ring orientation",
+      "surface_form": "correct O-ring orientation",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Orientation of O-ring to verify — measurable signal"
+    },
+    {
+      "label": "full tube insertion",
+      "surface_form": "full tube insertion against the stop",
+      "parent_anchor": "State",
+      "accept": true,
+      "rationale": "State of tube fully inserted — concluded state"
+    },
+    {
+      "label": "retaining clip flush and symmetric",
+      "surface_form": "retaining clip sits flush and symmetric in both lock windows",
+      "parent_anchor": "State",
+      "accept": true,
+      "rationale": "State of clip properly seated — concluded state"
+    },
+    {
+      "label": "hose twist",
+      "surface_form": "hose twist",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Observable twist in hose — measurable signal"
+    },
+    {
+      "label": "clamp clocking",
+      "surface_form": "clamp clocking",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Rotational position of clamp — measurable signal"
+    },
+    {
+      "label": "bracket alignment",
+      "surface_form": "bracket alignment",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Alignment of bracket — measurable signal"
+    },
+    {
+      "label": "neutral installed state",
+      "surface_form": "neutral installed state",
+      "parent_anchor": "State",
+      "accept": true,
+      "rationale": "State of no side load on connector — concluded state"
+    },
+    {
+      "label": "reservoir response",
+      "surface_form": "reservoir response",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Response of coolant reservoir during bleed — observable signal"
+    },
+    {
+      "label": "bleed return",
+      "surface_form": "bleed return",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Return flow during bleeding — observable signal"
+    },
+    {
+      "label": "trapped air release",
+      "surface_form": "trapped air release",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Air being purged from system — observable signal"
+    },
+    {
+      "label": "fresh wetting",
+      "surface_form": "fresh wetting",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "New wetness at connector — signal of potential leak"
+    },
+    {
+      "label": "seal failure",
+      "surface_form": "seal failure at the new connector body or O-ring seat",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Failure of the new seal — fault"
+    },
+    {
+      "label": "dry condition",
+      "surface_form": "remain dry under both static hold and pump-induced flow",
+      "parent_anchor": "State",
+      "accept": true,
+      "rationale": "State of being leak-free — concluded acceptance state"
+    },
+    {
+      "label": "side shield",
+      "surface_form": "side shield",
+      "parent_anchor": "Housing",
+      "accept": true,
+      "rationale": "Shield removed for access — housing/cover"
+    },
+    {
+      "label": "cooling branch",
+      "surface_form": "affected local cooling branch",
+      "parent_anchor": "Coolant",
+      "accept": true,
+      "rationale": "Coolant circuit branch being serviced — coolant pathway"
+    },
+    {
+      "label": "removed failure mode",
+      "surface_form": "removed failure mode",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Failure mode removed during repair — documented fault"
+    },
+    {
+      "label": "new connector seating confirmation",
+      "surface_form": "new connector seating confirmation",
+      "parent_anchor": "State",
+      "accept": true,
+      "rationale": "Confirmation of proper seating — concluded state"
+    },
+    {
+      "label": "leak behavior",
+      "surface_form": "leak behavior",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Pattern of leaking — observable signal"
+    }
+  ],
+  "_statistics": {
+    "total_concepts": 40,
+    "accepted": 40,
+    "rejected": 0,
+    "anchor_distribution": {
+      "Asset": 1,
+      "Component": 7,
+      "Connector": 3,
+      "Seal": 4,
+      "Fastener": 1,
+      "Housing": 1,
+      "Coolant": 1,
+      "Fault": 5,
+      "Signal": 11,
+      "State": 6
+    }
+  }
+}

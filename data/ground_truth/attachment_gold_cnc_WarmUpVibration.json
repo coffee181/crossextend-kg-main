@@ -1,0 +1,375 @@
+{
+  "schema_version": "attachment_gold.v2",
+  "annotation_policy": "See attachment_gold_annotation_spec.md for full rules. Singular form, lowercase, merged synonyms, no enumeration context.",
+  "domain": "cnc",
+  "source_doc": "CNC_Spindle_Warm-Up_Vibration_Confirmation",
+  "backbone_concepts": ["Asset", "Component", "Signal", "State", "Fault", "Seal", "Connector", "Sensor", "Controller", "Coolant", "Actuator", "Power", "Housing", "Fastener", "Media"],
+  "gold_attachments": [
+    {
+      "label": "Novaris VMC-810",
+      "surface_form": "Novaris VMC-810",
+      "parent_anchor": "Asset",
+      "accept": true,
+      "rationale": "Named CNC machine — top-level asset"
+    },
+    {
+      "label": "Y-axis",
+      "surface_form": "Y-axis",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Machine axis assembly — physical hardware component"
+    },
+    {
+      "label": "ball-screw shaft",
+      "surface_form": "Y-axis ball-screw",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Y-axis drive shaft — merges ball-screw shaft, Y-axis screw"
+    },
+    {
+      "label": "rear support",
+      "surface_form": "rear support hardware",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Rear support hardware for ball-screw — merges support block"
+    },
+    {
+      "label": "spindle",
+      "surface_form": "spindle",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "CNC spindle assembly — hardware component (negative scope)"
+    },
+    {
+      "label": "rear fixed bearing block BR-YR1",
+      "surface_form": "rear fixed bearing block BR-YR1",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Named bearing block supporting rear of ball-screw — merges rear bearing block"
+    },
+    {
+      "label": "linear-guide truck",
+      "surface_form": "rear linear-guide trucks",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Guide truck riding on linear rail — merges guide truck, rear guide trucks"
+    },
+    {
+      "label": "lube manifold",
+      "surface_form": "lube manifold",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Manifold distributing lubrication — physical hardware"
+    },
+    {
+      "label": "bearing cap",
+      "surface_form": "bearing cap",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Cap on the bearing assembly — hardware part"
+    },
+    {
+      "label": "X-axis",
+      "surface_form": "X-axis",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Machine axis assembly — hardware component (reference axis)"
+    },
+    {
+      "label": "bearing-preload stack",
+      "surface_form": "bearing-preload stack",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Stack of shims/spacers setting bearing preload — physical assembly"
+    },
+    {
+      "label": "lube line",
+      "surface_form": "lube line",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Lubrication supply line — physical hardware"
+    },
+    {
+      "label": "nut housing",
+      "surface_form": "nut housing",
+      "parent_anchor": "Housing",
+      "accept": true,
+      "rationale": "Structural housing enclosing the ball nut — Housing > Component"
+    },
+    {
+      "label": "way-cover segment",
+      "surface_form": "way-cover segment",
+      "parent_anchor": "Housing",
+      "accept": true,
+      "rationale": "Segment of the way cover — structural cover"
+    },
+    {
+      "label": "way-cover leaf",
+      "surface_form": "way-cover leaf",
+      "parent_anchor": "Housing",
+      "accept": true,
+      "rationale": "Leaf/panel of the way cover — Housing > Component"
+    },
+    {
+      "label": "saddle casting",
+      "surface_form": "saddle casting",
+      "parent_anchor": "Housing",
+      "accept": true,
+      "rationale": "Structural casting of the machine saddle — housing/structural"
+    },
+    {
+      "label": "rear locknut",
+      "surface_form": "rear locknut",
+      "parent_anchor": "Fastener",
+      "accept": true,
+      "rationale": "Locking nut on rear bearing — Fastener > Component; merges locknut"
+    },
+    {
+      "label": "lube manifold fitting",
+      "surface_form": "lube manifold fittings",
+      "parent_anchor": "Connector",
+      "accept": true,
+      "rationale": "Fluid fitting on the lube manifold — Connector > Component"
+    },
+    {
+      "label": "sensor TS-YS",
+      "surface_form": "sensor TS-YS",
+      "parent_anchor": "Sensor",
+      "accept": true,
+      "rationale": "Named temperature sensor on Y-axis screw — measurement device"
+    },
+    {
+      "label": "vibration",
+      "surface_form": "vibration",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Observable oscillation — measurable signal"
+    },
+    {
+      "label": "chatter",
+      "surface_form": "chatter",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Observable vibration type during reversal — measurable signal"
+    },
+    {
+      "label": "feed rate",
+      "surface_form": "feed rate",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Measurable feed speed parameter — signal"
+    },
+    {
+      "label": "payload",
+      "surface_form": "payload",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Measurable load on the axis — signal"
+    },
+    {
+      "label": "Y-axis reversal",
+      "surface_form": "reversal",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Motion direction change on Y-axis — observable event"
+    },
+    {
+      "label": "motion window",
+      "surface_form": "Y-axis motion window",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Defined range of axis motion for testing — inspection condition"
+    },
+    {
+      "label": "motion boundary",
+      "surface_form": "motion boundary",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Specific location where vibration originates — observable reference"
+    },
+    {
+      "label": "machine noise",
+      "surface_form": "background machine noise",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Ambient machine noise level — observable background signal"
+    },
+    {
+      "label": "mid-travel",
+      "surface_form": "mid-travel",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Midpoint of axis travel range — positional reference for comparison"
+    },
+    {
+      "label": "screw-surface temperature",
+      "surface_form": "screw-surface temperature",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Temperature measured on screw surface — measurable signal"
+    },
+    {
+      "label": "vibration peak",
+      "surface_form": "vibration peak",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Peak amplitude of vibration — measurable signal feature"
+    },
+    {
+      "label": "bearing preload",
+      "surface_form": "preload",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Preload force on bearing — measurable quantity"
+    },
+    {
+      "label": "guide-truck lubrication mark",
+      "surface_form": "guide-truck lubrication marks",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Lubrication marks on guide truck — observable evidence"
+    },
+    {
+      "label": "screw-to-cover clearance",
+      "surface_form": "screw-to-cover clearance",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Gap between screw and way-cover — measurable dimension"
+    },
+    {
+      "label": "way-cover contact mark",
+      "surface_form": "way-cover contact marks",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Contact marks on way-cover surface — observable evidence"
+    },
+    {
+      "label": "axial float",
+      "surface_form": "axial float",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Axial endplay of the screw — measurable signal"
+    },
+    {
+      "label": "backlash",
+      "surface_form": "backlash",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Lost motion between screw and nut — measurable signal"
+    },
+    {
+      "label": "coolant state",
+      "surface_form": "coolant state",
+      "parent_anchor": "State",
+      "accept": true,
+      "rationale": "Condition of the coolant system — concluded status"
+    },
+    {
+      "label": "servo tuning",
+      "surface_form": "servo tuning",
+      "parent_anchor": "State",
+      "accept": true,
+      "rationale": "Servo control calibration configuration — concluded status (negative scope)"
+    },
+    {
+      "label": "corrected condition",
+      "surface_form": "corrected condition",
+      "parent_anchor": "State",
+      "accept": true,
+      "rationale": "Post-repair verified condition — concluded acceptance status"
+    },
+    {
+      "label": "support loss",
+      "surface_form": "support loss",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Loss of rear support integrity — failure mode"
+    },
+    {
+      "label": "fretting",
+      "surface_form": "fretting",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Fretting wear from micro-motion — defect"
+    },
+    {
+      "label": "paint shift",
+      "surface_form": "paint shift",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Paint displacement indicating structural movement — defect"
+    },
+    {
+      "label": "dry track",
+      "surface_form": "dry track",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Lubrication-free guide track indicating lube failure — defect"
+    },
+    {
+      "label": "cover rub",
+      "surface_form": "cover rub",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Way-cover rubbing against screw — interference defect"
+    },
+    {
+      "label": "loose support bearing",
+      "surface_form": "loose support bearing",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Bearing loose in its support — defect condition"
+    },
+    {
+      "label": "loose fastener",
+      "surface_form": "loose fastener",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Fastener that has come loose — defect"
+    },
+    {
+      "label": "displaced cover segment",
+      "surface_form": "displaced cover segment",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Way-cover segment shifted out of position — defect"
+    },
+    {
+      "label": "locknut movement",
+      "surface_form": "locknut movement",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Locknut rotating or shifting under load — defect"
+    },
+    {
+      "label": "cover interference",
+      "surface_form": "cover interference",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Way-cover contacting the screw — interference defect"
+    },
+    {
+      "label": "guide-truck lubrication loss",
+      "surface_form": "guide-truck lubrication loss",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Loss of lubrication on guide truck — failure mode"
+    }
+  ],
+  "_statistics": {
+    "total_concepts": 50,
+    "accepted": 50,
+    "rejected": 0,
+    "anchor_distribution": {
+      "Asset": 1,
+      "Component": 11,
+      "Signal": 17,
+      "State": 3,
+      "Fault": 11,
+      "Housing": 4,
+      "Fastener": 1,
+      "Connector": 1,
+      "Sensor": 1
+    }
+  }
+}

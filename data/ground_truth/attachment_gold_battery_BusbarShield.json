@@ -1,0 +1,232 @@
+{
+  "schema_version": "attachment_gold.v2",
+  "annotation_policy": "See attachment_gold_annotation_spec.md for full rules. Singular form, lowercase, merged synonyms, no enumeration context.",
+  "domain": "battery",
+  "source_doc": "Battery_Module_Busbar_Insulator_Shield_Inspection",
+  "backbone_concepts": ["Asset", "Component", "Signal", "State", "Fault", "Seal", "Connector", "Sensor", "Controller", "Coolant", "Actuator", "Power", "Housing", "Fastener", "Media"],
+  "gold_attachments": [
+    {
+      "label": "Velorian ModuleShield-584",
+      "surface_form": "Velorian ModuleShield-584",
+      "parent_anchor": "Housing",
+      "accept": true,
+      "rationale": "Named shield assembly — structural housing/cover for the busbar"
+    },
+    {
+      "label": "module section",
+      "surface_form": "module section",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Subdivision of the battery module"
+    },
+    {
+      "label": "shield edge",
+      "surface_form": "shield edge",
+      "parent_anchor": "Housing",
+      "accept": true,
+      "rationale": "Edge of the shield — housing feature"
+    },
+    {
+      "label": "exposed busbar geometry",
+      "surface_form": "exposed busbar geometry",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "The busbar layout visible for inspection — component"
+    },
+    {
+      "label": "busbar shield",
+      "surface_form": "busbar shield",
+      "parent_anchor": "Housing",
+      "accept": true,
+      "rationale": "Insulating shield covering the busbar — structural housing"
+    },
+    {
+      "label": "retaining tab",
+      "surface_form": "retaining tabs",
+      "parent_anchor": "Fastener",
+      "accept": true,
+      "rationale": "Tabs that retain the shield — fastening feature"
+    },
+    {
+      "label": "busbar edge",
+      "surface_form": "busbar edges",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Edges of the busbar conductors"
+    },
+    {
+      "label": "stud exit",
+      "surface_form": "stud exits",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Points where studs pass through — component feature"
+    },
+    {
+      "label": "foam barrier",
+      "surface_form": "foam barriers",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Foam inserts acting as barriers — passive component"
+    },
+    {
+      "label": "cover rib",
+      "surface_form": "cover ribs",
+      "parent_anchor": "Housing",
+      "accept": true,
+      "rationale": "Ribs on the cover — structural housing feature"
+    },
+    {
+      "label": "crack",
+      "surface_form": "cracks",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Physical damage — fault"
+    },
+    {
+      "label": "heat spot",
+      "surface_form": "heat spots",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Observable thermal indication — signal"
+    },
+    {
+      "label": "missing tab",
+      "surface_form": "missing tabs",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Absence of retaining tabs — fault condition"
+    },
+    {
+      "label": "rub mark",
+      "surface_form": "rub marks",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Observable contact marks — signal"
+    },
+    {
+      "label": "trimmed opening",
+      "surface_form": "trimmed openings",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Openings modified by trimming — fault in shield"
+    },
+    {
+      "label": "loss of stand-off",
+      "surface_form": "loss of stand-off",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Gap between shield and busbar lost — fault condition (not a normal state)"
+    },
+    {
+      "label": "stud shoulder",
+      "surface_form": "stud shoulder",
+      "parent_anchor": "Fastener",
+      "accept": true,
+      "rationale": "Shoulder of the stud — fastener feature"
+    },
+    {
+      "label": "neighboring shield",
+      "surface_form": "neighboring shield",
+      "parent_anchor": "Housing",
+      "accept": true,
+      "rationale": "Adjacent shield for reference — housing"
+    },
+    {
+      "label": "tab engagement",
+      "surface_form": "tab engagement",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Engagement state assessed by comparison — measurable signal"
+    },
+    {
+      "label": "stand-off",
+      "surface_form": "stand-off",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Gap measurement — observable signal/metric"
+    },
+    {
+      "label": "busbar coverage",
+      "surface_form": "busbar coverage",
+      "parent_anchor": "State",
+      "accept": true,
+      "rationale": "Extent of busbar being covered — concluded state"
+    },
+    {
+      "label": "contact witness",
+      "surface_form": "contact witness",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Physical evidence of contact — observable signal"
+    },
+    {
+      "label": "cracked shield panel",
+      "surface_form": "cracked shield panel",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Specific fault: cracked panel (more specific than generic 'crack')"
+    },
+    {
+      "label": "missing retaining tab",
+      "surface_form": "missing retaining tab",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Specific fault: a retaining tab is absent (more specific than 'missing tab')"
+    },
+    {
+      "label": "mis-seated shield edge",
+      "surface_form": "mis-seated shield edge",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Specific fault: shield edge not properly seated"
+    },
+    {
+      "label": "cover-rib interference",
+      "surface_form": "cover-rib interference",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Specific fault: cover rib interfering with shield"
+    },
+    {
+      "label": "interfering support feature",
+      "surface_form": "interfering support feature",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Support feature that interferes — fault condition"
+    },
+    {
+      "label": "final loading",
+      "surface_form": "final loading",
+      "parent_anchor": "State",
+      "accept": true,
+      "rationale": "State after all parts refitted and loaded — concluded state"
+    },
+    {
+      "label": "final coverage result",
+      "surface_form": "final coverage result",
+      "parent_anchor": "State",
+      "accept": true,
+      "rationale": "Outcome of coverage verification — concluded state"
+    },
+    {
+      "label": "release boundary",
+      "surface_form": "release boundary",
+      "parent_anchor": "State",
+      "accept": true,
+      "rationale": "Criteria for releasing the job — acceptance state"
+    }
+  ],
+  "_statistics": {
+    "total_concepts": 30,
+    "accepted": 30,
+    "rejected": 0,
+    "anchor_distribution": {
+      "Component": 4,
+      "Housing": 6,
+      "Fastener": 3,
+      "Fault": 9,
+      "Signal": 6,
+      "State": 2
+    }
+  }
+}

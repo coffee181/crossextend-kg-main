@@ -1,0 +1,390 @@
+{
+  "schema_version": "attachment_gold.v2",
+  "annotation_policy": "See attachment_gold_annotation_spec.md for full rules. Singular form, lowercase, merged synonyms, no enumeration context.",
+  "domain": "nev",
+  "source_doc": "Drive_Motor_Coolant_Hose_Leak_Confirmation",
+  "backbone_concepts": ["Asset", "Component", "Signal", "State", "Fault", "Seal", "Connector", "Sensor", "Controller", "Coolant", "Actuator", "Power", "Housing", "Fastener", "Media"],
+  "gold_attachments": [
+    {
+      "label": "Helion DriveUnit-586 Plus",
+      "surface_form": "Helion DriveUnit-586 Plus",
+      "parent_anchor": "Asset",
+      "accept": true,
+      "rationale": "Named drive unit — top-level asset"
+    },
+    {
+      "label": "drive-motor coolant-hose leak",
+      "surface_form": "drive-motor coolant-hose leak",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Core fault under investigation — leak at coolant hose"
+    },
+    {
+      "label": "traction system",
+      "surface_form": "traction system",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "EV traction drive system — hardware component"
+    },
+    {
+      "label": "drive-motor coolant hose",
+      "surface_form": "drive-motor coolant hose",
+      "parent_anchor": "Coolant",
+      "accept": true,
+      "rationale": "Coolant hose on drive motor — Coolant > Component"
+    },
+    {
+      "label": "local cooling branch",
+      "surface_form": "local cooling branch",
+      "parent_anchor": "Coolant",
+      "accept": true,
+      "rationale": "Affected coolant circuit branch — Coolant > Component"
+    },
+    {
+      "label": "opposite cooling branch",
+      "surface_form": "opposite or adjacent cooling branch",
+      "parent_anchor": "Coolant",
+      "accept": true,
+      "rationale": "Reference coolant branch for comparison — Coolant > Component"
+    },
+    {
+      "label": "higher branch",
+      "surface_form": "higher branch above the drive unit",
+      "parent_anchor": "Coolant",
+      "accept": true,
+      "rationale": "Coolant branch above drive unit — possible migration source — Coolant > Component"
+    },
+    {
+      "label": "tube neck",
+      "surface_form": "tube neck",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Metal tube end where hose attaches — hardware component"
+    },
+    {
+      "label": "tube bead",
+      "surface_form": "tube bead",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Bead on tube end retaining hose — hardware component"
+    },
+    {
+      "label": "hose braid",
+      "surface_form": "hose braid",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Braided reinforcement layer of hose — component feature"
+    },
+    {
+      "label": "molded hose body",
+      "surface_form": "molded hose body",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Molded body of the coolant hose — component; merges hose body (T9)"
+    },
+    {
+      "label": "hose inner seat",
+      "surface_form": "hose inner seat",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Inner seating surface of hose over tube — component"
+    },
+    {
+      "label": "bracket-supported bend",
+      "surface_form": "bracket-supported bend",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Bend in hose at bracket location — component feature"
+    },
+    {
+      "label": "support bracket",
+      "surface_form": "support bracket",
+      "parent_anchor": "Housing",
+      "accept": true,
+      "rationale": "Bracket supporting hose routing — Housing > Component"
+    },
+    {
+      "label": "adjacent wiring",
+      "surface_form": "adjacent wiring",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Wiring near the coolant hose — component"
+    },
+    {
+      "label": "drive unit",
+      "surface_form": "drive unit",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Drive motor assembly — hardware component"
+    },
+    {
+      "label": "nearby sleeve",
+      "surface_form": "nearby sleeve",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Protective sleeve near the hose clamp area — component"
+    },
+    {
+      "label": "hose clamp",
+      "surface_form": "hose clamp",
+      "parent_anchor": "Fastener",
+      "accept": true,
+      "rationale": "Clamp securing hose to tube — Fastener > Component"
+    },
+    {
+      "label": "hose-to-neck interface",
+      "surface_form": "hose-to-neck interface",
+      "parent_anchor": "Connector",
+      "accept": true,
+      "rationale": "Connection point where hose meets tube neck — Connector > Component"
+    },
+    {
+      "label": "hose joint",
+      "surface_form": "suspect hose joint",
+      "parent_anchor": "Connector",
+      "accept": true,
+      "rationale": "Joint where hose connects to tube — Connector > Component"
+    },
+    {
+      "label": "tube bead interface",
+      "surface_form": "tube-bead contact area",
+      "parent_anchor": "Connector",
+      "accept": true,
+      "rationale": "Interface at tube bead — Connector > Component; merges tube-bead contact area (T5)"
+    },
+    {
+      "label": "debris",
+      "surface_form": "debris",
+      "parent_anchor": "Media",
+      "accept": true,
+      "rationale": "Foreign material at the hose seat — media"
+    },
+    {
+      "label": "motor-side hose routing",
+      "surface_form": "motor-side hose routing",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Observable routing of hose on motor side — measurable signal"
+    },
+    {
+      "label": "clamp position",
+      "surface_form": "clamp position",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Position of clamp on hose — measurable signal"
+    },
+    {
+      "label": "residue field",
+      "surface_form": "surrounding residue field",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Overall area of residue around the hose — observable signal"
+    },
+    {
+      "label": "hose twist",
+      "surface_form": "hose twist",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Observable twist in hose — measurable signal"
+    },
+    {
+      "label": "surface residue",
+      "surface_form": "loose surface residue",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Residue on surface to be cleaned — observable signal"
+    },
+    {
+      "label": "wet edge",
+      "surface_form": "wet edge",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Boundary of wetness from hose neck outward — observable signal"
+    },
+    {
+      "label": "clamp line",
+      "surface_form": "clamp line",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Line at the clamp where seepage appears — observable signal; merges hose clamp line (T9)"
+    },
+    {
+      "label": "coolant tracking",
+      "surface_form": "coolant tracking along the hose braid",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Observable coolant path along hose — measurable signal"
+    },
+    {
+      "label": "wetting",
+      "surface_form": "wetting",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Observable moisture at the tube bead — measurable signal"
+    },
+    {
+      "label": "fresh wetting",
+      "surface_form": "fresh wetting",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "New moisture appearing under pressure — observable signal"
+    },
+    {
+      "label": "clamp gap",
+      "surface_form": "clamp gap",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Gap at the clamp allowing leakage — measurable signal"
+    },
+    {
+      "label": "band imprint",
+      "surface_form": "band imprint",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Imprint from clamp band on hose — observable evidence"
+    },
+    {
+      "label": "clamp clocking",
+      "surface_form": "clamp clocking",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Rotational position of clamp on hose — measurable signal"
+    },
+    {
+      "label": "insertion depth",
+      "surface_form": "insertion depth to the bead",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "How far hose is inserted onto tube — measurable signal"
+    },
+    {
+      "label": "bracket alignment",
+      "surface_form": "bracket alignment",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Alignment of support bracket — measurable signal"
+    },
+    {
+      "label": "polished witness mark",
+      "surface_form": "polished witness mark",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Polished mark showing hose was rubbing — observable evidence"
+    },
+    {
+      "label": "bracket side load",
+      "surface_form": "bracket side load",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Side force from bracket on hose — measurable signal; merges bracket-induced side load"
+    },
+    {
+      "label": "leak boundary",
+      "surface_form": "exact leak boundary",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Concluded extent/location of the leak — observable classification"
+    },
+    {
+      "label": "residue pattern",
+      "surface_form": "as-found residue pattern",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Pattern of residue as found — observable signal"
+    },
+    {
+      "label": "as-found condition",
+      "surface_form": "as-found condition",
+      "parent_anchor": "State",
+      "accept": true,
+      "rationale": "Concluded initial condition before any intervention — concluded status"
+    },
+    {
+      "label": "natural angle",
+      "surface_form": "natural angle",
+      "parent_anchor": "State",
+      "accept": true,
+      "rationale": "Hose at its unstressed natural position — concluded state"
+    },
+    {
+      "label": "seepage",
+      "surface_form": "seepage",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Slow leak at the clamp line — fault"
+    },
+    {
+      "label": "inner-liner damage",
+      "surface_form": "inner-liner damage",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Damage to the hose inner liner — fault"
+    },
+    {
+      "label": "corrosion",
+      "surface_form": "corrosion at the bead",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Corrosion at the tube bead — fault"
+    },
+    {
+      "label": "double imprint",
+      "surface_form": "double imprint",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Two clamp imprints indicating repositioning — fault evidence"
+    },
+    {
+      "label": "deformation",
+      "surface_form": "deformation",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Physical deformation of components — fault"
+    },
+    {
+      "label": "clamp overtravel",
+      "surface_form": "clamp overtravel",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Clamp opened beyond intended range — fault"
+    },
+    {
+      "label": "misposition",
+      "surface_form": "misposition",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Component in wrong position — fault"
+    },
+    {
+      "label": "routing-induced strain",
+      "surface_form": "routing-induced strain condition",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Strain on hose caused by incorrect routing — fault"
+    },
+    {
+      "label": "hose fault path",
+      "surface_form": "identified hose fault path",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Documented failure path through the hose — fault classification"
+    }
+  ],
+  "_statistics": {
+    "total_concepts": 52,
+    "accepted": 52,
+    "rejected": 0,
+    "anchor_distribution": {
+      "Asset": 1,
+      "Component": 10,
+      "Coolant": 4,
+      "Housing": 1,
+      "Fastener": 1,
+      "Connector": 3,
+      "Media": 1,
+      "Signal": 19,
+      "State": 2,
+      "Fault": 10
+    }
+  }
+}

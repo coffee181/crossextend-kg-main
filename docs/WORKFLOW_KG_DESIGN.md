@@ -107,14 +107,15 @@ maps to, enabling cross-domain consistency checks).
 - `workflow_step -> semantic node`
   step grounding edges with `workflow_kind="action_object"`
 
-v2 field consumption with fallback:
+Authoritative v2 field consumption:
 
-| Edge Kind | v2 Source | v1 Fallback |
-|-----------|----------|-------------|
-| sequence | `step.sequence_next` | `relation_mentions` triggers |
-| action_object | `step.step_actions` | `relation_mentions` task_dependency |
-| structural | `step.structural_edges` | `relation_mentions` structural family |
-| diagnostic | `step.diagnostic_edges` | `relation_mentions` communication/propagation |
+| Edge Kind | Source |
+|-----------|--------|
+| sequence | `step.sequence_next` |
+| action_object | `step.step_actions` |
+| structural | `document_relation_mentions` structural family |
+| communication / propagation | `document_relation_mentions` with `cross_step_relations` metadata when present |
+| lifecycle | `document_relation_mentions` lifecycle family |
 
 Display labels are derived from `step_phase`: observe->"inspect", diagnose->"analyze", repair->"repair", verify->"verify".
 

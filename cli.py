@@ -22,7 +22,7 @@ except ImportError:  # pragma: no cover - direct repo-root execution fallback
     from preprocessing import run_preprocessing, load_preprocessing_config
 
 
-DEFAULT_CONFIG_PATH = Path(__file__).resolve().parent / "config" / "persistent" / "pipeline.deepseek.yaml"
+DEFAULT_CONFIG_PATH = Path(__file__).resolve().parent / "config" / "persistent" / "pipeline.test3.yaml"
 DEFAULT_PREPROCESSING_CONFIG = Path(__file__).resolve().parent / "config" / "persistent" / "preprocessing.deepseek.yaml"
 
 
@@ -38,6 +38,22 @@ def _emit_error(command: str | None, config_path: str | None, exc: Exception) ->
     print(json.dumps(payload, ensure_ascii=False, indent=2), file=sys.stderr)
 
 
+def _resolve_replay_target(run_dir: str, domain: str | None, snapshot: str | None) -> tuple[str, str]:
+    working_root = Path(run_dir) / "working"
+    if domain is None:
+        domains = sorted(path.name for path in working_root.iterdir() if path.is_dir())
+        if not domains:
+            raise FileNotFoundError(f"no domain working directories under {working_root}")
+        domain = domains[0]
+    if snapshot is None:
+        snapshots_root = working_root / domain / "snapshots"
+        snapshots = sorted(path.name for path in snapshots_root.iterdir() if path.is_dir())
+        if not snapshots:
+            raise FileNotFoundError(f"no snapshots under {snapshots_root}")
+        snapshot = snapshots[-1]
+    return domain, snapshot
+
+
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="crossextend-kg")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -51,8 +67,8 @@ def _build_parser() -> argparse.ArgumentParser:
 
     replay_parser = subparsers.add_parser("replay", help="load one exported snapshot state")
     replay_parser.add_argument("--run-dir", required=True)
-    replay_parser.add_argument("--domain", required=True)
-    replay_parser.add_argument("--snapshot", required=True)
+    replay_parser.add_argument("--domain", default=None)
+    replay_parser.add_argument("--snapshot", default=None)
 
     rollback_parser = subparsers.add_parser("rollback", help="load the rollback target snapshot state")
     rollback_parser.add_argument("--run-dir", required=True)
@@ -109,7 +125,8 @@ def main() -> int:
             return 0
 
         if args.command == "replay":
-            state = load_snapshot_state(args.run_dir, args.domain, args.snapshot)
+            domain, snapshot = _resolve_replay_target(args.run_dir, args.domain, args.snapshot)
+            state = load_snapshot_state(args.run_dir, domain, snapshot)
             print(json.dumps(state, ensure_ascii=False, indent=2))
             return 0
 

@@ -28,13 +28,8 @@ def main():
     print("(Rule-based attachment, no LLM/embedding)")
     print("=" * 60)
 
-    config = load_pipeline_config("config/persistent/pipeline.deepseek.yaml")
+    config = load_pipeline_config("config/persistent/pipeline.test3.yaml")
     config = config.config_for_domains(["battery", "cnc", "nev"])
-
-    # Use full evidence records (3 docs per domain)
-    config.domains[0].data_path = "data/evidence_records/battery_evidence_records_llm.json"
-    config.domains[1].data_path = "data/evidence_records/cnc_evidence_records_llm.json"
-    config.domains[2].data_path = "data/evidence_records/nev_evidence_records_llm.json"
 
     # Load & normalize
     records_by_domain = normalize_records_by_domain(load_records_by_domain(config))

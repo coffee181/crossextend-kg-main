@@ -83,3 +83,17 @@ With the expanded backbone, attachment routing now supports:
 3. `reject`: candidate cannot be anchored to any backbone concept
 
 The `shared_hypernym` field serves as a fallback anchor when `semantic_type_hint` is absent: a concept with `shared_hypernym="Seal"` routes to the backbone concept `Seal`.
+
+## Regression Experiment Summary (2026-04-25)
+
+Three regression tests validated the v2 pipeline with real API calls:
+
+| Test | Docs | battery (nodes/edges) | cnc (nodes/edges) | nev (nodes/edges) |
+|------|------|----------------------|--------------------|-------------------|
+| 1 (single-doc) | 1 | 41/30 | — | — |
+| 2 (three-domain) | 3 | 33/31 | 54/44 | 56/62 |
+| 3 (nine-doc) | 9 | 114/103 | 142/140 | 153/164 |
+
+Hypernym coverage: 14.7% → 49.5% (battery, increasing with doc count).
+7/10 Tier-1 hypernyms appear in all 3 domains at 9-doc scale.
+See `EXPERIMENT_REPORT.md` for full details.

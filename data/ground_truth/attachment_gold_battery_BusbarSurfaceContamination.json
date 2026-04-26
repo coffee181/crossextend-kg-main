@@ -1,0 +1,250 @@
+{
+  "schema_version": "attachment_gold.v2",
+  "annotation_policy": "See attachment_gold_annotation_spec.md for full rules. Singular form, lowercase, merged synonyms, no enumeration context.",
+  "domain": "battery",
+  "source_doc": "Battery_Module_Busbar_Surface_Contamination_Inspection",
+  "backbone_concepts": ["Asset", "Component", "Signal", "State", "Fault", "Seal", "Connector", "Sensor", "Controller", "Coolant", "Actuator", "Power", "Housing", "Fastener", "Media"],
+  "gold_attachments": [
+    {
+      "label": "Novaris Busbar-583",
+      "surface_form": "Novaris Busbar-583",
+      "parent_anchor": "Asset",
+      "accept": true,
+      "rationale": "Named busbar asset under inspection — top-level asset"
+    },
+    {
+      "label": "contamination",
+      "surface_form": "contamination",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Core fault under investigation on busbar surface"
+    },
+    {
+      "label": "coolant leak",
+      "surface_form": "coolant leak",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Named fault type — one of three possible contamination origins"
+    },
+    {
+      "label": "plating damage",
+      "surface_form": "plating damage",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Damage to busbar surface plating revealed after cleaning — fault"
+    },
+    {
+      "label": "foreign object",
+      "surface_form": "foreign-object",
+      "parent_anchor": "Media",
+      "accept": true,
+      "rationale": "Unspecified foreign material — one of three contamination origins"
+    },
+    {
+      "label": "metal debris",
+      "surface_form": "metal debris",
+      "parent_anchor": "Media",
+      "accept": true,
+      "rationale": "Specific contaminant type: metallic particles"
+    },
+    {
+      "label": "carbonized dust",
+      "surface_form": "carbonized dust",
+      "parent_anchor": "Media",
+      "accept": true,
+      "rationale": "Specific contaminant type: dust with carbon content from electrical activity"
+    },
+    {
+      "label": "assembly paste",
+      "surface_form": "assembly paste",
+      "parent_anchor": "Media",
+      "accept": true,
+      "rationale": "Specific contaminant type: residual paste from manufacturing"
+    },
+    {
+      "label": "busbar span",
+      "surface_form": "busbar span",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Specific length section of busbar where contamination is located"
+    },
+    {
+      "label": "busbar surface",
+      "surface_form": "busbar surface",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Outer face of the busbar that is inspected and cleaned"
+    },
+    {
+      "label": "busbar face",
+      "surface_form": "busbar face",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Specific planar face of busbar kept in same view as cover edge"
+    },
+    {
+      "label": "busbar section",
+      "surface_form": "neighboring busbar section",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Clean neighboring section of busbar used for comparison"
+    },
+    {
+      "label": "insulator cavity",
+      "surface_form": "insulator cavity",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Internal cavity within insulator — check for contamination migration"
+    },
+    {
+      "label": "fastener zone",
+      "surface_form": "fastener zone",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Area surrounding fasteners that must be exposed for inspection"
+    },
+    {
+      "label": "neighboring hardware",
+      "surface_form": "neighboring hardware",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Hardware components adjacent to busbar — recontamination risk"
+    },
+    {
+      "label": "accessible face",
+      "surface_form": "accessible face",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Externally reachable face where contamination may be visible"
+    },
+    {
+      "label": "insulator cover",
+      "surface_form": "insulator cover",
+      "parent_anchor": "Housing",
+      "accept": true,
+      "rationale": "Structural cover over insulator — Housing > Component"
+    },
+    {
+      "label": "insulator shield",
+      "surface_form": "insulator shield",
+      "parent_anchor": "Housing",
+      "accept": true,
+      "rationale": "Structural shield covering busbar — Housing > Component"
+    },
+    {
+      "label": "cover edge",
+      "surface_form": "cover edge",
+      "parent_anchor": "Housing",
+      "accept": true,
+      "rationale": "Edge of insulator cover kept in same view as busbar face — housing feature"
+    },
+    {
+      "label": "shield edge",
+      "surface_form": "shield edge",
+      "parent_anchor": "Housing",
+      "accept": true,
+      "rationale": "Edge of insulator shield — check for trapped debris — housing feature"
+    },
+    {
+      "label": "stain pattern",
+      "surface_form": "stain pattern",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Observable discoloration pattern saved as contamination evidence"
+    },
+    {
+      "label": "contaminant pattern",
+      "surface_form": "contaminant pattern",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Distribution pattern of contaminant material preserved for origin inference"
+    },
+    {
+      "label": "staining",
+      "surface_form": "staining",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Residual discoloration after cleaning — observable evidence"
+    },
+    {
+      "label": "heat mark",
+      "surface_form": "heat marks",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Observable thermal discoloration on cleaned surface"
+    },
+    {
+      "label": "coolant residue",
+      "surface_form": "coolant residue",
+      "parent_anchor": "Coolant",
+      "accept": true,
+      "rationale": "Residue from coolant fluid — Coolant > Component"
+    },
+    {
+      "label": "clamp interface",
+      "surface_form": "clamp interface",
+      "parent_anchor": "Connector",
+      "accept": true,
+      "rationale": "Connection interface at clamp point — contamination migration boundary"
+    },
+    {
+      "label": "terminal joint",
+      "surface_form": "terminal joint",
+      "parent_anchor": "Connector",
+      "accept": true,
+      "rationale": "Joint at terminal — check for contamination migration"
+    },
+    {
+      "label": "fastener stack",
+      "surface_form": "fastener stack",
+      "parent_anchor": "Fastener",
+      "accept": true,
+      "rationale": "Stacked fastener assembly — Fastener > Component"
+    },
+    {
+      "label": "fastener",
+      "surface_form": "fastener",
+      "parent_anchor": "Fastener",
+      "accept": true,
+      "rationale": "General fastener — may shift and cause recontamination"
+    },
+    {
+      "label": "assembled state",
+      "surface_form": "true assembled state",
+      "parent_anchor": "State",
+      "accept": true,
+      "rationale": "Final assembled condition of hardware — concluded state"
+    },
+    {
+      "label": "shield coverage",
+      "surface_form": "final shield coverage",
+      "parent_anchor": "State",
+      "accept": true,
+      "rationale": "Concluded extent of shield covering busbar at release boundary"
+    },
+    {
+      "label": "release boundary",
+      "surface_form": "release boundary",
+      "parent_anchor": "State",
+      "accept": true,
+      "rationale": "Acceptance criteria for closing the review — concluded acceptance state"
+    }
+  ],
+  "_statistics": {
+    "total_concepts": 32,
+    "accepted": 32,
+    "rejected": 0,
+    "anchor_distribution": {
+      "Asset": 1,
+      "Component": 8,
+      "Housing": 4,
+      "Signal": 4,
+      "State": 3,
+      "Fault": 3,
+      "Coolant": 1,
+      "Connector": 2,
+      "Fastener": 2,
+      "Media": 4
+    }
+  }
+}

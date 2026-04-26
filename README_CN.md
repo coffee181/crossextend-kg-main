@@ -157,10 +157,30 @@ v2 诊断指标：
 - `hypernym_coverage` -- 语义节点中拥有 shared_hypernym 的比例
 - `phase_distribution` -- observe/diagnose/repair/verify 分布
 
+### v2 回归实验结果（2026-04-25）
+
+三次测试均使用真实 API 调用（DeepSeek + DashScope），无 fallback：
+
+| 测试 | 文档数 | 领域 | 节点 | 边 | Hypernym 覆盖率 | 主要上位词 |
+|------|--------|------|------|-----|-----------------|-----------|
+| Test 1 | 1 | battery | 41 | 30 | 14.7% | Housing:3, Seal:1, Fastener:1 |
+| Test 2 | 3 | battery | 33 | 31 | 23.1% | Housing:4, Seal:1, Fastener:1 |
+| Test 2 | 3 | cnc | 54 | 44 | **71.7%** | Coolant:15, Fastener:9, Connector:4 |
+| Test 2 | 3 | nev | 56 | 62 | 29.8% | Seal:8, Connector:2, Coolant:2 |
+| Test 3 | 9 | battery | 114 | 103 | **49.5%** | Housing:13, Media:11, Power:9 |
+| Test 3 | 9 | cnc | 142 | 140 | 32.8% | Coolant:15, Fastener:9, Connector:4 |
+| Test 3 | 9 | nev | 153 | 164 | 28.1% | Seal:11, Connector:9, Coolant:5 |
+
+9 文档规模下，10 个 Tier-1 上位词中有 7 个在三个领域全部出现，证实了跨域泛化能力。详见 [docs/EXPERIMENT_REPORT.md](docs/EXPERIMENT_REPORT.md)。
+
 ## 文档入口
 
 - [docs/README.md](docs/README.md)
 - [docs/SYSTEM_DESIGN.md](docs/SYSTEM_DESIGN.md) -- 架构规则与 v2 模型扩展
 - [docs/PIPELINE_DATA_FLOW.md](docs/PIPELINE_DATA_FLOW.md) -- 端到端数据流
+- [docs/DATA_FLOW_DIAGRAM.md](docs/DATA_FLOW_DIAGRAM.md) -- 真实单文档数据流示例（含各阶段格式变化）
 - [docs/WORKFLOW_KG_DESIGN.md](docs/WORKFLOW_KG_DESIGN.md) -- 双层图设计与 v2 创新
+- [docs/EXPERIMENT_REPORT.md](docs/EXPERIMENT_REPORT.md) -- v2 回归实验报告
 - [docs/OPEN_SOURCE_UPDATE_CN.md](docs/OPEN_SOURCE_UPDATE_CN.md) -- v2 重构中文说明
+- [docs/DATA_FLOW_DIAGRAM_CN.md](docs/DATA_FLOW_DIAGRAM_CN.md) -- 数据流图中文版
+- [docs/EXPERIMENT_REPORT_CN.md](docs/EXPERIMENT_REPORT_CN.md) -- 回归实验报告中文版

@@ -1,0 +1,3873 @@
+{
+  "project_name": "crossextend_kg_preprocessing",
+  "generated_at": "2026-04-25T19:43:06Z",
+  "domains": [
+    "nev"
+  ],
+  "role": "target",
+  "document_count": 3,
+  "domain_stats": {
+    "nev": {
+      "om_manual": 3
+    }
+  },
+  "evidence_records": [
+    {
+      "evidence_id": "Battery_Pack_Coolant_Quick_Connector_Replacement",
+      "domain_id": "nev",
+      "role": "target",
+      "source_type": "om_manual",
+      "timestamp": "2026-04-25T19:35:48Z",
+      "raw_text": "| Time step | O&M sample text |\n|---|---|\n| T1 | Define the leaking branch on Helion PackLine-327 EV as the battery coolant quick connector at either the inlet or outlet side, and note whether coolant loss is active, dried, pressure-dependent, or only found after the vehicle sits overnight. Keep the opening complaint tied to the exact connector position and leak behavior so later pressure checks stay on the same repaired branch. |\n| T2 | Isolate the pack, drain only the affected local cooling branch, and remove the side shield so the quick connector, retaining clip, male tube, O-ring land, hose end, and nearby support bracket are fully exposed for replacement. Keep the connector, male tube, and bracket geometry visible together because hose side-load often returns only when the support hardware is restored. |\n| T3 | Release the retaining clip in a controlled way, disconnect the quick connector, and inspect the latch windows, inner O-ring seat, male tube surface, insertion stop, and hose-end condition for scoring, flattening, cracked plastic, or remnants of the old seal. This first read needs to distinguish seal damage from tube scoring before new parts are fitted and the original witness pattern is lost. |\n| T4 | Clean the male tube and confirm that no old O-ring fragment, dried coolant crystal, burr, or contamination remains on the sealing land, because even a small scratch or trapped debris can cut the new seal during reassembly. The sealing land has to remain clean and continuous from insertion stop to O-ring track before the replacement connector is pushed home. |\n| T5 | Install the replacement quick connector with the correct O-ring orientation, confirm full tube insertion against the stop, and verify that the retaining clip sits flush and symmetric in both lock windows instead of riding one side of the connector body. |\n| T6 | Restore the hose support and bracket position so the new connector is not held in side load, checking hose twist, clamp clocking, bracket alignment, and the natural free angle of the hose once the support hardware is returned. The connector should leave the bracket and hose span in a neutral installed state, not in a forced alignment that will reopen the leak after circulation begins. |\n| T7 | Refill and bleed the affected cooling branch, watching the reservoir response, bleed return, and the new quick connector for trapped air release, fluid pulsing, or fresh wetting during the first circulation cycle. Record whether the first visible wetting belongs to trapped-air purge or to a true seal failure at the new connector body or O-ring seat. |\n| T8 | Hold pressure on the repaired branch and confirm that the new connector body, O-ring seat, retaining clip, hose orientation, and bracket support remain dry under both static hold and pump-induced flow. This pressure hold has to prove both sealing and neutral support geometry after the branch settles back into its normal loaded route. |\n| T9 | Restore all access parts and close the job only after the replacement record includes the exact connector location, removed failure mode, new connector seating confirmation, bleed result, and final dry-check outcome. The closeout should identify the exact replaced connector and the final dry result in the same repaired branch so the next service event starts from one named hardware boundary. |",
+      "step_records": [
+        {
+          "step_id": "T1",
+          "task": {
+            "label": "T1",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Define the leaking branch on Helion PackLine-327 EV as the battery coolant quick connector at either the inlet or outlet side, and note whether coolant loss is active, dried, pressure-dependent, or only found after the vehicle sits overnight. Keep the opening complaint tied to the exact connector position and leak behavior so later pressure checks stay on the same repaired branch.",
+            "semantic_type_hint": null,
+            "shared_hypernym": null
+          },
+          "concept_mentions": [
+            {
+              "label": "coolant loss",
+              "kind": "concept",
+              "description": "loss of coolant from the connector",
+              "node_worthy": true,
+              "surface_form": "coolant loss",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": "Coolant"
+            },
+            {
+              "label": "Helion PackLine-327 EV",
+              "kind": "concept",
+              "description": "the EV pack being serviced",
+              "node_worthy": true,
+              "surface_form": "Helion PackLine-327 EV",
+              "semantic_type_hint": "Asset",
+              "shared_hypernym": null
+            },
+            {
+              "label": "outlet side",
+              "kind": "concept",
+              "description": "outlet side of the cooling branch",
+              "node_worthy": true,
+              "surface_form": "outlet side",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": null
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T1",
+              "tail": "coolant loss"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T1",
+              "tail": "T2"
+            }
+          ],
+          "step_phase": "observe",
+          "step_summary": "Define the leaking branch on Helion PackLine-327 EV as the battery coola",
+          "surface_form": "Define the leaking branch on Helion PackLine-327 EV as the battery coolant quick connector at either the inlet or outlet side, and note whether coolant loss is active, dried, pressure-dependent, or only found after the vehicle sits overnight. Keep the opening complaint tied to the exact connector position and leak behavior so later pressure checks stay on the same repaired branch.",
+          "step_actions": [
+            {
+              "action_type": "records",
+              "target_label": "coolant loss"
+            }
+          ],
+          "structural_edges": [],
+          "state_transitions": [],
+          "diagnostic_edges": [],
+          "sequence_next": "T2"
+        },
+        {
+          "step_id": "T2",
+          "task": {
+            "label": "T2",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Isolate the pack, drain only the affected local cooling branch, and remove the side shield so the quick connector, retaining clip, male tube, O-ring land, hose end, and nearby support bracket are fully exposed for replacement. Keep the connector, male tube, and bracket geometry visible together because hose side-load often returns only when the support hardware is restored.",
+            "semantic_type_hint": null,
+            "shared_hypernym": null
+          },
+          "concept_mentions": [
+            {
+              "label": "battery coolant quick connector",
+              "kind": "concept",
+              "description": "quick connector at inlet or outlet side of cooling branch",
+              "node_worthy": true,
+              "surface_form": "battery coolant quick connector",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Connector"
+            },
+            {
+              "label": "hose end",
+              "kind": "concept",
+              "description": "end of the hose connected to the connector",
+              "node_worthy": true,
+              "surface_form": "hose end",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": null
+            },
+            {
+              "label": "male tube surface",
+              "kind": "concept",
+              "description": "male tube of the quick connector",
+              "node_worthy": true,
+              "surface_form": "male tube",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": null
+            },
+            {
+              "label": "O-ring land",
+              "kind": "concept",
+              "description": "land where O-ring sits",
+              "node_worthy": true,
+              "surface_form": "O-ring land",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Seal"
+            },
+            {
+              "label": "retaining clip",
+              "kind": "concept",
+              "description": "clip that retains the quick connector",
+              "node_worthy": true,
+              "surface_form": "retaining clip",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Fastener"
+            },
+            {
+              "label": "support bracket",
+              "kind": "concept",
+              "description": "bracket supporting the hose and connector",
+              "node_worthy": true,
+              "surface_form": "support bracket",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Fastener"
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "exposes",
+              "family": "task_dependency",
+              "head": "T2",
+              "tail": "battery coolant quick connector"
+            },
+            {
+              "label": "exposes",
+              "family": "task_dependency",
+              "head": "T2",
+              "tail": "retaining clip"
+            },
+            {
+              "label": "exposes",
+              "family": "task_dependency",
+              "head": "T2",
+              "tail": "male tube surface"
+            },
+            {
+              "label": "exposes",
+              "family": "task_dependency",
+              "head": "T2",
+              "tail": "O-ring land"
+            },
+            {
+              "label": "exposes",
+              "family": "task_dependency",
+              "head": "T2",
+              "tail": "hose end"
+            },
+            {
+              "label": "exposes",
+              "family": "task_dependency",
+              "head": "T2",
+              "tail": "support bracket"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T2",
+              "tail": "T3"
+            }
+          ],
+          "step_phase": "repair",
+          "step_summary": "Isolate the pack, drain only the affected local cooling branch, and remo",
+          "surface_form": "Isolate the pack, drain only the affected local cooling branch, and remove the side shield so the quick connector, retaining clip, male tube, O-ring land, hose end, and nearby support bracket are fully exposed for replacement. Keep the connector, male tube, and bracket geometry visible together because hose side-load often returns only when the support hardware is restored.",
+          "step_actions": [
+            {
+              "action_type": "exposes",
+              "target_label": "battery coolant quick connector"
+            },
+            {
+              "action_type": "exposes",
+              "target_label": "retaining clip"
+            },
+            {
+              "action_type": "exposes",
+              "target_label": "male tube surface"
+            },
+            {
+              "action_type": "exposes",
+              "target_label": "O-ring land"
+            },
+            {
+              "action_type": "exposes",
+              "target_label": "hose end"
+            },
+            {
+              "action_type": "exposes",
+              "target_label": "support bracket"
+            }
+          ],
+          "structural_edges": [],
+          "state_transitions": [],
+          "diagnostic_edges": [],
+          "sequence_next": "T3"
+        },
+        {
+          "step_id": "T3",
+          "task": {
+            "label": "T3",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Release the retaining clip in a controlled way, disconnect the quick connector, and inspect the latch windows, inner O-ring seat, male tube surface, insertion stop, and hose-end condition for scoring, flattening, cracked plastic, or remnants of the old seal. This first read needs to distinguish seal damage from tube scoring before new parts are fitted and the original witness pattern is lost.",
+            "semantic_type_hint": null,
+            "shared_hypernym": null
+          },
+          "concept_mentions": [
+            {
+              "label": "cracked plastic",
+              "kind": "concept",
+              "description": "cracked plastic on connector",
+              "node_worthy": true,
+              "surface_form": "cracked plastic",
+              "semantic_type_hint": "Fault",
+              "shared_hypernym": null
+            },
+            {
+              "label": "flattening",
+              "kind": "concept",
+              "description": "flattening of O-ring or seal",
+              "node_worthy": true,
+              "surface_form": "flattening",
+              "semantic_type_hint": "Fault",
+              "shared_hypernym": null
+            },
+            {
+              "label": "hose-end condition",
+              "kind": "concept",
+              "description": "condition of the hose end",
+              "node_worthy": true,
+              "surface_form": "hose-end condition",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "inner O-ring seat",
+              "kind": "concept",
+              "description": "seat for the O-ring inside the connector",
+              "node_worthy": true,
+              "surface_form": "inner O-ring seat",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Seal"
+            },
+            {
+              "label": "insertion stop",
+              "kind": "concept",
+              "description": "stop that limits tube insertion depth",
+              "node_worthy": true,
+              "surface_form": "insertion stop",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": null
+            },
+            {
+              "label": "latch windows",
+              "kind": "concept",
+              "description": "windows on the connector for latch engagement",
+              "node_worthy": true,
+              "surface_form": "latch windows",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": null
+            },
+            {
+              "label": "male tube surface",
+              "kind": "concept",
+              "description": "male tube of the quick connector",
+              "node_worthy": true,
+              "surface_form": "male tube",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": null
+            },
+            {
+              "label": "old seal remnants",
+              "kind": "concept",
+              "description": "remnants of old seal",
+              "node_worthy": true,
+              "surface_form": "old seal remnants",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": "Seal"
+            },
+            {
+              "label": "scoring",
+              "kind": "concept",
+              "description": "scoring on tube or seat",
+              "node_worthy": true,
+              "surface_form": "scoring",
+              "semantic_type_hint": "Fault",
+              "shared_hypernym": null
+            },
+            {
+              "label": "seal damage",
+              "kind": "concept",
+              "description": "damage to the seal",
+              "node_worthy": true,
+              "surface_form": "seal damage",
+              "semantic_type_hint": "Fault",
+              "shared_hypernym": "Seal"
+            },
+            {
+              "label": "tube scoring",
+              "kind": "concept",
+              "description": "scoring on the tube",
+              "node_worthy": true,
+              "surface_form": "tube scoring",
+              "semantic_type_hint": "Fault",
+              "shared_hypernym": null
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "latch windows"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "inner O-ring seat"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "male tube surface"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "insertion stop"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "hose-end condition"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "scoring"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "flattening"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "cracked plastic"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "old seal remnants"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "T4"
+            }
+          ],
+          "step_phase": "observe",
+          "step_summary": "Release the retaining clip in a controlled way, disconnect the quick con",
+          "surface_form": "Release the retaining clip in a controlled way, disconnect the quick connector, and inspect the latch windows, inner O-ring seat, male tube surface, insertion stop, and hose-end condition for scoring, flattening, cracked plastic, or remnants of the old seal. This first read needs to distinguish seal damage from tube scoring before new parts are fitted and the original witness pattern is lost.",
+          "step_actions": [
+            {
+              "action_type": "inspects",
+              "target_label": "latch windows"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "inner O-ring seat"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "male tube surface"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "insertion stop"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "hose-end condition"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "scoring"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "flattening"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "cracked plastic"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "old seal remnants"
+            }
+          ],
+          "structural_edges": [],
+          "state_transitions": [],
+          "diagnostic_edges": [],
+          "sequence_next": "T4"
+        },
+        {
+          "step_id": "T4",
+          "task": {
+            "label": "T4",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Clean the male tube and confirm that no old O-ring fragment, dried coolant crystal, burr, or contamination remains on the sealing land, because even a small scratch or trapped debris can cut the new seal during reassembly. The sealing land has to remain clean and continuous from insertion stop to O-ring track before the replacement connector is pushed home.",
+            "semantic_type_hint": null,
+            "shared_hypernym": null
+          },
+          "concept_mentions": [
+            {
+              "label": "burr",
+              "kind": "concept",
+              "description": "burr on metal or plastic",
+              "node_worthy": true,
+              "surface_form": "burr",
+              "semantic_type_hint": "Fault",
+              "shared_hypernym": null
+            },
+            {
+              "label": "contamination",
+              "kind": "concept",
+              "description": "contamination on sealing land",
+              "node_worthy": true,
+              "surface_form": "contamination",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "dried coolant crystal",
+              "kind": "concept",
+              "description": "crystal from dried coolant",
+              "node_worthy": true,
+              "surface_form": "dried coolant crystal",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": "Coolant"
+            },
+            {
+              "label": "male tube surface",
+              "kind": "concept",
+              "description": "male tube of the quick connector",
+              "node_worthy": true,
+              "surface_form": "male tube",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": null
+            },
+            {
+              "label": "O-ring fragment",
+              "kind": "concept",
+              "description": "fragment of old O-ring",
+              "node_worthy": true,
+              "surface_form": "O-ring fragment",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": "Seal"
+            },
+            {
+              "label": "sealing land",
+              "kind": "concept",
+              "description": "land where seal contacts",
+              "node_worthy": true,
+              "surface_form": "sealing land",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Seal"
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "cleans",
+              "family": "task_dependency",
+              "head": "T4",
+              "tail": "male tube surface"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T4",
+              "tail": "sealing land"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T4",
+              "tail": "O-ring fragment"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T4",
+              "tail": "dried coolant crystal"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T4",
+              "tail": "burr"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T4",
+              "tail": "contamination"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T4",
+              "tail": "T5"
+            }
+          ],
+          "step_phase": "verify",
+          "step_summary": "Clean the male tube and confirm that no old O-ring fragment, dried coola",
+          "surface_form": "Clean the male tube and confirm that no old O-ring fragment, dried coolant crystal, burr, or contamination remains on the sealing land, because even a small scratch or trapped debris can cut the new seal during reassembly. The sealing land has to remain clean and continuous from insertion stop to O-ring track before the replacement connector is pushed home.",
+          "step_actions": [
+            {
+              "action_type": "cleans",
+              "target_label": "male tube surface"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "sealing land"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "O-ring fragment"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "dried coolant crystal"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "burr"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "contamination"
+            }
+          ],
+          "structural_edges": [],
+          "state_transitions": [],
+          "diagnostic_edges": [],
+          "sequence_next": "T5"
+        },
+        {
+          "step_id": "T5",
+          "task": {
+            "label": "T5",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Install the replacement quick connector with the correct O-ring orientation, confirm full tube insertion against the stop, and verify that the retaining clip sits flush and symmetric in both lock windows instead of riding one side of the connector body.",
+            "semantic_type_hint": null,
+            "shared_hypernym": null
+          },
+          "concept_mentions": [
+            {
+              "label": "full tube insertion",
+              "kind": "concept",
+              "description": "tube fully inserted against stop",
+              "node_worthy": true,
+              "surface_form": "full tube insertion",
+              "semantic_type_hint": "State",
+              "shared_hypernym": null
+            },
+            {
+              "label": "O-ring orientation",
+              "kind": "concept",
+              "description": "orientation of the O-ring during installation",
+              "node_worthy": true,
+              "surface_form": "O-ring orientation",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": "Seal"
+            },
+            {
+              "label": "replacement quick connector",
+              "kind": "concept",
+              "description": "new quick connector installed",
+              "node_worthy": true,
+              "surface_form": "replacement quick connector",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Connector"
+            },
+            {
+              "label": "retaining clip flush and symmetric",
+              "kind": "concept",
+              "description": "clip seated flush and symmetric in lock windows",
+              "node_worthy": true,
+              "surface_form": "retaining clip flush and symmetric",
+              "semantic_type_hint": "State",
+              "shared_hypernym": null
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "repairs",
+              "family": "task_dependency",
+              "head": "T5",
+              "tail": "replacement quick connector"
+            },
+            {
+              "label": "verifies",
+              "family": "task_dependency",
+              "head": "T5",
+              "tail": "O-ring orientation"
+            },
+            {
+              "label": "verifies",
+              "family": "task_dependency",
+              "head": "T5",
+              "tail": "full tube insertion"
+            },
+            {
+              "label": "verifies",
+              "family": "task_dependency",
+              "head": "T5",
+              "tail": "retaining clip flush and symmetric"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T5",
+              "tail": "T6"
+            }
+          ],
+          "step_phase": "verify",
+          "step_summary": "Install the replacement quick connector with the correct O-ring orientat",
+          "surface_form": "Install the replacement quick connector with the correct O-ring orientation, confirm full tube insertion against the stop, and verify that the retaining clip sits flush and symmetric in both lock windows instead of riding one side of the connector body.",
+          "step_actions": [
+            {
+              "action_type": "repairs",
+              "target_label": "replacement quick connector"
+            },
+            {
+              "action_type": "verifies",
+              "target_label": "O-ring orientation"
+            },
+            {
+              "action_type": "verifies",
+              "target_label": "full tube insertion"
+            },
+            {
+              "action_type": "verifies",
+              "target_label": "retaining clip flush and symmetric"
+            }
+          ],
+          "structural_edges": [],
+          "state_transitions": [],
+          "diagnostic_edges": [],
+          "sequence_next": "T6"
+        },
+        {
+          "step_id": "T6",
+          "task": {
+            "label": "T6",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Restore the hose support and bracket position so the new connector is not held in side load, checking hose twist, clamp clocking, bracket alignment, and the natural free angle of the hose once the support hardware is returned. The connector should leave the bracket and hose span in a neutral installed state, not in a forced alignment that will reopen the leak after circulation begins.",
+            "semantic_type_hint": null,
+            "shared_hypernym": null
+          },
+          "concept_mentions": [
+            {
+              "label": "bracket alignment",
+              "kind": "concept",
+              "description": "alignment of the bracket",
+              "node_worthy": true,
+              "surface_form": "bracket alignment",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "bracket position",
+              "kind": "concept",
+              "description": "position of the support bracket",
+              "node_worthy": true,
+              "surface_form": "bracket position",
+              "semantic_type_hint": "State",
+              "shared_hypernym": null
+            },
+            {
+              "label": "clamp clocking",
+              "kind": "concept",
+              "description": "clocking of the clamp",
+              "node_worthy": true,
+              "surface_form": "clamp clocking",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "hose support",
+              "kind": "concept",
+              "description": "support for the hose",
+              "node_worthy": true,
+              "surface_form": "hose support",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": null
+            },
+            {
+              "label": "hose twist",
+              "kind": "concept",
+              "description": "twist in the hose",
+              "node_worthy": true,
+              "surface_form": "hose twist",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "natural free angle of hose",
+              "kind": "concept",
+              "description": "natural free angle of the hose",
+              "node_worthy": true,
+              "surface_form": "natural free angle of hose",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "neutral installed state",
+              "kind": "concept",
+              "description": "state where connector is not under side load",
+              "node_worthy": true,
+              "surface_form": "neutral installed state",
+              "semantic_type_hint": "State",
+              "shared_hypernym": null
+            },
+            {
+              "label": "side load",
+              "kind": "concept",
+              "description": "side load on the connector",
+              "node_worthy": true,
+              "surface_form": "side load",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "restores",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "hose support"
+            },
+            {
+              "label": "restores",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "bracket position"
+            },
+            {
+              "label": "checks",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "hose twist"
+            },
+            {
+              "label": "checks",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "clamp clocking"
+            },
+            {
+              "label": "checks",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "bracket alignment"
+            },
+            {
+              "label": "checks",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "natural free angle of hose"
+            },
+            {
+              "label": "verifies",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "neutral installed state"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "T7"
+            }
+          ],
+          "step_phase": "repair",
+          "step_summary": "Restore the hose support and bracket position so the new connector is no",
+          "surface_form": "Restore the hose support and bracket position so the new connector is not held in side load, checking hose twist, clamp clocking, bracket alignment, and the natural free angle of the hose once the support hardware is returned. The connector should leave the bracket and hose span in a neutral installed state, not in a forced alignment that will reopen the leak after circulation begins.",
+          "step_actions": [
+            {
+              "action_type": "restores",
+              "target_label": "hose support"
+            },
+            {
+              "action_type": "restores",
+              "target_label": "bracket position"
+            },
+            {
+              "action_type": "checks",
+              "target_label": "hose twist"
+            },
+            {
+              "action_type": "checks",
+              "target_label": "clamp clocking"
+            },
+            {
+              "action_type": "checks",
+              "target_label": "bracket alignment"
+            },
+            {
+              "action_type": "checks",
+              "target_label": "natural free angle of hose"
+            },
+            {
+              "action_type": "verifies",
+              "target_label": "neutral installed state"
+            }
+          ],
+          "structural_edges": [],
+          "state_transitions": [],
+          "diagnostic_edges": [],
+          "sequence_next": "T7"
+        },
+        {
+          "step_id": "T7",
+          "task": {
+            "label": "T7",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Refill and bleed the affected cooling branch, watching the reservoir response, bleed return, and the new quick connector for trapped air release, fluid pulsing, or fresh wetting during the first circulation cycle. Record whether the first visible wetting belongs to trapped-air purge or to a true seal failure at the new connector body or O-ring seat.",
+            "semantic_type_hint": null,
+            "shared_hypernym": null
+          },
+          "concept_mentions": [
+            {
+              "label": "bleed return",
+              "kind": "concept",
+              "description": "return of coolant during bleeding",
+              "node_worthy": true,
+              "surface_form": "bleed return",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "fluid pulsing",
+              "kind": "concept",
+              "description": "pulsing of fluid",
+              "node_worthy": true,
+              "surface_form": "fluid pulsing",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "fresh wetting",
+              "kind": "concept",
+              "description": "new wetting at connector",
+              "node_worthy": true,
+              "surface_form": "fresh wetting",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "reservoir response",
+              "kind": "concept",
+              "description": "response of the coolant reservoir",
+              "node_worthy": true,
+              "surface_form": "reservoir response",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "trapped air release",
+              "kind": "concept",
+              "description": "release of trapped air",
+              "node_worthy": true,
+              "surface_form": "trapped air release",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "true seal failure",
+              "kind": "concept",
+              "description": "actual failure of the seal",
+              "node_worthy": true,
+              "surface_form": "true seal failure",
+              "semantic_type_hint": "Fault",
+              "shared_hypernym": "Seal"
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T7",
+              "tail": "reservoir response"
+            },
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T7",
+              "tail": "bleed return"
+            },
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T7",
+              "tail": "trapped air release"
+            },
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T7",
+              "tail": "fluid pulsing"
+            },
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T7",
+              "tail": "fresh wetting"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T7",
+              "tail": "T8"
+            }
+          ],
+          "step_phase": "observe",
+          "step_summary": "Refill and bleed the affected cooling branch, watching the reservoir res",
+          "surface_form": "Refill and bleed the affected cooling branch, watching the reservoir response, bleed return, and the new quick connector for trapped air release, fluid pulsing, or fresh wetting during the first circulation cycle. Record whether the first visible wetting belongs to trapped-air purge or to a true seal failure at the new connector body or O-ring seat.",
+          "step_actions": [
+            {
+              "action_type": "records",
+              "target_label": "reservoir response"
+            },
+            {
+              "action_type": "records",
+              "target_label": "bleed return"
+            },
+            {
+              "action_type": "records",
+              "target_label": "trapped air release"
+            },
+            {
+              "action_type": "records",
+              "target_label": "fluid pulsing"
+            },
+            {
+              "action_type": "records",
+              "target_label": "fresh wetting"
+            }
+          ],
+          "structural_edges": [],
+          "state_transitions": [],
+          "diagnostic_edges": [],
+          "sequence_next": "T8"
+        },
+        {
+          "step_id": "T8",
+          "task": {
+            "label": "T8",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Hold pressure on the repaired branch and confirm that the new connector body, O-ring seat, retaining clip, hose orientation, and bracket support remain dry under both static hold and pump-induced flow. This pressure hold has to prove both sealing and neutral support geometry after the branch settles back into its normal loaded route.",
+            "semantic_type_hint": null,
+            "shared_hypernym": null
+          },
+          "concept_mentions": [
+            {
+              "label": "dry condition",
+              "kind": "concept",
+              "description": "condition where no leakage is observed",
+              "node_worthy": true,
+              "surface_form": "dry condition",
+              "semantic_type_hint": "State",
+              "shared_hypernym": null
+            },
+            {
+              "label": "pump-induced flow",
+              "kind": "concept",
+              "description": "flow induced by pump",
+              "node_worthy": true,
+              "surface_form": "pump-induced flow",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "static hold",
+              "kind": "concept",
+              "description": "static pressure hold",
+              "node_worthy": true,
+              "surface_form": "static hold",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "verifies",
+              "family": "task_dependency",
+              "head": "T8",
+              "tail": "dry condition"
+            },
+            {
+              "label": "verifies",
+              "family": "task_dependency",
+              "head": "T8",
+              "tail": "static hold"
+            },
+            {
+              "label": "verifies",
+              "family": "task_dependency",
+              "head": "T8",
+              "tail": "pump-induced flow"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T8",
+              "tail": "T9"
+            }
+          ],
+          "step_phase": "verify",
+          "step_summary": "Hold pressure on the repaired branch and confirm that the new connector ",
+          "surface_form": "Hold pressure on the repaired branch and confirm that the new connector body, O-ring seat, retaining clip, hose orientation, and bracket support remain dry under both static hold and pump-induced flow. This pressure hold has to prove both sealing and neutral support geometry after the branch settles back into its normal loaded route.",
+          "step_actions": [
+            {
+              "action_type": "verifies",
+              "target_label": "dry condition"
+            },
+            {
+              "action_type": "verifies",
+              "target_label": "static hold"
+            },
+            {
+              "action_type": "verifies",
+              "target_label": "pump-induced flow"
+            }
+          ],
+          "structural_edges": [],
+          "state_transitions": [],
+          "diagnostic_edges": [],
+          "sequence_next": "T9"
+        },
+        {
+          "step_id": "T9",
+          "task": {
+            "label": "T9",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Restore all access parts and close the job only after the replacement record includes the exact connector location, removed failure mode, new connector seating confirmation, bleed result, and final dry-check outcome. The closeout should identify the exact replaced connector and the final dry result in the same repaired branch so the next service event starts from one named hardware boundary.",
+            "semantic_type_hint": null,
+            "shared_hypernym": null
+          },
+          "concept_mentions": [
+            {
+              "label": "bleed result",
+              "kind": "concept",
+              "description": "result of bleeding procedure",
+              "node_worthy": true,
+              "surface_form": "bleed result",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "final dry-check outcome",
+              "kind": "concept",
+              "description": "outcome of final dry check",
+              "node_worthy": true,
+              "surface_form": "final dry-check outcome",
+              "semantic_type_hint": "State",
+              "shared_hypernym": null
+            },
+            {
+              "label": "new connector seating confirmation",
+              "kind": "concept",
+              "description": "confirmation that new connector is seated",
+              "node_worthy": true,
+              "surface_form": "new connector seating confirmation",
+              "semantic_type_hint": "State",
+              "shared_hypernym": null
+            },
+            {
+              "label": "removed failure mode",
+              "kind": "concept",
+              "description": "failure mode that was removed",
+              "node_worthy": true,
+              "surface_form": "removed failure mode",
+              "semantic_type_hint": "Fault",
+              "shared_hypernym": null
+            },
+            {
+              "label": "replacement record",
+              "kind": "concept",
+              "description": "record of the replacement",
+              "node_worthy": true,
+              "surface_form": "replacement record",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T9",
+              "tail": "replacement record"
+            },
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T9",
+              "tail": "removed failure mode"
+            },
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T9",
+              "tail": "new connector seating confirmation"
+            },
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T9",
+              "tail": "bleed result"
+            },
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T9",
+              "tail": "final dry-check outcome"
+            }
+          ],
+          "step_phase": "observe",
+          "step_summary": "Restore all access parts and close the job only after the replacement re",
+          "surface_form": "Restore all access parts and close the job only after the replacement record includes the exact connector location, removed failure mode, new connector seating confirmation, bleed result, and final dry-check outcome. The closeout should identify the exact replaced connector and the final dry result in the same repaired branch so the next service event starts from one named hardware boundary.",
+          "step_actions": [
+            {
+              "action_type": "records",
+              "target_label": "replacement record"
+            },
+            {
+              "action_type": "records",
+              "target_label": "removed failure mode"
+            },
+            {
+              "action_type": "records",
+              "target_label": "new connector seating confirmation"
+            },
+            {
+              "action_type": "records",
+              "target_label": "bleed result"
+            },
+            {
+              "action_type": "records",
+              "target_label": "final dry-check outcome"
+            }
+          ],
+          "structural_edges": [],
+          "state_transitions": [],
+          "diagnostic_edges": [],
+          "sequence_next": null
+        }
+      ],
+      "document_concept_mentions": [
+        {
+          "label": "inlet side",
+          "kind": "concept",
+          "description": "inlet side of the cooling branch",
+          "node_worthy": true,
+          "surface_form": "inlet side",
+          "semantic_type_hint": "Component",
+          "shared_hypernym": null
+        }
+      ],
+      "document_relation_mentions": [
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "Helion PackLine-327 EV",
+          "tail": "battery coolant quick connector"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "battery coolant quick connector",
+          "tail": "male tube surface"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "battery coolant quick connector",
+          "tail": "O-ring land"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "battery coolant quick connector",
+          "tail": "latch windows"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "battery coolant quick connector",
+          "tail": "inner O-ring seat"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "battery coolant quick connector",
+          "tail": "insertion stop"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "battery coolant quick connector",
+          "tail": "sealing land"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "battery coolant quick connector",
+          "tail": "support bracket"
+        },
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "coolant loss",
+          "tail": "seal damage"
+        },
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "scoring",
+          "tail": "tube scoring"
+        },
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "fresh wetting",
+          "tail": "true seal failure"
+        },
+        {
+          "label": "causes",
+          "family": "propagation",
+          "head": "side load",
+          "tail": "seal damage"
+        },
+        {
+          "label": "causes",
+          "family": "propagation",
+          "head": "contamination",
+          "tail": "seal damage"
+        }
+      ],
+      "procedure_meta": {
+        "asset_name": "Pack",
+        "procedure_type": "repair",
+        "primary_fault_type": "leak"
+      },
+      "cross_step_relations": [
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "coolant loss",
+          "tail": "seal damage",
+          "head_step": "T1",
+          "tail_step": "T3"
+        },
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "scoring",
+          "tail": "tube scoring",
+          "head_step": "T3",
+          "tail_step": "T3"
+        },
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "fresh wetting",
+          "tail": "true seal failure",
+          "head_step": "T7",
+          "tail_step": "T7"
+        },
+        {
+          "label": "causes",
+          "family": "propagation",
+          "head": "side load",
+          "tail": "seal damage",
+          "head_step": "T6",
+          "tail_step": "T3"
+        },
+        {
+          "label": "causes",
+          "family": "propagation",
+          "head": "contamination",
+          "tail": "seal damage",
+          "head_step": "T4",
+          "tail_step": "T3"
+        }
+      ]
+    },
+    {
+      "evidence_id": "BMS_Enclosure_Seal_Replacement",
+      "domain_id": "nev",
+      "role": "target",
+      "source_type": "om_manual",
+      "timestamp": "2026-04-25T19:35:48Z",
+      "raw_text": "| Time step | O&M sample text |\n|---|---|\n| T1 | Start the enclosure-seal replacement on Arcline Logic-579 LR by reviewing the moisture complaint or prior leak history and checking the BMS enclosure perimeter first, so the new seal is not installed over a lid, flange, or pass-through defect that would immediately recreate the same leak path. Record which side or corner showed water tracks, because an upper left pass-through leak and a lower flange seep have different boundaries even though both wet the same enclosure. |\n| T2 | Depower the controller, remove the BMS lid, and extract the old seal while tracking the original joint position, flattened sections, adhesive residue, and any corner where the gasket appears pinched, under-compressed, or damaged by previous service work. Keep the removed seal indexed so the final failure can still be tied to one joint, one bolt-boss transition, or one connector pass-through corner after the groove has been cleaned. |\n| T3 | Clean the full seal groove, bolt-boss transitions, connector pass-through corners, and lid flange, then inspect for scratches, flange distortion, trapped dirt, previous seal scrap, or burrs; dry-fit the lid if needed to confirm flatness, dowel alignment, and even flange contact before the new gasket goes in. This preparation step should separate a bad gasket from a damaged sealing surface, because a rolled flange or raised burr will defeat any replacement seal installed over it. |\n| T4 | Install the replacement enclosure seal with the joint placed away from the known water path, confirming that the gasket sits fully in the groove along straight runs and remains untwisted around the corners, bosses, and pass-through transitions where compression normally varies. Check that the seal height stays consistent around the connector opening and dowel points so no local high spot forces the lid to bridge over one section of the enclosure. |\n| T5 | Refit the lid and tighten the fasteners in the intended cross pattern, watching the seal-compression line, lid-to-base gap, and pass-through corners so no one side closes early while another remains visibly high, then perform the specified splash or low-pressure leak confirmation on the enclosure boundary. The release check has to prove both uniform compression and a dry enclosure path at the original leak side rather than only a visually closed lid. |\n| T6 | Release the controller area only after the work order includes the seal lot, joint location, flange condition, dowel alignment result, tightening sequence, pass-through check, original leak side, and final closure result for the BMS enclosure seal replacement. The accepted boundary is an enclosure that closes evenly, keeps the new gasket seated through every corner transition, and shows no renewed moisture path at the previously identified leak zone. |",
+      "step_records": [
+        {
+          "step_id": "T1",
+          "task": {
+            "label": "T1",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Start the enclosure-seal replacement on Arcline Logic-579 LR by reviewing the moisture complaint or prior leak history and checking the BMS enclosure perimeter first, so the new seal is not installed over a lid, flange, or pass-through defect that would immediately recreate the same leak path. Record which side or corner showed water tracks, because an upper left pass-through leak and a lower flange seep have different boundaries even though both wet the same enclosure.",
+            "semantic_type_hint": null,
+            "shared_hypernym": null
+          },
+          "concept_mentions": [
+            {
+              "label": "Arcline Logic-579 LR",
+              "kind": "concept",
+              "description": "the asset being serviced",
+              "node_worthy": true,
+              "surface_form": "Arcline Logic-579 LR",
+              "semantic_type_hint": "Asset",
+              "shared_hypernym": null
+            },
+            {
+              "label": "BMS enclosure perimeter",
+              "kind": "concept",
+              "description": "the perimeter of the BMS enclosure",
+              "node_worthy": true,
+              "surface_form": "BMS enclosure perimeter",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Housing"
+            },
+            {
+              "label": "leak history",
+              "kind": "concept",
+              "description": "prior leak records",
+              "node_worthy": true,
+              "surface_form": "leak history",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "lower flange seep",
+              "kind": "concept",
+              "description": "seep at lower flange",
+              "node_worthy": true,
+              "surface_form": "lower flange seep",
+              "semantic_type_hint": "Fault",
+              "shared_hypernym": null
+            },
+            {
+              "label": "moisture complaint",
+              "kind": "concept",
+              "description": "recorded moisture issue",
+              "node_worthy": true,
+              "surface_form": "moisture complaint",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "upper left pass-through leak",
+              "kind": "concept",
+              "description": "leak at upper left pass-through",
+              "node_worthy": true,
+              "surface_form": "upper left pass-through leak",
+              "semantic_type_hint": "Fault",
+              "shared_hypernym": null
+            },
+            {
+              "label": "water tracks",
+              "kind": "concept",
+              "description": "visible water path evidence",
+              "node_worthy": true,
+              "surface_form": "water tracks",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T1",
+              "tail": "moisture complaint"
+            },
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T1",
+              "tail": "leak history"
+            },
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T1",
+              "tail": "water tracks"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T1",
+              "tail": "T2"
+            }
+          ],
+          "step_phase": "observe",
+          "step_summary": "Start the enclosure-seal replacement on Arcline Logic-579 LR by reviewin",
+          "surface_form": "Start the enclosure-seal replacement on Arcline Logic-579 LR by reviewing the moisture complaint or prior leak history and checking the BMS enclosure perimeter first, so the new seal is not installed over a lid, flange, or pass-through defect that would immediately recreate the same leak path. Record which side or corner showed water tracks, because an upper left pass-through leak and a lower flange seep have different boundaries even though both wet the same enclosure.",
+          "step_actions": [
+            {
+              "action_type": "records",
+              "target_label": "moisture complaint"
+            },
+            {
+              "action_type": "records",
+              "target_label": "leak history"
+            },
+            {
+              "action_type": "records",
+              "target_label": "water tracks"
+            }
+          ],
+          "structural_edges": [],
+          "state_transitions": [],
+          "diagnostic_edges": [],
+          "sequence_next": "T2"
+        },
+        {
+          "step_id": "T2",
+          "task": {
+            "label": "T2",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Depower the controller, remove the BMS lid, and extract the old seal while tracking the original joint position, flattened sections, adhesive residue, and any corner where the gasket appears pinched, under-compressed, or damaged by previous service work. Keep the removed seal indexed so the final failure can still be tied to one joint, one bolt-boss transition, or one connector pass-through corner after the groove has been cleaned.",
+            "semantic_type_hint": null,
+            "shared_hypernym": null
+          },
+          "concept_mentions": [
+            {
+              "label": "BMS lid",
+              "kind": "concept",
+              "description": "lid of the BMS enclosure",
+              "node_worthy": true,
+              "surface_form": "BMS lid",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Housing"
+            },
+            {
+              "label": "old seal",
+              "kind": "concept",
+              "description": "the original seal removed",
+              "node_worthy": true,
+              "surface_form": "old seal",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Seal"
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "removes",
+              "family": "task_dependency",
+              "head": "T2",
+              "tail": "BMS lid"
+            },
+            {
+              "label": "removes",
+              "family": "task_dependency",
+              "head": "T2",
+              "tail": "old seal"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T2",
+              "tail": "T3"
+            }
+          ],
+          "step_phase": null,
+          "step_summary": "Depower the controller, remove the BMS lid, and extract the old seal whi",
+          "surface_form": "Depower the controller, remove the BMS lid, and extract the old seal while tracking the original joint position, flattened sections, adhesive residue, and any corner where the gasket appears pinched, under-compressed, or damaged by previous service work. Keep the removed seal indexed so the final failure can still be tied to one joint, one bolt-boss transition, or one connector pass-through corner after the groove has been cleaned.",
+          "step_actions": [
+            {
+              "action_type": "removes",
+              "target_label": "BMS lid"
+            },
+            {
+              "action_type": "removes",
+              "target_label": "old seal"
+            }
+          ],
+          "structural_edges": [],
+          "state_transitions": [],
+          "diagnostic_edges": [],
+          "sequence_next": "T3"
+        },
+        {
+          "step_id": "T3",
+          "task": {
+            "label": "T3",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Clean the full seal groove, bolt-boss transitions, connector pass-through corners, and lid flange, then inspect for scratches, flange distortion, trapped dirt, previous seal scrap, or burrs; dry-fit the lid if needed to confirm flatness, dowel alignment, and even flange contact before the new gasket goes in. This preparation step should separate a bad gasket from a damaged sealing surface, because a rolled flange or raised burr will defeat any replacement seal installed over it.",
+            "semantic_type_hint": null,
+            "shared_hypernym": null
+          },
+          "concept_mentions": [
+            {
+              "label": "bolt-boss transitions",
+              "kind": "concept",
+              "description": "transition areas around bolt bosses",
+              "node_worthy": true,
+              "surface_form": "bolt-boss transitions",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Housing"
+            },
+            {
+              "label": "burrs",
+              "kind": "concept",
+              "description": "burrs on sealing surfaces",
+              "node_worthy": true,
+              "surface_form": "burrs",
+              "semantic_type_hint": "Fault",
+              "shared_hypernym": null
+            },
+            {
+              "label": "connector pass-through corners",
+              "kind": "concept",
+              "description": "corners of connector pass-through",
+              "node_worthy": true,
+              "surface_form": "connector pass-through corners",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Connector"
+            },
+            {
+              "label": "dowel alignment",
+              "kind": "concept",
+              "description": "alignment of dowels",
+              "node_worthy": true,
+              "surface_form": "dowel alignment",
+              "semantic_type_hint": "State",
+              "shared_hypernym": null
+            },
+            {
+              "label": "even flange contact",
+              "kind": "concept",
+              "description": "uniform contact of flange",
+              "node_worthy": true,
+              "surface_form": "even flange contact",
+              "semantic_type_hint": "State",
+              "shared_hypernym": null
+            },
+            {
+              "label": "flange distortion",
+              "kind": "concept",
+              "description": "distortion of the flange",
+              "node_worthy": true,
+              "surface_form": "flange distortion",
+              "semantic_type_hint": "Fault",
+              "shared_hypernym": null
+            },
+            {
+              "label": "flatness",
+              "kind": "concept",
+              "description": "flatness of lid and flange",
+              "node_worthy": true,
+              "surface_form": "flatness",
+              "semantic_type_hint": "State",
+              "shared_hypernym": null
+            },
+            {
+              "label": "lid flange",
+              "kind": "concept",
+              "description": "flange of the lid",
+              "node_worthy": true,
+              "surface_form": "lid flange",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Housing"
+            },
+            {
+              "label": "previous seal scrap",
+              "kind": "concept",
+              "description": "residue from old seal",
+              "node_worthy": true,
+              "surface_form": "previous seal scrap",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "raised burr",
+              "kind": "concept",
+              "description": "burr that is raised",
+              "node_worthy": true,
+              "surface_form": "raised burr",
+              "semantic_type_hint": "Fault",
+              "shared_hypernym": null
+            },
+            {
+              "label": "rolled flange",
+              "kind": "concept",
+              "description": "flange that is rolled",
+              "node_worthy": true,
+              "surface_form": "rolled flange",
+              "semantic_type_hint": "Fault",
+              "shared_hypernym": null
+            },
+            {
+              "label": "scratches",
+              "kind": "concept",
+              "description": "scratches on sealing surfaces",
+              "node_worthy": true,
+              "surface_form": "scratches",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "seal groove",
+              "kind": "concept",
+              "description": "groove for the seal",
+              "node_worthy": true,
+              "surface_form": "seal groove",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Housing"
+            },
+            {
+              "label": "trapped dirt",
+              "kind": "concept",
+              "description": "dirt trapped in groove",
+              "node_worthy": true,
+              "surface_form": "trapped dirt",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "seal groove"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "bolt-boss transitions"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "connector pass-through corners"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "lid flange"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "scratches"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "flange distortion"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "trapped dirt"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "previous seal scrap"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "burrs"
+            },
+            {
+              "label": "verifies",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "flatness"
+            },
+            {
+              "label": "verifies",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "dowel alignment"
+            },
+            {
+              "label": "verifies",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "even flange contact"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "T4"
+            }
+          ],
+          "step_phase": "verify",
+          "step_summary": "Clean the full seal groove, bolt-boss transitions, connector pass-throug",
+          "surface_form": "Clean the full seal groove, bolt-boss transitions, connector pass-through corners, and lid flange, then inspect for scratches, flange distortion, trapped dirt, previous seal scrap, or burrs; dry-fit the lid if needed to confirm flatness, dowel alignment, and even flange contact before the new gasket goes in. This preparation step should separate a bad gasket from a damaged sealing surface, because a rolled flange or raised burr will defeat any replacement seal installed over it.",
+          "step_actions": [
+            {
+              "action_type": "inspects",
+              "target_label": "seal groove"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "bolt-boss transitions"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "connector pass-through corners"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "lid flange"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "scratches"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "flange distortion"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "trapped dirt"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "previous seal scrap"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "burrs"
+            },
+            {
+              "action_type": "verifies",
+              "target_label": "flatness"
+            },
+            {
+              "action_type": "verifies",
+              "target_label": "dowel alignment"
+            },
+            {
+              "action_type": "verifies",
+              "target_label": "even flange contact"
+            }
+          ],
+          "structural_edges": [],
+          "state_transitions": [],
+          "diagnostic_edges": [],
+          "sequence_next": "T4"
+        },
+        {
+          "step_id": "T4",
+          "task": {
+            "label": "T4",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Install the replacement enclosure seal with the joint placed away from the known water path, confirming that the gasket sits fully in the groove along straight runs and remains untwisted around the corners, bosses, and pass-through transitions where compression normally varies. Check that the seal height stays consistent around the connector opening and dowel points so no local high spot forces the lid to bridge over one section of the enclosure.",
+            "semantic_type_hint": null,
+            "shared_hypernym": null
+          },
+          "concept_mentions": [
+            {
+              "label": "connector opening",
+              "kind": "concept",
+              "description": "opening for connector",
+              "node_worthy": true,
+              "surface_form": "connector opening",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Connector"
+            },
+            {
+              "label": "dowel points",
+              "kind": "concept",
+              "description": "points where dowels are located",
+              "node_worthy": true,
+              "surface_form": "dowel points",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Fastener"
+            },
+            {
+              "label": "replacement enclosure seal",
+              "kind": "concept",
+              "description": "the seal for the enclosure",
+              "node_worthy": true,
+              "surface_form": "enclosure-seal",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Seal"
+            },
+            {
+              "label": "seal height consistency",
+              "kind": "concept",
+              "description": "uniform height of seal",
+              "node_worthy": true,
+              "surface_form": "seal height consistency",
+              "semantic_type_hint": "State",
+              "shared_hypernym": null
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "repairs",
+              "family": "task_dependency",
+              "head": "T4",
+              "tail": "replacement enclosure seal"
+            },
+            {
+              "label": "verifies",
+              "family": "task_dependency",
+              "head": "T4",
+              "tail": "seal height consistency"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T4",
+              "tail": "T5"
+            }
+          ],
+          "step_phase": "verify",
+          "step_summary": "Install the replacement enclosure seal with the joint placed away from t",
+          "surface_form": "Install the replacement enclosure seal with the joint placed away from the known water path, confirming that the gasket sits fully in the groove along straight runs and remains untwisted around the corners, bosses, and pass-through transitions where compression normally varies. Check that the seal height stays consistent around the connector opening and dowel points so no local high spot forces the lid to bridge over one section of the enclosure.",
+          "step_actions": [
+            {
+              "action_type": "repairs",
+              "target_label": "replacement enclosure seal"
+            },
+            {
+              "action_type": "verifies",
+              "target_label": "seal height consistency"
+            }
+          ],
+          "structural_edges": [],
+          "state_transitions": [],
+          "diagnostic_edges": [],
+          "sequence_next": "T5"
+        },
+        {
+          "step_id": "T5",
+          "task": {
+            "label": "T5",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Refit the lid and tighten the fasteners in the intended cross pattern, watching the seal-compression line, lid-to-base gap, and pass-through corners so no one side closes early while another remains visibly high, then perform the specified splash or low-pressure leak confirmation on the enclosure boundary. The release check has to prove both uniform compression and a dry enclosure path at the original leak side rather than only a visually closed lid.",
+            "semantic_type_hint": null,
+            "shared_hypernym": null
+          },
+          "concept_mentions": [
+            {
+              "label": "dry enclosure path",
+              "kind": "concept",
+              "description": "no moisture path in enclosure",
+              "node_worthy": true,
+              "surface_form": "dry enclosure path",
+              "semantic_type_hint": "State",
+              "shared_hypernym": null
+            },
+            {
+              "label": "fasteners",
+              "kind": "concept",
+              "description": "fasteners for lid",
+              "node_worthy": true,
+              "surface_form": "fasteners",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Fastener"
+            },
+            {
+              "label": "lid-to-base gap",
+              "kind": "concept",
+              "description": "gap between lid and base",
+              "node_worthy": true,
+              "surface_form": "lid-to-base gap",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "seal-compression line",
+              "kind": "concept",
+              "description": "line of seal compression",
+              "node_worthy": true,
+              "surface_form": "seal-compression line",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "uniform compression",
+              "kind": "concept",
+              "description": "even compression of seal",
+              "node_worthy": true,
+              "surface_form": "uniform compression",
+              "semantic_type_hint": "State",
+              "shared_hypernym": null
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "verifies",
+              "family": "task_dependency",
+              "head": "T5",
+              "tail": "seal-compression line"
+            },
+            {
+              "label": "verifies",
+              "family": "task_dependency",
+              "head": "T5",
+              "tail": "lid-to-base gap"
+            },
+            {
+              "label": "verifies",
+              "family": "task_dependency",
+              "head": "T5",
+              "tail": "uniform compression"
+            },
+            {
+              "label": "verifies",
+              "family": "task_dependency",
+              "head": "T5",
+              "tail": "dry enclosure path"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T5",
+              "tail": "T6"
+            }
+          ],
+          "step_phase": "verify",
+          "step_summary": "Refit the lid and tighten the fasteners in the intended cross pattern, w",
+          "surface_form": "Refit the lid and tighten the fasteners in the intended cross pattern, watching the seal-compression line, lid-to-base gap, and pass-through corners so no one side closes early while another remains visibly high, then perform the specified splash or low-pressure leak confirmation on the enclosure boundary. The release check has to prove both uniform compression and a dry enclosure path at the original leak side rather than only a visually closed lid.",
+          "step_actions": [
+            {
+              "action_type": "verifies",
+              "target_label": "seal-compression line"
+            },
+            {
+              "action_type": "verifies",
+              "target_label": "lid-to-base gap"
+            },
+            {
+              "action_type": "verifies",
+              "target_label": "uniform compression"
+            },
+            {
+              "action_type": "verifies",
+              "target_label": "dry enclosure path"
+            }
+          ],
+          "structural_edges": [],
+          "state_transitions": [],
+          "diagnostic_edges": [],
+          "sequence_next": "T6"
+        },
+        {
+          "step_id": "T6",
+          "task": {
+            "label": "T6",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Release the controller area only after the work order includes the seal lot, joint location, flange condition, dowel alignment result, tightening sequence, pass-through check, original leak side, and final closure result for the BMS enclosure seal replacement. The accepted boundary is an enclosure that closes evenly, keeps the new gasket seated through every corner transition, and shows no renewed moisture path at the previously identified leak zone.",
+            "semantic_type_hint": null,
+            "shared_hypernym": null
+          },
+          "concept_mentions": [
+            {
+              "label": "dowel alignment",
+              "kind": "concept",
+              "description": "alignment of dowels",
+              "node_worthy": true,
+              "surface_form": "dowel alignment",
+              "semantic_type_hint": "State",
+              "shared_hypernym": null
+            },
+            {
+              "label": "final closure result",
+              "kind": "concept",
+              "description": "result of final closure",
+              "node_worthy": true,
+              "surface_form": "final closure result",
+              "semantic_type_hint": "State",
+              "shared_hypernym": null
+            },
+            {
+              "label": "flange condition",
+              "kind": "concept",
+              "description": "condition of flange",
+              "node_worthy": true,
+              "surface_form": "flange condition",
+              "semantic_type_hint": "State",
+              "shared_hypernym": null
+            },
+            {
+              "label": "joint location",
+              "kind": "concept",
+              "description": "location of seal joint",
+              "node_worthy": true,
+              "surface_form": "joint location",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "original leak side",
+              "kind": "concept",
+              "description": "side where leak originally occurred",
+              "node_worthy": true,
+              "surface_form": "original leak side",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "pass-through check",
+              "kind": "concept",
+              "description": "check of pass-through",
+              "node_worthy": true,
+              "surface_form": "pass-through check",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "seal lot",
+              "kind": "concept",
+              "description": "lot number of seal",
+              "node_worthy": true,
+              "surface_form": "seal lot",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "tightening sequence",
+              "kind": "concept",
+              "description": "sequence of fastener tightening",
+              "node_worthy": true,
+              "surface_form": "tightening sequence",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "seal lot"
+            },
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "joint location"
+            },
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "flange condition"
+            },
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "dowel alignment"
+            },
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "tightening sequence"
+            },
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "pass-through check"
+            },
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "original leak side"
+            },
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "final closure result"
+            }
+          ],
+          "step_phase": "observe",
+          "step_summary": "Release the controller area only after the work order includes the seal ",
+          "surface_form": "Release the controller area only after the work order includes the seal lot, joint location, flange condition, dowel alignment result, tightening sequence, pass-through check, original leak side, and final closure result for the BMS enclosure seal replacement. The accepted boundary is an enclosure that closes evenly, keeps the new gasket seated through every corner transition, and shows no renewed moisture path at the previously identified leak zone.",
+          "step_actions": [
+            {
+              "action_type": "records",
+              "target_label": "seal lot"
+            },
+            {
+              "action_type": "records",
+              "target_label": "joint location"
+            },
+            {
+              "action_type": "records",
+              "target_label": "flange condition"
+            },
+            {
+              "action_type": "records",
+              "target_label": "dowel alignment"
+            },
+            {
+              "action_type": "records",
+              "target_label": "tightening sequence"
+            },
+            {
+              "action_type": "records",
+              "target_label": "pass-through check"
+            },
+            {
+              "action_type": "records",
+              "target_label": "original leak side"
+            },
+            {
+              "action_type": "records",
+              "target_label": "final closure result"
+            }
+          ],
+          "structural_edges": [],
+          "state_transitions": [],
+          "diagnostic_edges": [],
+          "sequence_next": null
+        }
+      ],
+      "document_concept_mentions": [
+        {
+          "label": "controller",
+          "kind": "concept",
+          "description": "the controller of the BMS",
+          "node_worthy": true,
+          "surface_form": "controller",
+          "semantic_type_hint": "Component",
+          "shared_hypernym": "Controller"
+        }
+      ],
+      "document_relation_mentions": [
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "Arcline Logic-579 LR",
+          "tail": "BMS enclosure perimeter"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "BMS enclosure perimeter",
+          "tail": "replacement enclosure seal"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "BMS enclosure perimeter",
+          "tail": "BMS lid"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "BMS enclosure perimeter",
+          "tail": "seal groove"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "BMS enclosure perimeter",
+          "tail": "bolt-boss transitions"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "BMS enclosure perimeter",
+          "tail": "connector pass-through corners"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "BMS enclosure perimeter",
+          "tail": "lid flange"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "BMS enclosure perimeter",
+          "tail": "connector opening"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "BMS enclosure perimeter",
+          "tail": "dowel points"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "BMS enclosure perimeter",
+          "tail": "fasteners"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "BMS enclosure perimeter",
+          "tail": "controller"
+        },
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "water tracks",
+          "tail": "upper left pass-through leak"
+        },
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "water tracks",
+          "tail": "lower flange seep"
+        },
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "scratches",
+          "tail": "flange distortion"
+        },
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "scratches",
+          "tail": "burrs"
+        },
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "rolled flange",
+          "tail": "flange distortion"
+        },
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "raised burr",
+          "tail": "burrs"
+        }
+      ],
+      "procedure_meta": {
+        "asset_name": "Controller",
+        "procedure_type": "inspection",
+        "primary_fault_type": "leak"
+      },
+      "cross_step_relations": [
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "water tracks",
+          "tail": "upper left pass-through leak",
+          "head_step": "T1",
+          "tail_step": "T1"
+        },
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "water tracks",
+          "tail": "lower flange seep",
+          "head_step": "T1",
+          "tail_step": "T1"
+        },
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "scratches",
+          "tail": "flange distortion",
+          "head_step": "T3",
+          "tail_step": "T3"
+        },
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "scratches",
+          "tail": "burrs",
+          "head_step": "T3",
+          "tail_step": "T3"
+        },
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "rolled flange",
+          "tail": "flange distortion",
+          "head_step": "T3",
+          "tail_step": "T3"
+        },
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "raised burr",
+          "tail": "burrs",
+          "head_step": "T3",
+          "tail_step": "T3"
+        }
+      ]
+    },
+    {
+      "evidence_id": "Drive_Motor_Coolant_Hose_Leak_Confirmation",
+      "domain_id": "nev",
+      "role": "target",
+      "source_type": "om_manual",
+      "timestamp": "2026-04-25T19:35:48Z",
+      "raw_text": "| Time step | O&M sample text |\n|---|---|\n| T1 | Define the drive-motor coolant-hose leak on Helion DriveUnit-586 Plus by capturing whether it is active hot, active cold, pressure-dependent, or only visible after soak, and by noting the as-found condition of the motor-side hose routing, clamp position, and surrounding residue field before cleaning begins. |\n| T2 | Isolate the traction system, stabilize the local cooling branch, and remove only the shields needed to expose the drive-motor coolant hose, hose clamp, tube neck, support bracket, and adjacent wiring without changing the hose twist from its as-found condition. |\n| T3 | Clean only the loose surface residue and trace the wet edge from the hose neck outward, distinguishing seepage at the clamp line, coolant tracking along the hose braid, wetting at the tube bead, or migration from a higher branch above the drive unit. |\n| T4 | Apply pressure to the local cooling branch and hold it long enough to see whether fresh wetting starts at the clamp gap, the hose-to-neck interface, the molded hose body, or the bracket-supported bend where the hose is forced off-axis. |\n| T5 | Release the clamp only as far as required to inspect the band imprint, hose inner seat, and tube-bead contact area, checking for debris, inner-liner damage, corrosion at the bead, or a double imprint that would explain a repeat leak even with correct external clamp appearance. |\n| T6 | Compare the suspect hose joint with the opposite or adjacent cooling branch, checking clamp clocking, insertion depth to the bead, hose twist, bracket alignment, and any polished witness mark showing that the hose was rubbing or being pulled in service. |\n| T7 | Inspect the hose clamp, tube bead, hose inner seat, support bracket, and nearby sleeve for deformation, corrosion, clamp overtravel, or misposition that would separate a true leak joint from a routing-induced strain condition. |\n| T8 | Relax the bracket side load if required and repeat the pressure check with the hose returned to its natural angle so the leak decision reflects the true joint condition and not an artificially loaded support geometry. |\n| T9 | Record the exact leak boundary as hose clamp line, hose body, tube bead interface, or bracket-induced side load, and make sure the final note explains how the pressure test and the as-found residue pattern support that conclusion. |\n| T10 | Restore only the protection needed for safe closure and leave the identified hose fault path visible and documented for the next repair action instead of hiding it under a broad coolant-hose leak label. |",
+      "step_records": [
+        {
+          "step_id": "T1",
+          "task": {
+            "label": "T1",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Define the drive-motor coolant-hose leak on Helion DriveUnit-586 Plus by capturing whether it is active hot, active cold, pressure-dependent, or only visible after soak, and by noting the as-found condition of the motor-side hose routing, clamp position, and surrounding residue field before cleaning begins.",
+            "semantic_type_hint": null,
+            "shared_hypernym": null
+          },
+          "concept_mentions": [
+            {
+              "label": "active cold",
+              "kind": "concept",
+              "description": "leak active when cold",
+              "node_worthy": true,
+              "surface_form": "active cold",
+              "semantic_type_hint": "State",
+              "shared_hypernym": null
+            },
+            {
+              "label": "active hot",
+              "kind": "concept",
+              "description": "leak active when hot",
+              "node_worthy": true,
+              "surface_form": "active hot",
+              "semantic_type_hint": "State",
+              "shared_hypernym": null
+            },
+            {
+              "label": "as-found condition",
+              "kind": "concept",
+              "description": "condition as found",
+              "node_worthy": true,
+              "surface_form": "as-found condition",
+              "semantic_type_hint": "State",
+              "shared_hypernym": null
+            },
+            {
+              "label": "drive-motor coolant-hose leak",
+              "kind": "concept",
+              "description": "leak on drive motor coolant hose",
+              "node_worthy": true,
+              "surface_form": "drive-motor coolant-hose leak",
+              "semantic_type_hint": "Fault",
+              "shared_hypernym": null
+            },
+            {
+              "label": "Helion DriveUnit-586 Plus",
+              "kind": "concept",
+              "description": "drive unit asset",
+              "node_worthy": true,
+              "surface_form": "Helion DriveUnit-586 Plus",
+              "semantic_type_hint": "Asset",
+              "shared_hypernym": null
+            },
+            {
+              "label": "pressure-dependent",
+              "kind": "concept",
+              "description": "leak depends on pressure",
+              "node_worthy": true,
+              "surface_form": "pressure-dependent",
+              "semantic_type_hint": "State",
+              "shared_hypernym": null
+            },
+            {
+              "label": "residue field",
+              "kind": "concept",
+              "description": "field of residue",
+              "node_worthy": true,
+              "surface_form": "residue field",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "visible after soak",
+              "kind": "concept",
+              "description": "leak visible after soak",
+              "node_worthy": true,
+              "surface_form": "visible after soak",
+              "semantic_type_hint": "State",
+              "shared_hypernym": null
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T1",
+              "tail": "drive-motor coolant-hose leak"
+            },
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T1",
+              "tail": "as-found condition"
+            },
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T1",
+              "tail": "residue field"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T1",
+              "tail": "T2"
+            }
+          ],
+          "step_phase": null,
+          "step_summary": "Define the drive-motor coolant-hose leak on Helion DriveUnit-586 Plus by",
+          "surface_form": "Define the drive-motor coolant-hose leak on Helion DriveUnit-586 Plus by capturing whether it is active hot, active cold, pressure-dependent, or only visible after soak, and by noting the as-found condition of the motor-side hose routing, clamp position, and surrounding residue field before cleaning begins.",
+          "step_actions": [
+            {
+              "action_type": "records",
+              "target_label": "drive-motor coolant-hose leak"
+            },
+            {
+              "action_type": "records",
+              "target_label": "as-found condition"
+            },
+            {
+              "action_type": "records",
+              "target_label": "residue field"
+            }
+          ],
+          "structural_edges": [],
+          "state_transitions": [],
+          "diagnostic_edges": [],
+          "sequence_next": "T2"
+        },
+        {
+          "step_id": "T2",
+          "task": {
+            "label": "T2",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Isolate the traction system, stabilize the local cooling branch, and remove only the shields needed to expose the drive-motor coolant hose, hose clamp, tube neck, support bracket, and adjacent wiring without changing the hose twist from its as-found condition.",
+            "semantic_type_hint": null,
+            "shared_hypernym": null
+          },
+          "concept_mentions": [
+            {
+              "label": "drive-motor coolant hose",
+              "kind": "concept",
+              "description": "coolant hose on drive motor",
+              "node_worthy": true,
+              "surface_form": "drive-motor coolant hose",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Coolant"
+            },
+            {
+              "label": "hose clamp",
+              "kind": "concept",
+              "description": "clamp on coolant hose",
+              "node_worthy": true,
+              "surface_form": "hose clamp",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Fastener"
+            },
+            {
+              "label": "support bracket",
+              "kind": "concept",
+              "description": "bracket supporting hose",
+              "node_worthy": true,
+              "surface_form": "support bracket",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Housing"
+            },
+            {
+              "label": "tube neck",
+              "kind": "concept",
+              "description": "neck on tube",
+              "node_worthy": true,
+              "surface_form": "tube neck",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Connector"
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "exposes",
+              "family": "task_dependency",
+              "head": "T2",
+              "tail": "drive-motor coolant hose"
+            },
+            {
+              "label": "exposes",
+              "family": "task_dependency",
+              "head": "T2",
+              "tail": "hose clamp"
+            },
+            {
+              "label": "exposes",
+              "family": "task_dependency",
+              "head": "T2",
+              "tail": "tube neck"
+            },
+            {
+              "label": "exposes",
+              "family": "task_dependency",
+              "head": "T2",
+              "tail": "support bracket"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T2",
+              "tail": "T3"
+            }
+          ],
+          "step_phase": null,
+          "step_summary": "Isolate the traction system, stabilize the local cooling branch, and rem",
+          "surface_form": "Isolate the traction system, stabilize the local cooling branch, and remove only the shields needed to expose the drive-motor coolant hose, hose clamp, tube neck, support bracket, and adjacent wiring without changing the hose twist from its as-found condition.",
+          "step_actions": [
+            {
+              "action_type": "exposes",
+              "target_label": "drive-motor coolant hose"
+            },
+            {
+              "action_type": "exposes",
+              "target_label": "hose clamp"
+            },
+            {
+              "action_type": "exposes",
+              "target_label": "tube neck"
+            },
+            {
+              "action_type": "exposes",
+              "target_label": "support bracket"
+            }
+          ],
+          "structural_edges": [],
+          "state_transitions": [],
+          "diagnostic_edges": [],
+          "sequence_next": "T3"
+        },
+        {
+          "step_id": "T3",
+          "task": {
+            "label": "T3",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Clean only the loose surface residue and trace the wet edge from the hose neck outward, distinguishing seepage at the clamp line, coolant tracking along the hose braid, wetting at the tube bead, or migration from a higher branch above the drive unit.",
+            "semantic_type_hint": null,
+            "shared_hypernym": null
+          },
+          "concept_mentions": [
+            {
+              "label": "coolant tracking",
+              "kind": "concept",
+              "description": "tracking of coolant",
+              "node_worthy": true,
+              "surface_form": "coolant tracking",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "hose braid",
+              "kind": "concept",
+              "description": "braid of hose",
+              "node_worthy": true,
+              "surface_form": "hose braid",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": null
+            },
+            {
+              "label": "migration",
+              "kind": "concept",
+              "description": "migration from higher branch",
+              "node_worthy": true,
+              "surface_form": "migration",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "seepage",
+              "kind": "concept",
+              "description": "slow leak evidence",
+              "node_worthy": true,
+              "surface_form": "seepage",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "wet edge",
+              "kind": "concept",
+              "description": "edge of wet area",
+              "node_worthy": true,
+              "surface_form": "wet edge",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "wetting",
+              "kind": "concept",
+              "description": "wet condition",
+              "node_worthy": true,
+              "surface_form": "wetting",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "traces",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "wet edge"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "seepage"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "coolant tracking"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "wetting"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "migration"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T3",
+              "tail": "T4"
+            }
+          ],
+          "step_phase": "observe",
+          "step_summary": "Clean only the loose surface residue and trace the wet edge from the hos",
+          "surface_form": "Clean only the loose surface residue and trace the wet edge from the hose neck outward, distinguishing seepage at the clamp line, coolant tracking along the hose braid, wetting at the tube bead, or migration from a higher branch above the drive unit.",
+          "step_actions": [
+            {
+              "action_type": "traces",
+              "target_label": "wet edge"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "seepage"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "coolant tracking"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "wetting"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "migration"
+            }
+          ],
+          "structural_edges": [],
+          "state_transitions": [],
+          "diagnostic_edges": [],
+          "sequence_next": "T4"
+        },
+        {
+          "step_id": "T4",
+          "task": {
+            "label": "T4",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Apply pressure to the local cooling branch and hold it long enough to see whether fresh wetting starts at the clamp gap, the hose-to-neck interface, the molded hose body, or the bracket-supported bend where the hose is forced off-axis.",
+            "semantic_type_hint": null,
+            "shared_hypernym": null
+          },
+          "concept_mentions": [
+            {
+              "label": "bracket-supported bend",
+              "kind": "concept",
+              "description": "bend where bracket supports hose",
+              "node_worthy": true,
+              "surface_form": "bracket-supported bend",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": null
+            },
+            {
+              "label": "fresh wetting",
+              "kind": "concept",
+              "description": "new wetting after pressure",
+              "node_worthy": true,
+              "surface_form": "fresh wetting",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "hose-to-neck interface",
+              "kind": "concept",
+              "description": "interface between hose and neck",
+              "node_worthy": true,
+              "surface_form": "hose-to-neck interface",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Connector"
+            },
+            {
+              "label": "local cooling branch",
+              "kind": "concept",
+              "description": "cooling branch near drive unit",
+              "node_worthy": true,
+              "surface_form": "local cooling branch",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Coolant"
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "applies_pressure",
+              "family": "task_dependency",
+              "head": "T4",
+              "tail": "local cooling branch"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T4",
+              "tail": "fresh wetting"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T4",
+              "tail": "T5"
+            }
+          ],
+          "step_phase": null,
+          "step_summary": "Apply pressure to the local cooling branch and hold it long enough to se",
+          "surface_form": "Apply pressure to the local cooling branch and hold it long enough to see whether fresh wetting starts at the clamp gap, the hose-to-neck interface, the molded hose body, or the bracket-supported bend where the hose is forced off-axis.",
+          "step_actions": [
+            {
+              "action_type": "applies_pressure",
+              "target_label": "local cooling branch"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "fresh wetting"
+            }
+          ],
+          "structural_edges": [],
+          "state_transitions": [],
+          "diagnostic_edges": [],
+          "sequence_next": "T5"
+        },
+        {
+          "step_id": "T5",
+          "task": {
+            "label": "T5",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Release the clamp only as far as required to inspect the band imprint, hose inner seat, and tube-bead contact area, checking for debris, inner-liner damage, corrosion at the bead, or a double imprint that would explain a repeat leak even with correct external clamp appearance.",
+            "semantic_type_hint": null,
+            "shared_hypernym": null
+          },
+          "concept_mentions": [
+            {
+              "label": "band imprint",
+              "kind": "concept",
+              "description": "imprint from clamp band",
+              "node_worthy": true,
+              "surface_form": "band imprint",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "corrosion",
+              "kind": "concept",
+              "description": "corrosion at bead",
+              "node_worthy": true,
+              "surface_form": "corrosion",
+              "semantic_type_hint": "Fault",
+              "shared_hypernym": null
+            },
+            {
+              "label": "debris",
+              "kind": "concept",
+              "description": "debris at interface",
+              "node_worthy": true,
+              "surface_form": "debris",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "double imprint",
+              "kind": "concept",
+              "description": "two clamp imprints",
+              "node_worthy": true,
+              "surface_form": "double imprint",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "hose inner seat",
+              "kind": "concept",
+              "description": "inner seat of hose",
+              "node_worthy": true,
+              "surface_form": "hose inner seat",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Seal"
+            },
+            {
+              "label": "inner-liner damage",
+              "kind": "concept",
+              "description": "damage to inner liner",
+              "node_worthy": true,
+              "surface_form": "inner-liner damage",
+              "semantic_type_hint": "Fault",
+              "shared_hypernym": null
+            },
+            {
+              "label": "tube-bead contact area",
+              "kind": "concept",
+              "description": "contact area on tube bead",
+              "node_worthy": true,
+              "surface_form": "tube-bead contact area",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": null
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T5",
+              "tail": "band imprint"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T5",
+              "tail": "hose inner seat"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T5",
+              "tail": "tube-bead contact area"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T5",
+              "tail": "debris"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T5",
+              "tail": "inner-liner damage"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T5",
+              "tail": "corrosion"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T5",
+              "tail": "double imprint"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T5",
+              "tail": "T6"
+            }
+          ],
+          "step_phase": "observe",
+          "step_summary": "Release the clamp only as far as required to inspect the band imprint, h",
+          "surface_form": "Release the clamp only as far as required to inspect the band imprint, hose inner seat, and tube-bead contact area, checking for debris, inner-liner damage, corrosion at the bead, or a double imprint that would explain a repeat leak even with correct external clamp appearance.",
+          "step_actions": [
+            {
+              "action_type": "inspects",
+              "target_label": "band imprint"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "hose inner seat"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "tube-bead contact area"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "debris"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "inner-liner damage"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "corrosion"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "double imprint"
+            }
+          ],
+          "structural_edges": [],
+          "state_transitions": [],
+          "diagnostic_edges": [],
+          "sequence_next": "T6"
+        },
+        {
+          "step_id": "T6",
+          "task": {
+            "label": "T6",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Compare the suspect hose joint with the opposite or adjacent cooling branch, checking clamp clocking, insertion depth to the bead, hose twist, bracket alignment, and any polished witness mark showing that the hose was rubbing or being pulled in service.",
+            "semantic_type_hint": null,
+            "shared_hypernym": null
+          },
+          "concept_mentions": [
+            {
+              "label": "bracket alignment",
+              "kind": "concept",
+              "description": "alignment of bracket",
+              "node_worthy": true,
+              "surface_form": "bracket alignment",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "clamp clocking",
+              "kind": "concept",
+              "description": "clocking of clamp",
+              "node_worthy": true,
+              "surface_form": "clamp clocking",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "cooling branch",
+              "kind": "concept",
+              "description": "cooling branch adjacent",
+              "node_worthy": true,
+              "surface_form": "adjacent cooling branch",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Coolant"
+            },
+            {
+              "label": "hose joint",
+              "kind": "concept",
+              "description": "joint of hose",
+              "node_worthy": true,
+              "surface_form": "hose joint",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Connector"
+            },
+            {
+              "label": "hose twist",
+              "kind": "concept",
+              "description": "twist of hose",
+              "node_worthy": true,
+              "surface_form": "hose twist",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "insertion depth",
+              "kind": "concept",
+              "description": "depth of hose insertion",
+              "node_worthy": true,
+              "surface_form": "insertion depth",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "polished witness mark",
+              "kind": "concept",
+              "description": "wear mark from rubbing",
+              "node_worthy": true,
+              "surface_form": "polished witness mark",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "compares",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "hose joint"
+            },
+            {
+              "label": "compares",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "cooling branch"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "clamp clocking"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "insertion depth"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "hose twist"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "bracket alignment"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "polished witness mark"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T6",
+              "tail": "T7"
+            }
+          ],
+          "step_phase": "diagnose",
+          "step_summary": "Compare the suspect hose joint with the opposite or adjacent cooling bra",
+          "surface_form": "Compare the suspect hose joint with the opposite or adjacent cooling branch, checking clamp clocking, insertion depth to the bead, hose twist, bracket alignment, and any polished witness mark showing that the hose was rubbing or being pulled in service.",
+          "step_actions": [
+            {
+              "action_type": "compares",
+              "target_label": "hose joint"
+            },
+            {
+              "action_type": "compares",
+              "target_label": "cooling branch"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "clamp clocking"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "insertion depth"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "hose twist"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "bracket alignment"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "polished witness mark"
+            }
+          ],
+          "structural_edges": [],
+          "state_transitions": [],
+          "diagnostic_edges": [],
+          "sequence_next": "T7"
+        },
+        {
+          "step_id": "T7",
+          "task": {
+            "label": "T7",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Inspect the hose clamp, tube bead, hose inner seat, support bracket, and nearby sleeve for deformation, corrosion, clamp overtravel, or misposition that would separate a true leak joint from a routing-induced strain condition.",
+            "semantic_type_hint": null,
+            "shared_hypernym": null
+          },
+          "concept_mentions": [
+            {
+              "label": "clamp overtravel",
+              "kind": "concept",
+              "description": "clamp tightened too far",
+              "node_worthy": true,
+              "surface_form": "clamp overtravel",
+              "semantic_type_hint": "Fault",
+              "shared_hypernym": null
+            },
+            {
+              "label": "corrosion",
+              "kind": "concept",
+              "description": "corrosion at bead",
+              "node_worthy": true,
+              "surface_form": "corrosion",
+              "semantic_type_hint": "Fault",
+              "shared_hypernym": null
+            },
+            {
+              "label": "deformation",
+              "kind": "concept",
+              "description": "deformation of parts",
+              "node_worthy": true,
+              "surface_form": "deformation",
+              "semantic_type_hint": "Fault",
+              "shared_hypernym": null
+            },
+            {
+              "label": "hose clamp",
+              "kind": "concept",
+              "description": "clamp on coolant hose",
+              "node_worthy": true,
+              "surface_form": "hose clamp",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Fastener"
+            },
+            {
+              "label": "hose inner seat",
+              "kind": "concept",
+              "description": "inner seat of hose",
+              "node_worthy": true,
+              "surface_form": "hose inner seat",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Seal"
+            },
+            {
+              "label": "misposition",
+              "kind": "concept",
+              "description": "mispositioned component",
+              "node_worthy": true,
+              "surface_form": "misposition",
+              "semantic_type_hint": "Fault",
+              "shared_hypernym": null
+            },
+            {
+              "label": "routing-induced strain condition",
+              "kind": "concept",
+              "description": "strain from routing",
+              "node_worthy": true,
+              "surface_form": "routing-induced strain condition",
+              "semantic_type_hint": "State",
+              "shared_hypernym": null
+            },
+            {
+              "label": "sleeve",
+              "kind": "concept",
+              "description": "sleeve near hose",
+              "node_worthy": true,
+              "surface_form": "sleeve",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": null
+            },
+            {
+              "label": "support bracket",
+              "kind": "concept",
+              "description": "bracket supporting hose",
+              "node_worthy": true,
+              "surface_form": "support bracket",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Housing"
+            },
+            {
+              "label": "tube bead",
+              "kind": "concept",
+              "description": "bead on tube",
+              "node_worthy": true,
+              "surface_form": "tube bead",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Connector"
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T7",
+              "tail": "hose clamp"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T7",
+              "tail": "tube bead"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T7",
+              "tail": "hose inner seat"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T7",
+              "tail": "support bracket"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T7",
+              "tail": "sleeve"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T7",
+              "tail": "deformation"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T7",
+              "tail": "corrosion"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T7",
+              "tail": "clamp overtravel"
+            },
+            {
+              "label": "inspects",
+              "family": "task_dependency",
+              "head": "T7",
+              "tail": "misposition"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T7",
+              "tail": "T8"
+            }
+          ],
+          "step_phase": "observe",
+          "step_summary": "Inspect the hose clamp, tube bead, hose inner seat, support bracket, and",
+          "surface_form": "Inspect the hose clamp, tube bead, hose inner seat, support bracket, and nearby sleeve for deformation, corrosion, clamp overtravel, or misposition that would separate a true leak joint from a routing-induced strain condition.",
+          "step_actions": [
+            {
+              "action_type": "inspects",
+              "target_label": "hose clamp"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "tube bead"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "hose inner seat"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "support bracket"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "sleeve"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "deformation"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "corrosion"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "clamp overtravel"
+            },
+            {
+              "action_type": "inspects",
+              "target_label": "misposition"
+            }
+          ],
+          "structural_edges": [],
+          "state_transitions": [],
+          "diagnostic_edges": [],
+          "sequence_next": "T8"
+        },
+        {
+          "step_id": "T8",
+          "task": {
+            "label": "T8",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Relax the bracket side load if required and repeat the pressure check with the hose returned to its natural angle so the leak decision reflects the true joint condition and not an artificially loaded support geometry.",
+            "semantic_type_hint": null,
+            "shared_hypernym": null
+          },
+          "concept_mentions": [
+            {
+              "label": "hose joint",
+              "kind": "concept",
+              "description": "joint of hose",
+              "node_worthy": true,
+              "surface_form": "hose joint",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Connector"
+            },
+            {
+              "label": "support bracket",
+              "kind": "concept",
+              "description": "bracket supporting hose",
+              "node_worthy": true,
+              "surface_form": "support bracket",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Housing"
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "relaxes",
+              "family": "task_dependency",
+              "head": "T8",
+              "tail": "support bracket"
+            },
+            {
+              "label": "verifies",
+              "family": "task_dependency",
+              "head": "T8",
+              "tail": "hose joint"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T8",
+              "tail": "T9"
+            }
+          ],
+          "step_phase": "observe",
+          "step_summary": "Relax the bracket side load if required and repeat the pressure check wi",
+          "surface_form": "Relax the bracket side load if required and repeat the pressure check with the hose returned to its natural angle so the leak decision reflects the true joint condition and not an artificially loaded support geometry.",
+          "step_actions": [
+            {
+              "action_type": "relaxes",
+              "target_label": "support bracket"
+            },
+            {
+              "action_type": "verifies",
+              "target_label": "hose joint"
+            }
+          ],
+          "structural_edges": [],
+          "state_transitions": [],
+          "diagnostic_edges": [],
+          "sequence_next": "T9"
+        },
+        {
+          "step_id": "T9",
+          "task": {
+            "label": "T9",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Record the exact leak boundary as hose clamp line, hose body, tube bead interface, or bracket-induced side load, and make sure the final note explains how the pressure test and the as-found residue pattern support that conclusion.",
+            "semantic_type_hint": null,
+            "shared_hypernym": null
+          },
+          "concept_mentions": [
+            {
+              "label": "bracket-induced side load",
+              "kind": "concept",
+              "description": "side load from bracket",
+              "node_worthy": true,
+              "surface_form": "bracket-induced side load",
+              "semantic_type_hint": "Fault",
+              "shared_hypernym": null
+            },
+            {
+              "label": "hose clamp line",
+              "kind": "concept",
+              "description": "line at clamp edge",
+              "node_worthy": true,
+              "surface_form": "clamp line",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "leak boundary",
+              "kind": "concept",
+              "description": "boundary of leak",
+              "node_worthy": true,
+              "surface_form": "leak boundary",
+              "semantic_type_hint": "Signal",
+              "shared_hypernym": null
+            },
+            {
+              "label": "molded hose body",
+              "kind": "concept",
+              "description": "body of molded hose",
+              "node_worthy": true,
+              "surface_form": "molded hose body",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": null
+            },
+            {
+              "label": "tube bead interface",
+              "kind": "concept",
+              "description": "leak at tube bead",
+              "node_worthy": true,
+              "surface_form": "tube bead interface",
+              "semantic_type_hint": "Component",
+              "shared_hypernym": "Connector"
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T9",
+              "tail": "leak boundary"
+            },
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T9",
+              "tail": "hose clamp line"
+            },
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T9",
+              "tail": "molded hose body"
+            },
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T9",
+              "tail": "tube bead interface"
+            },
+            {
+              "label": "records",
+              "family": "task_dependency",
+              "head": "T9",
+              "tail": "bracket-induced side load"
+            },
+            {
+              "label": "triggers",
+              "family": "task_dependency",
+              "head": "T9",
+              "tail": "T10"
+            }
+          ],
+          "step_phase": "verify",
+          "step_summary": "Record the exact leak boundary as hose clamp line, hose body, tube bead ",
+          "surface_form": "Record the exact leak boundary as hose clamp line, hose body, tube bead interface, or bracket-induced side load, and make sure the final note explains how the pressure test and the as-found residue pattern support that conclusion.",
+          "step_actions": [
+            {
+              "action_type": "records",
+              "target_label": "leak boundary"
+            },
+            {
+              "action_type": "records",
+              "target_label": "hose clamp line"
+            },
+            {
+              "action_type": "records",
+              "target_label": "molded hose body"
+            },
+            {
+              "action_type": "records",
+              "target_label": "tube bead interface"
+            },
+            {
+              "action_type": "records",
+              "target_label": "bracket-induced side load"
+            }
+          ],
+          "structural_edges": [],
+          "state_transitions": [],
+          "diagnostic_edges": [],
+          "sequence_next": "T10"
+        },
+        {
+          "step_id": "T10",
+          "task": {
+            "label": "T10",
+            "kind": "concept",
+            "description": "",
+            "node_worthy": true,
+            "surface_form": "Restore only the protection needed for safe closure and leave the identified hose fault path visible and documented for the next repair action instead of hiding it under a broad coolant-hose leak label.",
+            "semantic_type_hint": null,
+            "shared_hypernym": null
+          },
+          "concept_mentions": [
+            {
+              "label": "hose fault path",
+              "kind": "concept",
+              "description": "fault path on hose",
+              "node_worthy": true,
+              "surface_form": "hose fault path",
+              "semantic_type_hint": "Fault",
+              "shared_hypernym": null
+            }
+          ],
+          "relation_mentions": [
+            {
+              "label": "documents",
+              "family": "task_dependency",
+              "head": "T10",
+              "tail": "hose fault path"
+            }
+          ],
+          "step_phase": "repair",
+          "step_summary": "Restore only the protection needed for safe closure and leave the identi",
+          "surface_form": "Restore only the protection needed for safe closure and leave the identified hose fault path visible and documented for the next repair action instead of hiding it under a broad coolant-hose leak label.",
+          "step_actions": [
+            {
+              "action_type": "documents",
+              "target_label": "hose fault path"
+            }
+          ],
+          "structural_edges": [],
+          "state_transitions": [],
+          "diagnostic_edges": [],
+          "sequence_next": null
+        }
+      ],
+      "document_concept_mentions": [],
+      "document_relation_mentions": [
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "Helion DriveUnit-586 Plus",
+          "tail": "local cooling branch"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "drive-motor coolant hose",
+          "tail": "tube neck"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "drive-motor coolant hose",
+          "tail": "support bracket"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "drive-motor coolant hose",
+          "tail": "tube bead"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "drive-motor coolant hose",
+          "tail": "bracket-supported bend"
+        },
+        {
+          "label": "contains",
+          "family": "structural",
+          "head": "drive-motor coolant hose",
+          "tail": "sleeve"
+        },
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "seepage",
+          "tail": "drive-motor coolant-hose leak"
+        },
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "wetting",
+          "tail": "drive-motor coolant-hose leak"
+        },
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "fresh wetting",
+          "tail": "drive-motor coolant-hose leak"
+        },
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "double imprint",
+          "tail": "repeat leak"
+        },
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "polished witness mark",
+          "tail": "rubbing"
+        },
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "bracket-induced side load",
+          "tail": "routing-induced strain condition"
+        },
+        {
+          "label": "causes",
+          "family": "propagation",
+          "head": "bracket-induced side load",
+          "tail": "drive-motor coolant-hose leak"
+        },
+        {
+          "label": "causes",
+          "family": "propagation",
+          "head": "routing-induced strain condition",
+          "tail": "drive-motor coolant-hose leak"
+        },
+        {
+          "label": "causes",
+          "family": "propagation",
+          "head": "corrosion",
+          "tail": "drive-motor coolant-hose leak"
+        },
+        {
+          "label": "causes",
+          "family": "propagation",
+          "head": "deformation",
+          "tail": "drive-motor coolant-hose leak"
+        },
+        {
+          "label": "causes",
+          "family": "propagation",
+          "head": "clamp overtravel",
+          "tail": "drive-motor coolant-hose leak"
+        },
+        {
+          "label": "causes",
+          "family": "propagation",
+          "head": "misposition",
+          "tail": "drive-motor coolant-hose leak"
+        },
+        {
+          "label": "causes",
+          "family": "propagation",
+          "head": "inner-liner damage",
+          "tail": "drive-motor coolant-hose leak"
+        }
+      ],
+      "procedure_meta": {
+        "asset_name": "Drive",
+        "procedure_type": null,
+        "primary_fault_type": "leak"
+      },
+      "cross_step_relations": [
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "seepage",
+          "tail": "drive-motor coolant-hose leak",
+          "head_step": "T3",
+          "tail_step": "T1"
+        },
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "wetting",
+          "tail": "drive-motor coolant-hose leak",
+          "head_step": "T3",
+          "tail_step": "T1"
+        },
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "fresh wetting",
+          "tail": "drive-motor coolant-hose leak",
+          "head_step": "T4",
+          "tail_step": "T1"
+        },
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "double imprint",
+          "tail": "repeat leak",
+          "head_step": "T5",
+          "tail_step": null
+        },
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "polished witness mark",
+          "tail": "rubbing",
+          "head_step": "T6",
+          "tail_step": null
+        },
+        {
+          "label": "indicates",
+          "family": "communication",
+          "head": "bracket-induced side load",
+          "tail": "routing-induced strain condition",
+          "head_step": "T9",
+          "tail_step": "T7"
+        },
+        {
+          "label": "causes",
+          "family": "propagation",
+          "head": "bracket-induced side load",
+          "tail": "drive-motor coolant-hose leak",
+          "head_step": "T9",
+          "tail_step": "T1"
+        },
+        {
+          "label": "causes",
+          "family": "propagation",
+          "head": "routing-induced strain condition",
+          "tail": "drive-motor coolant-hose leak",
+          "head_step": "T7",
+          "tail_step": "T1"
+        },
+        {
+          "label": "causes",
+          "family": "propagation",
+          "head": "corrosion",
+          "tail": "drive-motor coolant-hose leak",
+          "head_step": "T7",
+          "tail_step": "T1"
+        },
+        {
+          "label": "causes",
+          "family": "propagation",
+          "head": "deformation",
+          "tail": "drive-motor coolant-hose leak",
+          "head_step": "T7",
+          "tail_step": "T1"
+        },
+        {
+          "label": "causes",
+          "family": "propagation",
+          "head": "clamp overtravel",
+          "tail": "drive-motor coolant-hose leak",
+          "head_step": "T7",
+          "tail_step": "T1"
+        },
+        {
+          "label": "causes",
+          "family": "propagation",
+          "head": "misposition",
+          "tail": "drive-motor coolant-hose leak",
+          "head_step": "T7",
+          "tail_step": "T1"
+        },
+        {
+          "label": "causes",
+          "family": "propagation",
+          "head": "inner-liner damage",
+          "tail": "drive-motor coolant-hose leak",
+          "head_step": "T5",
+          "tail_step": "T1"
+        }
+      ]
+    }
+  ]
+}

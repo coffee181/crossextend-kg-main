@@ -1,0 +1,304 @@
+{
+  "schema_version": "attachment_gold.v2",
+  "annotation_policy": "See attachment_gold_annotation_spec.md for full rules. Singular form, lowercase, merged synonyms, no enumeration context.",
+  "domain": "cnc",
+  "source_doc": "Drawbar_Clamp_Force_Verification",
+  "backbone_concepts": ["Asset", "Component", "Signal", "State", "Fault", "Seal", "Connector", "Sensor", "Controller", "Coolant", "Actuator", "Power", "Housing", "Fastener", "Media"],
+  "gold_attachments": [
+    {
+      "label": "Arcline VTC-630",
+      "surface_form": "Arcline VTC-630",
+      "parent_anchor": "Asset",
+      "accept": true,
+      "rationale": "Named CNC machine — top-level asset"
+    },
+    {
+      "label": "CAT40 spindle",
+      "surface_form": "CAT40 spindle",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Spindle with CAT40 taper specification; merges 'spindle'"
+    },
+    {
+      "label": "CAT40 holder",
+      "surface_form": "CAT40 holder",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Toolholder with CAT40 taper interface; merges 'toolholder', 'holder'"
+    },
+    {
+      "label": "drawbar",
+      "surface_form": "drawbar",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Core mechanical shaft pulling holder into spindle taper"
+    },
+    {
+      "label": "Belleville stack",
+      "surface_form": "Belleville stack",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Spring washer stack assembly providing clamp force; merges 'drawbar clamp stack'"
+    },
+    {
+      "label": "drawbar seat",
+      "surface_form": "lower drawbar seat",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Lower seat where Belleville stack registers; merges 'lower seat'"
+    },
+    {
+      "label": "release piston",
+      "surface_form": "release-piston",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Piston that pushes stack to release clamp"
+    },
+    {
+      "label": "actuator linkage",
+      "surface_form": "actuator linkage",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Mechanical linkage from upper cylinder to lower drawbar seat"
+    },
+    {
+      "label": "spindle pull-force test point",
+      "surface_form": "spindle pull-force test point",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Physical access point on spindle for pull-force measurement"
+    },
+    {
+      "label": "hydraulic circuit",
+      "surface_form": "pressure circuit",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Hydraulic pressure circuit supplying booster cylinder; merges 'hydraulic side of the circuit'"
+    },
+    {
+      "label": "washer",
+      "surface_form": "washer",
+      "parent_anchor": "Fastener",
+      "accept": true,
+      "rationale": "Spring washer element within Belleville stack — Fastener > Component"
+    },
+    {
+      "label": "booster cylinder CY-DB1",
+      "surface_form": "drawbar booster cylinder CY-DB1",
+      "parent_anchor": "Actuator",
+      "accept": true,
+      "rationale": "Hydraulic booster cylinder for drawbar actuation — Actuator > Component"
+    },
+    {
+      "label": "unclamp valve SV-UC1",
+      "surface_form": "unclamp valve SV-UC1",
+      "parent_anchor": "Actuator",
+      "accept": true,
+      "rationale": "Valve controlling unclamp cycle — Actuator > Component"
+    },
+    {
+      "label": "Belleville stack housing BS-DB1",
+      "surface_form": "Belleville stack housing BS-DB1",
+      "parent_anchor": "Housing",
+      "accept": true,
+      "rationale": "Structural housing enclosing Belleville stack — Housing > Component"
+    },
+    {
+      "label": "pressure transducer port PT-UC1",
+      "surface_form": "pressure transducer port PT-UC1",
+      "parent_anchor": "Sensor",
+      "accept": true,
+      "rationale": "Measurement port for pressure transducer reading at booster cylinder"
+    },
+    {
+      "label": "clamp-force gauge",
+      "surface_form": "calibrated clamp-force gauge",
+      "parent_anchor": "Sensor",
+      "accept": true,
+      "rationale": "Calibrated gauge measuring pull/clamp force; merges 'pull-force gauge'"
+    },
+    {
+      "label": "drawbar alarm",
+      "surface_form": "drawbar alarm",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Alarm signal indicating drawbar system fault"
+    },
+    {
+      "label": "cutting load",
+      "surface_form": "cutting load",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Measurable machining load on tool during operation"
+    },
+    {
+      "label": "pull force",
+      "surface_form": "measured pull force",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Measurable drawbar clamping force; merges 'clamp force'"
+    },
+    {
+      "label": "service temperature",
+      "surface_form": "service temperature",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Measurable target temperature for spindle service warm-up"
+    },
+    {
+      "label": "unclamp pressure",
+      "surface_form": "unclamp pressure",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Measurable hydraulic pressure during unclamp at booster cylinder"
+    },
+    {
+      "label": "supply pressure",
+      "surface_form": "supply pressure",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Measurable supply-side hydraulic pressure to the circuit"
+    },
+    {
+      "label": "release stroke",
+      "surface_form": "release stroke",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Measurable release piston travel distance; merges 'stroke', 'hydraulic stroke'"
+    },
+    {
+      "label": "drawbar movement",
+      "surface_form": "drawbar movement",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Observable drawbar displacement during actuation"
+    },
+    {
+      "label": "stack height",
+      "surface_form": "Belleville stack height",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Measurable height of assembled Belleville stack"
+    },
+    {
+      "label": "washer orientation",
+      "surface_form": "washer orientation",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Observable facing direction of each washer in stack; merges 'Belleville stack orientation', 'corrected washer orientation'"
+    },
+    {
+      "label": "release-piston clearance",
+      "surface_form": "release-piston clearance",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Measurable gap around release piston"
+    },
+    {
+      "label": "washer sequence",
+      "surface_form": "washer sequence",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Observable ordering of washers in stack"
+    },
+    {
+      "label": "stack geometry",
+      "surface_form": "stack geometry",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Measurable geometric parameters of the Belleville stack"
+    },
+    {
+      "label": "spindle temperature window",
+      "surface_form": "spindle temperature window",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Measurable temperature range for repeatable testing"
+    },
+    {
+      "label": "pressure recovery",
+      "surface_form": "pressure recovery",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Observable pressure return behavior after clamp/unclamp cycling"
+    },
+    {
+      "label": "holder retention",
+      "surface_form": "holder retention",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Observable toolholder holding quality across cycles; merges 'tool retention'"
+    },
+    {
+      "label": "oil trace",
+      "surface_form": "fresh oil trace",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Observable evidence of oil leakage on actuator or cylinder"
+    },
+    {
+      "label": "tool pull-out",
+      "surface_form": "tool pull-out",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Tool pulling out of spindle during machining — primary complaint"
+    },
+    {
+      "label": "weak unclamp feel",
+      "surface_form": "weak unclamp feel",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Weak tactile feedback during unclamp — reported complaint"
+    },
+    {
+      "label": "weak Belleville stack",
+      "surface_form": "weak Belleville stack",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Fatigued Belleville stack with reduced spring force"
+    },
+    {
+      "label": "hydraulic short-stroke",
+      "surface_form": "hydraulic short-stroke",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Insufficient hydraulic stroke at booster cylinder; merges 'short hydraulic stroke'"
+    },
+    {
+      "label": "inverted washer pair",
+      "surface_form": "inverted lower Belleville pair",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Washer pair installed in reversed orientation; merges 'reversed pair', 'inverted lower Belleville pair'"
+    },
+    {
+      "label": "reduced stack height",
+      "surface_form": "reduced stack height",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Stack height below specification due to washer issue"
+    },
+    {
+      "label": "actuator-linkage misalignment",
+      "surface_form": "actuator-linkage misalignment",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Linkage between actuator and drawbar out of alignment; merges 'misalignment'"
+    }
+  ],
+  "_statistics": {
+    "total_concepts": 40,
+    "accepted": 40,
+    "rejected": 0,
+    "anchor_distribution": {
+      "Asset": 1,
+      "Component": 9,
+      "Actuator": 2,
+      "Housing": 1,
+      "Sensor": 2,
+      "Signal": 17,
+      "Fault": 7,
+      "Fastener": 1
+    }
+  }
+}

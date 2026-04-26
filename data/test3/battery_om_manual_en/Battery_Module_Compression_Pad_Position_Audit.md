@@ -1,0 +1,9 @@
+| Time step | O&M sample text |
+|---|---|
+| T1 | For Aurex ModulePad-495, record which compression-pad section is under audit and whether the concern is missing pad, shifted pad, folded edge, or uneven witness after module service, then identify the exact module interface. Save the original pad witness before it is touched. |
+| T2 | Expose the pad location, module face, compression member, and nearby harness or vent hardware without pulling the pad away before its original position is documented. Keep the pad edge and the compression member visible together because both define the witness. |
+| T3 | Inspect pad coverage, thickness, compression witness, and edge alignment so the audit distinguishes a correctly compressed pad from a pad that has migrated or folded under load. Record whether the witness is lost at one edge, one corner, or across the full section. |
+| T4 | Compare the suspect pad with the matching pad on the opposite module side or neighboring module so acceptable overlap and compression are judged against a true reference. This keeps the correction on one specific pad section. |
+| T5 | Correct the pad position or replace the damaged pad section, then close the compression member and confirm that the pad does not slide, fold, or trap adjacent harness or vent hardware as load builds. The corrected witness must remain stable through closure. |
+| T6 | Reinspect the pad witness after the module stack has settled because some shifted or memory-set pads reopen a weak edge only after the compression member relaxes. This final reread ties the result to the actual loaded condition. |
+| T7 | Close the pad audit only when the note names the pad location, observed issue, any replacement or repositioning performed, and the final accepted overlap and witness at that interface. The release boundary is a compression pad that covers the intended module face and holds its witness without renewed shift after settling. |

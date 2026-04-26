@@ -289,6 +289,11 @@ class GraphEdge(BaseModel):
     display_reject_reason: str | None = None
     head: str
     tail: str
+    head_step: str | None = None
+    tail_step: str | None = None
+    source_field: str | None = None
+    mechanism: str | None = None
+    evidence_label: str | None = None
     provenance_evidence_ids: list[str] = Field(default_factory=list)
     valid_from: str | None = None
     valid_to: str | None = None

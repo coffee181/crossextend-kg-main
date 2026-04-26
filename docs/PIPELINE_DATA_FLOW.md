@@ -3,6 +3,9 @@
 This document describes the active end-to-end data flow of the
 CrossExtend-KG v2 mainline.
 
+For a **real single-document example** with exact input/output format at each
+stage, see [DATA_FLOW_DIAGRAM.md](DATA_FLOW_DIAGRAM.md).
+
 ## Stage 1: Input Parsing
 
 Input source:
@@ -83,14 +86,15 @@ The graph assembler builds a dual-layer graph with v2 field consumption:
 
 **Workflow layer**:
 - workflow nodes from `step_records` (with `step_phase` propagated to `GraphNode`)
-- workflow sequence edges (prefers `sequence_next`, falls back to triggers relations)
-- workflow grounding edges (prefers `step_actions`, falls back to task_dependency relations)
+- workflow sequence edges from `sequence_next`
+- workflow grounding edges from `step_actions`
 
 **Semantic layer**:
-- semantic nodes from admitted attachment decisions (with `shared_hypernym` propagated to `GraphNode`)
-- semantic structural edges (prefers `structural_edges`, falls back to structural relations)
-- semantic diagnostic edges (from communication/propagation relations)
-- cross-step diagnostic relations (from `cross_step_relations`)
+- 15 fixed backbone nodes materialized in every domain graph
+- semantic adapter nodes from admitted attachment decisions (with `shared_hypernym` propagated to `GraphNode`)
+- adapter-to-backbone `is_a` edges from attachment `parent_anchor`
+- semantic structural / communication / propagation / lifecycle edges from `document_relation_mentions`
+- `cross_step_relations` metadata added to matching communication / propagation edges
 
 **Display logic**:
 - `step_summary` / `surface_form` preferred for `display_label`; falls back to `task.surface_form`
@@ -126,11 +130,11 @@ python -m crossextend_kg.cli preprocess --config config/persistent/preprocessing
 Run:
 
 ```bash
-python -m crossextend_kg.cli run --config config/persistent/pipeline.deepseek.yaml
+python -m crossextend_kg.cli run --config config/persistent/pipeline.test3.yaml
 ```
 
 Run selected domains only:
 
 ```bash
-python -m crossextend_kg.cli run --config config/persistent/pipeline.deepseek.yaml --domains battery cnc
+python -m crossextend_kg.cli run --config config/persistent/pipeline.test3.yaml --domains battery cnc
 ```

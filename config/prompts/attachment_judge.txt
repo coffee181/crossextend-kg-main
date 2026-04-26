@@ -26,7 +26,7 @@ Your job is to decide whether each candidate should:
 - `State`: concluded or verified condition/status such as `dry`, `fully latched`, or `naturally supported`.
 - `Fault`: defect, failure mode, damaged boundary, seepage mode, crack, incomplete insertion, or causal loading root cause.
 - A label containing words like `state`, `condition`, or `status` may still be a `Signal` if it names the inspection dimension rather than the final conclusion.
-- Hardware surfaces and interfaces such as `O-ring seat`, `tube bead`, `manifold block`, or `support bracket` remain `Component`, not `Signal` or `State`.
+- Hardware surfaces, interfaces, and geometric subfeatures remain `Component`, not `Signal` or `State`, unless the candidate explicitly names an observed measurement, status, or defect.
 
 ## Decision Policy
 1. Admit specific or localized hardware and repeatable inspection findings when they can be grounded to a valid backbone parent.

@@ -1,0 +1,188 @@
+{
+  "schema_version": "attachment_gold.v2",
+  "annotation_policy": "See attachment_gold_annotation_spec.md for full rules. Singular form, lowercase, merged synonyms, no enumeration context.",
+  "domain": "battery",
+  "source_doc": "Battery_Module_Compression_Pad_Position_Audit",
+  "backbone_concepts": ["Asset", "Component", "Signal", "State", "Fault", "Seal", "Connector", "Sensor", "Controller", "Coolant", "Actuator", "Power", "Housing", "Fastener", "Media"],
+  "gold_attachments": [
+    {
+      "label": "Aurex ModulePad-495",
+      "surface_form": "Aurex ModulePad-495",
+      "parent_anchor": "Asset",
+      "accept": true,
+      "rationale": "Named battery module platform — top-level asset"
+    },
+    {
+      "label": "compression pad",
+      "surface_form": "compression-pad section",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Compressible pad between modules — component"
+    },
+    {
+      "label": "pad section",
+      "surface_form": "compression-pad section",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Localized region of a compression pad — component subsection"
+    },
+    {
+      "label": "pad edge",
+      "surface_form": "pad edge",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Edge boundary of compression pad — component feature"
+    },
+    {
+      "label": "module face",
+      "surface_form": "module face",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Physical surface of battery module — component surface"
+    },
+    {
+      "label": "module interface",
+      "surface_form": "exact module interface",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Interface between module and pad — component connection"
+    },
+    {
+      "label": "compression member",
+      "surface_form": "compression member",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Structural part applying compression force (e.g. strap/plate) — component"
+    },
+    {
+      "label": "harness",
+      "surface_form": "nearby harness",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Adjacent wiring harness — component"
+    },
+    {
+      "label": "vent hardware",
+      "surface_form": "vent hardware",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Ventilation-related hardware — component"
+    },
+    {
+      "label": "module stack",
+      "surface_form": "module stack",
+      "parent_anchor": "Component",
+      "accept": true,
+      "rationale": "Assembled stack of modules — component assembly"
+    },
+    {
+      "label": "pad witness",
+      "surface_form": "original pad witness",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Compression imprint left by pad — observable signal"
+    },
+    {
+      "label": "pad coverage",
+      "surface_form": "pad coverage",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Extent of pad covering module face — measurable signal"
+    },
+    {
+      "label": "thickness",
+      "surface_form": "thickness",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Pad thickness dimension — measurable signal"
+    },
+    {
+      "label": "edge alignment",
+      "surface_form": "edge alignment",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Alignment of pad edge relative to module — measurable signal"
+    },
+    {
+      "label": "overlap",
+      "surface_form": "acceptable overlap",
+      "parent_anchor": "Signal",
+      "accept": true,
+      "rationale": "Degree of pad overlap with module face — measurable signal"
+    },
+    {
+      "label": "missing pad",
+      "surface_form": "missing pad",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Pad absent where expected — fault"
+    },
+    {
+      "label": "shifted pad",
+      "surface_form": "shifted pad",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Pad migrated from intended position — fault (merges migrated pad)"
+    },
+    {
+      "label": "folded edge",
+      "surface_form": "folded edge",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Edge of pad folded under load — fault"
+    },
+    {
+      "label": "folded pad",
+      "surface_form": "pad that has migrated or folded under load",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Entire pad folded — fault (distinct from folded edge)"
+    },
+    {
+      "label": "uneven witness",
+      "surface_form": "uneven witness",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Non-uniform compression imprint — fault indicator"
+    },
+    {
+      "label": "damaged pad section",
+      "surface_form": "damaged pad section",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Physically damaged portion of pad — fault"
+    },
+    {
+      "label": "trapped harness",
+      "surface_form": "trap adjacent harness",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Harness caught under pad — fault"
+    },
+    {
+      "label": "memory-set pad",
+      "surface_form": "memory-set pads",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Pad with permanent deformation from prior compression — fault"
+    },
+    {
+      "label": "weak edge",
+      "surface_form": "weak edge",
+      "parent_anchor": "Fault",
+      "accept": true,
+      "rationale": "Pad edge that reopens after settling — fault"
+    }
+  ],
+  "_statistics": {
+    "total_concepts": 24,
+    "accepted": 24,
+    "rejected": 0,
+    "anchor_distribution": {
+      "Asset": 1,
+      "Component": 9,
+      "Signal": 5,
+      "Fault": 9
+    }
+  }
+}

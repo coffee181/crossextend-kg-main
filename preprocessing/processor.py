@@ -908,6 +908,16 @@ def extraction_to_evidence_record(doc: DocumentInput, extraction: ExtractionResu
             mechanism=str(de_data.get("mechanism", "")).strip() or None,
         ))
 
+    step_record_by_id = {step.step_id: step for step in step_records}
+    for transition in llm_state_transitions:
+        if transition.trigger_step and transition.trigger_step in step_record_by_id:
+            step_record_by_id[transition.trigger_step].state_transitions.append(transition)
+
+    for diagnostic_edge in llm_diagnostic_edges:
+        for step_id, concepts in step_concepts.items():
+            if diagnostic_edge.evidence_label in concepts or diagnostic_edge.indicated_label in concepts:
+                step_record_by_id[step_id].diagnostic_edges.append(diagnostic_edge)
+
     # Build cross_step_relations from document-level communication/propagation relations
     cross_step_relations: list[CrossStepRelation] = []
     for rel in document_relations:
