@@ -9,9 +9,12 @@ from typing import Any, Literal
 from pydantic import BaseModel, Field, model_validator
 
 try:
-    from crossextend_kg.config import LLMBackendConfig
+    from crossextend_kg.config import LLMBackendConfig, resolve_backend_config
 except ImportError:  # pragma: no cover - direct script execution fallback
-    from config import LLMBackendConfig
+    from config import LLMBackendConfig, resolve_backend_config
+
+
+_PERSISTENT_CONFIG_DIR = (Path(__file__).resolve().parent.parent / "config" / "persistent").resolve()
 
 
 class DocumentInput(BaseModel):
@@ -51,16 +54,7 @@ class PreprocessingConfig(BaseModel):
             ).resolve()
         )
     )
-    llm: LLMBackendConfig = Field(
-        default_factory=lambda: LLMBackendConfig(
-            base_url="https://api.deepseek.com",
-            api_key="",
-            model="deepseek-chat",
-            timeout_sec=600,
-            max_tokens=4096,
-            temperature=0.1,
-        )
-    )
+    llm: LLMBackendConfig
     batch_size: int = 5
     relation_families: list[str] = Field(
         default_factory=lambda: [
@@ -85,22 +79,39 @@ class PreprocessingConfig(BaseModel):
     @model_validator(mode="before")
     @classmethod
     def _upgrade_legacy_llm_fields(cls, data: Any) -> Any:
-        if not isinstance(data, dict) or "llm" in data:
-            return data
-        if not any(key.startswith("llm_") for key in data):
+        if not isinstance(data, dict):
             return data
 
         payload = dict(data)
-        payload["llm"] = {
-            "provider": payload.pop("llm_provider", None),
-            "host": payload.pop("llm_host", None),
-            "base_url": payload.pop("llm_base_url", ""),
-            "api_key": payload.pop("llm_api_key", ""),
-            "model": payload.pop("llm_model", "deepseek-chat"),
-            "timeout_sec": payload.pop("llm_timeout_sec", 600),
-            "max_tokens": payload.pop("llm_max_tokens", 4096),
-            "temperature": payload.pop("llm_temperature", 0.1),
-        }
+        if "llm" not in payload and any(key.startswith("llm_") for key in payload):
+            payload["llm"] = {
+                "provider": payload.pop("llm_provider", None),
+                "host": payload.pop("llm_host", None),
+                "base_url": payload.pop("llm_base_url", ""),
+                "api_key": payload.pop("llm_api_key", ""),
+                "model": payload.pop("llm_model", ""),
+                "timeout_sec": payload.pop("llm_timeout_sec", 600),
+                "max_tokens": payload.pop("llm_max_tokens", 4096),
+                "temperature": payload.pop("llm_temperature", 0.1),
+            }
+
+        llm_payload = payload.get("llm")
+        if llm_payload is not None and not isinstance(llm_payload, dict):
+            return payload
+
+        llm_mapping = dict(llm_payload or {})
+        needs_backend_defaults = not llm_mapping.get("base_url") or not llm_mapping.get("model")
+        if needs_backend_defaults or payload.get("llm_backend_id") or payload.get("llm_backend_catalog_path"):
+            payload["llm"] = resolve_backend_config(
+                llm_mapping,
+                base_dir=_PERSISTENT_CONFIG_DIR,
+                section_key="llm",
+                backend_id_key="llm_backend_id",
+                default_catalog_stem="llm_backends",
+                backend_id=str(payload.get("llm_backend_id", "")).strip() or None,
+                catalog_path_value=payload.get("llm_backend_catalog_path"),
+                use_default_backend=needs_backend_defaults,
+            )
         return payload
 
 

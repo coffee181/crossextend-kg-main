@@ -75,11 +75,13 @@ connects to a diagnosis in T3 or a root cause in T5.
 
 Workflow steps are materialized as `workflow_step` nodes with:
 
-- `label` (e.g., "BATOM_001:T1")
-- `display_label` (canonical action + object, e.g., "Inspect O-ring (T1)")
+- `node_id` (e.g., `"battery::node::Battery_Module_Busbar_Insulator_Shield_Inspection:T1"`)
+- `label` (scoped workflow label, e.g., `"Battery_Module_Busbar_Insulator_Shield_Inspection:T1"`)
+- `display_label` (human-readable short title, e.g., `"Inspect O-ring (T1)"`)
 - `step_id` (e.g., "T1")
 - `order_index`
 - `surface_form` (full step text)
+- `provenance_evidence_ids`
 - `node_layer="workflow"`
 - `step_phase` (observe/diagnose/repair/verify) -- **v2**
 
@@ -103,9 +105,9 @@ maps to, enabling cross-domain consistency checks).
 ### Workflow Edges
 
 - `workflow_step -> workflow_step`
-  procedure sequence edges with `workflow_kind="sequence"`
+  procedure sequence edges with `label="triggers"`, `family="task_dependency"`, and `workflow_kind="sequence"`
 - `workflow_step -> semantic node`
-  step grounding edges with `workflow_kind="action_object"`
+  step grounding edges with `family="action_object"` and `workflow_kind="action_object"`
 
 Authoritative v2 field consumption:
 
@@ -117,7 +119,12 @@ Authoritative v2 field consumption:
 | communication / propagation | `document_relation_mentions` with `cross_step_relations` metadata when present |
 | lifecycle | `document_relation_mentions` lifecycle family |
 
-Display labels are derived from `step_phase`: observe->"inspect", diagnose->"analyze", repair->"repair", verify->"verify".
+`display_label` is not a fixed 1:1 rewrite of `step_phase`. The assembler first
+tries to derive a canonical action from grounded workflow edges plus phase
+hints; when that fails it falls back to a default object phrase or truncated
+step text. Typical defaults are observe->`inspect`, diagnose->`compare`,
+repair->`repair`, and verify->`verify`, but observe steps may still surface as
+`record`, `measure`, or `expose` when the grounded relation is stronger.
 
 ### Semantic Edges
 

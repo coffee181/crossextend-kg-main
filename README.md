@@ -112,7 +112,14 @@ Human-maintained configs live under `config/persistent/`:
 - `embedding_backends.yaml`
 - `relation_constraints.json` -- v2: Tier-1 hypernyms in allowed types
 
-The recommended default LLM backend is `deepseek-chat`.
+The recommended default LLM backend is `deepseek-v4-flash`.
+
+To switch models, update `config/persistent/llm_backends.yaml`. Existing presets
+already use `llm_backend_id: deepseek`, so changing
+`backends.deepseek.model` replaces the active model for both `preprocess` and
+`run`. If you want multiple selectable models, add another backend entry and
+change the preset's `llm_backend_id`. Changing `default_backend` alone does not
+affect presets that already set `llm_backend_id`.
 
 ## Commands
 

@@ -85,7 +85,7 @@ candidate routes to the matching Tier-1 backbone concept.
 The graph assembler builds a dual-layer graph with v2 field consumption:
 
 **Workflow layer**:
-- workflow nodes from `step_records` (with `step_phase` propagated to `GraphNode`)
+- workflow nodes from `step_records` (materialized with scoped `label`, original `step_id`, `display_label`, and propagated `step_phase`)
 - workflow sequence edges from `sequence_next`
 - workflow grounding edges from `step_actions`
 
@@ -97,8 +97,9 @@ The graph assembler builds a dual-layer graph with v2 field consumption:
 - `cross_step_relations` metadata added to matching communication / propagation edges
 
 **Display logic**:
-- `step_summary` / `surface_form` preferred for `display_label`; falls back to `task.surface_form`
-- `step_phase` used for canonical action derivation (observe->inspect, diagnose->analyze, repair->repair, verify->verify)
+- `surface_form` is preferred as the display-text source, then `step_summary`, `task.description`, `task.surface_form`, and finally `task.label`
+- `display_label` is usually rendered as canonical action + object + `(<step_id>)`; if no grounded action/object can be admitted, it falls back to truncated step text + `(<step_id>)`
+- `step_phase` biases canonical action derivation rather than fixing it 1:1: observe can still surface as `record` / `inspect` / `measure` / `expose` / `compare`, diagnose defaults to `compare`, repair defaults to `repair`, and verify defaults to `verify`
 
 Accepted edges are exported into:
 

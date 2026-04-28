@@ -14,7 +14,7 @@
 
 ## Current Defaults
 
-- `deepseek` resolves to `deepseek-chat`
+- `deepseek` resolves to `deepseek-v4-flash`
 - `dashscope_text_embedding_v4` is the default embedding backend
 
 ## v2 Config Changes
@@ -34,5 +34,16 @@ embedding_backend_id: dashscope_text_embedding_v4
 runtime:
   run_prefix: deepseek
 ```
+
+## Switching Models
+
+To replace the current external LLM globally, edit
+`llm_backends.yaml -> backends.deepseek.model`.
+
+To keep multiple model options, add another backend entry in
+`llm_backends.yaml` and point the preset's `llm_backend_id` at that backend.
+
+Changing `default_backend` alone does not override presets that already specify
+`llm_backend_id`.
 
 Use CLI domain filters instead of adding special one-off config files.

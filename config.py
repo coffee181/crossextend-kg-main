@@ -337,20 +337,26 @@ def _load_backend_catalog(path: Path) -> dict[str, Any]:
     return payload
 
 
-def _resolve_backend_reference(
-    payload: dict[str, Any],
+def resolve_backend_config(
+    existing_section: dict[str, Any] | None,
     *,
     base_dir: Path,
     section_key: str,
     backend_id_key: str,
-    catalog_path_key: str,
     default_catalog_stem: str,
-) -> None:
-    backend_id = str(payload.get(backend_id_key, "")).strip()
-    if not backend_id:
-        return
+    backend_id: str | None = None,
+    catalog_path_value: str | Path | None = None,
+    use_default_backend: bool = False,
+) -> dict[str, Any]:
+    if existing_section is None:
+        existing_section = {}
+    if not isinstance(existing_section, dict):
+        raise ValueError(f"'{section_key}' must be a mapping when {backend_id_key} is used")
 
-    catalog_path_value = payload.get(catalog_path_key)
+    resolved_backend_id = str(backend_id or "").strip()
+    if not resolved_backend_id and not use_default_backend:
+        return deepcopy(existing_section)
+
     if catalog_path_value:
         catalog_path = Path(str(catalog_path_value))
         if not catalog_path.is_absolute():
@@ -363,20 +369,42 @@ def _resolve_backend_reference(
             )
 
     catalog = _load_backend_catalog(catalog_path)
+    if not resolved_backend_id:
+        resolved_backend_id = str(catalog.get("default_backend", "")).strip()
+        if not resolved_backend_id:
+            return deepcopy(existing_section)
+
     backends = catalog["backends"]
-    if backend_id not in backends:
+    if resolved_backend_id not in backends:
         available = ", ".join(sorted(backends))
         raise KeyError(
-            f"unknown backend id '{backend_id}' in {catalog_path}; available backends: {available}"
+            f"unknown backend id '{resolved_backend_id}' in {catalog_path}; available backends: {available}"
         )
 
-    existing_section = payload.get(section_key, {})
-    if existing_section is None:
-        existing_section = {}
-    if not isinstance(existing_section, dict):
-        raise ValueError(f"'{section_key}' must be a mapping when {backend_id_key} is used")
+    return _merge_payloads(backends[resolved_backend_id], existing_section)
 
-    payload[section_key] = _merge_payloads(backends[backend_id], existing_section)
+
+def _resolve_backend_reference(
+    payload: dict[str, Any],
+    *,
+    base_dir: Path,
+    section_key: str,
+    backend_id_key: str,
+    catalog_path_key: str,
+    default_catalog_stem: str,
+) -> None:
+    backend_id = str(payload.get(backend_id_key, "")).strip()
+    existing_section = payload.get(section_key, {})
+    payload[section_key] = resolve_backend_config(
+        existing_section,
+        base_dir=base_dir,
+        section_key=section_key,
+        backend_id_key=backend_id_key,
+        default_catalog_stem=default_catalog_stem,
+        backend_id=backend_id,
+        catalog_path_value=payload.get(catalog_path_key),
+        use_default_backend=not backend_id and not existing_section,
+    )
 
 
 def load_structured_config_payload(config_path: str | Path) -> tuple[Path, dict[str, Any]]:

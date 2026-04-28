@@ -62,7 +62,7 @@ first column define the workflow step ordering.
 
 ## Stage 1: Preprocessing Extraction (LLM API)
 
-**API**: DeepSeek Chat (`deepseek-chat`)
+**API**: DeepSeek v4 Flash (`deepseek-v4-flash`)
 **Prompt**: `config/prompts/preprocessing_extraction_om.txt`
 
 The LLM is called once per document. It receives:
@@ -383,10 +383,13 @@ dual-layer graph.
 **Workflow step nodes** (7 total): One node per `step_records` entry.
 
 Each workflow node gets:
-- `label`: "T1" through "T7"
+- `node_id`: runtime node ID such as `"battery::node::Battery_Module_Busbar_Insulator_Shield_Inspection:T1"`
+- `label`: scoped workflow label such as `"Battery_Module_Busbar_Insulator_Shield_Inspection:T1"`
+- `step_id`: original step token (`"T1"` through `"T7"`)
 - `node_type`: "workflow_step"
 - `step_phase`: from `StepEvidenceRecord.step_phase`
-- `display_label`: derived from `step_summary` + step label
+- `display_label`: canonical short title derived from grounded workflow action + object when possible, otherwise a truncated step-text fallback
+- `surface_form` / `provenance_evidence_ids`: full step text plus source-document provenance
 
 | Step | Phase | Display Label |
 |------|-------|---------------|
@@ -400,12 +403,13 @@ Each workflow node gets:
 
 **Workflow sequence edges** (6 total): T1→T2→T3→T4→T5→T6→T7
 - Source: `sequence_next` field (v2 authoritative source)
-- Edge family: `sequence`
-- Edge relation: `triggers`
+- Stored `family`: `task_dependency`
+- Stored `workflow_kind`: `sequence`
+- Stored relation label: `triggers`
 
 **Workflow grounding edges** (action_object, 24 total):
 
-Source: `step_actions[]` (v2 authoritative source).
+Source: `step_actions[]` (v2 authoritative source; no runtime fallback to `relation_mentions`).
 
 | Step | Action Type | Target Concept | Display-Admitted |
 |------|------------|----------------|-----------------|
@@ -510,31 +514,50 @@ Structure:
 
 ### Node Format (GraphNode)
 
+`step_summary` remains on `StepEvidenceRecord`. In the final graph, workflow nodes
+materialize `display_label`, `surface_form`, and provenance instead.
+
 **Workflow step node example**:
 ```json
 {
-  "id": "battery::step::T1",
-  "label": "T1",
-  "node_type": "workflow_step",
-  "domain_id": "battery",
-  "evidence_id": "Battery_Module_Busbar_Insulator_Shield_Inspection",
+  "node_id": "battery::node::Battery_Module_Busbar_Insulator_Shield_Inspection:T1",
+  "label": "Battery_Module_Busbar_Insulator_Shield_Inspection:T1",
   "display_label": "Record busbar-insulator review (T1)",
-  "phase": "observe",
-  "step_summary": "For Velorian ModuleShield-584, record whether the busbar-insulator revie",
-  "surface_form": "For Velorian ModuleShield-584, record whether the busbar-insulator review follows an electrical event..."
+  "domain_id": "battery",
+  "node_type": "workflow_step",
+  "node_layer": "workflow",
+  "parent_anchor": null,
+  "surface_form": "For Velorian ModuleShield-584, record whether the busbar-insulator review follows an electrical event...",
+  "step_id": "T1",
+  "order_index": 1,
+  "provenance_evidence_ids": ["Battery_Module_Busbar_Insulator_Shield_Inspection"],
+  "valid_from": "2026-04-25T19:09:32Z",
+  "valid_to": null,
+  "lifecycle_stage": null,
+  "shared_hypernym": null,
+  "step_phase": "observe"
 }
 ```
 
 **Semantic adapter concept node example**:
 ```json
 {
-  "id": "battery::Velorian ModuleShield-584",
+  "node_id": "battery::node::Velorian ModuleShield-584",
   "label": "Velorian ModuleShield-584",
-  "node_type": "adapter_concept",
+  "display_label": "Velorian ModuleShield-584",
   "domain_id": "battery",
+  "node_type": "adapter_concept",
+  "node_layer": "semantic",
   "parent_anchor": "Component",
+  "surface_form": "Velorian ModuleShield-584",
+  "step_id": null,
+  "order_index": null,
+  "provenance_evidence_ids": ["Battery_Module_Busbar_Insulator_Shield_Inspection"],
+  "valid_from": "2026-04-25T19:09:32Z",
+  "valid_to": null,
+  "lifecycle_stage": null,
   "shared_hypernym": "Housing",
-  "description": "the specific module shield assembly under review"
+  "step_phase": null
 }
 ```
 
@@ -543,41 +566,66 @@ Structure:
 **Workflow sequence edge example**:
 ```json
 {
-  "id": "battery::seq::T1_T2",
-  "source": "battery::step::T1",
-  "target": "battery::step::T2",
-  "relation": "triggers",
-  "family": "sequence",
+  "edge_id": "battery::edge::Battery_Module_Busbar_Insulator_Shield_Inspection:T1::triggers::Battery_Module_Busbar_Insulator_Shield_Inspection:T2",
+  "domain_id": "battery",
+  "label": "triggers",
+  "raw_label": "triggers",
+  "display_label": "triggers",
+  "family": "task_dependency",
+  "edge_layer": "workflow",
   "workflow_kind": "sequence",
+  "edge_salience": "high",
   "display_admitted": true,
-  "salience": "high"
+  "display_reject_reason": null,
+  "head": "Battery_Module_Busbar_Insulator_Shield_Inspection:T1",
+  "tail": "Battery_Module_Busbar_Insulator_Shield_Inspection:T2",
+  "provenance_evidence_ids": ["Battery_Module_Busbar_Insulator_Shield_Inspection"],
+  "valid_from": "2026-04-25T19:09:32Z",
+  "valid_to": null
 }
 ```
 
 **Workflow grounding edge example**:
 ```json
 {
-  "id": "battery::gnd::T2_busbar shield",
-  "source": "battery::step::T2",
-  "target": "battery::busbar shield",
-  "relation": "exposes",
+  "edge_id": "battery::edge::Battery_Module_Busbar_Insulator_Shield_Inspection:T2::exposes::busbar shield",
+  "domain_id": "battery",
+  "label": "exposes",
+  "raw_label": "exposes",
+  "display_label": "expose",
   "family": "action_object",
+  "edge_layer": "workflow",
   "workflow_kind": "action_object",
+  "edge_salience": "high",
   "display_admitted": true,
-  "salience": "high"
+  "display_reject_reason": null,
+  "head": "Battery_Module_Busbar_Insulator_Shield_Inspection:T2",
+  "tail": "busbar shield",
+  "provenance_evidence_ids": ["Battery_Module_Busbar_Insulator_Shield_Inspection"],
+  "valid_from": "2026-04-25T19:09:32Z",
+  "valid_to": null
 }
 ```
 
 **Semantic structural edge example**:
 ```json
 {
-  "id": "battery::sem::Velorian ModuleShield-584_contains_foam barriers",
-  "source": "battery::Velorian ModuleShield-584",
-  "target": "battery::foam barriers",
-  "relation": "contains",
+  "edge_id": "battery::edge::Velorian ModuleShield-584::contains::foam barriers",
+  "domain_id": "battery",
+  "label": "contains",
+  "raw_label": "contains",
+  "display_label": "contains",
   "family": "structural",
+  "edge_layer": "semantic",
+  "workflow_kind": null,
+  "edge_salience": "medium",
   "display_admitted": true,
-  "salience": "medium"
+  "display_reject_reason": null,
+  "head": "Velorian ModuleShield-584",
+  "tail": "foam barriers",
+  "provenance_evidence_ids": ["Battery_Module_Busbar_Insulator_Shield_Inspection"],
+  "valid_from": "2026-04-25T19:09:32Z",
+  "valid_to": null
 }
 ```
 

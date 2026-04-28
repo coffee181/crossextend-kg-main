@@ -31,6 +31,44 @@ workflow-first O&M pipeline.
 - avoid cloning whole configs for one-off runs
 - use CLI domain filters instead of domain-specific preset files
 
+## Switching LLM Models
+
+Both `preprocess` and `run` resolve their LLM settings from
+`config/persistent/llm_backends.yaml`. Changing the external model should be a
+config-only operation.
+
+Replace the currently used model globally by editing the backend entry that
+existing presets point to:
+
+```yaml
+backends:
+  deepseek:
+    base_url: https://api.deepseek.com
+    api_key: ${DEEPSEEK_API_KEY}
+    model: deepseek-v4-flash
+```
+
+The current presets already use `llm_backend_id: deepseek`, so changing
+`backends.deepseek.model` switches both preprocessing and pipeline runs.
+
+Keep multiple models side by side by adding another backend entry and changing
+the preset's `llm_backend_id`:
+
+```yaml
+backends:
+  deepseek:
+    model: deepseek-v4-flash
+  deepseek_r1:
+    model: deepseek-r1
+```
+
+```yaml
+llm_backend_id: deepseek_r1
+```
+
+Changing `default_backend` alone does not affect presets that already set
+`llm_backend_id`.
+
 ## Commands
 
 ```bash

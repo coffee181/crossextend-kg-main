@@ -107,7 +107,14 @@ crossextend_kg/
 - `embedding_backends.yaml`
 - `relation_constraints.json` -- v2：Tier-1 上位词纳入允许类型
 
-默认推荐的外部大模型后端是 `deepseek-chat`。
+默认推荐的外部大模型后端是 `deepseek-v4-flash`。
+
+如需切换模型，直接修改 `config/persistent/llm_backends.yaml` 即可。现有
+preset 已经统一使用 `llm_backend_id: deepseek`，所以只要修改
+`backends.deepseek.model`，`preprocess` 和 `run` 都会一起切换。如果要同
+时保留多个可选模型，就在 `llm_backends.yaml` 里新增一个 backend 条目，
+再把对应 preset 的 `llm_backend_id` 改过去。只修改 `default_backend` 本
+身，不会影响那些已经显式设置了 `llm_backend_id` 的 preset。
 
 ## 常用命令
 

@@ -57,7 +57,7 @@
 
 ## Stage 1：预处理提取（LLM API）
 
-**API**: DeepSeek Chat (`deepseek-chat`)
+**API**: DeepSeek v4 Flash (`deepseek-v4-flash`)
 **Prompt**: `config/prompts/preprocessing_extraction_om.txt`
 
 LLM 对每个文档调用一次。输入包括：
@@ -373,10 +373,13 @@ LLM 接收候选的描述、嵌入先验、路由特征（包含 `shared_hyperny
 **Workflow 步骤节点**（共 7 个）：每个 `step_records` 条目生成一个节点。
 
 每个 workflow 节点包含：
-- `label`："T1" 到 "T7"
+- `node_id`：运行时节点 ID，例如 `"battery::node::Battery_Module_Busbar_Insulator_Shield_Inspection:T1"`
+- `label`：带文档作用域的 workflow 标签，例如 `"Battery_Module_Busbar_Insulator_Shield_Inspection:T1"`
+- `step_id`：原始步骤号（`"T1"` 到 `"T7"`）
 - `node_type`："workflow_step"
 - `step_phase`：来自 `StepEvidenceRecord.step_phase`
-- `display_label`：由 `step_summary` + 步骤标签推导
+- `display_label`：优先由已接地的 workflow 动作 + 对象推导出的可读短标题；如果推导不出来，再回退到截断步骤文本
+- `surface_form` / `provenance_evidence_ids`：完整步骤原文和来源文档证据
 
 | Step | Phase | Display Label |
 |------|-------|---------------|
@@ -389,13 +392,14 @@ LLM 接收候选的描述、嵌入先验、路由特征（包含 `shared_hyperny
 | T7 | observe | "Inspect fault boundary (T7)" |
 
 **Workflow 序列边**（共 6 条）：T1→T2→T3→T4→T5→T6→T7
-- 来源：`sequence_next` 字段（v2），回退到 `triggers` 关系（v1）
-- 边族：`sequence`
-- 边关系：`triggers`
+- 来源：`sequence_next` 字段（v2 权威来源）
+- 存储的 `family`：`task_dependency`
+- 存储的 `workflow_kind`：`sequence`
+- 存储的关系标签：`triggers`
 
 **Workflow 接地边**（action_object，共 24 条）：
 
-来源：`step_actions[]`（v2），回退到 `family="task_dependency"` 的 `relation_mentions`（v1）。
+来源：`step_actions[]`（v2 权威来源；运行时不会再回退到 `relation_mentions`）。
 
 | Step | 操作类型 | 目标概念 | 显示允许 |
 |------|---------|---------|---------|
@@ -499,31 +503,50 @@ LLM 接收候选的描述、嵌入先验、路由特征（包含 `shared_hyperny
 
 ### 节点格式（GraphNode）
 
+`step_summary` 保留在 `StepEvidenceRecord` 上；进入最终图后，workflow 节点主要暴露
+`display_label`、`surface_form` 和 provenance。
+
 **Workflow 步骤节点示例**：
 ```json
 {
-  "id": "battery::step::T1",
-  "label": "T1",
-  "node_type": "workflow_step",
-  "domain_id": "battery",
-  "evidence_id": "Battery_Module_Busbar_Insulator_Shield_Inspection",
+  "node_id": "battery::node::Battery_Module_Busbar_Insulator_Shield_Inspection:T1",
+  "label": "Battery_Module_Busbar_Insulator_Shield_Inspection:T1",
   "display_label": "Record busbar-insulator review (T1)",
-  "phase": "observe",
-  "step_summary": "For Velorian ModuleShield-584, record whether the busbar-insulator revie",
-  "surface_form": "For Velorian ModuleShield-584, record whether the busbar-insulator review follows an electrical event..."
+  "domain_id": "battery",
+  "node_type": "workflow_step",
+  "node_layer": "workflow",
+  "parent_anchor": null,
+  "surface_form": "For Velorian ModuleShield-584, record whether the busbar-insulator review follows an electrical event...",
+  "step_id": "T1",
+  "order_index": 1,
+  "provenance_evidence_ids": ["Battery_Module_Busbar_Insulator_Shield_Inspection"],
+  "valid_from": "2026-04-25T19:09:32Z",
+  "valid_to": null,
+  "lifecycle_stage": null,
+  "shared_hypernym": null,
+  "step_phase": "observe"
 }
 ```
 
 **语义 adapter 概念节点示例**：
 ```json
 {
-  "id": "battery::Velorian ModuleShield-584",
+  "node_id": "battery::node::Velorian ModuleShield-584",
   "label": "Velorian ModuleShield-584",
-  "node_type": "adapter_concept",
+  "display_label": "Velorian ModuleShield-584",
   "domain_id": "battery",
+  "node_type": "adapter_concept",
+  "node_layer": "semantic",
   "parent_anchor": "Component",
+  "surface_form": "Velorian ModuleShield-584",
+  "step_id": null,
+  "order_index": null,
+  "provenance_evidence_ids": ["Battery_Module_Busbar_Insulator_Shield_Inspection"],
+  "valid_from": "2026-04-25T19:09:32Z",
+  "valid_to": null,
+  "lifecycle_stage": null,
   "shared_hypernym": "Housing",
-  "description": "the specific module shield assembly under review"
+  "step_phase": null
 }
 ```
 
@@ -532,41 +555,66 @@ LLM 接收候选的描述、嵌入先验、路由特征（包含 `shared_hyperny
 **Workflow 序列边示例**：
 ```json
 {
-  "id": "battery::seq::T1_T2",
-  "source": "battery::step::T1",
-  "target": "battery::step::T2",
-  "relation": "triggers",
-  "family": "sequence",
+  "edge_id": "battery::edge::Battery_Module_Busbar_Insulator_Shield_Inspection:T1::triggers::Battery_Module_Busbar_Insulator_Shield_Inspection:T2",
+  "domain_id": "battery",
+  "label": "triggers",
+  "raw_label": "triggers",
+  "display_label": "triggers",
+  "family": "task_dependency",
+  "edge_layer": "workflow",
   "workflow_kind": "sequence",
+  "edge_salience": "high",
   "display_admitted": true,
-  "salience": "high"
+  "display_reject_reason": null,
+  "head": "Battery_Module_Busbar_Insulator_Shield_Inspection:T1",
+  "tail": "Battery_Module_Busbar_Insulator_Shield_Inspection:T2",
+  "provenance_evidence_ids": ["Battery_Module_Busbar_Insulator_Shield_Inspection"],
+  "valid_from": "2026-04-25T19:09:32Z",
+  "valid_to": null
 }
 ```
 
 **Workflow 接地边示例**：
 ```json
 {
-  "id": "battery::gnd::T2_busbar shield",
-  "source": "battery::step::T2",
-  "target": "battery::busbar shield",
-  "relation": "exposes",
+  "edge_id": "battery::edge::Battery_Module_Busbar_Insulator_Shield_Inspection:T2::exposes::busbar shield",
+  "domain_id": "battery",
+  "label": "exposes",
+  "raw_label": "exposes",
+  "display_label": "expose",
   "family": "action_object",
+  "edge_layer": "workflow",
   "workflow_kind": "action_object",
+  "edge_salience": "high",
   "display_admitted": true,
-  "salience": "high"
+  "display_reject_reason": null,
+  "head": "Battery_Module_Busbar_Insulator_Shield_Inspection:T2",
+  "tail": "busbar shield",
+  "provenance_evidence_ids": ["Battery_Module_Busbar_Insulator_Shield_Inspection"],
+  "valid_from": "2026-04-25T19:09:32Z",
+  "valid_to": null
 }
 ```
 
 **语义结构边示例**：
 ```json
 {
-  "id": "battery::sem::Velorian ModuleShield-584_contains_foam barriers",
-  "source": "battery::Velorian ModuleShield-584",
-  "target": "battery::foam barriers",
-  "relation": "contains",
+  "edge_id": "battery::edge::Velorian ModuleShield-584::contains::foam barriers",
+  "domain_id": "battery",
+  "label": "contains",
+  "raw_label": "contains",
+  "display_label": "contains",
   "family": "structural",
+  "edge_layer": "semantic",
+  "workflow_kind": null,
+  "edge_salience": "medium",
   "display_admitted": true,
-  "salience": "medium"
+  "display_reject_reason": null,
+  "head": "Velorian ModuleShield-584",
+  "tail": "foam barriers",
+  "provenance_evidence_ids": ["Battery_Module_Busbar_Insulator_Shield_Inspection"],
+  "valid_from": "2026-04-25T19:09:32Z",
+  "valid_to": null
 }
 ```
 

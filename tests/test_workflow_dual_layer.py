@@ -37,6 +37,8 @@ from pipeline.artifacts import export_variant_run, load_snapshot_state
 from pipeline.exports.graphml import export_graphml
 from pipeline.graph import assemble_domain_graphs
 from pipeline.router import retrieve_anchor_rankings
+from preprocessing.models import PreprocessingConfig
+from preprocessing.processor import load_preprocessing_config
 from rules.filtering import filter_attachment_decision
 
 
@@ -1527,6 +1529,27 @@ class WorkflowDualLayerTests(unittest.TestCase):
             )
             state = load_snapshot_state(Path(temp_dir) / "full_llm", "battery", "battery-snapshot-001")
             self.assertEqual(state["consistency"]["node_count"], 1)
+
+    def test_preprocessing_config_load_uses_backend_registry(self) -> None:
+        config = load_preprocessing_config("config/persistent/preprocessing.deepseek.yaml")
+
+        self.assertEqual(config.llm.model, "deepseek-v4-flash")
+        self.assertEqual(config.llm.base_url, "https://api.deepseek.com")
+
+    def test_preprocessing_config_model_validate_uses_registry_default_backend(self) -> None:
+        config = PreprocessingConfig.model_validate(
+            {
+                "data_root": "data",
+                "domain_ids": ["battery"],
+                "output_path": "data/evidence_records/test.json",
+                "role": "target",
+                "llm": {"max_tokens": 1234},
+            }
+        )
+
+        self.assertEqual(config.llm.model, "deepseek-v4-flash")
+        self.assertEqual(config.llm.base_url, "https://api.deepseek.com")
+        self.assertEqual(config.llm.max_tokens, 1234)
 
 
 if __name__ == "__main__":

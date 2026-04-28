@@ -4,17 +4,19 @@ Live documentation for the CrossExtend-KG v2 mainline.
 
 ## Reading Order
 
-1. `SYSTEM_DESIGN.md`
+1. `PROJECT_INTRODUCTION_CN.md`
+   Chinese full project introduction for non-specialists: business goal, architecture, modules, data formats, data flow, and final graph shape.
+2. `SYSTEM_DESIGN.md`
    Active architecture rules, runtime boundaries, and v2 model extensions.
-2. `PIPELINE_DATA_FLOW.md`
+3. `PIPELINE_DATA_FLOW.md`
    End-to-end data flow from O&M markdown to exported graph artifacts.
-3. `DATA_FLOW_DIAGRAM.md`
+4. `DATA_FLOW_DIAGRAM.md`
    **Real single-document example** tracing data format changes through every pipeline stage.
-4. `WORKFLOW_KG_DESIGN.md`
+5. `WORKFLOW_KG_DESIGN.md`
    Dual-layer graph design, v2 innovations, and evaluation boundary.
-5. `EXPERIMENT_REPORT.md`
+6. `EXPERIMENT_REPORT.md`
    Complete v2 regression experiment report (3 tests, v1 vs v2 comparison, cross-domain analysis).
-6. `OPEN_SOURCE_UPDATE_CN.md`
+7. `OPEN_SOURCE_UPDATE_CN.md`
    Chinese summary of the repository scope, v2 restructuring, and open-source maintenance principles.
 
 ## 中文文档
