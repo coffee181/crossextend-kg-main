@@ -45,7 +45,7 @@ backends:
   deepseek:
     base_url: https://api.deepseek.com
     api_key: ${DEEPSEEK_API_KEY}
-    model: deepseek-v4-flash
+    model: deepseek-v4-pro
 ```
 
 The current presets already use `llm_backend_id: deepseek`, so changing
@@ -57,7 +57,7 @@ the preset's `llm_backend_id`:
 ```yaml
 backends:
   deepseek:
-    model: deepseek-v4-flash
+    model: deepseek-v4-pro
   deepseek_r1:
     model: deepseek-r1
 ```

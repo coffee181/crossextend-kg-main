@@ -63,6 +63,10 @@ crossextend_kg/
     artifacts.py             # 产物导出
     exports/graphml.py       # GraphML 导出
     utils.py                 # 运行时工具
+    router.py                # Embedding backbone 路由
+    attachment.py            # Attachment 决策（规则/LLM）
+    relation_validation.py   # 关系类型校验
+    runner.py                # Pipeline 编排
   preprocessing/
     processor.py             # 预处理主处理器
     extractor.py             # LLM 提取包装
@@ -70,26 +74,33 @@ crossextend_kg/
     models.py                # 预处理数据模型
   rules/
     filtering.py             # Attachment 过滤（v2：hypernym 回退）
+    relation_filtering.py    # 关系过滤规则
   backends/
     llm.py                   # LLM 后端
     embeddings.py            # Embedding 后端
     faiss_cache.py           # FAISS 缓存
   temporal/                  # 可选 lifecycle / temporal 支持
-  experiments/
-    metrics/                 # 图谱评测指标
-    downstream/              # 面向下游任务设计
+    versioning.py
+    lifecycle.py
+    consistency.py
   data/
-    battery_om_manual_en/    # Battery O&M 源文档
-    cnc_om_manual_en/        # CNC O&M 源文档
-    ev_om_manual_en/         # NEV O&M 源文档
-    evidence_records/        # 按域 evidence record JSON
-    ground_truth/            # 人工标注（9 个文件）
+    battery_om_manual_en/    # Battery O&M 源文档（100 篇）
+    cnc_om_manual_en/        # CNC O&M 源文档（100 篇）
+    ev_om_manual_en/         # NEV O&M 源文档（200 篇）
+    evidence_records/        # Evidence record JSON（全量 + 按域）
+    ground_truth/            # 人工标注 gold（9 个文件）
   config/
-    persistent/              # 稳定运行时配置
+    persistent/              # 稳定运行时配置（12 个 YAML/JSON）
     prompts/                 # LLM 提取和 attachment 提示词
-  docs/                      # 架构与设计文档
+  docs/                      # 架构与设计文档（8 个文档）
   tests/                     # 单元测试（19 个：12 v1 + 7 v2）
-  scripts/                   # 回归测试脚本
+  scripts/                   # 测试、评估和全量运行脚本
+    regression_test1.py      # 单文档测试
+    regression_test2.py      # 三文档测试
+    regression_test3.py      # 九文档测试
+    evaluate_attachment_gold.py  # Attachment gold 评估
+    run_full_preprocess.py   # 全量 400 文档预处理入口
+    run_cnc_preprocess.py    # CNC+battery 200 文档预处理入口
 ```
 
 ## 当前配置结构
@@ -97,17 +108,15 @@ crossextend_kg/
 人工维护配置统一放在 `config/persistent/`：
 
 - `pipeline.base.yaml` -- v2：15 概念 backbone
-- `pipeline.test1.yaml` -- 单文档测试
-- `pipeline.test2.yaml` -- 三文档测试（每域1个）
-- `pipeline.test3.yaml` -- 九文档测试（每域3个）
-- `pipeline.deepseek.yaml` -- deepseek 预设
+- `pipeline.full.yaml` -- 全量（400 文档）实验配置
+- `pipeline.test3.yaml` -- 九文档测试（每域 3 个）
 - `preprocessing.base.yaml`
 - `preprocessing.deepseek.yaml`
 - `llm_backends.yaml`
 - `embedding_backends.yaml`
 - `relation_constraints.json` -- v2：Tier-1 上位词纳入允许类型
 
-默认推荐的外部大模型后端是 `deepseek-v4-flash`。
+默认推荐大模型后端：全量实验用 `deepseek-v4-pro`，轻量测试用 `deepseek-v4-flash`。
 
 如需切换模型，直接修改 `config/persistent/llm_backends.yaml` 即可。现有
 preset 已经统一使用 `llm_backend_id: deepseek`，所以只要修改
@@ -148,16 +157,9 @@ python -m crossextend_kg.cli evaluate --gold data/ground_truth/battery_BATOM_002
 python -m crossextend_kg.cli evaluate --run-root artifacts/some_run --variant full_llm --ground-truth-dir data/ground_truth
 ```
 
-## 实验目录
+## 实验与结果
 
-`experiments/` 保留两个活跃方向：
-
-- `experiments/metrics/`
-  当前主线图谱评测与图质量诊断
-- `experiments/downstream/`
-  面向下游任务的协议设计、样本格式和 benchmark 模板
-
-论文主要指标：
+### 核心评测指标
 
 - `workflow_step_f1`、`workflow_sequence_f1`、`workflow_grounding_f1`
 - `anchor_accuracy`、`anchor_macro_f1`
@@ -166,6 +168,28 @@ v2 诊断指标：
 
 - `hypernym_coverage` -- 语义节点中拥有 shared_hypernym 的比例
 - `phase_distribution` -- observe/diagnose/repair/verify 分布
+
+### 全量预处理（2026-05-02）：400 篇文档
+
+| 领域 | 文档数 | 状态 |
+|------|--------|------|
+| battery | 100 | 完成 |
+| cnc | 100 | 完成 |
+| ev (nev) | 200 | 完成 |
+| **合计** | **400** | **完成** |
+
+- **模型**：`deepseek-v4-pro`（DeepSeek API）
+- **总耗时**：59.4 小时（约 2.5 天）
+- **平均速率**：535s/篇（8.9 分钟/篇）
+- **合并输出**：`data/evidence_records/evidence_records_llm.json`（20.6 MB）
+- **按域输出**：battery (5.0 MB), cnc (5.2 MB), ev (10.6 MB)
+- **API 可靠性**：2-3 次临时 JSON 解析失败，均自动恢复
+
+```bash
+python -m scripts.run_full_preprocess
+```
+
+配置：`preprocessing.deepseek.yaml` → `llm_backends.yaml` (`deepseek-v4-pro`)
 
 ### 人工标注 Attachment Gold（2026-04-26）
 
@@ -225,11 +249,11 @@ Attachment 接受率: 348/349 (99.7%)。跨域 Hypernym 一致性: 117/118 (99.2
 ## 文档入口
 
 - [docs/README.md](docs/README.md)
+- [docs/PROJECT_INTRODUCTION_CN.md](docs/PROJECT_INTRODUCTION_CN.md) -- 完整项目介绍（中文）
 - [docs/SYSTEM_DESIGN.md](docs/SYSTEM_DESIGN.md) -- 架构规则与 v2 模型扩展
 - [docs/PIPELINE_DATA_FLOW.md](docs/PIPELINE_DATA_FLOW.md) -- 端到端数据流
 - [docs/DATA_FLOW_DIAGRAM.md](docs/DATA_FLOW_DIAGRAM.md) -- 真实单文档数据流示例（含各阶段格式变化）
 - [docs/WORKFLOW_KG_DESIGN.md](docs/WORKFLOW_KG_DESIGN.md) -- 双层图设计与 v2 创新
-- [docs/EXPERIMENT_REPORT.md](docs/EXPERIMENT_REPORT.md) -- v2 回归实验报告
 - [docs/OPEN_SOURCE_UPDATE_CN.md](docs/OPEN_SOURCE_UPDATE_CN.md) -- v2 重构中文说明
 - [docs/DATA_FLOW_DIAGRAM_CN.md](docs/DATA_FLOW_DIAGRAM_CN.md) -- 数据流图中文版
-- [docs/EXPERIMENT_REPORT_CN.md](docs/EXPERIMENT_REPORT_CN.md) -- 回归实验报告中文版
+- [REPRODUCIBILITY.md](REPRODUCIBILITY.md) -- 可复现指南（含命令与预期结果）

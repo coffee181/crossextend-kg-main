@@ -183,4 +183,4 @@ This graph shape supports downstream O&M enhancement tasks:
 - **evidence-grounded workflow retrieval**: given a complaint/symptom, retrieve the most relevant ordered workflow with grounded objects
 - **repair suffix ranking**: given an observed workflow prefix, rank candidate repair suffixes
 
-See `experiments/downstream/` for the protocol design and benchmark schema.
+See `docs/WORKFLOW_KG_DESIGN.md` for the full design and evaluation boundary.

@@ -64,5 +64,6 @@ LLM backend: `config/persistent/llm_backends.yaml` → `deepseek-v4-pro`
 
 Old round-by-round optimization logs, one-off regression notes, and temporary
 experiment reports are no longer part of the live repository contract. Deleted
-docs (`DOWNSTREAM_EVALUATION.md`, `GRAPH_QUALITY_DIAGNOSIS.md`) have been
-absorbed into `WORKFLOW_KG_DESIGN.md` and the downstream README.
+docs (`DOWNSTREAM_EVALUATION.md`, `GRAPH_QUALITY_DIAGNOSIS.md`, `EXPERIMENT_REPORT.md`,
+`EXPERIMENT_REPORT_CN.md`) have been absorbed into `WORKFLOW_KG_DESIGN.md`, `README.md`,
+and the downstream README.

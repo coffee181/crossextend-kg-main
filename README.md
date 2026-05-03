@@ -67,6 +67,10 @@ crossextend_kg/
     artifacts.py             # Artifact export
     exports/graphml.py       # GraphML export
     utils.py                 # Runtime utilities
+    router.py                # Embedding-based backbone routing
+    attachment.py            # Attachment decision (rule/LLM)
+    relation_validation.py   # Relation type validation
+    runner.py                # Pipeline orchestration
   preprocessing/
     processor.py             # Main preprocessing processor
     extractor.py             # LLM extraction wrapper
@@ -74,29 +78,33 @@ crossextend_kg/
     models.py                # Preprocessing data models
   rules/
     filtering.py             # Attachment filtering (v2: hypernym fallback)
+    relation_filtering.py    # Relation filtering rules
   backends/
     llm.py                   # LLM backend
     embeddings.py            # Embedding backend
     faiss_cache.py           # FAISS cache
   temporal/                  # Optional lifecycle / temporal support
-  experiments/
-    metrics/                 # Graph evaluation metrics
-    downstream/              # Workflow-centric downstream tasks
+    versioning.py
+    lifecycle.py
+    consistency.py
   data/
-    battery_om_manual_en/    # Battery O&M source markdown
-    cnc_om_manual_en/        # CNC O&M source markdown
-    ev_om_manual_en/         # NEV O&M source markdown
-    evidence_records/        # Per-domain evidence record JSONs
+    battery_om_manual_en/    # Battery O&M source markdown (100 docs)
+    cnc_om_manual_en/        # CNC O&M source markdown (100 docs)
+    ev_om_manual_en/         # NEV O&M source markdown (200 docs)
+    evidence_records/        # Evidence record JSONs (full-scale + per-domain)
+    ground_truth/            # Human-annotated attachment gold (9 files)
   config/
-    persistent/              # Stable runtime configs
+    persistent/              # Stable runtime configs (12 YAML/JSON files)
     prompts/                 # LLM extraction and attachment prompts
-  docs/                      # Architecture and design documentation
+  docs/                      # Architecture and design documentation (8 docs)
   tests/                     # Unit tests (19 tests: 12 v1 + 7 v2)
-  scripts/                   # Regression test scripts
-    regression_test1.py      # Single-doc test
-    regression_test2.py      # Three-domain single-doc test
-    regression_test3.py      # Full 9-doc test
+  scripts/                   # Test, evaluation, and full-scale run scripts
+    regression_test1.py      # Single-doc test (rule-based)
+    regression_test2.py      # Three-domain single-doc test (rule-based)
+    regression_test3.py      # Full 9-doc test (rule-based)
     evaluate_attachment_gold.py  # Attachment gold evaluation
+    run_full_preprocess.py   # Full-scale 400-doc preprocessing entry
+    run_cnc_preprocess.py    # CNC+battery 200-doc preprocessing entry
 ```
 
 ## Current Config Layout
@@ -104,15 +112,16 @@ crossextend_kg/
 Human-maintained configs live under `config/persistent/`:
 
 - `pipeline.base.yaml` -- v2: 15-concept backbone
-- `pipeline.test3.yaml` -- default reproducible Test3 evidence-record run
-- `pipeline.deepseek.yaml` -- deepseek preset; requires generated evidence record files
+- `pipeline.full.yaml` -- Full-scale (400-doc) experiment config
+- `pipeline.test3.yaml` -- Default reproducible 9-doc evidence-record run
 - `preprocessing.base.yaml`
 - `preprocessing.deepseek.yaml`
 - `llm_backends.yaml`
 - `embedding_backends.yaml`
 - `relation_constraints.json` -- v2: Tier-1 hypernyms in allowed types
 
-The recommended default LLM backend is `deepseek-v4-flash`.
+The recommended default LLM backend is `deepseek-v4-pro` (full-scale experiments)
+or `deepseek-v4-flash` (lighter test runs).
 
 To switch models, update `config/persistent/llm_backends.yaml`. Existing presets
 already use `llm_backend_id: deepseek`, so changing
@@ -153,24 +162,39 @@ Gold evaluation is supported when a local gold directory is present:
 python -m crossextend_kg.cli evaluate --gold <gold.json> --graph <final_graph.json>
 ```
 
-## Experiments
+## Experiments & Results
 
-`experiments/` keeps two active areas:
-
-- `experiments/metrics/`
-  strict graph-construction evaluation and graph-quality diagnostics
-- `experiments/downstream/`
-  workflow-centric downstream task design and benchmark schema
-
-Primary paper metrics:
+### Primary Evaluation Metrics
 
 - `workflow_step_f1`, `workflow_sequence_f1`, `workflow_grounding_f1`
 - `anchor_accuracy`, `anchor_macro_f1`
 
 v2 diagnostic metrics:
 
-- `hypernym_coverage` -- fraction of semantic nodes with shared_hypernym
-- `phase_distribution` -- observe/diagnose/repair/verify distribution
+- `hypernym_coverage` — fraction of semantic nodes with shared_hypernym
+- `phase_distribution` — observe/diagnose/repair/verify distribution
+
+### Full-Scale Preprocessing (2026-05-02): 400 Docs
+
+| Domain | Documents | Status |
+|--------|-----------|--------|
+| battery | 100 | Complete |
+| cnc | 100 | Complete |
+| ev (nev) | 200 | Complete |
+| **Total** | **400** | **Complete** |
+
+- **Model**: `deepseek-v4-pro` (DeepSeek API)
+- **Total time**: 59.4 hours (~2.5 days)
+- **Average rate**: 535s/doc (8.9 min/doc)
+- **Combined output**: `data/evidence_records/evidence_records_llm.json` (20.6 MB)
+- **Per-domain output**: battery (5.0 MB), cnc (5.2 MB), ev (10.6 MB)
+- **API reliability**: 2-3 transient JSON parse failures, all auto-recovered
+
+```bash
+python -m scripts.run_full_preprocess
+```
+
+Config: `preprocessing.deepseek.yaml` → `llm_backends.yaml` (`deepseek-v4-pro`)
 
 ### Attachment Gold Annotation (2026-04-26)
 
@@ -204,7 +228,6 @@ Rule-based attachment (deterministic, no LLM/embedding), all tests pass:
 
 Test 3 totals: **465 nodes, 795 edges, 447 accepted triples**.
 Attachment acceptance: 348/349 (99.7%). Cross-domain hypernym consistency: 117/118 (99.2%).
-See [docs/EXPERIMENT_REPORT.md](docs/EXPERIMENT_REPORT.md) for full details.
 
 ### 9-Doc Ablation: Embedding + LLM Variants (2026-04-26)
 
@@ -230,12 +253,12 @@ See [docs/EXPERIMENT_REPORT.md](docs/EXPERIMENT_REPORT.md) for full details.
 
 ## Documentation
 
-- [docs/README.md](docs/README.md)
-- [docs/SYSTEM_DESIGN.md](docs/SYSTEM_DESIGN.md) -- Architecture rules and v2 model extensions
-- [docs/PIPELINE_DATA_FLOW.md](docs/PIPELINE_DATA_FLOW.md) -- End-to-end data flow
-- [docs/DATA_FLOW_DIAGRAM.md](docs/DATA_FLOW_DIAGRAM.md) -- Real single-doc data flow example with format changes at each stage
-- [docs/WORKFLOW_KG_DESIGN.md](docs/WORKFLOW_KG_DESIGN.md) -- Dual-layer design and v2 innovations
-- [docs/EXPERIMENT_REPORT.md](docs/EXPERIMENT_REPORT.md) -- v2 regression experiment report
-- [docs/OPEN_SOURCE_UPDATE_CN.md](docs/OPEN_SOURCE_UPDATE_CN.md) -- Chinese summary of v2 restructuring
-- [docs/DATA_FLOW_DIAGRAM_CN.md](docs/DATA_FLOW_DIAGRAM_CN.md) -- 数据流图中文版
-- [docs/EXPERIMENT_REPORT_CN.md](docs/EXPERIMENT_REPORT_CN.md) -- 回归实验报告中文版
+- [docs/README.md](docs/README.md) — Documentation index and reading order
+- [docs/PROJECT_INTRODUCTION_CN.md](docs/PROJECT_INTRODUCTION_CN.md) — Full project introduction (Chinese)
+- [docs/SYSTEM_DESIGN.md](docs/SYSTEM_DESIGN.md) — Architecture rules and v2 model extensions
+- [docs/PIPELINE_DATA_FLOW.md](docs/PIPELINE_DATA_FLOW.md) — End-to-end data flow
+- [docs/DATA_FLOW_DIAGRAM.md](docs/DATA_FLOW_DIAGRAM.md) — Real single-doc data flow example
+- [docs/WORKFLOW_KG_DESIGN.md](docs/WORKFLOW_KG_DESIGN.md) — Dual-layer design and v2 innovations
+- [docs/OPEN_SOURCE_UPDATE_CN.md](docs/OPEN_SOURCE_UPDATE_CN.md) — Chinese summary of v2 restructuring
+- [docs/DATA_FLOW_DIAGRAM_CN.md](docs/DATA_FLOW_DIAGRAM_CN.md) — Data flow diagram (Chinese)
+- [REPRODUCIBILITY.md](REPRODUCIBILITY.md) — Reproducibility guide with commands and expected results

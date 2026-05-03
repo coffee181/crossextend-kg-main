@@ -103,4 +103,4 @@ Rule-based regression tests validated the v2 pipeline:
 | pure_llm | 459 | 772 | 430 |
 
 9 attachment gold files (359 concepts) completed.
-See `EXPERIMENT_REPORT.md` for full details.
+See `README.md` for full experimental results.

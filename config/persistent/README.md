@@ -14,7 +14,7 @@
 
 ## Current Defaults
 
-- `deepseek` resolves to `deepseek-v4-flash`
+- `deepseek` resolves to `deepseek-v4-pro`
 - `dashscope_text_embedding_v4` is the default embedding backend
 
 ## v2 Config Changes

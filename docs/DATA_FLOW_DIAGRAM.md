@@ -62,7 +62,7 @@ first column define the workflow step ordering.
 
 ## Stage 1: Preprocessing Extraction (LLM API)
 
-**API**: DeepSeek v4 Flash (`deepseek-v4-flash`)
+**API**: DeepSeek v4 Pro (`deepseek-v4-pro`)
 **Prompt**: `config/prompts/preprocessing_extraction_om.txt`
 
 The LLM is called once per document. It receives:

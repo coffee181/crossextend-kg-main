@@ -57,7 +57,7 @@
 
 ## Stage 1：预处理提取（LLM API）
 
-**API**: DeepSeek v4 Flash (`deepseek-v4-flash`)
+**API**: DeepSeek v4 Pro (`deepseek-v4-pro`)
 **Prompt**: `config/prompts/preprocessing_extraction_om.txt`
 
 LLM 对每个文档调用一次。输入包括：
