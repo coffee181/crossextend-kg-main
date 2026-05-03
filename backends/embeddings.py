@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import json
+import logging
+import time
 import urllib.error
 import urllib.request
 from typing import Protocol
@@ -16,6 +18,8 @@ try:
 except ImportError:  # pragma: no cover - direct script execution fallback
     from config import EmbeddingBackendConfig
     from exceptions import EmbeddingBackendError
+
+logger = logging.getLogger(__name__)
 
 
 class EmbeddingBackend(Protocol):
@@ -73,20 +77,40 @@ class OpenAICompatibleEmbeddingBackend:
         headers = {"Content-Type": "application/json"}
         if self.api_key:
             headers["Authorization"] = f"Bearer {self.api_key}"
-        req = urllib.request.Request(
-            build_api_endpoint(self.base_url, "embeddings"),
-            data=json.dumps(payload).encode("utf-8"),
-            headers=headers,
-            method="POST",
-        )
-        try:
-            with urllib.request.urlopen(req, timeout=self.timeout_sec) as resp:
-                return json.loads(resp.read().decode("utf-8"))
-        except urllib.error.HTTPError as e:
-            body = e.read().decode("utf-8", errors="replace") if e.fp else ""
-            raise EmbeddingBackendError(
-                f"embedding API returned HTTP {e.code}: {body[:500]}"
-            ) from e
+        url = build_api_endpoint(self.base_url, "embeddings")
+        data = json.dumps(payload).encode("utf-8")
+        last_error = None
+        for attempt in range(1, 4):
+            try:
+                req = urllib.request.Request(url, data=data, headers=headers, method="POST")
+                with urllib.request.urlopen(req, timeout=self.timeout_sec) as resp:
+                    return json.loads(resp.read().decode("utf-8"))
+            except urllib.error.HTTPError as e:
+                body = e.read().decode("utf-8", errors="replace") if e.fp else ""
+                last_error = EmbeddingBackendError(
+                    f"embedding API returned HTTP {e.code}: {body[:500]}"
+                )
+                if e.code in {429, 500, 502, 503, 504} and attempt < 4:
+                    delay_sec = min(10.0, 2.0 * attempt)
+                    logger.warning(
+                        "Retryable embedding API error on attempt %d/3: HTTP %d. Retrying in %.1fs",
+                        attempt, e.code, delay_sec,
+                    )
+                    time.sleep(delay_sec)
+                    continue
+                raise last_error from e
+            except (urllib.error.URLError, OSError, ConnectionError) as e:
+                last_error = EmbeddingBackendError(f"embedding API connection failed: {e}")
+                if attempt < 4:
+                    delay_sec = min(10.0, 2.0 * attempt)
+                    logger.warning(
+                        "Retryable embedding connection error on attempt %d/3: %s. Retrying in %.1fs",
+                        attempt, e, delay_sec,
+                    )
+                    time.sleep(delay_sec)
+                    continue
+                raise last_error from e
+        raise last_error  # type: ignore[misc]
 
     _EMBED_BATCH_SIZE = 10
 

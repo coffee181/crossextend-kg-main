@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import os
 import re
 import time
@@ -16,9 +17,9 @@ try:
 except ImportError:  # pragma: no cover - direct script execution fallback
     from config import load_structured_config_payload, resolve_preprocessing_payload_paths
 try:
-    from crossextend_kg.file_io import ensure_dir, write_json
+    from crossextend_kg.file_io import ensure_dir, read_json, write_json
 except ImportError:  # pragma: no cover - direct script execution fallback
-    from file_io import ensure_dir, write_json
+    from file_io import ensure_dir, read_json, write_json
 try:
     from crossextend_kg.models import (
         ConceptMention,
@@ -53,6 +54,8 @@ except ImportError:  # pragma: no cover - direct script execution fallback
         StateTransition,
         StructuralEdge,
     )
+logger = logging.getLogger(__name__)
+
 from preprocessing.extractor import build_extractor
 from preprocessing.models import DocumentInput, ExtractionResult, PreprocessingConfig, PreprocessingResult
 from preprocessing.parser import (
@@ -573,9 +576,62 @@ def _build_domain_output_path(output_path: Path, domain_id: str, domain_count: i
     return output_path.with_name(f"{domain_id}_{output_path.name}")
 
 
+def _write_output(
+    output_path: Path,
+    config: Any,
+    successful: int,
+    domain_stats: dict[str, dict[str, int]],
+    evidence_records: list[Any],
+) -> None:
+    """Incrementally write output JSON so work is never lost on failure.
+
+    Writes both the combined file and per-domain files.
+    """
+    generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    serialized = [record.model_dump(mode="json") for record in evidence_records]
+
+    # Combined output
+    write_json(
+        output_path,
+        {
+            "project_name": "crossextend_kg_preprocessing",
+            "generated_at": generated_at,
+            "domains": config.domain_ids,
+            "role": config.role,
+            "document_count": successful,
+            "domain_stats": domain_stats,
+            "evidence_records": serialized,
+        },
+    )
+
+    # Per-domain output
+    domain_count = len(config.domain_ids)
+    records_by_domain: dict[str, list[dict]] = {d: [] for d in config.domain_ids}
+    for record in evidence_records:
+        records_by_domain.setdefault(record.domain_id, []).append(record)
+
+    for domain_id in config.domain_ids:
+        domain_path = _build_domain_output_path(output_path, domain_id, domain_count)
+        domain_records = [r.model_dump(mode="json") for r in records_by_domain.get(domain_id, [])]
+        domain_doc_count = len(domain_records)
+        write_json(
+            domain_path,
+            {
+                "project_name": "crossextend_kg_preprocessing",
+                "generated_at": generated_at,
+                "domains": [domain_id],
+                "role": config.role,
+                "document_count": domain_doc_count,
+                "domain_stats": {domain_id: domain_stats.get(domain_id, {})},
+                "evidence_records": domain_records,
+            },
+        )
+
+
 def run_preprocessing(
     config: PreprocessingConfig,
     config_path: str | None = None,
+    max_docs: int | None = None,
 ) -> PreprocessingResult:
     """Run preprocessing pipeline from config."""
     start_time = time.time()
@@ -596,6 +652,68 @@ def run_preprocessing(
     successful = 0
     failed = 0
     domain_stats: dict[str, dict[str, int]] = {}
+
+    # Resume from existing output if present.
+    # Try per-domain files first (more granular, less data loss on corruption),
+    # then fall back to the combined file.
+    processed_doc_ids: set[str] = set()
+    domain_count = len(config.domain_ids) if config.domain_ids else 1
+    resume_sources: list[Path] = []
+    if domain_count > 1:
+        for domain_id in config.domain_ids:
+            domain_path = _build_domain_output_path(output_path, domain_id, domain_count)
+            if domain_path.exists():
+                resume_sources.append(domain_path)
+    if not resume_sources and output_path.exists():
+        resume_sources.append(output_path)
+
+    # Safety: back up existing files before touching them
+    backup_dir: Path | None = None
+    if resume_sources:
+        backup_dir = output_path.parent / ".preprocess_backups"
+        backup_dir.mkdir(exist_ok=True)
+        for src in resume_sources:
+            if src.exists():
+                bak = backup_dir / f"{src.name}.bak"
+                bak.write_bytes(src.read_bytes())
+        print(f"[preprocess] backed up {len(resume_sources)} existing file(s) to {backup_dir}", flush=True)
+
+    for source_path in resume_sources:
+        try:
+            existing_data = read_json(source_path)
+            existing_records = existing_data.get("evidence_records", [])
+            loaded = 0
+            for record_data in existing_records:
+                doc_id = record_data.get("evidence_id", "") or record_data.get("doc_id", "")
+                if doc_id and doc_id not in processed_doc_ids:
+                    processed_doc_ids.add(doc_id)
+                    evidence_records.append(EvidenceRecord.model_validate(record_data))
+                    successful += 1
+                    loaded += 1
+            if loaded:
+                logger.info(
+                    "Resumed %d records from %s", loaded, source_path,
+                )
+        except Exception as exc:
+            logger.warning("Failed to load existing output %s: %s", source_path, exc)
+            print(
+                f"[preprocess] ERROR: failed to load {source_path}: {exc}",
+                flush=True,
+            )
+            print(
+                f"[preprocess] Backup saved at {backup_dir}. Will NOT overwrite — aborting.",
+                flush=True,
+            )
+            raise RuntimeError(
+                f"Failed to load existing output {source_path}. "
+                f"Backup saved at {backup_dir}. Fix the issue before restarting."
+            ) from exc
+
+    if processed_doc_ids:
+        print(
+            f"[preprocess] resumed {len(processed_doc_ids)} existing records from {len(resume_sources)} file(s)",
+            flush=True,
+        )
 
     if config.data_root and config.domain_ids:
         data_root = Path(config.data_root)
@@ -632,8 +750,13 @@ def run_preprocessing(
             domain_stats[domain_id] = {}
 
             for doc_type, documents in docs_by_type.items():
-                domain_stats[domain_id][doc_type] = len(documents)
-                for doc in documents:
+                limited_docs = documents[:max_docs] if max_docs is not None else documents
+                domain_stats[domain_id][doc_type] = len(limited_docs)
+                for doc in limited_docs:
+                    # Skip already-processed documents (resume support)
+                    if doc.doc_id in processed_doc_ids:
+                        continue
+
                     normalized_content = normalize_content(doc.content)
                     if len(normalized_content) > _MAX_DOC_CONTENT_LENGTH:
                         normalized_content = normalized_content[:_MAX_DOC_CONTENT_LENGTH] + "\n... [truncated]"
@@ -645,8 +768,38 @@ def run_preprocessing(
                             f"LLM extraction returned failed for {doc.doc_id} ({domain_id}/{doc_type})"
                         )
 
-                    evidence_records.append(extraction_to_evidence_record(doc, result))
+                    evidence_record = extraction_to_evidence_record(doc, result)
+                    evidence_records.append(evidence_record)
                     successful += 1
+                    if True:
+                        elapsed = time.time() - start_time
+                        step_count = len(evidence_record.step_records)
+                        step_concepts = sum(len(sr.concept_mentions) for sr in evidence_record.step_records)
+                        step_relations = sum(len(sr.relation_mentions) for sr in evidence_record.step_records)
+                        step_actions = sum(len(sr.step_actions) for sr in evidence_record.step_records)
+                        diag_edges = sum(len(sr.diagnostic_edges) for sr in evidence_record.step_records)
+                        doc_concepts = len(evidence_record.document_concept_mentions)
+                        doc_relations = len(evidence_record.document_relation_mentions)
+                        print(
+                            f"[preprocess] {successful:>4d} | {doc.doc_id} | "
+                            f"LLM: {len(result.concepts)}c/{len(result.relations)}r/{len(result.diagnostic_edges)}d | "
+                            f"Evidence: {step_count}steps {step_concepts}c/{step_relations}r/{step_actions}a/{diag_edges}d + "
+                            f"doc:{doc_concepts}c/{doc_relations}r | "
+                            f"{elapsed:.0f}s ({elapsed / successful:.0f}s/doc)",
+                            flush=True,
+                        )
+                        logger.info(
+                            "[preprocess] %s | LLM: concepts=%d relations=%d diag=%d | "
+                            "Evidence: steps=%d step_c=%d step_r=%d actions=%d diag=%d doc_c=%d doc_r=%d | %.1fs",
+                            doc.doc_id,
+                            len(result.concepts), len(result.relations), len(result.diagnostic_edges),
+                            step_count, step_concepts, step_relations, step_actions, diag_edges,
+                            doc_concepts, doc_relations,
+                            elapsed,
+                        )
+
+                    # Incremental write: save after every document so work is never lost
+                    _write_output(output_path, config, successful, domain_stats, evidence_records)
     else:
         raise ValueError(
             "Preprocessing requires multi-domain configuration. "

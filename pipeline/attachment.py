@@ -399,6 +399,84 @@ def _chunked(items: list[SchemaCandidate], size: int) -> list[list[SchemaCandida
     return [items[index : index + size] for index in range(0, len(items), size)]
 
 
+def _build_candidate_payload(
+    candidate: SchemaCandidate,
+    decision: AttachmentDecision,
+    retrievals: dict[str, list[RetrievedAnchor]],
+    backbone_concepts: set[str],
+) -> dict[str, object]:
+    return {
+        "candidate": candidate.model_dump(mode="json"),
+        "decision": decision.model_dump(mode="json"),
+        "retrievals": [item.model_dump(mode="json") for item in retrievals.get(candidate.candidate_id, [])],
+        "is_existing_backbone_label": candidate.label in backbone_concepts,
+        "accepted_as_adapter": decision.admit_as_node and decision.route == "vertical_specialize",
+        "accepted_as_backbone_reuse": decision.admit_as_node and decision.route == "reuse_backbone",
+        "rejected": not decision.admit_as_node,
+    }
+
+
+def _write_partial_attachment_audit(
+    *,
+    working_dir: str | None,
+    domain_id: str,
+    variant_id: str,
+    candidates: list[SchemaCandidate],
+    decisions: list[AttachmentDecision],
+    retrievals: dict[str, list[RetrievedAnchor]],
+    backbone_concepts: set[str],
+) -> None:
+    """Incrementally write attachment audit so work is never lost on LLM failure."""
+    if not working_dir:
+        return
+    try:
+        from pathlib import Path as _Path
+        try:
+            from crossextend_kg.file_io import ensure_dir, write_json
+        except ImportError:
+            from file_io import ensure_dir, write_json
+        domain_working = _Path(working_dir) / domain_id
+        ensure_dir(domain_working)
+        decisions_by_id = {d.candidate_id: d for d in decisions}
+        items = []
+        accepted_adapters = 0
+        accepted_backbone = 0
+        rejected = 0
+        rejected_by_reason: dict[str, int] = {}
+        for candidate in candidates:
+            decision = decisions_by_id.get(candidate.candidate_id)
+            if decision is None:
+                continue
+            payload = _build_candidate_payload(candidate, decision, retrievals, backbone_concepts)
+            items.append(payload)
+            if payload["accepted_as_adapter"]:
+                accepted_adapters += 1
+            elif payload["accepted_as_backbone_reuse"]:
+                accepted_backbone += 1
+            else:
+                rejected += 1
+                reason = str(decision.reject_reason or "unspecified")
+                rejected_by_reason[reason] = rejected_by_reason.get(reason, 0) + 1
+        payload = {
+            "_partial": True,
+            "_batches_completed": len(decisions),
+            "domain_id": domain_id,
+            "variant_id": variant_id,
+            "summary": {
+                "candidate_count": len(candidates),
+                "processed_count": len(decisions),
+                "accepted_adapter_candidate_count": accepted_adapters,
+                "accepted_backbone_reuse_count": accepted_backbone,
+                "rejected_candidate_count": rejected,
+                "rejected_by_reason": rejected_by_reason,
+            },
+            "items": items,
+        }
+        write_json(domain_working / "attachment_audit.json", payload)
+    except Exception:
+        logger.warning("Failed to write partial attachment audit for domain %s", domain_id, exc_info=True)
+
+
 def decide_attachments_for_domain(
     config: PipelineConfig,
     variant: VariantConfig,
@@ -408,6 +486,8 @@ def decide_attachments_for_domain(
     retrievals: dict[str, list[RetrievedAnchor]],
     backbone_descriptions: dict[str, str],
     backbone_concepts: set[str],
+    *,
+    working_dir: str | None = None,
 ) -> dict[str, AttachmentDecision]:
     if variant.attachment_strategy == "embedding_top1":
         decisions = build_embedding_top1_decisions(
@@ -454,6 +534,16 @@ def decide_attachments_for_domain(
                 payload = llm_backend.generate_json(prompt)
                 decisions.extend(_parse_llm_decisions(payload, batch))
                 logger.info("Domain %s: batch %d/%d completed successfully", domain_id, batch_idx, total_batches)
+                # Incremental write: save partial decisions after each batch
+                _write_partial_attachment_audit(
+                    working_dir=working_dir,
+                    domain_id=domain_id,
+                    variant_id=variant.variant_id,
+                    candidates=candidates,
+                    decisions=decisions,
+                    retrievals=retrievals,
+                    backbone_concepts=backbone_concepts,
+                )
             except Exception as exc:
                 logger.error("Domain %s: batch %d/%d failed: %s", domain_id, batch_idx, total_batches, exc)
                 raise RuntimeError(

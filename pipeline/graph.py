@@ -605,6 +605,54 @@ def _record_workflow_relation_inputs(record) -> list[GraphRelationInput]:
     return relation_inputs
 
 
+def _record_v2_semantic_relation_inputs(record) -> list[GraphRelationInput]:
+    relation_inputs: list[GraphRelationInput] = []
+    for step_record in record.step_records:
+        for label, head, tail in _step_structural_edges(step_record):
+            relation_inputs.append(
+                GraphRelationInput(
+                    label=label,
+                    family="structural",
+                    head=head,
+                    tail=tail,
+                    source_field="structural_edges",
+                    head_step=step_record.step_id,
+                    tail_step=step_record.step_id,
+                )
+            )
+        for diagnostic_edge in step_record.diagnostic_edges:
+            mechanism = diagnostic_edge.mechanism or "communication"
+            if mechanism not in {"communication", "propagation"}:
+                mechanism = "communication"
+            relation_inputs.append(
+                GraphRelationInput(
+                    label="indicates" if mechanism == "communication" else "causes",
+                    family=mechanism,
+                    head=diagnostic_edge.evidence_label,
+                    tail=diagnostic_edge.indicated_label,
+                    source_field="diagnostic_edges",
+                    head_step=step_record.step_id,
+                    tail_step=step_record.step_id,
+                    mechanism=mechanism,
+                    evidence_label=diagnostic_edge.evidence_label,
+                )
+            )
+        for state_transition in step_record.state_transitions:
+            relation_inputs.append(
+                GraphRelationInput(
+                    label="transitionsTo",
+                    family="lifecycle",
+                    head=state_transition.from_state,
+                    tail=state_transition.to_state,
+                    source_field="state_transitions",
+                    head_step=state_transition.trigger_step or step_record.step_id,
+                    tail_step=step_record.step_id,
+                    evidence_label=state_transition.evidence_label,
+                )
+            )
+    return relation_inputs
+
+
 def _relation_input_from_mention(relation, source_field: str) -> GraphRelationInput:
     return GraphRelationInput(
         label=relation.label,
@@ -960,6 +1008,10 @@ def assemble_domain_graphs(
                 (relation, "workflow")
                 for relation in _record_workflow_relation_inputs(record)
             ]
+            relation_stream.extend(
+                (relation, "v2_semantic")
+                for relation in _record_v2_semantic_relation_inputs(record)
+            )
             relation_stream.extend(
                 (_relation_input_from_mention(relation, "document_relation_mentions"), "document")
                 for relation in normalized_document_relations

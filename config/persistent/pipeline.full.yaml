@@ -1,0 +1,24 @@
+# Full-scale experiment configuration for CrossExtend-KG.
+# Extends pipeline.base.yaml, enabling detailed artifact writing for
+# debugging and reproducibility during full-scale (400-document) runs.
+extends: ./pipeline.base.yaml
+
+benchmark_name: full_scale_experiment
+
+runtime:
+  artifact_root: ../../results/full_scale
+  run_prefix: full
+  write_detailed_working_artifacts: true
+  write_jsonl_artifacts: true
+  write_graphml: true
+  write_property_graph_jsonl: true
+  write_graph_db_csv: false
+  llm_attachment_batch_size: 16
+  retrieval_top_k: 5
+  enable_embedding_cache: true
+  enable_relation_validation: true
+  min_relation_support_count: 1
+  save_latest_summary: true
+
+llm_backend_id: deepseek
+embedding_backend_id: dashscope_text_embedding_v4

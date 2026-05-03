@@ -3,10 +3,13 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import logging
+import os
 import re
 import time
+from pathlib import Path
 from typing import Any, Protocol
 
 import openai
@@ -83,7 +86,7 @@ def extract_json(raw: str) -> dict[str, Any]:
 
 
 class ChatCompletionsLLMBackend:
-    def __init__(self, config: LLMBackendConfig) -> None:
+    def __init__(self, config: LLMBackendConfig, *, debug_dir: str | None = None) -> None:
         self.base_url = normalize_api_base_url(config.base_url)
         self.api_key = config.api_key
         self.model = config.model
@@ -92,6 +95,7 @@ class ChatCompletionsLLMBackend:
         self.temperature = config.temperature
         self.max_retries = 3
         self.request_max_attempts = 2
+        self.debug_dir = debug_dir
         self.client = openai.OpenAI(
             api_key=self.api_key,
             base_url=self.base_url,
@@ -99,6 +103,28 @@ class ChatCompletionsLLMBackend:
             max_retries=self.max_retries,
         )
 
+
+    def _save_raw_response(self, prompt: str, content: str) -> None:
+        if not self.debug_dir:
+            return
+        try:
+            debug_path = Path(self.debug_dir)
+            debug_path.mkdir(parents=True, exist_ok=True)
+            prompt_hash = hashlib.sha256(prompt.encode()).hexdigest()[:16]
+            timestamp = time.strftime("%Y%m%d_%H%M%S")
+            filename = f"llm_response_{timestamp}_{prompt_hash}.json"
+            payload = {
+                "timestamp": timestamp,
+                "model": self.model,
+                "prompt": prompt,
+                "content": content,
+            }
+            (debug_path / filename).write_text(
+                json.dumps(payload, ensure_ascii=False, indent=2),
+                encoding="utf-8",
+            )
+        except Exception as exc:
+            logger.warning("Failed to save debug LLM response: %s", exc)
 
     def supports_generation(self) -> bool:
         return True
@@ -115,7 +141,6 @@ class ChatCompletionsLLMBackend:
                 response = self.client.chat.completions.create(
                     model=self.model,
                     messages=[{"role": "user", "content": prompt}],
-                    response_format={"type": "json_object"},
                     temperature=self.temperature,
                     max_tokens=self.max_tokens,
                 )
@@ -128,6 +153,8 @@ class ChatCompletionsLLMBackend:
                         "Reduce prompt/output size or increase max_tokens."
                     )
                 content = choice.message.content or ""
+                if self.debug_dir:
+                    self._save_raw_response(prompt, content)
                 return extract_json(_normalize_chat_content(content))
             except ValueError as exc:
                 if attempt >= self.request_max_attempts:
@@ -137,7 +164,7 @@ class ChatCompletionsLLMBackend:
                         exc,
                     )
                     raise
-                delay_sec = min(10.0, 2.0 * attempt)
+                delay_sec = min(20.0, 4.0 * attempt)
                 logger.warning(
                     "LLM returned invalid JSON on attempt %d/%d: %s. Retrying in %.1fs",
                     attempt,
@@ -150,7 +177,7 @@ class ChatCompletionsLLMBackend:
                 if attempt >= self.request_max_attempts:
                     logger.error("OpenAI API error after %d attempts: %s", attempt, exc)
                     raise
-                delay_sec = min(10.0, 2.0 * attempt)
+                delay_sec = min(20.0, 4.0 * attempt)
                 logger.warning(
                     "Retryable OpenAI API error on attempt %d/%d: %s. Retrying in %.1fs",
                     attempt,
@@ -165,5 +192,5 @@ class ChatCompletionsLLMBackend:
         raise RuntimeError("LLM request exhausted without a JSON response")
 
 
-def build_llm_backend(config: LLMBackendConfig) -> LLMBackend:
-    return ChatCompletionsLLMBackend(config)
+def build_llm_backend(config: LLMBackendConfig, *, debug_dir: str | None = None) -> LLMBackend:
+    return ChatCompletionsLLMBackend(config, debug_dir=debug_dir)

@@ -9,13 +9,11 @@ import sys
 from pathlib import Path
 
 try:
-    from .experiments.metrics import compute_metrics, evaluate_variant_run
     from .logging_config import configure_logging
     from .pipeline.artifacts import load_snapshot_state, rollback_snapshot
     from .pipeline.runner import run_pipeline, run_pipeline_for_domains
     from .preprocessing import run_preprocessing, load_preprocessing_config
 except ImportError:  # pragma: no cover - direct repo-root execution fallback
-    from experiments.metrics import compute_metrics, evaluate_variant_run
     from logging_config import configure_logging
     from pipeline.artifacts import load_snapshot_state, rollback_snapshot
     from pipeline.runner import run_pipeline, run_pipeline_for_domains
@@ -81,17 +79,8 @@ def _build_parser() -> argparse.ArgumentParser:
     preprocess_parser.add_argument("--domain-ids", nargs="*", default=None, help="override domain IDs (e.g., battery cnc nev)")
     preprocess_parser.add_argument("--output-path", default=None, help="override output path")
     preprocess_parser.add_argument("--role", default="target", choices=["target"], help="Domain role (unified construction: all domains are target)")
+    preprocess_parser.add_argument("--max-docs", type=int, default=None, help="limit documents per domain (useful for dry-run testing)")
 
-    evaluate_parser = subparsers.add_parser("evaluate", help="evaluate one graph or one run output against human gold")
-    target_group = evaluate_parser.add_mutually_exclusive_group(required=True)
-    target_group.add_argument("--graph", default=None, help="path to one final_graph.json")
-    target_group.add_argument("--run-root", default=None, help="path to one benchmark run root")
-    evaluate_parser.add_argument("--gold", default=None, help="path to one gold json when evaluating a single graph")
-    evaluate_parser.add_argument("--variant", default=None, help="variant id when evaluating a run root")
-    evaluate_parser.add_argument("--ground-truth-dir", default=None, help="gold directory for run-level evaluation")
-    evaluate_parser.add_argument("--domains", nargs="*", default=None, help="optional domain filter for run-level evaluation")
-    evaluate_parser.add_argument("--gold-files", nargs="*", default=None, help="optional gold file filter for run-level evaluation")
-    evaluate_parser.add_argument("--output", default=None, help="optional output json path")
     return parser
 
 
@@ -146,29 +135,8 @@ def main() -> int:
                 config.output_path = args.output_path
             if args.role:
                 config.role = args.role
-            result = run_preprocessing(config, config_path=args.config)
+            result = run_preprocessing(config, config_path=args.config, max_docs=args.max_docs)
             print(json.dumps(result.model_dump(), ensure_ascii=False, indent=2))
-            return 0
-
-        if args.command == "evaluate":
-            if args.graph:
-                if not args.gold:
-                    raise ValueError("--gold is required when --graph is used")
-                payload = compute_metrics(args.gold, args.graph)
-            else:
-                if not args.variant:
-                    raise ValueError("--variant is required when --run-root is used")
-                payload = evaluate_variant_run(
-                    run_root=args.run_root,
-                    variant_id=args.variant,
-                    ground_truth_dir=args.ground_truth_dir,
-                    domain_ids=args.domains,
-                    gold_file_names=args.gold_files,
-                )
-            rendered = json.dumps(payload, ensure_ascii=False, indent=2)
-            if args.output:
-                Path(args.output).write_text(rendered + "\n", encoding="utf-8")
-            print(rendered)
             return 0
     except Exception as exc:
         _emit_error(command, config_path, exc)

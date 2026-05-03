@@ -95,6 +95,11 @@ def run_pipeline(
     variant_ids: list[str] | None = None,
     export_artifacts: bool = True,
 ) -> PipelineBenchmarkResult:
+    if regenerate:
+        logger.warning(
+            "--regenerate is accepted for CLI compatibility but is not yet implemented. "
+            "To force regeneration, delete the existing run directory manually."
+        )
     logger.info("Loading pipeline config from %s", config_path)
     config = load_pipeline_config(config_path)
     llm_backend = build_llm_backend(config.llm)
@@ -139,6 +144,9 @@ def run_pipeline(
         retrievals_by_domain: dict[str, dict[str, list]] = {}
         decisions_by_domain = {}
 
+        variant_run_dir = run_root / variant.variant_id
+        attachment_working_dir = str(variant_run_dir / "working") if export_artifacts and variant.export_artifacts else None
+
         for domain in config.domains:
             logger.info("Processing domain %s (%d candidates)", domain.domain_id, len(candidates_by_domain.get(domain.domain_id, [])))
             candidates = candidates_by_domain.get(domain.domain_id, [])
@@ -164,6 +172,7 @@ def run_pipeline(
                 retrievals=retrievals,
                 backbone_descriptions=backbone_descriptions,
                 backbone_concepts=backbone_set,
+                working_dir=attachment_working_dir,
             )
             if variant.use_rule_filter:
                 filtered = {}
@@ -193,8 +202,6 @@ def run_pipeline(
             decisions_by_domain=decisions_by_domain,
             backbone_concepts=backbone_concepts,
         )
-
-        variant_run_dir = run_root / variant.variant_id
 
         result = VariantRunResult(
             variant_id=variant.variant_id,

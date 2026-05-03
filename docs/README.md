@@ -14,15 +14,12 @@ Live documentation for the CrossExtend-KG v2 mainline.
    **Real single-document example** tracing data format changes through every pipeline stage.
 5. `WORKFLOW_KG_DESIGN.md`
    Dual-layer graph design, v2 innovations, and evaluation boundary.
-6. `EXPERIMENT_REPORT.md`
-   Complete v2 regression experiment report (3 tests, v1 vs v2 comparison, cross-domain analysis).
-7. `OPEN_SOURCE_UPDATE_CN.md`
+6. `OPEN_SOURCE_UPDATE_CN.md`
    Chinese summary of the repository scope, v2 restructuring, and open-source maintenance principles.
 
 ## 中文文档
 
 - `DATA_FLOW_DIAGRAM_CN.md` — 数据流图中文版（真实单文档示例，各阶段格式变化）
-- `EXPERIMENT_REPORT_CN.md` — 回归实验报告中文版（3 次测试、v1 与 v2 对比、跨域分析）
 - `OPEN_SOURCE_UPDATE_CN.md` — v2 重构中文说明
 
 ## v2 Restructuring Summary
@@ -37,41 +34,31 @@ innovation points:
 The backbone was expanded from 6 to 15 concepts. All v1 data remains compatible
 through optional fields with defaults.
 
-## Regression Experiment Results (2026-04-26)
+## Full-Scale Preprocessing (400 Docs, May 2026)
 
-### Rule-based Regression (deterministic, no LLM)
+**Model**: deepseek-v4-pro | **Backend**: DeepSeek API
 
-| Test | Docs | battery nodes/edges | cnc nodes/edges | nev nodes/edges |
-|------|------|--------------------|-----------------|-----------------|
-| Test 1 | 1 | 59/69 | — | — |
-| Test 2 | 3 | 48/57 | 68/90 | 73/115 |
-| Test 3 | 9 | 132/206 | 160/275 | 173/314 |
+| Domain | Documents | Status |
+|--------|-----------|--------|
+| battery | 100 | Complete |
+| cnc | 100 | Complete |
+| ev (nev) | 200 | Complete |
+| **Total** | **400** | **Complete** |
 
-### 9-Doc Ablation: Embedding + LLM Variants
+- **Total time**: 59.4 hours (~2.5 days)
+- **Average rate**: 535s/doc (8.9 min/doc)
+- **Output**: `data/evidence_records/evidence_records_llm.json` (20.6 MB)
+- **Per-domain files**: battery (5.0 MB), cnc (5.2 MB), ev (10.6 MB)
+- **API retries**: 2-3 transient JSON parse failures, auto-recovered
 
-Three attachment strategies compared on the 9-doc benchmark:
+### Run Command
 
-| Variant | Nodes | Edges | Accepted Triples | Rejected Cands |
-|---------|-------|-------|-----------------|----------------|
-| baseline_embedding_llm | 454 | 754 | 417 | 12 |
-| **contextual_rerank_embedding_llm** | **461** | **776** | **432** | **5** |
-| pure_llm | 459 | 772 | 430 | 7 |
+```bash
+python -m scripts.run_full_preprocess
+```
 
-Per-domain accepted triples:
-
-| Variant | battery | cnc | nev |
-|---------|---------|-----|-----|
-| baseline_embedding_llm | 106 | 148 | 163 |
-| contextual_rerank_embedding_llm | 107 | 151 | **174** |
-| pure_llm | 106 | 150 | **174** |
-
-Key findings:
-- Contextual rerank variant achieves highest accepted triple count (432) and lowest rejection (5)
-- NEV domain shows largest variant sensitivity: 163 → 174 triples (+6.7%)
-- CNC domain is stable across all variants (148–151)
-- 9 attachment gold files (359 concepts) completed for evaluation
-
-See `EXPERIMENT_REPORT.md` for full details.
+Configuration: `config/persistent/preprocessing.deepseek.yaml` (extends `preprocessing.base.yaml`)
+LLM backend: `config/persistent/llm_backends.yaml` → `deepseek-v4-pro`
 
 ## Removed Historical Material
 

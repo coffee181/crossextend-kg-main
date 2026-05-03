@@ -25,7 +25,11 @@ def read_json(path: str | Path) -> Any:
 
 
 def write_json(path: str | Path, payload: Any) -> None:
-    Path(path).write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    """Atomically write JSON — temp file + rename, so a crash never corrupts existing data."""
+    target = Path(path)
+    tmp = target.with_suffix(target.suffix + ".tmp")
+    tmp.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    tmp.replace(target)
 
 
 def read_jsonl(path: str | Path) -> list[dict[str, Any]]:

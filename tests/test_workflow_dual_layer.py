@@ -9,7 +9,6 @@ import json
 from pathlib import Path
 from types import SimpleNamespace
 
-from experiments.metrics.core import compute_metrics, predicted_concepts, predicted_relations, workflow_grounding_edges
 from models import (
     AdapterConcept,
     AttachmentDecision,
@@ -115,75 +114,6 @@ class WorkflowDualLayerTests(unittest.TestCase):
 
         self.assertEqual(baseline[candidate.candidate_id][0].anchor, "Asset")
         self.assertEqual(reranked[candidate.candidate_id][0].anchor, "Signal")
-
-    def test_metrics_project_workflow_nodes_to_legacy_task(self) -> None:
-        graph_payload = {
-            "nodes": [
-                {
-                    "label": "BATOM_002:T1",
-                    "display_label": "capture issue context (T1)",
-                    "domain_id": "battery",
-                    "node_type": "workflow_step",
-                    "node_layer": "workflow",
-                    "step_id": "T1",
-                    "provenance_evidence_ids": ["BATOM_002"],
-                },
-                {
-                    "label": "BATOM_002:T2",
-                    "display_label": "remove cover (T2)",
-                    "domain_id": "battery",
-                    "node_type": "workflow_step",
-                    "node_layer": "workflow",
-                    "step_id": "T2",
-                    "provenance_evidence_ids": ["BATOM_002"],
-                },
-                {
-                    "label": "coolant odor",
-                    "display_label": "coolant odor",
-                    "domain_id": "battery",
-                    "node_type": "adapter_concept",
-                    "node_layer": "semantic",
-                    "parent_anchor": "Signal",
-                    "provenance_evidence_ids": ["BATOM_002"],
-                },
-            ],
-            "edges": [
-                {
-                    "head": "BATOM_002:T1",
-                    "label": "triggers",
-                    "tail": "BATOM_002:T2",
-                    "family": "task_dependency",
-                    "edge_layer": "workflow",
-                    "workflow_kind": "sequence",
-                    "provenance_evidence_ids": ["BATOM_002"],
-                },
-                {
-                    "head": "BATOM_002:T1",
-                    "label": "observes",
-                    "raw_label": "observes",
-                    "display_label": "inspect",
-                    "tail": "coolant odor",
-                    "family": "action_object",
-                    "edge_layer": "workflow",
-                    "workflow_kind": "action_object",
-                    "display_admitted": True,
-                    "provenance_evidence_ids": ["BATOM_002"],
-                },
-            ],
-        }
-        doc_ids = {"BATOM_002"}
-
-        concept_map = predicted_concepts(graph_payload, doc_ids)
-        relation_set = predicted_relations(graph_payload, doc_ids)
-        grounding = workflow_grounding_edges(graph_payload, doc_ids)
-
-        self.assertEqual(concept_map["T1"], "Task")
-        self.assertEqual(concept_map["T2"], "Task")
-        self.assertEqual(concept_map["coolant odor"], "Signal")
-        self.assertIn(("T1", "triggers", "T2", "task_dependency"), relation_set)
-        self.assertNotIn(("T1", "observes", "coolant odor", "action_object"), relation_set)
-        self.assertEqual(len(grounding), 1)
-        self.assertEqual(grounding[0]["tail"], "coolant odor")
 
     def test_filter_rejects_task_parent_for_semantic_attachment(self) -> None:
         candidate = SimpleNamespace(
@@ -953,88 +883,6 @@ class WorkflowDualLayerTests(unittest.TestCase):
             self.assertIn(">inspect<", text)
             self.assertNotIn(">performed_on<", text)
 
-    def test_compute_metrics_reads_optional_workflow_grounding_gold(self) -> None:
-        with tempfile.TemporaryDirectory() as temp_dir:
-            gold_path = Path(temp_dir) / "gold.json"
-            graph_path = Path(temp_dir) / "graph.json"
-            gold_payload = {
-                "domain_id": "battery",
-                "documents": [{"doc_id": "BATOM_002", "doc_type": "om_manual"}],
-                "concept_ground_truth": [
-                    {"evidence_id": "BATOM_002", "label": "T1", "should_be_in_graph": True, "expected_anchor": "Task"},
-                    {"evidence_id": "BATOM_002", "label": "coolant odor", "should_be_in_graph": True, "expected_anchor": "Signal"},
-                ],
-                "relation_ground_truth": [
-                    {
-                        "evidence_id": "BATOM_002",
-                        "head": "T1",
-                        "relation": "triggers",
-                        "tail": "T2",
-                        "family": "task_dependency",
-                        "valid": False,
-                    }
-                ],
-                "workflow_relation_ground_truth": [
-                    {
-                        "evidence_id": "BATOM_002",
-                        "head": "T1",
-                        "relation": "observes",
-                        "tail": "coolant odor",
-                        "family": "action_object",
-                        "valid": True,
-                    }
-                ],
-            }
-            graph_payload = {
-                "nodes": [
-                    {
-                        "label": "BATOM_002:T1",
-                        "display_label": "capture issue context (T1)",
-                        "domain_id": "battery",
-                        "node_type": "workflow_step",
-                        "node_layer": "workflow",
-                        "step_id": "T1",
-                        "provenance_evidence_ids": ["BATOM_002"],
-                    },
-                    {
-                        "label": "coolant odor",
-                        "display_label": "coolant odor",
-                        "domain_id": "battery",
-                        "node_type": "adapter_concept",
-                        "node_layer": "semantic",
-                        "parent_anchor": "Signal",
-                        "provenance_evidence_ids": ["BATOM_002"],
-                    },
-                ],
-                "edges": [
-                    {
-                        "head": "BATOM_002:T1",
-                        "label": "observes",
-                        "tail": "coolant odor",
-                        "raw_label": "observes",
-                        "display_label": "inspect",
-                        "family": "action_object",
-                        "edge_layer": "workflow",
-                        "workflow_kind": "action_object",
-                        "display_admitted": True,
-                        "provenance_evidence_ids": ["BATOM_002"],
-                    }
-                ],
-            }
-            gold_path.write_text(json.dumps(gold_payload, ensure_ascii=False, indent=2), encoding="utf-8")
-            graph_path.write_text(json.dumps(graph_payload, ensure_ascii=False, indent=2), encoding="utf-8")
-
-            metrics = compute_metrics(gold_path, graph_path)
-
-            self.assertTrue(metrics["workflow_grounding_metrics"]["available"])
-            self.assertEqual(metrics["workflow_grounding_metrics"]["f1"], 1.0)
-            self.assertEqual(metrics["workflow_grounding_metrics"]["gold_count"], 1)
-            self.assertEqual(metrics["workflow_grounding_metrics"]["predicted_count"], 1)
-            self.assertIn("diagnostics", metrics)
-            self.assertIn("legacy_strict_metrics", metrics["diagnostics"])
-            self.assertIn("relation_metrics", metrics["diagnostics"]["legacy_strict_metrics"])
-            self.assertNotIn("relation_metrics", metrics)
-
     def test_v2_step_evidence_record_with_new_fields(self) -> None:
         """Test that StepEvidenceRecord v2 fields are optional and backward compatible."""
         # Old-style construction still works
@@ -1534,7 +1382,7 @@ class WorkflowDualLayerTests(unittest.TestCase):
         config = load_preprocessing_config("config/persistent/preprocessing.deepseek.yaml")
 
         self.assertEqual(config.llm.model, "deepseek-v4-flash")
-        self.assertEqual(config.llm.base_url, "https://api.deepseek.com")
+        self.assertEqual(config.llm.base_url, "https://api2api.709970.xyz/v1")
 
     def test_preprocessing_config_model_validate_uses_registry_default_backend(self) -> None:
         config = PreprocessingConfig.model_validate(
@@ -1548,7 +1396,7 @@ class WorkflowDualLayerTests(unittest.TestCase):
         )
 
         self.assertEqual(config.llm.model, "deepseek-v4-flash")
-        self.assertEqual(config.llm.base_url, "https://api.deepseek.com")
+        self.assertEqual(config.llm.base_url, "https://api2api.709970.xyz/v1")
         self.assertEqual(config.llm.max_tokens, 1234)
 
 

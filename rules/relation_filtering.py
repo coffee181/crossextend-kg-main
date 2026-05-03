@@ -33,6 +33,20 @@ _LOW_VALUE_LIFECYCLE_ENDPOINTS = {
     "naturally supported",
     "stable",
 }
+_STRUCTURAL_ANCHORS = frozenset({
+    "Asset",
+    "Component",
+    "Seal",
+    "Connector",
+    "Sensor",
+    "Controller",
+    "Coolant",
+    "Actuator",
+    "Power",
+    "Housing",
+    "Fastener",
+    "Media",
+})
 
 
 def _anchor_for(label: str, node_anchor_map: dict[str, str | None] | None) -> str | None:
@@ -60,7 +74,7 @@ def should_filter_structural_relation(
 
     head_anchor = _anchor_for(head, node_anchor_map)
     tail_anchor = _anchor_for(tail, node_anchor_map)
-    if head_anchor not in {"Asset", "Component"} or tail_anchor not in {"Asset", "Component"}:
+    if head_anchor not in _STRUCTURAL_ANCHORS or tail_anchor not in _STRUCTURAL_ANCHORS:
         return (True, "structural_requires_stable_components")
 
     if _LOW_VALUE_STRUCTURAL_TAIL_PATTERN.search(tail):

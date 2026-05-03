@@ -49,6 +49,16 @@ Return JSON only.
       "evidence_label": "seepage",
       "indicated_label": "O-ring degradation",
       "mechanism": "communication"
+    },
+    {
+      "evidence_label": "heat spot",
+      "indicated_label": "localized overheating",
+      "mechanism": "communication"
+    },
+    {
+      "evidence_label": "O-ring degradation",
+      "indicated_label": "coolant loss",
+      "mechanism": "propagation"
     }
   ],
   "extraction_quality": "high"
@@ -108,7 +118,8 @@ When the text explicitly describes a state change or diagnostic inference:
 
 - Extract `state_transitions` when a step drives a change from one state to another. `trigger_step` is the step that causes the transition. `evidence_label` is the signal or observation confirming the new state.
 - Extract `diagnostic_edges` when a signal or observation indicates a fault or condition. `mechanism` should be `communication` for evidential links or `propagation` for causal chains.
-- Both are optional. Only include them when the text explicitly grounds them.
+- **`diagnostic_edges` are NOT optional for O&M documents.** Every inspection step lists observable signals and the faults they reveal. For each extracted `Signal`, create at least one `communication` edge linking it to the `Fault` or `State` it indicates. For each `Fault`, create `propagation` edges when the text describes a causal chain between faults.
+- Only include edges when the text explicitly or implicitly grounds them. If a step says "inspect X for A, B, C", then X is the inspection target and A/B/C are what X reveals — build communication edges from each finding back to the condition it diagnoses.
 
 ## Semantic Hints
 - `Asset`: named vehicle, pack, machine, line, cabinet, or platform.
@@ -153,9 +164,10 @@ Direction constraints:
 - Do not use `task_dependency` for concept-to-concept relations such as `Signal -> Fault`, `Fault -> Fault`, or `Asset -> Component`.
 - When both head and tail are non-step concepts, prefer `communication`, `propagation`, `structural`, or `lifecycle` as appropriate.
 - If a step sentence both describes an action and reveals a stable part-whole structure, you may emit both the step-local action edge and the concept-to-concept structural edge when both are grounded.
-- For `communication`, require explicit evidential grounding such as indicates, shows, confirms, reveals, or another clearly diagnostic wording. Do not create a communication edge from mere co-occurrence.
+- For `communication`, require explicit evidential grounding such as indicates, shows, confirms, reveals, or another clearly diagnostic wording. But also recognize implicit grounding: when a step lists "inspect X for A, B, C" or "check Y: D, E, F", the listed findings D/E/F are what the inspection of Y reveals — this is grounded evidential structure, not mere co-occurrence.
+- When the text lists multiple observable findings for a single inspection target (e.g. "inspect the shield for cracks, heat spots, missing tabs"), create a separate `communication` edge for each finding that maps to a distinct `Fault` or `State`. Each observable is a `Signal` and each listed defect is a `Fault` — connect them.
 - For `propagation`, require explicit causal grounding such as causes, leads to, results in, drives, creates, or another clearly causal wording. Do not use `propagation` for weak association or diagnostic evidence.
-- Prefer the most immediate grounded fault target for `communication`. Do not fan one observation out to multiple competing targets unless the text explicitly supports each edge.
+- Prefer the most immediate grounded fault target for `communication`. When the text clearly links one observation to one fault, use that direct edge rather than chaining through intermediate faults. When a single observation genuinely supports multiple fault targets, include each grounded edge — but prefer quality over quantity.
 - For `structural`, use stable physical assembly heads such as assets, connectors, couplers, manifolds, housings, boundaries, faces, noses, brackets, channels, seats, or other explicit local hardware interfaces. Avoid purely contextual heads such as `branch`, `path`, or `section` unless the text clearly states a stable physical assembly.
 - For `structural`, the document does not need to use the literal word `contains`. If the text clearly presents one named assembly, boundary, or interface as the local place where listed parts/features belong, `structural` is appropriate.
 - For `structural`, choose the right parent level. When the document frames the complaint or repair around a named service locus such as a face, mouth, cavity, joint, interface, or named disconnect boundary, use that locus as the parent rather than a lower-level sibling part.

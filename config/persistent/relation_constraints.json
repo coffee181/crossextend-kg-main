@@ -20,8 +20,8 @@
   },
   "structural": {
     "description": "Physical containment or part-of hierarchy edges.",
-    "allowed_head_types": ["Asset", "Component"],
-    "allowed_tail_types": ["Asset", "Component"],
+    "allowed_head_types": ["Asset", "Component", "Seal", "Connector", "Sensor", "Controller", "Coolant", "Actuator", "Power", "Housing", "Fastener", "Media"],
+    "allowed_tail_types": ["Asset", "Component", "Seal", "Connector", "Sensor", "Controller", "Coolant", "Actuator", "Power", "Housing", "Fastener", "Media"],
     "examples": [
       "battery pack contains cells -> Asset -> Component",
       "sensor belongs to controller -> Component -> Component",
